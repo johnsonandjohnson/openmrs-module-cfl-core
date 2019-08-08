@@ -24,35 +24,4 @@
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="org.openmrs.module.cfl" />
-
-    <!-- Wraps CFLModuleService methods in DB transactions and OpenMRS interceptors,
-    which set audit info like dateCreated, changedBy, etc.-->
-    <bean id="cfl.CFLModuleService"
-            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager" />
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.cfl.api.impl.CFLModuleServiceImpl">
-                <property name="dao" ref="cfl.CFLModuleDao" />
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors" />
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource" />
-        </property>
-    </bean>
-
-    <!-- Adds CFLModuleService to OpenMRS context so it can be accessed
-    calling Context.getService(CFLModuleService.class) -->
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list>
-                <value>org.openmrs.module.cfl.api.CFLModuleService</value>
-                <ref bean="cfl.CFLModuleService" />
-            </list>
-        </property>
-    </bean>
 </beans>
