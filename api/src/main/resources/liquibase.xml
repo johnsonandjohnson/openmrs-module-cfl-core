@@ -6,34 +6,118 @@
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
  
     <!--
-    	See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
+    	See http://wiki.openmrs.org/display/docs/Module+liquibase+File for
     	documentation on this file.
-    
+
         See http://www.liquibase.org/manual/home#available_database_refactorings
         for a list of supported elements and attributes
     -->
- 
- 	<!-- Uncomment the changeset below if you want to make the Item class persistable, see also Item and CFLModuleDaoTest -->
- 	<!--
-	<changeSet id="cfl-2016-08-02-12-21" author="raff">
-		<preConditions onFail="MARK_RAN">
-			<not><tableExists tableName="cfl_item"/></not>
-		</preConditions>
-		<comment>
-			Creating the cfl_item table
-		</comment>
-		<createTable tableName="cfl_item">
-			<column name="cfl_item_id" type="int" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false"/>
-			</column>
-			<column name="uuid" type="char(38)">
-				<constraints nullable="false" unique="true"></constraints>
-			</column>
-			<column name="owner" type="int" />
-			<column name="description" type="varchar(255)" />
-		</createTable>
-        <addForeignKeyConstraint constraintName="cfl_item_owner_fk" baseTableName="cfl_item" baseColumnNames="owner"  referencedTableName="users"
-                                 referencedColumnNames="user_id" />
-    </changeSet> -->
+    
+    <changeSet id="cfl-20190808-11:50" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "bfdf8ed0-87e3-437e-897d-81434393a233";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the Location personAttribute.
+        </comment>
+        <insert tableName="person_attribute_type">
+            <column name="name">LocationAttribute</column>
+            <column name="description">Attribute used to store information about patient localization</column>
+            <column name="format">java.lang.String</column>
+            <column name="searchable">0</column>
+            <column name="uuid">bfdf8ed0-87e3-437e-897d-81434393a233</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20190808-11:51" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "ff34db58-c1f4-475b-8bac-30f26e251333";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the Language personAttribute.
+        </comment>
+        <insert tableName="person_attribute_type">
+            <column name="name">personLanguage</column>
+            <column name="description">Attribute used to store information about patient language</column>
+            <column name="format">java.lang.String</column>
+            <column name="searchable">0</column>
+            <column name="uuid">ff34db58-c1f4-475b-8bac-30f26e251333</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20190808-11:52" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "a5476c49-32d2-489e-a90b-d08be4b5cff9";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the DND consent personAttribute.
+        </comment>
+        <insert tableName="person_attribute_type">
+            <column name="name">dndConsent</column>
+            <column name="description">Attribute used to store information about patient dnd consent</column>
+            <column name="format">java.lang.String</column>
+            <column name="searchable">0</column>
+            <column name="uuid">a5476c49-32d2-489e-a90b-d08be4b5cff9</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20190808-11:53" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patient_identifier_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM patient_identifier_type WHERE uuid ="4aa897a3-0b05-4ec9-8d70-a93a336be548";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the Aadhar Number patientIdentifierType.
+        </comment>
+        <insert tableName="patient_identifier_type">
+            <column name="name">Aadhar Number</column>
+            <column name="description">CFL Aadhar Number</column>
+            <column name="check_digit">0</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+            <column name="required">0</column>
+            <column name="location_behavior">NOT_USED</column>
+            <column name="uuid">4aa897a3-0b05-4ec9-8d70-a93a336be548</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20190808-11:54" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patient_identifier_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM patient_identifier_type WHERE uuid ="2a4c3f45-405b-41ab-b6cd-f3c5ad2f5007";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the Aadhar Number patientIdentifierType.
+        </comment>
+        <insert tableName="patient_identifier_type">
+            <column name="name">ART Number</column>
+            <column name="description">CFL ART Number</column>
+            <column name="check_digit">0</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+            <column name="required">0</column>
+            <column name="location_behavior">NOT_USED</column>
+            <column name="uuid">2a4c3f45-405b-41ab-b6cd-f3c5ad2f5007</column>
+        </insert>
+    </changeSet>
  
 </databaseChangeLog>

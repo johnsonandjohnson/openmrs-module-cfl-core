@@ -20,7 +20,7 @@
                   "type":"personAttribute",
                   "label":"DND Consent",
                   "formFieldName":"dndConsent",
-                  "uuid":"7dbea149-5b81-41ff-a0f1-af366d62a0b3",
+                  "uuid":"a5476c49-32d2-489e-a90b-d08be4b5cff9",
                   "widget":{
                     "providerName":"uicommons",
                     "fragmentId":"field/radioButtons",
