@@ -1,0 +1,10 @@
+[
+  {
+    "id": "cfl.patientVisitHistory",
+    "extensionPointId": "patientDashboard.overallActions",
+    "type": "link",
+    "label": "Patient visit history",
+    "icon": "icon-book",
+    "url": "coreapps/patientdashboard/patientDashboard.page?patientId={{patient.uuid}}"
+  }
+]
