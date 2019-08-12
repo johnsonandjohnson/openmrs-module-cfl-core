@@ -477,7 +477,7 @@
                 SELECT COUNT(uuid) FROM encounter_type WHERE uuid = '6932803d-f0a3-44e5-90cd-e08d86f98d70';
             </sqlCheck>
         </preConditions>
-        <comment></comment>
+        <comment>Added encounter type used by the CFL HIV form</comment>
         <insert tableName="encounter_type">
             <column name="name">CFL HIV Visit</column>
             <column name="description">CFL HIV visit</column>
@@ -485,6 +485,109 @@
             <column name="date_created">2019-08-08</column>
             <column name="uuid">6932803d-f0a3-44e5-90cd-e08d86f98d70</column>
         </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20190812-09:00" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_tag" />
+            <tableExists tableName="patientflags_tag_role" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the new patient tag and add privileges for them</comment>
+        <sql>
+            INSERT INTO patientflags_tag
+            (name, description, creator, date_created, uuid)
+            VALUES('CFL tag', 'CFL patient flag tag', 1, '2019-08-12', 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23');
+
+            INSERT INTO patientflags_tag_role
+            SELECT (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'), role
+            FROM role;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cfl-20190812-09:01" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_priority" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the patient flag priority</comment>
+        <sql>
+            INSERT INTO patientflags_priority
+            (name, `style`, `rank`, creator, date_created, uuid)
+            VALUES('CFL flag priority', 'border: 1px solid #51a351; color: #51a351; padding: 1px 2px; border-radius: 4px;',
+            1, 1, '2019-08-12', '15d23b9b-1dc1-448c-81ce-8c5d191b0fff');
+        </sql>
+    </changeSet>
+
+    <changeSet id="cfl-20190812-09:02" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = '60c36969-e85c-4e72-bcef-43e0e106a7f1';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the patient flag (missed 3 visits) and connect with flag tag</comment>
+        <sql>
+            INSERT INTO patientflags_flag
+            (name, criteria, message, enabled, evaluator, creator, date_created, uuid, priority_id)
+            VALUES('CFL flag - missed last 3 visits', 'SELECT i.patient_id
+            FROM   (SELECT st.patient_id,
+            st.status,
+            Count(st.status) AS count
+            FROM   (SELECT
+            a.patient_id,
+            a.status,
+            @rn := IF(@prev = a.patient_id, @rn + 1, 1) AS rn,
+            @prev := a.patient_id
+            FROM openmrs.appointmentscheduling_appointment a
+            JOIN (SELECT @prev := NULL, @rn := 0) AS vars
+            HAVING @rn &lt; 3
+            ORDER BY a.patient_id, a.date_changed IS NULL DESC, a.date_changed DESC) st
+            GROUP  BY st.patient_id,
+            st.status) i
+            WHERE  i.status = ''MISSED''
+            AND count > 2;',
+            'Patient missed last 3 visits', 1, 'org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator',
+            1, '2019-08-12', '60c36969-e85c-4e72-bcef-43e0e106a7f1',
+            (SELECT priority_id FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff'));
+
+            INSERT INTO patientflags_flag_tag
+            (flag_id, tag_id)
+            VALUES ((SELECT flag_id FROM patientflags_flag WHERE uuid = '60c36969-e85c-4e72-bcef-43e0e106a7f1'),
+            (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="cfl-20190812-09:04" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = 'f900fe9f-1c68-4d6d-a578-a22b9a254b70';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the patient flag (last HIV encounter) and connect with flag tag</comment>
+        <sql>
+            INSERT INTO patientflags_flag
+            (name, criteria, message, enabled, evaluator, creator, date_created, uuid, priority_id)
+            VALUES('CFL HIV encounter', "SELECT e.patient_id, DATE_FORMAT(e.encounter_datetime, '%d.%m.%Y')
+            FROM (SELECT * FROM encounter ORDER BY encounter_datetime DESC) e
+            WHERE e.encounter_type IN
+                (SELECT encounter_type_id FROM encounter_type WHERE uuid = '6932803d-f0a3-44e5-90cd-e08d86f98d70');",
+            'Last CFL HIV encounter on ${1}', 1, 'org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator',
+            1, '2019-08-12', 'f900fe9f-1c68-4d6d-a578-a22b9a254b70',
+            (SELECT priority_id FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff'));
+
+            INSERT INTO patientflags_flag_tag
+            (flag_id, tag_id)
+            VALUES ((SELECT flag_id FROM patientflags_flag WHERE uuid = 'f900fe9f-1c68-4d6d-a578-a22b9a254b70'),
+            (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
+        </sql>
     </changeSet>
  
 </databaseChangeLog>

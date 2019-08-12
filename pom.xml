@@ -102,5 +102,6 @@
 		<uiframeworkVersion>3.9</uiframeworkVersion>
 		<htmlformentryVersion>3.8.0</htmlformentryVersion>
 		<htmlformentryuiVersion>1.7.0</htmlformentryuiVersion>
+		<patientFlagVersion>3.0.1</patientFlagVersion>
 	</properties>
 </project>

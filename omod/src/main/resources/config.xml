@@ -38,6 +38,9 @@
 		<require_module version="${htmlformentryuiVersion}">
 			org.openmrs.module.htmlformentryui
 		</require_module>
+		<require_module version="${patientFlagVersion}">
+			org.openmrs.module.patientflags
+		</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->
