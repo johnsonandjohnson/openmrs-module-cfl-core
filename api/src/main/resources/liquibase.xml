@@ -119,5 +119,372 @@
             <column name="uuid">2a4c3f45-405b-41ab-b6cd-f3c5ad2f5007</column>
         </insert>
     </changeSet>
+
+    <changeSet id="cfl-20190809-09:01" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="concept" />
+            <sqlCheck expectedResult="0">
+                select count(*) from concept where uuid='f7c6f4f7-89d2-48f9-8844-c1a6564231c0'
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added new concepts, which represents a new question and answers used by the CFL forms.
+        </comment>
+        <sql>
+            -- Risk factor for HIV - Question
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d491e50-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Risk factor for HIV', 'en-GB', '1', '2019-08-08', '0', '1', 'e3ee53be-8015-452c-99fa-37c3757054bd'
+            FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0';
+
+            -- Heterosexual - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '7b52533b-c396-474b-b9df-b8c156f66b5d', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Heterosexual', 'en-GB', '1', '2019-08-08', '0', '1', '3e400be9-c115-456c-b7ea-7d83f6f8a882'
+            FROM concept WHERE uuid = '7b52533b-c396-474b-b9df-b8c156f66b5d';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '7b52533b-c396-474b-b9df-b8c156f66b5d'),
+            '1', '2019-08-08', UUID());
+
+            -- Blood transfusion - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '57624032-3bc9-46a7-b0e6-bb7930d80277', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Blood transfusion', 'en-GB', '1', '2019-08-08', '0', '1', 'e231b64b-66cf-46e0-b49b-d0ca33daaa61'
+            FROM concept WHERE uuid = '57624032-3bc9-46a7-b0e6-bb7930d80277';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '57624032-3bc9-46a7-b0e6-bb7930d80277'),
+            '1', '2019-08-08', UUID());
+
+            -- Trucker - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'fb2045ef-7b1a-4e90-9f47-408aca35c2a8', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Trucker', 'en-GB', '1', '2019-08-08', '0', '1', '699a6db1-95b4-4da4-bf8e-8c490bbf1a68'
+            FROM concept WHERE uuid = 'fb2045ef-7b1a-4e90-9f47-408aca35c2a8';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = 'fb2045ef-7b1a-4e90-9f47-408aca35c2a8'),
+            '1', '2019-08-08', UUID());
+
+            -- MSM - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '1db7ff2a-5f20-4bdc-890b-3a348e06edc6', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'MSM', 'en-GB', '1', '2019-08-08', '0', '1', '3308a83e-f273-4cff-b77b-fc8690500ffa'
+            FROM concept WHERE uuid = '1db7ff2a-5f20-4bdc-890b-3a348e06edc6';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '1db7ff2a-5f20-4bdc-890b-3a348e06edc6'),
+            '1', '2019-08-08', UUID());
+
+            -- Mother to child - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '4c5d3452-19b4-4703-88c2-f3d061019527', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Mother to child', 'en-GB', '1', '2019-08-08', '0', '1', '4663bb25-989e-4700-8414-89e8279fc7e8'
+            FROM concept WHERE uuid = '4c5d3452-19b4-4703-88c2-f3d061019527';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '4c5d3452-19b4-4703-88c2-f3d061019527'),
+            '1', '2019-08-08', UUID());
+
+            -- Commercial sex work - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '154c910f-a66b-4517-a541-130931274ca7', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Commercial sex work', 'en-GB', '1', '2019-08-08', '0', '1', 'b01c15d4-f878-4c7f-9149-02e477e1c874'
+            FROM concept WHERE uuid = '154c910f-a66b-4517-a541-130931274ca7';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '154c910f-a66b-4517-a541-130931274ca7'),
+            '1', '2019-08-08', UUID());
+
+            -- Injecting drug use (IDU) - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '8c4e1b8a-cc7a-4028-8077-ece704c782f7', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Injecting drug use (IDU)', 'en-GB', '1', '2019-08-08', '0', '1', '333ff6d3-866a-41bf-b967-7cb18a330024'
+            FROM concept WHERE uuid = '8c4e1b8a-cc7a-4028-8077-ece704c782f7';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '8c4e1b8a-cc7a-4028-8077-ece704c782f7'),
+            '1', '2019-08-08', UUID());
+
+            -- Probable unsafe injection - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '553b9a1d-d117-4460-9c8c-2c0eb5ad0518', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Probable unsafe injection', 'en-GB', '1', '2019-08-08', '0', '1', '885adf20-6abc-4a43-ab60-ff45c647f6d4'
+            FROM concept WHERE uuid = '553b9a1d-d117-4460-9c8c-2c0eb5ad0518';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '553b9a1d-d117-4460-9c8c-2c0eb5ad0518'),
+            '1', '2019-08-08', UUID());
+
+            -- Migrant - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '24750e2b-d4b6-437f-a092-d99a319dddab', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Migrant', 'en-GB', '1', '2019-08-08', '0', '1', 'c805bd15-c51f-413b-8cb4-239b8b760e92'
+            FROM concept WHERE uuid = '24750e2b-d4b6-437f-a092-d99a319dddab';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '24750e2b-d4b6-437f-a092-d99a319dddab'),
+            '1', '2019-08-08', UUID());
+
+            -- Unknown - Answer
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'f7c6f4f7-89d2-48f9-8844-c1a6564231c0'),
+            (SELECT concept_id FROM concept WHERE uuid = '1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
+            '1', '2019-08-08', UUID());
+
+            -- High Risk Groups - Question
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '9994a4aa-981b-4605-8f4f-23e02e64106e', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d491e50-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'High Risk Groups', 'en-GB', '1', '2019-08-08', '0', '1', '4c26edef-4eb9-4069-b1b6-d81c50866272'
+            FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e';
+
+            -- 2nd Line - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'ea15773b-714a-492c-b7f0-c13b9e8b7166', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, '2nd Line', 'en-GB', '1', '2019-08-08', '0', '1', '421eb3f5-e064-4c46-83ad-6d30ec8e3a2b'
+            FROM concept WHERE uuid = 'ea15773b-714a-492c-b7f0-c13b9e8b7166';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = 'ea15773b-714a-492c-b7f0-c13b9e8b7166'),
+            '1', '2019-08-08', UUID());
+
+            -- Patient with family issues - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '52bc8545-88d6-4f12-a6f9-386496b22b76', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Patient with family issues', 'en-GB', '1', '2019-08-08', '0', '1', 'f7b58089-d280-4599-9afc-fbd345f8aea3'
+            FROM concept WHERE uuid = '52bc8545-88d6-4f12-a6f9-386496b22b76';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = '52bc8545-88d6-4f12-a6f9-386496b22b76'),
+            '1', '2019-08-08', UUID());
+
+            -- Co infected patients (others than TB) - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '4185ab0d-069d-440f-a4f3-aef07f0f6231', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Co infected patients (others than TB)', 'en-GB', '1', '2019-08-08', '0', '1', 'ae24294d-f35a-4ba2-a8b9-afe0c8ba746a'
+            FROM concept WHERE uuid = '4185ab0d-069d-440f-a4f3-aef07f0f6231';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = '4185ab0d-069d-440f-a4f3-aef07f0f6231'),
+            '1', '2019-08-08', UUID());
+
+            -- Patient on alternate treatment - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'b0095cdf-8dd6-46f8-8b30-19c451e3b8d5', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Patient on alternate treatment', 'en-GB', '1', '2019-08-08', '0', '1', '07ece597-5af0-448a-887f-179b71afcf83'
+            FROM concept WHERE uuid = 'b0095cdf-8dd6-46f8-8b30-19c451e3b8d5';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = 'b0095cdf-8dd6-46f8-8b30-19c451e3b8d5'),
+            '1', '2019-08-08', UUID());
+
+            -- LFU and regular defaulters - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '9027f618-09b5-41cd-9330-b549d0dd280d', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'LFU and regular defaulters', 'en-GB', '1', '2019-08-08', '0', '1', 'd3906689-0cdc-481d-ab10-0b6f0734846b'
+            FROM concept WHERE uuid = '9027f618-09b5-41cd-9330-b549d0dd280d';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = '9027f618-09b5-41cd-9330-b549d0dd280d'),
+            '1', '2019-08-08', UUID());
+
+            -- Other - answer
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '9994a4aa-981b-4605-8f4f-23e02e64106e'),
+            (SELECT concept_id FROM concept WHERE uuid = '5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
+            '1', '2019-08-08', UUID());
+
+            -- TB - Question
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '01f37a87-14a3-496d-88fe-00d3d1fea03c', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d491e50-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'TB', 'en-GB', '1', '2019-08-08', '0', '1', 'd816bb11-6f88-457a-a6fa-c9522586a605'
+            FROM concept WHERE uuid = '01f37a87-14a3-496d-88fe-00d3d1fea03c';
+
+            -- Patient with previous history of TB - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '3d0460b8-40c7-47df-b5c3-f8d7d31c533f', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Patient with previous history of TB', 'en-GB', '1', '2019-08-08', '0', '1', '7b7ebc1c-156f-4b77-8b4f-cacdc41fdfd6'
+            FROM concept WHERE uuid = '3d0460b8-40c7-47df-b5c3-f8d7d31c533f';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '01f37a87-14a3-496d-88fe-00d3d1fea03c'),
+            (SELECT concept_id FROM concept WHERE uuid = '3d0460b8-40c7-47df-b5c3-f8d7d31c533f'),
+            '1', '2019-08-08', UUID());
+
+            -- Patient with current diagnosis of TB - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '4503b322-d946-4d0a-8878-eb0650d3976b', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Patient with current diagnosis of TB', 'en-GB', '1', '2019-08-08', '0', '1', '879d5abf-c694-4605-a637-6da6c6939379'
+            FROM concept WHERE uuid = '4503b322-d946-4d0a-8878-eb0650d3976b';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = '01f37a87-14a3-496d-88fe-00d3d1fea03c'),
+            (SELECT concept_id FROM concept WHERE uuid = '4503b322-d946-4d0a-8878-eb0650d3976b'),
+            '1', '2019-08-08', UUID());
+
+            -- Treatment Status - Question
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'c59d7c13-7037-4a70-9f14-ec8b727d1c12', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d491e50-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Treatment Status', 'en-GB', '1', '2019-08-08', '0', '1', 'fe38292f-ea78-4c7a-9729-f347067cf98f'
+            FROM concept WHERE uuid = 'c59d7c13-7037-4a70-9f14-ec8b727d1c12';
+
+            -- Under Treatment - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'f6c9f4e0-143f-4cb2-9346-35c266f5f803', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Under Treatment', 'en-GB', '1', '2019-08-08', '0', '1', '5305c075-3adf-43d4-8665-02e67c01649f'
+            FROM concept WHERE uuid = 'f6c9f4e0-143f-4cb2-9346-35c266f5f803';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'c59d7c13-7037-4a70-9f14-ec8b727d1c12'),
+            (SELECT concept_id FROM concept WHERE uuid = 'f6c9f4e0-143f-4cb2-9346-35c266f5f803'),
+            '1', '2019-08-08', UUID());
+
+            -- Treatment completed - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT 'b4f0332a-ea36-4086-a4e9-e1136c541487', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Treatment completed', 'en-GB', '1', '2019-08-08', '0', '1', '22bf92a7-bf0f-4358-a509-4dbf25281dfd'
+            FROM concept WHERE uuid = 'b4f0332a-ea36-4086-a4e9-e1136c541487';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'c59d7c13-7037-4a70-9f14-ec8b727d1c12'),
+            (SELECT concept_id FROM concept WHERE uuid = 'b4f0332a-ea36-4086-a4e9-e1136c541487'),
+            '1', '2019-08-08', UUID());
+
+            -- Treatment failure/transfer out - Diagnosis
+            INSERT INTO concept (uuid, retired, datatype_id, class_id, creator, date_created)
+            SELECT '15bd5100-cd85-4bbd-a848-8d3a19b1e738', '0', c_datatype.concept_datatype_id, c_class.concept_class_id, '1', '2019-08-08'
+            FROM concept_datatype c_datatype INNER JOIN  concept_class c_class
+            WHERE c_datatype.hl7_abbreviation = 'CWE' AND c_class.uuid = '8d4918b0-c2cc-11de-8d13-0010c6dffd0f';
+
+            INSERT INTO concept_name (concept_id, name, locale, creator, date_created, voided, locale_preferred, uuid)
+            SELECT concept_id, 'Treatment failure/transfer out', 'en-GB', '1', '2019-08-08', '0', '1', '62a7cecf-e2c1-46f4-82d1-655c286b0e71'
+            FROM concept WHERE uuid = '15bd5100-cd85-4bbd-a848-8d3a19b1e738';
+
+            INSERT INTO concept_answer (concept_id, answer_concept, creator, date_created, uuid) VALUES
+            ((SELECT concept_id FROM concept WHERE uuid = 'c59d7c13-7037-4a70-9f14-ec8b727d1c12'),
+            (SELECT concept_id FROM concept WHERE uuid = '15bd5100-cd85-4bbd-a848-8d3a19b1e738'),
+            '1', '2019-08-08', UUID());
+        </sql>
+    </changeSet>
+
+    <changeSet id="cfl-20190809-09:03" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM encounter_type WHERE uuid = '6932803d-f0a3-44e5-90cd-e08d86f98d70';
+            </sqlCheck>
+        </preConditions>
+        <comment></comment>
+        <insert tableName="encounter_type">
+            <column name="name">CFL HIV Visit</column>
+            <column name="description">CFL HIV visit</column>
+            <column name="creator">1</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="uuid">6932803d-f0a3-44e5-90cd-e08d86f98d70</column>
+        </insert>
+    </changeSet>
  
 </databaseChangeLog>

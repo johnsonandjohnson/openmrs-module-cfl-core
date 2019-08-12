@@ -11,4 +11,22 @@
 	<packaging>jar</packaging>
 	<name>CFL Module API</name>
 	<description>API project for CFL Module</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>uiframework-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>htmlformentry-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>htmlformentryui-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>
