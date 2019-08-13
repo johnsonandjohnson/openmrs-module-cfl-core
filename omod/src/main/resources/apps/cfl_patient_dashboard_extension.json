@@ -6,5 +6,21 @@
     "label": "Patient visit history",
     "icon": "icon-book",
     "url": "coreapps/patientdashboard/patientDashboard.page?patientId={{patient.uuid}}"
+  },
+  {
+    "id": "cfl.appointments.list",
+    "extensionPointId": "patientDashboard.overallActions",
+    "type": "link",
+    "label": "Scheduled appointments",
+    "icon":"icon-calendar",
+    "url": "module/appointmentscheduling/appointmentList.list"
+  },
+  {
+    "id": "cfl.appointments.checkIn",
+    "extensionPointId": "patientDashboard.overallActions",
+    "type": "link",
+    "label": "CFL check-in",
+    "icon":"icon-file-alt",
+    "url": "htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patient.uuid}}&visitId={{visit.uuid}}&definitionUiResource=cfl:htmlforms/cfl-check-in.xml"
   }
 ]

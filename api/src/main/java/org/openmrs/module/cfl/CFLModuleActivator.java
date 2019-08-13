@@ -48,7 +48,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		FormService formService = Context.getFormService();
 		HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
 
-		List<String> htmlforms = Arrays.asList("cfl:htmlforms/cfl-HIV.xml");
+		List<String> htmlforms = Arrays.asList("cfl:htmlforms/cfl-HIV.xml", "cfl:htmlforms/cfl-check-in.xml");
 
 		for (String htmlform : htmlforms) {
 			HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
