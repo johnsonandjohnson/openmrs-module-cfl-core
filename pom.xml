@@ -56,6 +56,12 @@
 				<version>${htmlformentryuiVersion}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>appframework-api</artifactId>
+				<version>${appframeworkVersion}</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -103,5 +109,6 @@
 		<htmlformentryVersion>3.8.0</htmlformentryVersion>
 		<htmlformentryuiVersion>1.7.0</htmlformentryuiVersion>
 		<patientFlagVersion>3.0.1</patientFlagVersion>
+		<appframeworkVersion>2.9</appframeworkVersion>
 	</properties>
 </project>
