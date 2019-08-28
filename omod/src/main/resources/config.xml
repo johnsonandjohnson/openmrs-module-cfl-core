@@ -41,6 +41,9 @@
 		<require_module version="${patientFlagVersion}">
 			org.openmrs.module.patientflags
 		</require_module>
+		<require_module version="${appframeworkVersion}">
+			org.openmrs.module.appframework
+		</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->

@@ -590,6 +590,27 @@
         </sql>
     </changeSet>
 
+    <changeSet id="cfl-20190826-11:50" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "58cb9e76-75a1-4f49-956f-4ff6d0e02312";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the email personAttribute.
+        </comment>
+        <insert tableName="person_attribute_type">
+            <column name="name">EmailAttribute</column>
+            <column name="description">Attribute used to store information about patient email</column>
+            <column name="format">java.lang.String</column>
+            <column name="searchable">0</column>
+            <column name="uuid">58cb9e76-75a1-4f49-956f-4ff6d0e02312</column>
+            <column name="date_created">2019-08-08</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
+
     <changeSet id="cfl-20190827-15:50" author="Arkadiusz Lalo">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="relationship_type" />
