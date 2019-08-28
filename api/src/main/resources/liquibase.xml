@@ -589,5 +589,27 @@
             (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
         </sql>
     </changeSet>
+
+    <changeSet id="cfl-20190827-15:50" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="relationship_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM relationship_type WHERE uuid = "acec590b-825e-45d2-876a-0028f174903d";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the caregiver relationship type.
+        </comment>
+        <insert tableName="relationship_type">
+            <column name="a_is_to_b">Caregiver</column>
+            <column name="b_is_to_a">Caretaker</column>
+            <column name="preferred">0</column>
+            <column name="weight">0</column>
+            <column name="description">Caregiver relationship</column>
+            <column name="uuid">acec590b-825e-45d2-876a-0028f174903d</column>
+            <column name="date_created">2019-08-27</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
  
 </databaseChangeLog>

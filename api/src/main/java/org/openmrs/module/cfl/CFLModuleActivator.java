@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.FormService;
@@ -24,10 +25,13 @@ public class CFLModuleActivator extends BaseModuleActivator {
 	/**
 	 * @see #started()
 	 */
+	@Override
 	public void started() {
 		log.info("Started CFL Module");
 		try {
 			setupHtmlForms();
+			createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
+					CFLConstants.PERSONATTRIBUTETYPE_UUID);
 		}
 		catch (Exception e) {
 			Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
@@ -35,14 +39,24 @@ public class CFLModuleActivator extends BaseModuleActivator {
 			throw new RuntimeException("failed to setup the required modules", e);
 		}
 	}
-	
+
 	/**
 	 * @see #shutdown()
 	 */
 	public void shutdown() {
 		log.info("Shutdown CFL Module");
 	}
-	
+
+	private void createGlobalSettingIfNotExists(String key, String value) {
+		String existSetting = Context.getAdministrationService().getGlobalProperty(key);
+		if (StringUtils.isBlank(existSetting)) {
+			Context.getAdministrationService().setGlobalProperty(key, value);
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("CFL Module created '%s' global property with value - %s", key, value));
+			}
+		}
+	}
+
 	private void setupHtmlForms() throws Exception {
 		ResourceFactory resourceFactory = ResourceFactory.getInstance();
 		FormService formService = Context.getFormService();
