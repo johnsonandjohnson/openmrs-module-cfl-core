@@ -162,6 +162,25 @@
               ]
             }
           ]
+        },
+        {
+          "id": "relationships-info",
+          "label": "registrationapp.person.relationship",
+          "questions": [
+            {
+              "legend": "registrationapp.person.relationship.label",
+              "header": "registrationapp.person.relationship.question",
+              "fields": [
+                {
+                  "type": "personRelationships",
+                  "widget": {
+                    "providerName": "registrationapp",
+                    "fragmentId": "field/personRelationship"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }
