@@ -3,7 +3,7 @@
     "id": "cfl.patientVisitHistory",
     "extensionPointId": "patientDashboard.overallActions",
     "type": "link",
-    "label": "Patient visit history",
+    "label": "Patient medical history",
     "icon": "icon-book",
     "url": "coreapps/patientdashboard/patientDashboard.page?patientId={{patient.uuid}}"
   },
