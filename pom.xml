@@ -62,6 +62,12 @@
 				<version>${appframeworkVersion}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>emrapi-api</artifactId>
+				<version>${emrapiVersion}</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -110,5 +116,6 @@
 		<htmlformentryuiVersion>1.7.0</htmlformentryuiVersion>
 		<patientFlagVersion>3.0.1</patientFlagVersion>
 		<appframeworkVersion>2.9</appframeworkVersion>
+		<emrapiVersion>1.26.0</emrapiVersion>
 	</properties>
 </project>

@@ -7,7 +7,9 @@ import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.Module;
+import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.ui.framework.resource.ResourceFactory;
@@ -32,11 +34,12 @@ public class CFLModuleActivator extends BaseModuleActivator {
 			setupHtmlForms();
 			createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
 					CFLConstants.PERSONATTRIBUTETYPE_UUID);
+			installMetadataPackages();
 		}
 		catch (Exception e) {
 			Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
 			ModuleFactory.stopModule(mod);
-			throw new RuntimeException("failed to setup the required modules", e);
+			throw new ModuleException("failed to setup the required modules", e);
 		}
 	}
 
@@ -69,4 +72,11 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		}
 	}
 
+	private void installMetadataPackages() {
+		try {
+			MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
+		} catch(Exception e) {
+			throw new ModuleException("Failed to load Metadata sharing packages", e);
+		}
+	}
 }
