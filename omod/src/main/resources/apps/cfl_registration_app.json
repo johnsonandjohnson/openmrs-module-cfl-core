@@ -6,7 +6,7 @@
     "description":"Create a new Patient Record",
     "extensions":[
       {
-        "id":"referenceapplication.registrationapp.registerPatient.homepageLink",
+        "id":"cfl.registrationapp.registerPatient.homepageLink",
         "extensionPointId":"org.openmrs.referenceapplication.homepageLink",
         "type":"link",
         "label":"CFL Register Patient",
@@ -14,6 +14,54 @@
         "icon":"icon-user",
         "order":1,
         "requiredPrivilege":"App: registrationapp.registerPatient"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "type": "link",
+        "order": 1,
+        "label": "cfl.goBackToPatientDashboard.label",
+        "url": "coreapps/clinicianfacing/patient.page?patientId={{patient.uuid}}",
+        "icon": "icon-dashboard"
+      },
+      {
+        "id": "cfl.registrationapp.summary.editPatientLink",
+        "extensionPointId": "patientDashboard.overallActions",
+        "type": "link",
+        "label": "cfl.editPatientInfo.label",
+        "url": "registrationapp/registrationSummary.page?patientId={{patient.uuid}}&appId=cfl.registerPatient",
+        "icon": "icon-pencil",
+        "order": 2,
+        "requiredPrivilege": "App: registrationapp.registerPatient"
+      },
+      {
+        "id": "cfl.registrationapp.summary.patientIds",
+        "appId": "cfl.registerPatient",
+        "extensionPointId": "registrationSummary.contentFragments",
+        "extensionParams": {
+          "provider": "registrationapp",
+          "fragment": "summary/section",
+          "fragmentConfig": {
+            "sectionId": "patientIds",
+            "patientId": "{{patientId}}"
+          }
+        },
+        "order": 1
+      },
+      {
+        "id": "cfl.registrationapp.summary.accesslocation-info",
+        "appId": "cfl.registerPatient",
+        "extensionPointId": "registrationSummary.contentFragments",
+        "extensionParams": {
+          "provider": "registrationapp",
+          "fragment": "summary/section",
+          "fragmentConfig": {
+            "sectionId": "accesslocation-info",
+            "patientId": "{{patientId}}"
+          }
+        },
+        "order": 2
       }
     ],
     "config":{

@@ -3,12 +3,16 @@ package org.openmrs.module.cfl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.appframework.service.AppFrameworkService;
+import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
@@ -21,7 +25,8 @@ import java.util.List;
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class CFLModuleActivator extends BaseModuleActivator {
-	
+
+
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
@@ -33,7 +38,10 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		try {
 			setupHtmlForms();
 			createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
-					CFLConstants.PERSONATTRIBUTETYPE_UUID);
+					CFLConstants.PERSONATTRIBUTETYPE_UUID, null);
+			createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
+					CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
+			configureDistribution();
 			installMetadataPackages();
 		}
 		catch (Exception e) {
@@ -50,12 +58,42 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		log.info("Shutdown CFL Module");
 	}
 
-	private void createGlobalSettingIfNotExists(String key, String value) {
+	private void configureDistribution() {
+		AdministrationService administrationService = Context.getService(AdministrationService.class);
+		AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
+		if (CFLConstants.TRUE.equalsIgnoreCase(
+				administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
+			appFrameworkService.enableApp(AppFrameworkConstants.CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP);
+			appFrameworkService.enableApp(AppFrameworkConstants.CFL_RELATIONSHIPS_APP);
+			appFrameworkService.enableApp(AppFrameworkConstants.CFL_LATESTOBSFORCONCEPTLIS_APP);
+			disableApps(appFrameworkService, AppFrameworkConstants.APP_IDS);
+			disableExtensions(appFrameworkService, AppFrameworkConstants.EXTENSION_IDS);
+		} else {
+			appFrameworkService.disableApp(AppFrameworkConstants.CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP);
+			appFrameworkService.disableApp(AppFrameworkConstants.CFL_RELATIONSHIPS_APP);
+			appFrameworkService.disableApp(AppFrameworkConstants.CFL_LATESTOBSFORCONCEPTLIS_APP);
+		}
+	}
+
+	private void disableApps(AppFrameworkService service, List<String> appIds) {
+		for (String app : appIds) {
+			service.disableApp(app);
+		}
+	}
+
+	private void disableExtensions(AppFrameworkService service, List<String> extensions) {
+		for (String ext : extensions) {
+			service.disableExtension(ext);
+		}
+	}
+
+	private void createGlobalSettingIfNotExists(String key, String value, String description) {
 		String existSetting = Context.getAdministrationService().getGlobalProperty(key);
 		if (StringUtils.isBlank(existSetting)) {
-			Context.getAdministrationService().setGlobalProperty(key, value);
+			GlobalProperty gp = new GlobalProperty(key, value, description);
+			Context.getAdministrationService().saveGlobalProperty(gp);
 			if (log.isDebugEnabled()) {
-				log.debug(String.format("CFL Module created '%s' global property with value - %s", key, value));
+				log.debug(String.format("Message Module created '%s' global property with value - %s", key, value));
 			}
 		}
 	}
