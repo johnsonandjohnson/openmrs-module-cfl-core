@@ -38,7 +38,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		try {
 			setupHtmlForms();
 			createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
-					CFLConstants.PERSONATTRIBUTETYPE_UUID, null);
+					CFLConstants.PERSONATTRIBUTETYPE_UUID);
 			createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
 					CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
 			configureDistribution();
@@ -63,15 +63,25 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
 		if (CFLConstants.TRUE.equalsIgnoreCase(
 				administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
-			appFrameworkService.enableApp(AppFrameworkConstants.CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP);
-			appFrameworkService.enableApp(AppFrameworkConstants.CFL_RELATIONSHIPS_APP);
-			appFrameworkService.enableApp(AppFrameworkConstants.CFL_LATESTOBSFORCONCEPTLIS_APP);
-			disableApps(appFrameworkService, AppFrameworkConstants.APP_IDS);
-			disableExtensions(appFrameworkService, AppFrameworkConstants.EXTENSION_IDS);
+			enableAdditionalConfiguration(appFrameworkService);
 		} else {
-			appFrameworkService.disableApp(AppFrameworkConstants.CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP);
-			appFrameworkService.disableApp(AppFrameworkConstants.CFL_RELATIONSHIPS_APP);
-			appFrameworkService.disableApp(AppFrameworkConstants.CFL_LATESTOBSFORCONCEPTLIS_APP);
+			enableDefaultConfiguration(appFrameworkService);
+		}
+	}
+
+	private void enableAdditionalConfiguration(AppFrameworkService appFrameworkService) {
+		enableApps(appFrameworkService, AppFrameworkConstants.CFL_ADDITIONAL_MODIFICATION_APP_IDS);
+		disableApps(appFrameworkService, AppFrameworkConstants.APP_IDS);
+		disableExtensions(appFrameworkService, AppFrameworkConstants.EXTENSION_IDS);
+	}
+
+	private void enableDefaultConfiguration(AppFrameworkService appFrameworkService) {
+		disableApps(appFrameworkService, AppFrameworkConstants.CFL_ADDITIONAL_MODIFICATION_APP_IDS);
+	}
+
+	private void enableApps(AppFrameworkService service, List<String> appIds) {
+		for (String app : appIds) {
+			service.enableApp(app);
 		}
 	}
 
@@ -87,7 +97,11 @@ public class CFLModuleActivator extends BaseModuleActivator {
 		}
 	}
 
-	private void createGlobalSettingIfNotExists(String key, String value, String description) {
+	private void createGlobalSettingIfNotExists(String key, String value) {
+		createGlobalSettingIfNotExists(key, value, null);
+	}
+
+		private void createGlobalSettingIfNotExists(String key, String value, String description) {
 		String existSetting = Context.getAdministrationService().getGlobalProperty(key);
 		if (StringUtils.isBlank(existSetting)) {
 			GlobalProperty gp = new GlobalProperty(key, value, description);
