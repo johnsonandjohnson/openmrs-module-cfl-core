@@ -21,7 +21,7 @@
         "appId": "cfl.registerPatient",
         "type": "link",
         "order": 1,
-        "label": "cfl.goBackToPatientDashboard.label",
+        "label": "cfl.patientDashboard.label",
         "url": "coreapps/clinicianfacing/patient.page?patientId={{patient.uuid}}",
         "icon": "icon-dashboard"
       },
@@ -52,7 +52,7 @@
       {
         "id": "cfl.registrationapp.summary.accesslocation-info",
         "appId": "cfl.registerPatient",
-        "extensionPointId": "registrationSummary.contentFragments",
+        "extensionPointId": "registrationSummary.secondColumnContentFragments",
         "extensionParams": {
           "provider": "registrationapp",
           "fragment": "summary/section",

@@ -1,5 +1,5 @@
 <script type="text/javascript">
     jq( document ).ready(function() {
-        jq("h3:contains('Current Visit Actions')").parent().hide();
+        jq("h3:contains('${ ui.message("coreapps.clinicianfacing.activeVisitActions") }')").parent().hide();
     });
 </script>
