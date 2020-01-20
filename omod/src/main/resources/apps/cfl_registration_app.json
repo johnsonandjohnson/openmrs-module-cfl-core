@@ -16,16 +16,6 @@
         "requiredPrivilege":"App: registrationapp.registerPatient"
       },
       {
-        "id": "cfl.registrationSummaryOverallActionsLink",
-        "extensionPointId": "registrationSummary.overallActions",
-        "appId": "cfl.registerPatient",
-        "type": "link",
-        "order": 1,
-        "label": "cfl.patientDashboard.label",
-        "url": "coreapps/clinicianfacing/patient.page?patientId={{patient.uuid}}",
-        "icon": "icon-dashboard"
-      },
-      {
         "id": "cfl.registrationapp.summary.editPatientLink",
         "extensionPointId": "patientDashboard.overallActions",
         "type": "link",
@@ -34,6 +24,94 @@
         "icon": "icon-pencil",
         "order": 2,
         "requiredPrivilege": "App: registrationapp.registerPatient"
+      },
+      {
+        "id": "cfl.registrationSummary.includeFragments",
+        "extensionPointId": "patientDashboard.includeFragments",
+        "extensionParams": {
+          "provider": "cfl",
+          "fragment": "includeFragments/deletePatientAction"
+        }
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink1",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "type": "link",
+        "order": 1,
+        "label": "visits.visits",
+        "url": "owa/visits/index.html#/visits/manage/{{patient.uuid}}",
+        "icon": "icon-calendar"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink2",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "type": "link",
+        "order": 2,
+        "label": "messages.title",
+        "url": "owa/messages/index.html#/messages/{{patient.patientId}}&patientUuid={{patient.uuid}}",
+        "icon": "icon-comment"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink3",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "type": "link",
+        "order": 3,
+        "label": "cfl.patientDashboard.label",
+        "url": "coreapps/clinicianfacing/patient.page?patientId={{patient.uuid}}",
+        "icon": "icon-dashboard"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink4",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "type": "link",
+        "order": 4,
+        "label": "coreapps.conditionui.conditions",
+        "icon": "icon-diagnosis",
+        "url": "coreapps/conditionlist/manageConditions.page?patientId={{patient.uuid}}"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink5",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "order": 5,
+        "type": "link",
+        "label": "allergyui.allergies",
+        "icon": "icon-medical",
+        "url": "allergyui/allergies.page?patientId={{patient.uuid}}"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink6",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "order": 6,
+        "type": "Link",
+        "label": "coreapps.markPatientDead.label",
+        "icon": "icon-plus-sign-alt",
+        "url": "coreapps/markPatientDead.page?patientId={{patient.uuid}}"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink7",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "order": 7,
+        "type": "script",
+        "label": "coreapps.task.deletePatient.label",
+        "script": "delPatient.showDeletePatientCreationDialog(&#x27;{{patient.uuid}}&#x27;)",
+        "icon": "icon-remove"
+      },
+      {
+        "id": "cfl.registrationSummaryOverallActionsLink5",
+        "extensionPointId": "registrationSummary.overallActions",
+        "appId": "cfl.registerPatient",
+        "order": 8,
+        "type": "link",
+        "label": "callflows.initcall.button",
+        "icon":"icon-phone-sign",
+        "url": "/ws/callflows/person/{{patient.uuid}}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=Patient"
       },
       {
         "id": "cfl.registrationapp.summary.patientIds",
