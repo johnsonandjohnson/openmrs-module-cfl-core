@@ -1,10 +1,20 @@
 [
   {
-    "id": "cfl.patientVisitHistory",
+    "id": "cfl.link.conditions",
     "extensionPointId": "patientDashboard.overallActions",
     "type": "link",
-    "label": "Patient medical history",
-    "icon": "icon-book",
-    "url": "coreapps/patientdashboard/patientDashboard.page?patientId={{patient.uuid}}"
+    "label": "coreapps.conditionui.conditions",
+    "icon": "icon-diagnosis",
+    "order": 6,
+    "url": "coreapps/conditionlist/manageConditions.page?patientId={{patient.uuid}}"
+  },
+  {
+    "id": "cfl.link.allergies",
+    "extensionPointId": "patientDashboard.overallActions",
+    "type": "link",
+    "label": "allergyui.allergies",
+    "icon": "icon-medical",
+    "order": 7,
+    "url": "allergyui/allergies.page?patientId={{patient.uuid}}"
   }
 ]

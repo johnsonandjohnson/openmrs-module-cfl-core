@@ -1,0 +1,93 @@
+[
+  {
+    "id":"cfl.patientDashboard.improvements",
+    "description":"Make some additional improvement in the patient dashboard",
+    "extensions": [
+      {
+        "id": "cfl.patientDashboard.includeFragments.disableVisitActions",
+        "extensionPointId": "patientDashboard.includeFragments",
+        "extensionParams": {
+          "provider": "cfl",
+          "fragment": "includeFragments/disableVisitActions"
+        }
+      },
+      {
+        "id": "cfl.conditionlist",
+        "extensionPointId": "patientDashboard.firstColumnFragments",
+        "order": 3,
+        "label": "coreapps.conditionui.conditions",
+        "icon": "icon-medical",
+        "extensionParams": {
+          "provider": "coreapps",
+          "fragment": "conditionlist/conditions"
+        }
+      },
+      {
+        "id": "cfl.allergies",
+        "extensionPointId": "patientDashboard.firstColumnFragments",
+        "order": 4,
+        "extensionParams": {
+          "provider": "allergyui",
+          "fragment": "allergies"
+        }
+      },
+      {
+        "id": "cfl.patientflags.patientDashboard.secondColumnFragments",
+        "extensionPointId": "patientDashboard.secondColumnFragments",
+        "order": -1,
+        "extensionParams": {
+          "provider": "patientflags",
+          "fragment": "patientflagsDashboard"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cfl.relationships",
+    "instanceOf": "coreapps.template.dashboardWidget",
+    "description": "coreapps.relationships.app.description",
+    "config": {
+      "widget": "relationships",
+      "icon": "icon-group",
+      "label": "FAMILY",
+      "editPrivilege": "Task: coreapps.editRelationships",
+      "maxRecords": "5"
+    },
+    "extensions": [
+      {
+        "id": "cfl.relationships.clinicianDashboardFirstColumn",
+        "appId": "cfl.relationships",
+        "order": 5,
+        "extensionPointId": "patientDashboard.firstColumnFragments",
+        "extensionParams": {
+          "provider": "coreapps",
+          "fragment": "dashboardwidgets/dashboardWidget"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cfl.latestobsforconceptlis",
+    "instanceOf": "coreapps.template.dashboardWidget",
+    "description": "coreapps.latestObsForConceptList.app.description",
+    "config": {
+      "widget": "latestobsforconceptlist",
+      "icon": "icon-user-md",
+      "label": "LATEST OBSERVATIONS",
+      "maxAge": "1m",
+      "concepts": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "extensions": [
+      {
+        "id": "cfl.latestobsforconceptlis.clinicianDashboardSecondColumn",
+        "appId": "cfl.latestobsforconceptlis",
+        "order": 1,
+        "extensionPointId": "patientDashboard.secondColumnFragments",
+        "extensionParams": {
+          "provider": "coreapps",
+          "fragment": "dashboardwidgets/dashboardWidget"
+        }
+      }
+    ]
+  }
+]
