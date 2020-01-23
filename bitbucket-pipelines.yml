@@ -10,11 +10,21 @@ definitions:
           - mvn clean install
         artifacts:
           - omod/target/*.omod
+    - step: &firefox-ui-tests 
+        name: Run Firefox Tests
+        image: pgesek/maven-geckodriver:1.0
+        caches:
+          - maven
+        script:
+          - cd ui-tests && mvn clean test -Dbrowser=firefox -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dheadless=true
 
 pipelines:
   default:
     - step: *build-step
 
+  ui-tests:
+    - step: *firefox-ui-tests 
+  
   branches:
     master:
       - step: *build-step
