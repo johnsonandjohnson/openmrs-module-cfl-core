@@ -1,0 +1,58 @@
+[
+  {
+    "person": {
+      "names": [
+        {
+          "givenName": "[PATIENT]",
+          "familyName": "[ONE]"
+        }
+      ],
+      "age": 30,
+      "gender": "M",
+      "addresses": [
+        {
+          "address1": "Isolation Ward"
+        }
+      ]
+    },
+    "identifiers": [
+      {
+        "identifier": "0000",
+        "identifierType": "05a29f94-c0ed-11e2-94be-8c13b969e334",
+        "preferred": true,
+        "location": "2131aff8-2e2a-480a-b7ab-4ac53250262b"
+      }
+    ],
+    "related": [
+      {
+        "relationshipType": "acec590b-825e-45d2-876a-0028f174903d",
+        "personB": {
+          "person": {
+            "names": [
+              {
+                "givenName": "[CAREGIVER]",
+                "familyName": "[ONE]"
+              }
+            ],
+            "age": 40,
+            "gender": "F",
+            "addresses": [
+              {
+                "address1": "Isolation Ward"
+              }
+            ]
+          },
+          "identifiers": [
+            {
+              "identifier": "000000",
+              "identifierType": "05a29f94-c0ed-11e2-94be-8c13b969e334",
+              "preferred": true,
+              "location": "2131aff8-2e2a-480a-b7ab-4ac53250262b"
+            }
+          ],
+          "related": []
+        }
+      }
+    ]
+  }
+]
