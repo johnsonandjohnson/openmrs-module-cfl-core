@@ -22,8 +22,9 @@ pipelines:
   default:
     - step: *build-step
 
-  ui-tests:
-    - step: *firefox-ui-tests 
+  custom:
+    ui-tests:
+      - step: *firefox-ui-tests 
   
   branches:
     master:
