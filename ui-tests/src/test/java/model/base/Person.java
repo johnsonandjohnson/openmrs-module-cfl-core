@@ -1,8 +1,14 @@
 package model.base;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Person {
+public class Person implements Serializable {
+
+    private static final long serialVersionUID = 2856356152347194522L;
 
     private String uuid;
     private List<PersonName> names;
@@ -50,5 +56,23 @@ public class Person {
     public Person setAddresses(List<PersonAddress> addresses) {
         this.addresses = addresses;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

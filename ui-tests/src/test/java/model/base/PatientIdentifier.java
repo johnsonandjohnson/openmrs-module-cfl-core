@@ -3,7 +3,11 @@ package model.base;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class PatientIdentifier {
+import java.io.Serializable;
+
+public class PatientIdentifier implements Serializable {
+
+    private static final long serialVersionUID = -4561147567602113244L;
 
     private String identifier;
     private String identifierType;
@@ -44,27 +48,19 @@ public class PatientIdentifier {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-        PatientIdentifier that = (PatientIdentifier) o;
-
-        return new EqualsBuilder()
-                .append(getPreferred(), that.getPreferred())
-                .append(getIdentifier(), that.getIdentifier())
-                .append(getIdentifierType(), that.getIdentifierType())
-                .append(getLocation(), that.getLocation())
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getIdentifier())
-                .append(getIdentifierType())
-                .append(getPreferred())
-                .append(getLocation())
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
