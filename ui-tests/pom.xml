@@ -15,28 +15,36 @@
     </repositories>
 
     <dependencies>
-        <!-- These are the cucumber dependencies -->
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-java</artifactId>
             <version>1.2.5</version>
         </dependency>
 
-        <!-- These are the cucumber-junit dependencies -->
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
             <version>1.2.5</version>
         </dependency>
 
-        <!-- These are the junit dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
 
-        <!-- These are the selenium-webdriver dependencies -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gsonVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttpVersion}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -91,4 +99,8 @@
         </plugins>
     </build>
 
+    <properties>
+        <gsonVersion>2.8.5</gsonVersion>
+        <okhttpVersion>4.3.1</okhttpVersion>
+    </properties>
 </project>
