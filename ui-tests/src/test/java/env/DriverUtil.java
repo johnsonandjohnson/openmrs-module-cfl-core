@@ -30,19 +30,23 @@ import java.util.concurrent.TimeUnit;
 // Note: this class has to stay in the 'env' package to work with selenium-cucumber-java.
 
 public class DriverUtil {
-    public static long DEFAULT_WAIT = 20;
+
+    private static final long DEFAULT_WAIT = 20;
 
     private static WebDriver driver = null;
-
     private static String currentPath = System.getProperty("user.dir");
     private static Properties prop = new Properties();
     private static DesiredCapabilities capability = null;
 
-    public static WebDriver getDefaultDriver() {
+    public static WebDriver getDriver() {
         if (driver != null) {
             return driver;
+        } else {
+            return getDefaultDriver();
         }
+    }
 
+    public static WebDriver getDefaultDriver() {
         String enviroment = "desktop";
         String platform = "";
         String config = System.getProperty("config", "");

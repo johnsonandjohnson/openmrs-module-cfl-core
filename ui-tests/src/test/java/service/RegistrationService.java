@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class RegistrationService {
 
-    private static final String BASE_URL = "http://cfl-dev-lb-149730096.us-east-1.elb.amazonaws.com/openmrs/ws/rest/v1/";
+    private static final String BASE_URL = ContextService.getServerUrl() + "/ws/rest/v1/";
     private static final String PERSON_URL = BASE_URL + "person";
     private static final String PATIENT_URL = BASE_URL + "patient";
     private static final String RELATIONSHIP_URL = BASE_URL + "relationship";

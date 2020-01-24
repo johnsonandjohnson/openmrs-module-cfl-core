@@ -2,10 +2,7 @@ Feature: Patient's messages functionality
   As a user I should be able to go through patient's message functionalities
 
   Scenario: Go through messages
-    Given I navigate to "http://cfl-dev-lb-149730096.us-east-1.elb.amazonaws.com/openmrs/login.htm"
-    When I enter "admin" into input field having id "username"
-    And I enter "Admin123" into input field having id "password"
-    And I click on element having id "loginButton"
+    Given I log in
     Then element having id "apps" should be present
     When I click on element having xpath "//a[contains(@href,'findpatient')]"
     Then element having xpath "//h2[contains(text(),'Find Patient Record')]" should be present
