@@ -10,7 +10,7 @@ public class LoginSteps {
 
     @Given("^I log in$")
     public void iLogIn() {
-        WebDriver driver = DriverUtil.getDriver();
+        WebDriver driver = DriverUtil.getDefaultDriver();
         driver.get(ContextService.getServerUrl() + "/referenceapplication/login.page?showSessionLocations=true&");
         fillLoginForm(driver);
     }

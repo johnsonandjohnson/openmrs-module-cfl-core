@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
-import static env.DriverUtil.getDriver;
+import static env.DriverUtil.getDefaultDriver;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -31,8 +31,8 @@ public class RunCukeTest {
 
     @BeforeClass
     public static void setUp() {
-        getDriver().manage().timeouts().implicitlyWait(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        getDriver().manage().timeouts().pageLoadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        getDefaultDriver().manage().timeouts().implicitlyWait(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        getDefaultDriver().manage().timeouts().pageLoadTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
     @AfterClass

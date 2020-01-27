@@ -38,58 +38,54 @@ public class DriverUtil {
     private static Properties prop = new Properties();
     private static DesiredCapabilities capability = null;
 
-    public static WebDriver getDriver() {
+    public static WebDriver getDefaultDriver() {
         if (driver != null) {
             return driver;
         } else {
-            return getDefaultDriver();
-        }
-    }
+            String enviroment = "desktop";
+            String platform = "";
+            String config = System.getProperty("config", "");
 
-    public static WebDriver getDefaultDriver() {
-        String enviroment = "desktop";
-        String platform = "";
-        String config = System.getProperty("config", "");
+            if (!config.isEmpty()) {
+                enviroment = config.split("_")[0].toLowerCase();
+                platform = config.split("_")[1].toLowerCase();
+                try (InputStream input = new FileInputStream(currentPath + "/src/main/java/browserConfigs/" + config
+                        + ".properties")) {
+                    capability = getCapability(input);
+                } catch (IOException e) {
+                    throw new IllegalStateException("Unable to load browser config properties", e);
+                }
+            }
 
-        if (!config.isEmpty()) {
-            enviroment = config.split("_")[0].toLowerCase();
-            platform = config.split("_")[1].toLowerCase();
-            try (InputStream input = new FileInputStream(currentPath + "/src/main/java/browserConfigs/" + config
-                    + ".properties")) {
-                capability = getCapability(input);
+            try {
+                switch (enviroment) {
+                    case "local":
+                        switch (platform) {
+                            case "android":
+                                driver = androidDriver(capability);
+                                break;
+                            case "ios":
+                                driver = iosDriver(capability);
+                                break;
+                            default:
+                                System.out.println("unsupported platform");
+                                System.exit(0);
+                        }
+                        break;
+                    case "desktop":
+                        driver = chooseDriver();
+                        driver.manage().timeouts().setScriptTimeout(DEFAULT_WAIT, TimeUnit.SECONDS);
+                        driver.manage().window().maximize();
+                        break;
+                    default:
+                        throw new IllegalStateException("Inalid environment: " + enviroment);
+                }
             } catch (IOException e) {
-                throw new IllegalStateException("Unable to load browser config properties", e);
+                throw new IllegalStateException("Unable to create driver", e);
             }
-        }
 
-        try {
-            switch (enviroment) {
-                case "local":
-                    switch (platform) {
-                        case "android":
-                            driver = androidDriver(capability);
-                            break;
-                        case "ios":
-                            driver = iosDriver(capability);
-                            break;
-                        default:
-                            System.out.println("unsupported platform");
-                            System.exit(0);
-                    }
-                    break;
-                case "desktop":
-                    driver = chooseDriver();
-                    driver.manage().timeouts().setScriptTimeout(DEFAULT_WAIT, TimeUnit.SECONDS);
-                    driver.manage().window().maximize();
-                    break;
-                default:
-                    throw new IllegalStateException("Inalid environment: " + enviroment);
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to create driver", e);
+            return driver;
         }
-
-        return driver;
     }
 
     private static DesiredCapabilities setupDefaultDesktopCapabilities(DesiredCapabilities capabilities) {
