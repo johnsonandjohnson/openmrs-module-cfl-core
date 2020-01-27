@@ -23,6 +23,10 @@ Feature: Patient's messages functionality
     And element having xpath "//a[contains(text(),'Patient')]" should be present
     And element having xpath "//a[contains(text(),'Caregiver -')]" should be present
     When I click on element having xpath "//button[contains(text(),'Manage messages')]"
+    #todo remove manual refresh
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
+    And I refresh page
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
     Then element having xpath "//div[@class='time-section']/span[contains(text(),'Patient')]" should be present
     Then element having xpath "//div[@class='time-section']/span[contains(text(),'Caregiver')]" should be present
     When I click on element having xpath "//input[contains(@class,'ant-time-picker-input')]"
@@ -33,6 +37,10 @@ Feature: Patient's messages functionality
     And I click on element having xpath "//button[contains(text(),'Calendar Overview')]"
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
     When I click on element having xpath "//button[contains(text(),'Manage messages')]"
+    #todo remove manual refresh
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
+    And I refresh page
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
     Then element having xpath "//div[contains(text(),'Message Type')]" should be present
     And element having xpath "//div[contains(text(),'Patient')]" should be present
     And element having xpath "//div[contains(text(),'Caregiver')]" should be present
@@ -46,6 +54,10 @@ Feature: Patient's messages functionality
     And I click on element having xpath "//input[@name='Call']"
     And I click on element having xpath "//div[contains(@id,'Adherence report daily')]/div[2]/form/div/label/input[@name='Call']"
     And I click on element having xpath "//button[contains(text(),'Save')]"
+    #todo remove manual refresh
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Manage messages')]" to be enabled
+    And I refresh page
+    Then I wait 5 seconds for element having xpath "//button[contains(text(),'Manage messages')]" to be enabled
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
     And element having class "fc-day-grid-event" should be present
     When I click on element having css ".u-pl-1_5em:nth-child(2) input"
