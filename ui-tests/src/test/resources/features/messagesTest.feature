@@ -4,11 +4,7 @@ Feature: Patient's messages functionality
   Scenario: Go through messages
     Given I log in
     Then element having id "apps" should be present
-    When I click on element having xpath "//a[contains(@href,'findpatient')]"
-    Then element having xpath "//h2[contains(text(),'Find Patient Record')]" should be present
-    When I enter "Caregiver Test" into input field having id "patient-search"
-    Then element having xpath "//td[contains(text(),'Caregiver Test')]" should be present
-    When I click on element having xpath "//td[contains(text(),'Caregiver Test')]"
+    Then I navigate to patient "Caregiver Test" dashboard
     Then element having class "patient-header" should be present
     When I click on element having id "messagesapp.basicMessages.patientDashboardLink"
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
