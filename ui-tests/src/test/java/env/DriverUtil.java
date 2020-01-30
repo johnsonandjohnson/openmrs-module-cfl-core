@@ -173,8 +173,7 @@ public class DriverUtil {
     public static void closeDriver() {
         if (driver != null) {
             try {
-                driver.close();
-                //driver.quit(); // fails in current geckodriver! TODO: Fixme
+                driver.quit();
             } catch (NoSuchMethodError | SessionNotCreatedException | NoSuchSessionException e) {
                 throw new IllegalStateException("Unable to close web driver", e);
             }
