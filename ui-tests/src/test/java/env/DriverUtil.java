@@ -3,6 +3,7 @@ package env;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
@@ -34,9 +35,23 @@ public class DriverUtil {
     private static final long DEFAULT_WAIT = 20;
 
     private static WebDriver driver = null;
+    private static WebDriverWait wait = null;
     private static String currentPath = System.getProperty("user.dir");
     private static Properties prop = new Properties();
     private static DesiredCapabilities capability = null;
+
+    public static JavascriptExecutor getJsExecutor() {
+        return (JavascriptExecutor) getDefaultDriver();
+    }
+
+    public static WebDriverWait getWait() {
+        if (wait != null) {
+            return wait;
+        } else {
+            wait = new WebDriverWait(getDefaultDriver(), DEFAULT_WAIT);
+            return wait;
+        }
+    }
 
     public static WebDriver getDefaultDriver() {
         if (driver != null) {

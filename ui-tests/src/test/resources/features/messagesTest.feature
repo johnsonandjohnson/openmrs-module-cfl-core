@@ -8,7 +8,7 @@ Feature: Patient's messages functionality
     Then element having class "patient-header" should be present
     When I click on element having id "messagesapp.basicMessages.patientDashboardLink"
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
-    When I click on element having xpath "//button[contains(text(),'Manage messages')]"
+    Then I wait and click on element having xpath "//button[contains(text(),'Manage messages')]"
     And I click on element having xpath "//a[contains(@href,'Adherence report daily')]"
     And I click on element having xpath "//p[contains(text(),'Adherence report daily')]"
     And I wait 5 seconds for element having xpath "//input[@name='Deactivate service']" to be enabled
@@ -18,7 +18,7 @@ Feature: Patient's messages functionality
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
     And element having xpath "//a[contains(text(),'Patient')]" should be present
     And element having xpath "//a[contains(text(),'Caregiver -')]" should be present
-    When I click on element having xpath "//button[contains(text(),'Manage messages')]"
+    Then I wait and click on element having xpath "//button[contains(text(),'Manage messages')]"
     #todo remove manual refresh
     Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
     And I refresh page
@@ -32,7 +32,7 @@ Feature: Patient's messages functionality
     And I click on element having xpath "//button[contains(text(),'Save')]"
     And I click on element having xpath "//button[contains(text(),'Calendar Overview')]"
     Then element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
-    When I click on element having xpath "//button[contains(text(),'Manage messages')]"
+    Then I wait and click on element having xpath "//button[contains(text(),'Manage messages')]"
     #todo remove manual refresh
     Then I wait 5 seconds for element having xpath "//button[contains(text(),'Calendar Overview')]" to be enabled
     And I refresh page
