@@ -1,24 +1,25 @@
 package info.seleniumcucumber.stepdefinitions;
 
 import cucumber.api.java.en.Given;
-import env.DriverUtil;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import service.ContextService;
+
+import static env.DriverUtil.getDefaultDriver;
+import static util.StepUtils.clickOn;
+import static util.StepUtils.sendKeys;
 
 public class LoginSteps {
 
     @Given("^I log in$")
     public void iLogIn() {
-        WebDriver driver = DriverUtil.getDefaultDriver();
-        driver.get(ContextService.getServerUrl() + "/referenceapplication/login.page?showSessionLocations=true&");
-        fillLoginForm(driver);
+        getDefaultDriver().get(ContextService.getServerUrl() + "/referenceapplication/login.page?showSessionLocations=true&");
+        fillLoginForm();
     }
 
-    private void fillLoginForm(WebDriver driver) {
-        driver.findElement(By.id("Inpatient Ward")).click();
-        driver.findElement(By.id("username")).sendKeys(ContextService.getUsername());
-        driver.findElement(By.id("password")).sendKeys(ContextService.getPassword());
-        driver.findElement(By.id("loginButton")).click();
+    private void fillLoginForm() {
+        clickOn(By.id("Inpatient Ward"));
+        sendKeys(By.id("username"), ContextService.getUsername());
+        sendKeys(By.id("password"), ContextService.getPassword());
+        clickOn(By.id("loginButton"));
     }
 }
