@@ -3,7 +3,6 @@ Feature: Patient's calendar events
 
   @WithPatients
   Scenario: View today's Adherence report daily on the calendar
-    Given I log in
     When I navigate to patient "[PATIENT] [ONE]" messages
     And element having xpath "//h3[contains(text(),'Calendar Overview')]" should be present
     And I wait and click on element having xpath "//button[contains(text(),'Manage messages')]"
@@ -16,4 +15,3 @@ Feature: Patient's calendar events
     And I click on element having xpath "//button[contains(text(),'Save')]"
     And I refresh page
     Then today's calendar tile contains "Adherence report daily"
-    Then I log out

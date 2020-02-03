@@ -2,7 +2,6 @@ Feature: Patient's messages functionality
   As a user I should be able to go through patient's message functionalities
 
   Scenario: Go through messages
-    Given I log in
     Then element having id "apps" should be present
     Then I navigate to patient "Caregiver Test" dashboard
     Then element having class "patient-header" should be present
@@ -69,4 +68,3 @@ Feature: Patient's messages functionality
 #    When I forcefully click on element having css ".u-pl-1_5em:nth-child(2) input"
 #    And I refresh page
 #    Then element having class "fc-day-grid-event" should be present
-    Then I log out
