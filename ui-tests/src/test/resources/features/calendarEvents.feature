@@ -15,3 +15,4 @@ Feature: Patient's calendar events
     Then I click on element having xpath "//button[contains(text(),'Save')]"
     Then I refresh page
     Then today's calendar tile contains "Adherence report daily"
+    Then I log out

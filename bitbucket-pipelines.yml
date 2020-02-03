@@ -16,7 +16,7 @@ definitions:
         caches:
           - maven
         script:
-          - cd ui-tests && mvn clean test -Dbrowser=firefox -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dheadless=true
+          - mvn clean install -Pui-tests -Dbrowser=firefox -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dheadless=true
 
 pipelines:
   default:
@@ -47,3 +47,5 @@ pipelines:
             # push to the repository
             - git push origin dev
 
+    ui-tests*:
+      - step: *firefox-ui-tests
