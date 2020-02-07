@@ -1,9 +1,7 @@
 package org.openmrs.module.cfl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
@@ -13,6 +11,7 @@ import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
+import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
@@ -37,13 +36,17 @@ public class CFLModuleActivator extends BaseModuleActivator {
         log.info("Started CFL Module");
         try {
             setupHtmlForms();
-            createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+            GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
                     CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
                     CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-            createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
+            GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                    CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
                     CFLConstants.PERSONATTRIBUTETYPE_UUID);
-            createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
-                    CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
+            GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                    CFLConstants.DISABLED_CONTROL_KEY,
+                    CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
+                    CFLConstants.DISABLED_CONTROL_DESCRIPTION);
             configureDistribution();
             installMetadataPackages();
         } catch (Exception e) {
@@ -96,21 +99,6 @@ public class CFLModuleActivator extends BaseModuleActivator {
     private void disableExtensions(AppFrameworkService service, List<String> extensions) {
         for (String ext : extensions) {
             service.disableExtension(ext);
-        }
-    }
-
-    private void createGlobalSettingIfNotExists(String key, String value) {
-        createGlobalSettingIfNotExists(key, value, null);
-    }
-
-    private void createGlobalSettingIfNotExists(String key, String value, String description) {
-        String existSetting = Context.getAdministrationService().getGlobalProperty(key);
-        if (StringUtils.isBlank(existSetting)) {
-            GlobalProperty gp = new GlobalProperty(key, value, description);
-            Context.getAdministrationService().saveGlobalProperty(gp);
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Message Module created '%s' global property with value - %s", key, value));
-            }
         }
     }
 

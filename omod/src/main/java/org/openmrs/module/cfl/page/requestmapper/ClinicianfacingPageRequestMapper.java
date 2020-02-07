@@ -1,19 +1,18 @@
 package org.openmrs.module.cfl.page.requestmapper;
 
-import org.apache.commons.lang.StringUtils;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.openmrs.ui.framework.page.PageRequestMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PersonPageRequestMapper implements PageRequestMapper {
+public class ClinicianfacingPageRequestMapper implements PageRequestMapper {
 
     @Override
     public boolean mapRequest(PageRequest request) {
         if (isCoreappsPatientDashboard(request) && isRedirectingToPersonDashboardEnabled()) {
-            request.setProviderNameOverride("cfl");
+            request.setProviderNameOverride(CFLConstants.MODULE_ID);
             request.setPageNameOverride("person");
             return true;
         }
@@ -21,9 +20,7 @@ public class PersonPageRequestMapper implements PageRequestMapper {
     }
 
     private boolean isRedirectingToPersonDashboardEnabled() {
-        String gp = Context.getAdministrationService()
-                .getGlobalProperty(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME);
-        return StringUtils.isNotBlank(gp) && Boolean.valueOf(gp);
+        return GlobalPropertyUtils.isTrue(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME);
     }
 
     private boolean isCoreappsPatientDashboard(PageRequest request) {
