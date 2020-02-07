@@ -118,6 +118,31 @@
                 <version>${webservicesRestVersion}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>coreapps-api</artifactId>
+                <version>${coreappsVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>appui-omod</artifactId>
+                <version>${appuiVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>appui-api</artifactId>
+                        <groupId>org.openmrs.module</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.web</groupId>
+                <artifactId>openmrs-web</artifactId>
+                <version>${openMRSVersion}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -160,7 +185,9 @@
     </pluginRepositories>
 
     <properties>
+        <openMRSVersion>1.12.0</openMRSVersion>
         <appuiVersion>1.7</appuiVersion>
+        <coreappsVersion>1.21.0</coreappsVersion>
         <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
         <uiframeworkVersion>3.9</uiframeworkVersion>
         <htmlformentryVersion>3.8.0</htmlformentryVersion>
