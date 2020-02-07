@@ -147,7 +147,80 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkStylePluginVersion}</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>verify-checkstyle</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <configLocation>checkstyle.xml</configLocation>
+                                <encoding>${project.build.sourceEncoding}</encoding>
+                                <consoleOutput>true</consoleOutput>
+                                <logViolationsToConsole>true</logViolationsToConsole>
+                                <failOnViolation>true</failOnViolation>
+                                <failsOnError>true</failsOnError>
+                                <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            </configuration>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${pmdPluginVersion}</version>
+                    <configuration>
+                        <rulesets>
+                            <ruleset>${project.basedir}/../pmd.xml</ruleset>
+                        </rulesets>
+                        <linkXRef>false</linkXRef>
+                        <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                        <minimumTokens>100</minimumTokens>
+                        <printFailingErrors>true</printFailingErrors>
+                        <analysisCache>true</analysisCache>
+                        <includeTests>false</includeTests>
+                        <failOnViolation>true</failOnViolation>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>cpd-check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findBugsPluginVersion}</version>
+                    <configuration>
+                        <includeFilterFile>findbugs-include.xml</includeFilterFile>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
                 <artifactId>maven-java-formatter-plugin</artifactId>
@@ -186,6 +259,9 @@
 
     <properties>
         <openMRSVersion>1.12.0</openMRSVersion>
+        <pmdPluginVersion>3.12.0</pmdPluginVersion>
+        <checkStylePluginVersion>3.0.0</checkStylePluginVersion>
+        <findBugsPluginVersion>3.0.5</findBugsPluginVersion>
         <appuiVersion>1.7</appuiVersion>
         <coreappsVersion>1.21.0</coreappsVersion>
         <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>

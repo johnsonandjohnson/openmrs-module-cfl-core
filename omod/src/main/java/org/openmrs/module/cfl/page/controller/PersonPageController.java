@@ -96,15 +96,18 @@ public class PersonPageController {
             contextModel.put("visit", activeVisit == null ? null : new VisitContextModel(activeVisit));
 
             List<Program> programs = new ArrayList<Program>();
-            List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, null, null, null, null, null, false);
+            List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient,
+                    null, null, null, null, null, false);
             for (PatientProgram patientProgram : patientPrograms) {
                 programs.add(patientProgram.getProgram());
             }
-            contextModel.put("patientPrograms", ConversionUtil.convertToRepresentation(programs, Representation.DEFAULT));
+            contextModel.put("patientPrograms", ConversionUtil.convertToRepresentation(programs,
+                    Representation.DEFAULT));
 
             model.addAttribute("appContextModel", contextModel);
 
-            List<Extension> overallActions = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".overallActions", contextModel);
+            List<Extension> overallActions = appFrameworkService
+                    .getExtensionsForCurrentUser(dashboard + ".overallActions", contextModel);
             Collections.sort(overallActions);
             model.addAttribute("overallActions", overallActions);
 
@@ -112,29 +115,37 @@ public class PersonPageController {
             if (activeVisit == null) {
                 visitActions = new ArrayList<Extension>();
             } else {
-                visitActions = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".visitActions", contextModel);
+                visitActions = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".visitActions",
+                        contextModel);
                 Collections.sort(visitActions);
             }
             model.addAttribute("visitActions", visitActions);
 
-            List<Extension> includeFragments = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".includeFragments", contextModel);
+            List<Extension> includeFragments = appFrameworkService
+                    .getExtensionsForCurrentUser(dashboard + ".includeFragments", contextModel);
             Collections.sort(includeFragments);
             model.addAttribute("includeFragments", includeFragments);
 
-            List<Extension> firstColumnFragments = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".firstColumnFragments", contextModel);
+            List<Extension> firstColumnFragments = appFrameworkService
+                    .getExtensionsForCurrentUser(dashboard + ".firstColumnFragments", contextModel);
             Collections.sort(firstColumnFragments);
             model.addAttribute("firstColumnFragments", firstColumnFragments);
 
-            List<Extension> secondColumnFragments = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".secondColumnFragments", contextModel);
+            List<Extension> secondColumnFragments = appFrameworkService
+                    .getExtensionsForCurrentUser(dashboard + ".secondColumnFragments", contextModel);
             Collections.sort(secondColumnFragments);
             model.addAttribute("secondColumnFragments", secondColumnFragments);
 
             List<Extension> otherActions = appFrameworkService.getExtensionsForCurrentUser(
-                    (dashboard == "patientDashboard" ? "clinicianFacingPatientDashboard" : dashboard) + ".otherActions", contextModel);
+                    (dashboard == "patientDashboard" ?
+                            "clinicianFacingPatientDashboard" : dashboard) + ".otherActions", contextModel);
             Collections.sort(otherActions);
             model.addAttribute("otherActions", otherActions);
 
-            model.addAttribute("baseDashboardUrl", coreAppsProperties.getDashboardUrl());  // used for breadcrumbs to link back to the base dashboard in the case when this is used to render a context-specific dashboard
+            // used for breadcrumbs to link back to the base dashboard in the case when this
+            // is used to render a context-specific dashboard
+            model.addAttribute("baseDashboardUrl", coreAppsProperties.getDashboardUrl());
+
             model.addAttribute("dashboard", dashboard);
 
             applicationEventService.patientViewed(patient, sessionContext.getCurrentUser());

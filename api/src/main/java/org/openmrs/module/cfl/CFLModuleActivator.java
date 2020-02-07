@@ -18,6 +18,7 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import java.util.List;
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class CFLModuleActivator extends BaseModuleActivator {
-
 
     private Log log = LogFactory.getLog(this.getClass());
 
@@ -38,15 +38,15 @@ public class CFLModuleActivator extends BaseModuleActivator {
         try {
             setupHtmlForms();
             createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
-                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE, CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
+                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
+                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
             createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
                     CFLConstants.PERSONATTRIBUTETYPE_UUID);
             createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
                     CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
             configureDistribution();
             installMetadataPackages();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
             ModuleFactory.stopModule(mod);
             throw new ModuleException("failed to setup the required modules", e);
@@ -103,7 +103,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
         createGlobalSettingIfNotExists(key, value, null);
     }
 
-        private void createGlobalSettingIfNotExists(String key, String value, String description) {
+    private void createGlobalSettingIfNotExists(String key, String value, String description) {
         String existSetting = Context.getAdministrationService().getGlobalProperty(key);
         if (StringUtils.isBlank(existSetting)) {
             GlobalProperty gp = new GlobalProperty(key, value, description);
@@ -114,7 +114,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
         }
     }
 
-    private void setupHtmlForms() throws Exception {
+    private void setupHtmlForms() throws IOException {
         ResourceFactory resourceFactory = ResourceFactory.getInstance();
         FormService formService = Context.getFormService();
         HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
@@ -129,7 +129,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
     private void installMetadataPackages() {
         try {
             MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new ModuleException("Failed to load Metadata sharing packages", e);
         }
     }
