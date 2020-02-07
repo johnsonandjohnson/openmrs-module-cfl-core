@@ -40,6 +40,7 @@ public class TextFragmentController {
         }
     }
 
+    @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
     private SimpleObject createCustomPersonAttributeJson(FragmentConfiguration config, Person person,
                                                          List<Extension> customPersonAttributeEditFragments) {
         SimpleObject so = new SimpleObject();

@@ -19,19 +19,16 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Program;
-import org.openmrs.api.EncounterService;
-import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.domain.AppDescriptor;
-import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.cfl.extension.builder.ExtensionBuilder;
 import org.openmrs.module.coreapps.CoreAppsConstants;
 import org.openmrs.module.coreapps.CoreAppsProperties;
 import org.openmrs.module.coreapps.contextmodel.PatientContextModel;
 import org.openmrs.module.coreapps.contextmodel.VisitContextModel;
-import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.emrapi.adt.AdtService;
 import org.openmrs.module.emrapi.event.ApplicationEventService;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
@@ -45,24 +42,21 @@ import org.openmrs.ui.framework.page.Redirect;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PersonPageController {
 
-    public Object controller(@RequestParam("patientId") Patient patient, PageModel model,
+    @SuppressWarnings({"checkstyle:parameterNumber", "PMD.ExcessiveParameterList"})
+    public Object controller(@RequestParam("patientId") Patient patient,
                              @RequestParam(required = false, value = "app") AppDescriptor app,
-                             @RequestParam(required = false, value = "dashboard") String dashboard,
+                             @RequestParam(required = false, value = "dashboard") String dashboardParam,
                              @InjectBeans PatientDomainWrapper patientDomainWrapper,
                              @SpringBean("adtService") AdtService adtService,
-                             @SpringBean("visitService") VisitService visitService,
-                             @SpringBean("encounterService") EncounterService encounterService,
-                             @SpringBean("emrApiProperties") EmrApiProperties emrApiProperties,
                              @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
                              @SpringBean("applicationEventService") ApplicationEventService applicationEventService,
                              @SpringBean("coreAppsProperties") CoreAppsProperties coreAppsProperties,
+                             PageModel model,
                              UiSessionContext sessionContext) {
-
         try {
             if (!Context.hasPrivilege(CoreAppsConstants.PRIVILEGE_PATIENT_DASHBOARD)) {
                 return new Redirect("coreapps", "noAccess", "");
@@ -70,20 +64,12 @@ public class PersonPageController {
                 return new Redirect("coreapps", "patientdashboard/deletedPatient", "patientId=" + patient.getId());
             }
 
-            if (StringUtils.isEmpty(dashboard)) {
-                dashboard = "patientDashboard";
-            }
-
+            String dashboard = StringUtils.isEmpty(dashboardParam) ? "patientDashboard" : dashboardParam;
             patientDomainWrapper.setPatient(patient);
             model.addAttribute("patient", patientDomainWrapper);
             model.addAttribute("app", app);
 
-            Location visitLocation = null;
-            try {
-                visitLocation = adtService.getLocationThatSupportsVisits(sessionContext.getSessionLocation());
-            } catch (IllegalArgumentException ex) {
-                // location does not support visits
-            }
+            Location visitLocation = prepareVisitLocation(adtService, sessionContext);
 
             VisitDomainWrapper activeVisit = null;
             if (visitLocation != null) {
@@ -91,56 +77,16 @@ public class PersonPageController {
             }
             model.addAttribute("activeVisit", activeVisit);
 
-            AppContextModel contextModel = sessionContext.generateAppContextModel();
-            contextModel.put("patient", new PatientContextModel(patient));
-            contextModel.put("visit", activeVisit == null ? null : new VisitContextModel(activeVisit));
-
-            List<Program> programs = new ArrayList<Program>();
-            List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient,
-                    null, null, null, null, null, false);
-            for (PatientProgram patientProgram : patientPrograms) {
-                programs.add(patientProgram.getProgram());
-            }
-            contextModel.put("patientPrograms", ConversionUtil.convertToRepresentation(programs,
-                    Representation.DEFAULT));
-
+            AppContextModel contextModel = prepareContextModel(sessionContext, patient, activeVisit);
             model.addAttribute("appContextModel", contextModel);
 
-            List<Extension> overallActions = appFrameworkService
-                    .getExtensionsForCurrentUser(dashboard + ".overallActions", contextModel);
-            Collections.sort(overallActions);
-            model.addAttribute("overallActions", overallActions);
-
-            List<Extension> visitActions;
-            if (activeVisit == null) {
-                visitActions = new ArrayList<Extension>();
-            } else {
-                visitActions = appFrameworkService.getExtensionsForCurrentUser(dashboard + ".visitActions",
-                        contextModel);
-                Collections.sort(visitActions);
-            }
-            model.addAttribute("visitActions", visitActions);
-
-            List<Extension> includeFragments = appFrameworkService
-                    .getExtensionsForCurrentUser(dashboard + ".includeFragments", contextModel);
-            Collections.sort(includeFragments);
-            model.addAttribute("includeFragments", includeFragments);
-
-            List<Extension> firstColumnFragments = appFrameworkService
-                    .getExtensionsForCurrentUser(dashboard + ".firstColumnFragments", contextModel);
-            Collections.sort(firstColumnFragments);
-            model.addAttribute("firstColumnFragments", firstColumnFragments);
-
-            List<Extension> secondColumnFragments = appFrameworkService
-                    .getExtensionsForCurrentUser(dashboard + ".secondColumnFragments", contextModel);
-            Collections.sort(secondColumnFragments);
-            model.addAttribute("secondColumnFragments", secondColumnFragments);
-
-            List<Extension> otherActions = appFrameworkService.getExtensionsForCurrentUser(
-                    (dashboard == "patientDashboard" ?
-                            "clinicianFacingPatientDashboard" : dashboard) + ".otherActions", contextModel);
-            Collections.sort(otherActions);
-            model.addAttribute("otherActions", otherActions);
+            ExtensionBuilder builder = new ExtensionBuilder(appFrameworkService, dashboard, contextModel);
+            model.addAttribute("overallActions", builder.buildOverallActions());
+            model.addAttribute("visitActions", builder.buildVisitActions());
+            model.addAttribute("includeFragments", builder.buildInclude());
+            model.addAttribute("firstColumnFragments", builder.buildFirstColumn());
+            model.addAttribute("secondColumnFragments", builder.buildSecondColumn());
+            model.addAttribute("otherActions", builder.buildOtherActions());
 
             // used for breadcrumbs to link back to the base dashboard in the case when this
             // is used to render a context-specific dashboard
@@ -155,6 +101,32 @@ public class PersonPageController {
         } catch (NullPointerException x) {
             return new Redirect("coreapps", "patientdashboard/patientNotFound", "patientId=" + "Not Found");
         }
+    }
 
+    private Location prepareVisitLocation(AdtService adtService, UiSessionContext sessionContext) {
+        try {
+            return adtService.getLocationThatSupportsVisits(sessionContext.getSessionLocation());
+        } catch (IllegalArgumentException ex) {
+            // location does not support visits
+            return null;
+        }
+    }
+
+    private AppContextModel prepareContextModel(UiSessionContext sessionContext, Patient patient,
+                                                VisitDomainWrapper activeVisit) {
+        AppContextModel contextModel = sessionContext.generateAppContextModel();
+        contextModel.put("patient", new PatientContextModel(patient));
+        contextModel.put("visit", activeVisit == null ? null : new VisitContextModel(activeVisit));
+
+        List<Program> programs = new ArrayList<Program>();
+        List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient,
+                null, null, null, null, null, false);
+        for (PatientProgram patientProgram : patientPrograms) {
+            programs.add(patientProgram.getProgram());
+        }
+        contextModel.put("patientPrograms", ConversionUtil.convertToRepresentation(programs,
+                Representation.DEFAULT));
+
+        return contextModel;
     }
 }
