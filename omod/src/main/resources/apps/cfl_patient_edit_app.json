@@ -1,19 +1,25 @@
 [
   {
-    "id":"cfl.registerPatient",
-    "instanceOf":"cfl.editPatient",
-    "label":"CFL Register Patient app",
-    "description":"Create a new Patient Record",
+    "id":"cfl.editPatient",
+    "instanceOf":"registrationapp.registerPatient",
+    "label":"CFL Edit patient info",
+    "description":"Same as cfl.registerPatient however without relationship because of issue with edit.",
     "extensions":[
       {
-        "id":"cfl.registrationapp.registerPatient.homepageLink",
-        "extensionPointId":"org.openmrs.referenceapplication.homepageLink",
-        "type":"link",
-        "label":"CFL Register Patient",
-        "url":"registrationapp/registerPatient.page?appId=cfl.registerPatient",
-        "icon":"icon-user",
-        "order":1,
-        "requiredPrivilege":"App: registrationapp.registerPatient"
+        "id": "cfl.registrationSummary.includeFragments",
+        "extensionPointId": "patientDashboard.includeFragments",
+        "extensionParams": {
+          "provider": "cfl",
+          "fragment": "includeFragments/disableLegacyPatientEdit"
+        }
+      },
+      {
+        "id": "cfl.editPatientInfo",
+        "extensionPointId": "patientHeader.editPatientDemographics",
+        "type": "link",
+        "label": "general.edit",
+        "order": 2,
+        "url": "registrationapp/editSection.page?patientId={{patient.patientId}}&sectionId=demographics&appId=cfl.editPatient"
       }
     ],
     "config":{
@@ -145,19 +151,6 @@
                   "widget":{
                     "providerName":"uicommons",
                     "fragmentId":"field/text"
-                  }
-                }
-              ]
-            },
-            {
-              "legend": "registrationapp.person.relationship.label",
-              "header": "registrationapp.person.relationship.question",
-              "fields": [
-                {
-                  "type": "personRelationships",
-                  "widget": {
-                    "providerName": "registrationapp",
-                    "fragmentId": "field/personRelationship"
                   }
                 }
               ]

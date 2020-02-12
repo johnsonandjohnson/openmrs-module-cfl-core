@@ -69,6 +69,9 @@ public final class AppFrameworkConstants {
             COREAPPS_CREATE_RETROSPECTIVE_VISIT_EXT, COREAPPS_MERGE_VISITS_EXT, ALLERGYUI_PATIENT_DASHBOARD_EXT,
             PATIENTFLAGS_EXT, ATTACHMENTS_EXT, CHARTSEARCH_EXT, LOCATIONBASEDACCESS_EXT);
 
+    public static final String REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT = "org.openmrs.module.registrationapp." +
+            "editPatientDemographics";
+
     private AppFrameworkConstants() {
     }
 }

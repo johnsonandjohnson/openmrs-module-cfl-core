@@ -19,6 +19,7 @@ import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,12 +67,18 @@ public class CFLModuleActivator extends BaseModuleActivator {
     private void configureDistribution() {
         AdministrationService administrationService = Context.getService(AdministrationService.class);
         AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
+        disableUnusedExtensions(appFrameworkService);
         if (CFLConstants.TRUE.equalsIgnoreCase(
                 administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
             enableAdditionalConfiguration(appFrameworkService);
         } else {
             enableDefaultConfiguration(appFrameworkService);
         }
+    }
+
+    private void disableUnusedExtensions(AppFrameworkService appFrameworkService) {
+        disableExtensions(appFrameworkService,
+                Collections.singletonList(AppFrameworkConstants.REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT));
     }
 
     private void enableAdditionalConfiguration(AppFrameworkService appFrameworkService) {
