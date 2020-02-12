@@ -6,8 +6,8 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.escapeJs(ui.encodeHtmlContent(ui.format(patient.patient))) }" ,
-            link: '${ ui.urlBind("/" + contextPath + baseDashboardUrl, [ patientId: patient.patient.id ] ) }'}
+        { label: "${ ui.escapeJs(ui.encodeHtmlContent(ui.format(isPatient ? patient.patient : person.person))) }" ,
+            link: '${ ui.urlBind("/" + contextPath + baseDashboardUrl, [ patientId: isPatient ? patient.patient.id : person.person.id ] ) }'}
     ];
     // add on breadcrumb if it has been defined in messages.properties
     <% if (ui.message(dashboard + ".breadcrumb") != dashboard + ".breadcrumb") { %>
@@ -20,7 +20,9 @@
             window.location.reload();
         });
     });
-    var patient = { id: ${ patient.id } };
+    <% if (isPatient) { %>
+        var patient = { id: ${patient.id} };
+    <% } %>
 </script>
 
 <% if(includeFragments){
@@ -35,7 +37,11 @@
     <%}
 } %>
 
-${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
+<% if(isPatient) { %>
+    ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
+<% } else { %>
+    ${ ui.includeFragment("cfl", "personHeader", [ person: person.person, appContextModel: appContextModel ]) }
+<%  } %>
 
 <div class="clear"></div>
 <div class="container">
@@ -54,7 +60,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, a
                     if(it.extensionParams.fragmentConfig != null){
                         configs = it.extensionParams.fragmentConfig;
                     }
-                    configs << [ patient: patient, patientId: patient.patient.id, app: it.appId ]
+                    configs << [ patient: patient, patientId: isPatient ? patient.patient.id : person.person.id, app: it.appId ]
             %>
                     ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, configs)}
             <%  }
@@ -69,7 +75,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, a
                     if(it.extensionParams.fragmentConfig != null){
                         configs = it.extensionParams.fragmentConfig;
                     }
-                    configs << [ patient: patient, patientId: patient.patient.id, app: it.appId ]
+                    configs << [ patient: patient, patientId: isPatient ? patient.patient.id : person.person.id, app: it.appId ]
             %>
                     ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, configs)}
             <%   }

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "messages.personStatus",
+    "label": "person status",
+    "description": "Used to provide person status UI functionality",
+    "extensions": [
+      {
+        "id": "messages.personHeader.secondLineFragments.personStatus",
+        "extensionPointId": "personHeader.secondLineFragments",
+        "extensionParams": {
+          "provider": "messages",
+          "fragment": "patientheader/personStatus"
+        }
+      },
+      {
+        "id": "messages.personDashboard.includeFragments",
+        "extensionPointId": "personDashboard.includeFragments",
+        "extensionParams": {
+          "provider": "messages",
+          "fragment": "patientdashboard/changeStatus"
+        }
+      }
+    ]
+  }
+]

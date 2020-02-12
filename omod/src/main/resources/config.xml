@@ -47,6 +47,9 @@
 		<require_module version="${emrapiVersion}">
 			org.openmrs.module.emrapi
 		</require_module>
+		<require_module version="${coreappsVersion}">
+			org.openmrs.module.coreapps
+		</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->
