@@ -31,26 +31,34 @@ Currently [axe 2](https://axe-core.org/) is being used as the accessibility chec
 Running
 -------
 
-* Run with parameters specifying a browser and a webdriver's path
+Run the following commands in `ui-tests` directory with parameters specifying a browser, a profile and a webdriver's path (make sure it's adequate to your local environment).
 
 Example:
+
+* for Firefox
 ```bash
-# for Firefox
-mvn clean test -Dbrowser=firefox -Dwebdriver.gecko.driver=/home/user/geckodriver
-# for Chrome
-mvn clean test -Dbrowser=chrome -Dwebdriver.chrome.driver=/home/user/chromedriver
-# for Safari
-mvn clean test -Dbrowser=safari -Dwebdriver.safari.driver=/home/user/safaridriver
-# for Edge
-mvn clean test -Dbrowser=edge -Dwebdriver.edge.driver=/home/user/MicrosoftWebDriver.exe
+mvn clean test -Dbrowser=firefox -Pui-tests -Dwebdriver.gecko.driver=/home/user/geckodriver
+```
+* for Chrome
+```bash
+mvn clean test -Dbrowser=chrome -Pui-tests -Dwebdriver.chrome.driver=/home/user/chromedriver
+```
+* for Safari
+```bash
+mvn clean test -Dbrowser=safari -Pui-tests -Dwebdriver.safari.driver=/home/user/safaridriver
+```
+* for Edge
+```bash
+mvn clean test -Dbrowser=edge -Pui-tests -Dwebdriver.edge.driver=/home/user/MicrosoftWebDriver.exe
 ```
 
 You can run browsers Firefox and Chrome in headless mode (tests are performed without opened browser window)
 ```bash
 # for Firefox
-mvn clean test -Dbrowser=firefox -Dwebdriver.gecko.driver=/home/user/geckodriver -Dheadless=true
+mvn clean test -Dbrowser=firefox -Pui-tests -Dwebdriver.gecko.driver=/home/user/geckodriver -Dheadless=true
+
 # for Chrome
-mvn clean test -Dbrowser=chrome -Dwebdriver.chrome.driver=/home/user/chromedriver -Dheadless=true
+mvn clean test -Dbrowser=chrome -Pui-tests -Dwebdriver.chrome.driver=/home/user/chromedriver -Dheadless=true
 ```
 
 Feature Hooks
