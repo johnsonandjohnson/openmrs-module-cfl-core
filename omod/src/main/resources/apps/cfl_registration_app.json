@@ -1,7 +1,7 @@
 [
   {
     "id":"cfl.registerPatient",
-    "instanceOf":"cfl.editPatient",
+    "instanceOf":"registrationapp.registerPatient",
     "label":"CFL Register Patient app",
     "description":"Create a new Patient Record",
     "extensions":[
