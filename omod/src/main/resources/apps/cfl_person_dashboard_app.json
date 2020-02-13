@@ -1,0 +1,18 @@
+[
+  {
+      "id": "cfl.personDashboard",
+      "label": "CFL module",
+      "description": "CFL configuration of person dashboard",
+      "extensions": [
+          {
+              "id": "cfl.personDashboard.outgoing",
+              "extensionPointId": "personDashboard.overallActions",
+              "type": "link",
+              "order": 26,
+              "label": "callflows.initcall.button",
+              "icon":"icon-phone-sign",
+              "url": "/ws/callflows/person/{{patient.uuid}}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=Caregiver"
+          }
+      ]
+  }
+]

@@ -111,6 +111,7 @@ public class PersonPageController {
         personDomainWrapper.setPerson(person);
         model.addAttribute(PERSON, personDomainWrapper);
         model.addAttribute("app", params.app);
+        model.addAttribute("activeVisit", null);
 
         AppContextModel contextModel = sessionContext.generateAppContextModel();
         model.addAttribute("appContextModel", contextModel);

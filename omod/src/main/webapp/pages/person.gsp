@@ -113,7 +113,7 @@
                         </ul>
                     <% } %>
                     <%
-                     def cxtModel = [ patientId: patient.id, activeVisitId: activeVisit ? activeVisit.visit.id : null]
+                     def cxtModel = [ patientId: isPatient ? patient.patient.id : person.person.id, activeVisitId: activeVisit ? activeVisit.visit.id : null]
                      otherActions.each { action -> %>
                     <a id="${ action.id }" class="button medium" href="${ ui.escapeJs(action.url("/" + ui.contextPath(), cxtModel)) }" class="float-left">
                         <i class="${ action.icon } float-left"></i>${ ui.message(action.label) }
