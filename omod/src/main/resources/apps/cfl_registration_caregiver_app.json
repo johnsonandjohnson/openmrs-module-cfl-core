@@ -1,0 +1,102 @@
+[
+  {
+    "id": "cfl.registerCaregiver",
+    "label": "Register Caregiver",
+    "description": "Create a new Person Record",
+    "extensions": [
+      {
+        "id": "cfl.registerCaregiver.homepageLink",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "CFL Register Caregiver",
+        "url": "cfl/registerCaregiver.page?appId=cfl.registerCaregiver",
+        "icon": "icon-user",
+        "order": 4,
+        "requiredPrivilege": "App: cfl.registerCaregiver"
+      }
+    ],
+    "config": {
+      "afterCreatedUrl": "/cfl/person.page?patientId={{patientId}}",
+      "allowUnknownPatients": false,
+      "sections": [
+        {
+          "id": "name",
+          "label": "cfl.registration.caregiver.name.label",
+          "questions": [
+            {
+              "id": "name",
+              "legend": "cfl.registration.caregiver.name.label"
+            }
+          ]
+        },
+        {
+          "id": "contactInfo",
+          "label": "cfl.registration.caregiver.contactInfo.label",
+          "questions": [
+            {
+              "legend": "cfl.registration.caregiver.language.label",
+              "id": "language",
+              "fields": [
+                {
+                  "type": "personAttribute",
+                  "label": "cfl.registration.caregiver.language.select.label",
+                  "formFieldName": "personLanguage",
+                  "uuid": "ff34db58-c1f4-475b-8bac-30f26e251333",
+                  "widget": {
+                    "providerName": "uicommons",
+                    "fragmentId": "field/dropDown",
+                    "config": {
+                      "options": [
+                        {
+                          "label": "English",
+                          "value": "English"
+                        },
+                        {
+                          "label": "Marathi",
+                          "value": "Marathi"
+                        },
+                        {
+                          "label": "Hindi",
+                          "value": "English"
+                        }
+                      ],
+                      "hideEmptyLabel": true,
+                      "expanded": false
+                    }
+                  },
+                  "cssClasses": [
+                    "required"
+                  ]
+                }
+              ]
+            },
+            {
+              "legend": "cfl.registration.caregiver.phone.label",
+              "id": "phoneNumberLabel",
+              "fields": [
+                {
+                  "type": "personAttribute",
+                  "label": "cfl.registration.caregiver.phone.question",
+                  "formFieldName": "phoneNumber",
+                  "uuid": "14d4f066-15f5-102d-96e4-000c29c2a5d7",
+                  "widget": {
+                    "providerName": "uicommons",
+                    "fragmentId": "field/text",
+                    "config": {
+                      "regex": "^[0-9]{10,13}$"
+                    }
+                  },
+                  "cssClasses": [
+                    "phone",
+                    "required",
+                    "regex"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

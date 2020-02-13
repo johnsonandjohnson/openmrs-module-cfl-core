@@ -147,6 +147,24 @@
                 <scope>provided</scope>
                 <version>${metadatamappingVersion}</version>
             </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>registrationapp-api</artifactId>
+                <version>${registrationappVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>registrationcore-api</artifactId>
+                <version>${registrationcoreVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>uicommons-api</artifactId>
+                <version>${uicommonsVersion}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -303,7 +321,7 @@
         <pmdPluginVersion>3.12.0</pmdPluginVersion>
         <checkStylePluginVersion>3.0.0</checkStylePluginVersion>
         <findBugsPluginVersion>3.0.5</findBugsPluginVersion>
-        <appuiVersion>1.7</appuiVersion>
+        <appuiVersion>1.9.0</appuiVersion>
         <coreappsVersion>1.21.0</coreappsVersion>
         <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
         <uiframeworkVersion>3.9</uiframeworkVersion>
@@ -313,5 +331,8 @@
         <appframeworkVersion>2.9</appframeworkVersion>
         <emrapiVersion>1.26.0</emrapiVersion>
         <webservicesRestVersion>2.11</webservicesRestVersion>
+        <registrationappVersion>1.13.0</registrationappVersion>
+        <registrationcoreVersion>1.8.0</registrationcoreVersion>
+        <uicommonsVersion>2.6.1</uicommonsVersion>
     </properties>
 </project>
