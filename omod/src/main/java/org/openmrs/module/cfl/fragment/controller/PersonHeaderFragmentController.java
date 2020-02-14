@@ -24,6 +24,7 @@ import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.extension.domain.PersonDomainWrapper;
 import org.openmrs.module.coreapps.CoreAppsProperties;
 import org.openmrs.module.coreapps.NameSupportCompatibility;
@@ -49,6 +50,7 @@ public class PersonHeaderFragmentController {
     private static final String SECOND_LINE = "secondLineFragments";
     private static final String PERSON = "person";
     private static final String PERSON_NAMES = "personNames";
+    private static final String TELEPHONE = "telephone";
     private static final String PERSON_HEADER = "personHeader";
     private static final String APP_CONTEXT_MODEL = "appContextModel";
 
@@ -68,6 +70,7 @@ public class PersonHeaderFragmentController {
         }
         config.addAttribute(PERSON, wrapper);
         config.addAttribute(PERSON_NAMES, getNames(wrapper.getPersonName()));
+        config.addAttribute(TELEPHONE, wrapper.getPerson().getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
 
         if (appContextModel == null) {
             AppContextModel contextModel = sessionContext.generateAppContextModel();

@@ -2,6 +2,7 @@
     ui.decorateWith("appui", "standardEmrPage")
     ui.includeCss("coreapps", "clinicianfacing/patient.css")
     ui.includeJavascript("coreapps", "custom/deletePatient.js")
+    ui.includeJavascript("cfl", "deletePerson.js")
 %>
 <script type="text/javascript">
     var breadcrumbs = [
@@ -124,3 +125,23 @@
         <% } %>
     </div>
 </div>
+<% if (!isPatient) { %>
+    <div id="delete-person-creation-dialog" class="dialog" style="display: none">
+        <div class="dialog-header">
+            <i class="icon-remove"></i>
+            <h3>
+                ${ ui.message("cfl.deletePerson.title", ui.encodeHtmlContent(ui.format(person.person))) }
+            </h3>
+        </div>
+        <div class="dialog-content">
+            <p class="dialog-instructions">${ ui.message("cfl.deletePerson.message", ui.encodeHtmlContent(ui.format(person.person))) }</p>
+            <label for="delete-reason">${ ui.message("cfl.deletePerson.reason.label") }: </label>
+            <input type="text" id="delete-reason">
+            <br>
+            <h6 id="delete-reason-empty">${ ui.message("cfl.deletePerson.deleteMessageEmpty") }</h6>
+            <br>
+            <button class="confirm right">${ ui.message("coreapps.confirm") }<i class="icon-spinner icon-spin icon-2x" style="display: none; margin-left: 10px;"></i></button>
+            <button class="cancel">${ ui.message("coreapps.cancel") }</button>
+        </div>
+    </div>
+<% } %>

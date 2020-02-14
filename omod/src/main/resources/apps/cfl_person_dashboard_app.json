@@ -8,10 +8,10 @@
         "id": "cfl.personDashboard.outgoing",
         "extensionPointId": "personDashboard.overallActions",
         "type": "link",
-        "order": 26,
-        "label": "callflows.initcall.button",
+        "order": 1,
+        "label": "cfl.initcall.button",
         "icon":"icon-phone-sign",
-        "url": "/ws/callflows/person/{{patient.uuid}}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=Caregiver"
+        "url": "/ws/callflows/person/{{person.uuid}}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=Caregiver"
       },
       {
         "id": "cfl.personDashboard.includeFragments.changeStatus",
@@ -20,6 +20,25 @@
           "provider": "messages",
           "fragment": "patientdashboard/changeStatus"
         }
+      },
+      {
+        "id": "cfl.basicMessages.personDashboardLink",
+        "extensionPointId": "personDashboard.overallActions",
+        "type": "link",
+        "label": "messages.title",
+        "icon": "icon-comment",
+        "order": 3,
+        "url": "owa/messages/index.html#/messages/{{personId}}&patientUuid={{person.uuid}}"
+      },
+      {
+        "id": "cfl.personDashboard.deletePerson",
+        "extensionPointId": "personDashboard.overallActions",
+        "type": "script",
+        "label": "cfl.deletePerson.label",
+        "script": "delPerson.showDeletePersonCreationDialog(&#x27;{{person.uuid}}&#x27;)",
+        "icon": "icon-remove",
+        "order": 4,
+        "requiredPrivilege": "Delete People"
       }
     ]
   }

@@ -32,6 +32,7 @@ import org.openmrs.module.cfl.extension.domain.PersonDomainWrapper;
 import org.openmrs.module.coreapps.CoreAppsConstants;
 import org.openmrs.module.coreapps.CoreAppsProperties;
 import org.openmrs.module.coreapps.contextmodel.PatientContextModel;
+import org.openmrs.module.coreapps.contextmodel.PersonContextModel;
 import org.openmrs.module.coreapps.contextmodel.VisitContextModel;
 import org.openmrs.module.emrapi.adt.AdtService;
 import org.openmrs.module.emrapi.event.ApplicationEventService;
@@ -113,7 +114,7 @@ public class PersonPageController {
         model.addAttribute("app", params.app);
         model.addAttribute("activeVisit", null);
 
-        AppContextModel contextModel = sessionContext.generateAppContextModel();
+        AppContextModel contextModel = prepareContextModel(sessionContext, person);
         model.addAttribute("appContextModel", contextModel);
 
         PersonExtensionBuilder builder = new PersonExtensionBuilder(beans.appFrameworkService, dashboard, contextModel);
@@ -181,6 +182,13 @@ public class PersonPageController {
             // location does not support visits
             return null;
         }
+    }
+
+    private AppContextModel prepareContextModel(UiSessionContext sessionContext, Person person) {
+        AppContextModel contextModel = sessionContext.generateAppContextModel();
+        contextModel.put(PERSON, new PersonContextModel(person));
+        contextModel.put(PERSON_ID, person.getId());
+        return contextModel;
     }
 
     private AppContextModel prepareContextModel(UiSessionContext sessionContext, Patient patient,
