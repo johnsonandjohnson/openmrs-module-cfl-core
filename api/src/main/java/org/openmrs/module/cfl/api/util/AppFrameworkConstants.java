@@ -37,6 +37,9 @@ public final class AppFrameworkConstants {
     public static final String STICKY_NOTE_EXT = "org.openmrs.module.coreapps.patientHeader" +
             ".secondLineFragments.stickyNote";
 
+    public static final String ACTIVE_VISIT_STATUS_EXT = "org.openmrs.module.coreapps.patientHeader"
+            + ".secondLineFragments.activeVisitStatus";
+
     public static final String COREAPPS_CREATE_VISIT_EXT = "org.openmrs.module.coreapps.createVisit";
 
     public static final String COREAPPS_CREATE_RETROSPECTIVE_VISIT_EXT = "org.openmrs.module.coreapps." +
@@ -52,10 +55,15 @@ public final class AppFrameworkConstants {
     public static final String ATTACHMENTS_EXT = "org.openmrs.module.attachments.patientDashboard." +
             "secondColumnFragments.att";
 
+    public static final String ATTACHMENTS_OVERALL_ACTION_EXT = "org.openmrs.module.attachments.overallActions.default";
+
     public static final String CHARTSEARCH_EXT = "chartsearch.chartSearchLink";
 
     public static final String LOCATIONBASEDACCESS_EXT = "org.openmrs.module.locationbasedaccess.editLocation";
 
+    /**
+     * The list of app which should be disabled
+     */
     public static final List<String> APP_IDS = Arrays.asList(APPOINTMENTSCHEDULINGUI_HOME_APP,
             SCHEDULING_APPOINTMENT_APP, REQUEST_APPOINTMENT_APP, COREAPPS_CONDITIONLIST_APP,
             COREAPPS_LATEST_OBS_FOR_CONCEPT_LIST_APP, COREAPPS_OBS_ACROSS_ENCOUNTERS_APP, COREAPPS_OBS_GRAPH_APP,
@@ -64,10 +72,13 @@ public final class AppFrameworkConstants {
     public static final List<String> CFL_ADDITIONAL_MODIFICATION_APP_IDS = Arrays.asList(
             CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP, CFL_RELATIONSHIPS_APP, CFL_LATESTOBSFORCONCEPTLIS_APP);
 
+    /**
+     * The list of extensions which should be disabled
+     */
     public static final List<String> EXTENSION_IDS = Arrays.asList(APPOINTMENTSCHEDULINGUI_TAB_EXT,
-            PATIENT_DASHBOARD_APPOINTMENTS_EXT, STICKY_NOTE_EXT, COREAPPS_CREATE_VISIT_EXT,
+            PATIENT_DASHBOARD_APPOINTMENTS_EXT, STICKY_NOTE_EXT, ACTIVE_VISIT_STATUS_EXT, COREAPPS_CREATE_VISIT_EXT,
             COREAPPS_CREATE_RETROSPECTIVE_VISIT_EXT, COREAPPS_MERGE_VISITS_EXT, ALLERGYUI_PATIENT_DASHBOARD_EXT,
-            PATIENTFLAGS_EXT, ATTACHMENTS_EXT, CHARTSEARCH_EXT, LOCATIONBASEDACCESS_EXT);
+            PATIENTFLAGS_EXT, ATTACHMENTS_EXT, ATTACHMENTS_OVERALL_ACTION_EXT, CHARTSEARCH_EXT, LOCATIONBASEDACCESS_EXT);
 
     public static final String REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT = "org.openmrs.module.registrationapp." +
             "editPatientDemographics";
