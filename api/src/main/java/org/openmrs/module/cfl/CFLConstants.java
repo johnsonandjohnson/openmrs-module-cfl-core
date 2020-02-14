@@ -28,5 +28,7 @@ public final class CFLConstants {
 
     public static final String TRUE = "true";
 
+    public static final String DATETIME_WITH_ZONE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
     private CFLConstants() { }
 }

@@ -24,4 +24,10 @@
             http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="org.openmrs.module.cfl" />
+
+    <bean id="cfl.findPersonWithCflRelationshipStrategy"
+          class="org.openmrs.module.cfl.api.strategy.impl.FindPersonWithCflRelationshipFilterStrategyImpl"/>
+
+    <bean id="cfl.personOverviewMapper"
+          class="org.openmrs.module.cfl.api.mapper.PersonOverviewMapper"/>
 </beans>

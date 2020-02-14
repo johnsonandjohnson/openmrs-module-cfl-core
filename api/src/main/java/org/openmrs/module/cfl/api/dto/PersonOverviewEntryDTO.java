@@ -1,0 +1,101 @@
+package org.openmrs.module.cfl.api.dto;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PersonOverviewEntryDTO {
+
+    private int personId;
+    private String gender;
+    private int age;
+    private String birthdate;
+    private boolean birthdateEstimated;
+    private String personName;
+    private String uuid;
+    private List<PersonAttributeDTO> attributes = new ArrayList<PersonAttributeDTO>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public boolean isBirthdateEstimated() {
+        return birthdateEstimated;
+    }
+
+    public void setBirthdateEstimated(boolean birthdateEstimated) {
+        this.birthdateEstimated = birthdateEstimated;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public List<PersonAttributeDTO> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<PersonAttributeDTO> attributes) {
+        this.attributes = attributes;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+}

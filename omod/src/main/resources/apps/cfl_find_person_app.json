@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cfl.findPerson",
+    "instanceOf": "coreapps.template.findPatient",
+    "description": "Person search for people which have relationships to patients that goes to the person dashboard",
+    "order": 3,
+    "extensions": [
+      {
+        "id": "coreapps.activeVisitsHomepageLink",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "cfl.findPerson.app.label",
+        "url": "cfl/findPerson.page?app=cfl.findPerson",
+        "icon": "icon-search",
+        "requiredPrivilege": "App: coreapps.findPatient"
+      }
+    ],
+    "config": {
+      "afterSelectedUrl": "/cfl/person.page?patientId={{ patientId }}",
+      "label": "cfl.findPerson.app.label",
+      "heading": "cfl.findPerson.app.heading"
+    }
+  }
+]
