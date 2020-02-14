@@ -29,7 +29,7 @@ jq(function () {
         jq('#validation-errors').hide();
         var formData = jq('#registration').serialize();
 
-        var url = '/' + OPENMRS_CONTEXT_PATH + '/cfl/registerCaregiver/submit.action?appId=' + appId;
+        var url = '/' + OPENMRS_CONTEXT_PATH + '/cfl/registerPerson/submit.action?appId=' + appId;
         jq.ajax({
             url: url,
             type: 'POST',

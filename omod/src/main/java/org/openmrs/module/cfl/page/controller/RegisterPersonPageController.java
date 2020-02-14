@@ -40,7 +40,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * Based on openmrs-module-registrationapp v1.13.0
  * omod/src/main/java/org/openmrs/module/registrationapp/page/controller/RegisterPatientPageController.java
  */
-public class RegisterCaregiverPageController {
+public class RegisterPersonPageController {
 
     private static final String SPACE = " ";
     private static final String COMMA = ",";
@@ -59,12 +59,13 @@ public class RegisterCaregiverPageController {
     private static final String RELATIONSHIP_TYPES_PROP = "relationshipTypes";
     private static final String GENDER_OPTIONS_PROP = "genderOptions";
     private static final String INCLUDE_FRAGMENTS_PROP = "includeFragments";
-    private static final String REGISTER_CAREGIVER_PROP = "registerCaregiver";
+    private static final String REGISTER_PERSON_PROP = "registerPerson";
     private static final String ADDRESS_HIERARCHY_PROP = "addresshierarchy";
-    private static final String DASHBOARD_LINK_PROP = "caregiverDashboardLink";
+    private static final String DASHBOARD_LINK_PROP = "personDashboardLink";
     private static final String COMBINE_SUB_SECTIONS_PROP = "combineSubSections";
+    private static final String TITLE_PROP = "mainTitle";
     private static final String ENABLE_OVERRIDE_PATH = ADDRESS_HIERARCHY_PROP + DOT + ENABLE_OVERRIDE_PROP;
-    private static final String INCLUDE_FRAGMENTS_PATH = REGISTER_CAREGIVER_PROP + DOT + INCLUDE_FRAGMENTS_PROP;
+    private static final String INCLUDE_FRAGMENTS_PATH = REGISTER_PERSON_PROP + DOT + INCLUDE_FRAGMENTS_PROP;
 
     public void get(UiSessionContext sessionContext,
                     PageModel model,
@@ -76,12 +77,15 @@ public class RegisterCaregiverPageController {
         addModelAttributes(model, person, app, breadcrumbOverride, appFrameworkService);
     }
 
+    @SuppressWarnings({"checkstyle:ParameterAssignment", "PMD.AvoidReassigningParameters"})
     public void addModelAttributes(PageModel model,
                                    Person person,
                                    AppDescriptor app,
                                    String breadcrumbOverride,
                                    AppFrameworkService appFrameworkService) {
-        Person caregiver = (person == null) ? new Person() : person;
+        if (person == null) {
+            person = new Person();
+        }
 
         NavigableFormStructure formStructure = RegisterPersonFormBuilder.buildFormStructure(app);
         NameSupportCompatibility nameSupport = Context
@@ -89,8 +93,9 @@ public class RegisterCaregiverPageController {
         AddressSupportCompatibility addressSupport = Context
                 .getRegisteredComponent(AddressSupportCompatibility.ID, AddressSupportCompatibility.class);
 
-        model.addAttribute(PERSON_PROP, caregiver);
+        model.addAttribute(PERSON_PROP, person);
         model.addAttribute(APP_ID_PROP, app.getId());
+        model.addAttribute(TITLE_PROP,  app.getLabel());
         model.addAttribute(FORM_STRUCTURE_PROP, formStructure);
         model.addAttribute(NAME_TEMPLATE_PROP, nameSupport.getDefaultLayoutTemplate());
         model.addAttribute(ADDRESS_TEMPLATE_PROP, addressSupport.getAddressTemplate());

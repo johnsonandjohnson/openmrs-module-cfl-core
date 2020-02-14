@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Based on openmrs-module-registrationapp v1.13.0
  * omod/src/main/java/org/openmrs/module/registrationapp/fragment/controller/RegisterPatientFragmentController.java
  */
-public class RegisterCaregiverFragmentController {
+public class RegisterPersonFragmentController {
 
     private static final String APP_ID_PARAM = "appId";
     private static final String PERSON_PARAM = "person";
@@ -45,7 +45,8 @@ public class RegisterCaregiverFragmentController {
     private static final String PERSON_SERVICE_PROP = "personService";
     private static final String AFTER_CREATED_URL_PROP = "afterCreatedUrl";
 
-    @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
+    @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList",
+            "checkstyle:ParameterAssignment", "PMD.AvoidReassigningParameters"})
     public FragmentActionResult submit(@RequestParam(value = APP_ID_PARAM) AppDescriptor app,
                                        @ModelAttribute(PERSON_PARAM) @BindParams Person person,
                                        @ModelAttribute(PERSON_NAME_PARAM) @BindParams PersonName name,
@@ -59,8 +60,8 @@ public class RegisterCaregiverFragmentController {
         person.addAddress(address);
         handleBirthDate(person, birthdateYears, birthdateMonths);
 
-        Person caregiver = personService.savePerson(person);
-        return new SuccessResult(getRedirectUrl(caregiver, app));
+        person = personService.savePerson(person);
+        return new SuccessResult(getRedirectUrl(person, app));
     }
 
     private String getRedirectUrl(Person person, AppDescriptor app) {

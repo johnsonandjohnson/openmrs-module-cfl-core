@@ -14,18 +14,13 @@
     ui.includeJavascript('uicommons', 'navigator/navigatorTemplates.js', Integer.MAX_VALUE - 21)
     ui.includeJavascript('uicommons', 'navigator/exitHandlers.js', Integer.MAX_VALUE - 22);
 
-    ui.includeJavascript('cfl', 'registerCaregiver.js');
+    ui.includeJavascript('cfl', 'registerPerson.js');
     ui.includeCss('registrationapp', 'registerPatient.css')
 
-    def localizedGenderOptions = []
-    def genderCodes = []
+    def genderOptions = [[label: ui.message("emr.gender.M"), value: 'M'],
+                         [label: ui.message("emr.gender.F"), value: 'F']]
 
-    genderOptions.each { optn ->
-        localizedGenderOptions << [label: ui.message('emr.gender.' + optn), value: optn]
-        genderCodes << 'emr.gender.' + optn
-    }
-
-    def breadcrumbMiddle = breadcrumbOverride ?: '';
+    def breadcrumbMiddle = breadcrumbOverride ?: ''
 
 %>
 
@@ -35,12 +30,6 @@ ${ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment)}
 <% }
 } %>
 
-<%=ui.includeFragment('appui', 'messages', [codes: [
-        'emr.gender.M',
-        'emr.gender.F'
-].flatten()
-])%>
-
 ${ui.includeFragment('uicommons', 'validationMessages')}
 
 <script type="text/javascript">
@@ -49,8 +38,8 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
         {icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm'},
         ${ breadcrumbMiddle },
         {
-            label: "${ ui.message('cfl.registration.caregiver.label') }",
-            link: "${ ui.pageLink('registrationapp', 'registerPatient') }"
+            label: "${ ui.message('cfl.registration.label') }",
+            link: "${ ui.pageLink('cfl', 'registerPerson') }"
         }
     ]));
 
@@ -73,7 +62,7 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
 </div>
 
 <div id="content" class="container">
-    <h2>${ui.message('cfl.registration.caregiver.label')}</h2>
+    <h2>${ui.message(mainTitle)}</h2>
 
     <form class="simple-form-ui" id="registration" method="POST">
         <% formStructure.sections.each { structure ->
@@ -86,37 +75,7 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
             </span>
             <% questions.each { question ->
                 def fields = question.fields
-                def classes = '';
-                if (question.cssClasses) {
-                    classes = classes + (classes.length() > 0 ? ' ' : '') + question.cssClasses.join(' ')
-                } %>
-            <% if (question.id == 'name') { %>
-            <fieldset id="name">
-                <legend>${ui.message('cfl.registration.caregiver.name.label')}</legend>
-
-                <div>
-                    <h3>${ui.message('cfl.registration.caregiver.name.question')}</h3>
-                    <% nameTemplate.lines.each { line ->
-                        // go through each line in the template and find the first name token; assumption is there is only one name token per line
-                        def name = line.find({ it['isToken'] == 'IS_NAME_TOKEN' })['codeName'];
-                        def initialNameFieldValue = ''
-                        if (person.personName && person.personName[name]) {
-                            initialNameFieldValue = person.personName[name]
-                        } %>
-                    ${ui.includeFragment("registrationapp", "field/personName", [
-                            label: ui.message(nameTemplate.nameMappings[name]),
-                            size: nameTemplate.sizeMappings[name],
-                            formFieldName: name,
-                            dataItems: 4,
-                            left: true,
-                            initialValue: initialNameFieldValue,
-                            classes: [(name == 'givenName' || name == 'familyName') ? 'required' : '']])}
-                    <% } %>
-                </div>
-
-                <input type="hidden" name="preferred" value="true"/>
-            </fieldset>
-            <% } else { %>
+                def classes = question.cssClasses ? question.cssClasses.join(' ') : '' %>
             <fieldset id="${question.id}"
                 <% if (classes.length() > 0) { %>
                       class="${classes}"
@@ -129,38 +88,64 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
                 <% } %>>
 
                 <legend>${ui.message(question.legend)}</legend>
-                <% if (question.legend == 'Person.address') { %>
-                ${ui.includeFragment('uicommons', 'fieldErrors', [fieldName: 'personAddress'])}
-                <% } %>
                 <% if (question.header) { %>
                 <h3>${ui.message(question.header)}</h3>
                 <% } %>
 
+                <% if (question.id == 'name') { %>
+                <% nameTemplate.lines.each { line ->
+                    // go through each line in the template and find the first name token;
+                    // assumption is there is only one name token per line
+                    def name = line.find({ it['isToken'] == 'IS_NAME_TOKEN' })['codeName'] as String
+                    def initialNameFieldValue = ''
+                    if (person.personName && person.personName[name]) {
+                        initialNameFieldValue = person.personName[name]
+                    } %>
+                ${ui.includeFragment('registrationapp', 'field/personName', [
+                        label        : ui.message(nameTemplate.nameMappings[name]),
+                        size         : nameTemplate.sizeMappings[name],
+                        formFieldName: name,
+                        dataItems    : 4,
+                        left         : true,
+                        initialValue : initialNameFieldValue,
+                        classes      : [(name == 'givenName' || name == 'familyName') ? 'required' : '']])}
+                <% } %>
+                <input type="hidden" name="preferred" value="true"/>
+                <% } else { %>
                 <% fields.each { field ->
-                    def configOptions = (field.fragmentRequest.configuration != null) ? field.fragmentRequest.configuration : [:];
+                    def configOptions = (field.fragmentRequest.configuration != null)
+                            ? field.fragmentRequest.configuration
+                            : [:]
                     configOptions.label = ui.message(field.label)
                     configOptions.formFieldName = field.formFieldName
                     configOptions.left = true
                     configOptions.classes = field.cssClasses
 
+                    if (field.type == 'gender') {
+                        configOptions.initialValue = person.gender
+                        configOptions.options = genderOptions
+                    }
+                    if (field.type == 'birthdate') {
+                        configOptions.estimated = person.birthdateEstimated
+                        configOptions.initialValue = person.birthdate
+                    }
                     if (field.type == 'personAddress') {
                         configOptions.addressTemplate = addressTemplate
                     }
-
                     if (field.type == 'personRelationships') {
                         configOptions.relationshipTypes = relationshipTypes
                     } %>
                 ${ui.includeFragment(field.fragmentRequest.providerName, field.fragmentRequest.fragmentId, configOptions)}
                 <% } %>
+                <% } %>
             </fieldset>
-            <% } %>
             <% } %>
         </section>
         <% } %>
 
         <div id="confirmation">
             <span id="confirmation_label" class="title">
-                ${ui.message('cfl.registration.caregiver.confirm.label')}
+                ${ui.message('cfl.registration.confirm.label')}
             </span>
 
             <div class="before-dataCanvas"></div>
@@ -170,13 +155,13 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
             <div class="after-data-canvas"></div>
 
             <div id="confirmationQuestion">
-                ${ui.message('cfl.registration.caregiver.confirm')}
+                ${ui.message('cfl.registration.confirm')}
                 <p style="display: inline">
                     <input
                             id="submit"
                             type="submit"
                             class="submitButton confirm right"
-                            value="${ui.message('cfl.registration.caregiver.confirm.label')}"/>
+                            value="${ui.message('cfl.registration.confirm.label')}"/>
                 </p>
 
                 <p style="display: inline">
@@ -184,7 +169,7 @@ ${ui.includeFragment('uicommons', 'validationMessages')}
                             id="cancelSubmission"
                             class="cancel"
                             type="button"
-                            value="${ui.message('cfl.registration.caregiver.cancel')}"/>
+                            value="${ui.message('cfl.registration.cancel')}"/>
                 </p>
             </div>
         </div>
