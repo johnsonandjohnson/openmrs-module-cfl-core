@@ -55,7 +55,7 @@ public final class AppFrameworkConstants {
     public static final String ATTACHMENTS_EXT = "org.openmrs.module.attachments.patientDashboard." +
             "secondColumnFragments.att";
 
-    public static final String ATTACHMENTS_OVERALL_ACTION_EXT = "org.openmrs.module.attachments.overallActions.default";
+    public static final String ATTACHMENTS_OVERALL_ACTION_EXT = "attachments.attachments.overallActions.default";
 
     public static final String CHARTSEARCH_EXT = "chartsearch.chartSearchLink";
 
