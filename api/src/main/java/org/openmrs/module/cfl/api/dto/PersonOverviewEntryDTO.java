@@ -10,7 +10,7 @@ public class PersonOverviewEntryDTO {
 
     private int personId;
     private String gender;
-    private int age;
+    private Integer age;
     private String birthdate;
     private boolean birthdateEstimated;
     private String personName;
@@ -51,11 +51,11 @@ public class PersonOverviewEntryDTO {
         this.gender = gender;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.mapper;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.module.cfl.api.dto.PersonAttributeDTO;
@@ -18,8 +19,10 @@ public class PersonOverviewMapper extends AbstractMapper<PersonOverviewEntryDTO,
         dto.setPersonId(person.getId());
         dto.setGender(person.getGender());
         dto.setAge(person.getAge());
-        dto.setBirthdate(DateUtil.convertToDateTimeWithZone(person.getBirthdate()));
-        dto.setBirthdateEstimated(person.getBirthdateEstimated());
+        dto.setBirthdate(person.getBirthdate() != null
+                ? DateUtil.convertToDateTimeWithZone(person.getBirthdate())
+                : null);
+        dto.setBirthdateEstimated(BooleanUtils.isTrue(person.getBirthdateEstimated()));
         dto.setPersonName(person.getPersonName() != null ? person.getPersonName().getFullName() : null);
         dto.setAttributes(getAttributes(person));
         dto.setUuid(person.getUuid());
