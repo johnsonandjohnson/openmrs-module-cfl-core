@@ -10,12 +10,16 @@ public final class GlobalPropertyUtils {
 
     private static Log log = LogFactory.getLog(GlobalPropertyUtils.class);
 
+    public static String getGlobalProperty(String key) {
+        return Context.getAdministrationService().getGlobalProperty(key);
+    }
+
     public static void createGlobalSettingIfNotExists(String key, String value) {
         createGlobalSettingIfNotExists(key, value, null);
     }
 
     public static void createGlobalSettingIfNotExists(String key, String value, String description) {
-        String existSetting = Context.getAdministrationService().getGlobalProperty(key);
+        String existSetting = getGlobalProperty(key);
         if (org.apache.commons.lang3.StringUtils.isBlank(existSetting)) {
             GlobalProperty gp = new GlobalProperty(key, value, description);
             Context.getAdministrationService().saveGlobalProperty(gp);
@@ -26,7 +30,7 @@ public final class GlobalPropertyUtils {
     }
 
     public static boolean isTrue(String key) {
-        String gp = Context.getAdministrationService().getGlobalProperty(key);
+        String gp = getGlobalProperty(key);
         return StringUtils.isNotBlank(gp) && Boolean.valueOf(gp);
     }
 

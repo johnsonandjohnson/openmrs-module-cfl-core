@@ -1,11 +1,11 @@
 [
   {
-    "id": "messages.personStatus",
-    "label": "person status",
-    "description": "Used to provide person status UI functionality",
+    "id": "cfl.personHeader",
+    "label": "person header",
+    "description": "Used to provide person header UI extensions",
     "extensions": [
       {
-        "id": "messages.personHeader.secondLineFragments.personStatus",
+        "id": "cfl.personHeader.secondLineFragments.personStatus",
         "extensionPointId": "personHeader.secondLineFragments",
         "extensionParams": {
           "provider": "messages",
@@ -13,11 +13,11 @@
         }
       },
       {
-        "id": "messages.personDashboard.includeFragments",
-        "extensionPointId": "personDashboard.includeFragments",
+        "id": "cfl.personDashboard.secondLineFragments.personLocation",
+        "extensionPointId": "personHeader.secondLineFragments",
         "extensionParams": {
-          "provider": "messages",
-          "fragment": "patientdashboard/changeStatus"
+          "provider": "cfl",
+          "fragment": "personHeaderLocation"
         }
       }
     ]

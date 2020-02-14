@@ -43,7 +43,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
                     CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
             GlobalPropertyUtils.createGlobalSettingIfNotExists(
                     CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
-                    CFLConstants.PERSONATTRIBUTETYPE_UUID);
+                    CFLConstants.LOCATION_ATTRIBUTE_TYPE_UUID);
             GlobalPropertyUtils.createGlobalSettingIfNotExists(
                     CFLConstants.DISABLED_CONTROL_KEY,
                     CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,

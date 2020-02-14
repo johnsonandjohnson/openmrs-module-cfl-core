@@ -60,7 +60,8 @@
                 <% } else { %>
                     ${ui.message("coreapps.ageDays", person.ageInDays)}
                 <% } %>
-                (<% if (person.birthdateEstimated) { %>~<% } %>${ ui.formatDatePretty(person.birthdate) })
+                (<% if (person.birthdateEstimated) { %>~<% } %>
+                    ${ ui.formatDatePretty(person.birthdate) })
                 <% } else { %>
                     ${ui.message("coreapps.unknownAge")}
                 <% } %>

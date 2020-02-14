@@ -1,10 +1,10 @@
 [
   {
-    "id":"messages.personDashboard.graph",
+    "id":"cfl.personDashboard.graph",
     "description":"Adds some modifications in the patient dashboard",
     "extensions": [
       {
-        "id": "messages.personDashboard.graph.actorResponse",
+        "id": "cfl.personDashboard.graph.actorResponse",
         "order": 6,
         "extensionPointId": "personDashboard.firstColumnFragments",
         "extensionParams": {

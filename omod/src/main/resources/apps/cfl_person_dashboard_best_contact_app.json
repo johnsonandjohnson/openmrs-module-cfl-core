@@ -1,10 +1,10 @@
 [
   {
-    "id":"messages.personDashboard.bestContact",
+    "id":"cfl.personDashboard.bestContact",
     "description":"Adds some modifications in the patient dashboard",
     "extensions": [
       {
-        "id": "messages.personDashboard.bestContact",
+        "id": "cfl.personDashboard.bestContact",
         "order": 4,
         "extensionPointId": "personDashboard.secondColumnFragments",
         "icon": "icon-comment",
