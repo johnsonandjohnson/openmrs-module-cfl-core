@@ -1,14 +1,16 @@
 <%
+    def isPatientDashboard = dashboard == "patientDashboard"
     ui.decorateWith("appui", "standardEmrPage")
     ui.includeCss("coreapps", "clinicianfacing/patient.css")
     ui.includeJavascript("coreapps", "custom/deletePatient.js")
     ui.includeJavascript("cfl", "deletePerson.js")
 %>
+
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.escapeJs(ui.encodeHtmlContent(ui.format(isPatient ? patient.patient : person.person))) }" ,
-            link: '${ ui.urlBind("/" + contextPath + baseDashboardUrl, [ patientId: isPatient ? patient.patient.id : person.person.id ] ) }'}
+        { label: "${ ui.escapeJs(ui.encodeHtmlContent(ui.format(isPatientDashboard ? patient.patient : person.person))) }" ,
+            link: '${ ui.urlBind("/" + contextPath + baseDashboardUrl, [ patientId: isPatientDashboard ? patient.patient.id : person.person.id ] ) }'}
     ];
     // add on breadcrumb if it has been defined in messages.properties
     <% if (ui.message(dashboard + ".breadcrumb") != dashboard + ".breadcrumb") { %>
@@ -21,7 +23,7 @@
             window.location.reload();
         });
     });
-    <% if (isPatient) { %>
+    <% if (isPatientDashboard) { %>
         var patient = { id: ${patient.id} };
     <% } %>
 </script>
@@ -38,11 +40,30 @@
     <%}
 } %>
 
-<% if(isPatient) { %>
+<% if(isPatientDashboard) { %>
     ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
 <% } else { %>
     ${ ui.includeFragment("cfl", "personHeader", [ person: person.person, appContextModel: appContextModel ]) }
-<%  } %>
+<% } %>
+
+<% if(isPatient && isCaregiver) { %>
+    <div id="error-message" class="note-container">
+        <div class="note warning" style="color: #5B57A6; border-color: #5B57A6; background-color: #F9F9F9;">
+            <div class="text" style="display: flex; align-items: center; justify-content: center;">
+                <i class="icon-info-sign medium"></i>
+                <% if(isPatientDashboard) { %>
+                    <p style="position: inherit; margin-right: 0;">This Patient is also a Caregiver.</p>
+                    &nbsp;
+                    <a href=${"?patientId=" + patient.patient.uuid + "&dashboard=person"}>See the Caregiver Dashboard</a>
+                <% } else { %>
+                    <p style="position: inherit; margin-right: 0;">This Caregiver is also a Patient.</p>
+                    &nbsp;
+                    <a href=${"?patientId=" + person.person.uuid + "&dashboard=patient"}>See the Patient Dashboard</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+<% } %>
 
 <div class="clear"></div>
 <div class="container">
@@ -61,10 +82,10 @@
                     if(it.extensionParams.fragmentConfig != null){
                         configs = it.extensionParams.fragmentConfig;
                     }
-                    configs << [ patient: patient, patientId: isPatient ? patient.patient.id : person.person.id, app: it.appId ]
+                    configs << [ patient: patient, patientId: isPatientDashboard ? patient.patient.id : person.person.id, app: it.appId ]
             %>
                     ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, configs)}
-            <%  }
+            <% }
             } %>
 
         </div>
@@ -76,10 +97,10 @@
                     if(it.extensionParams.fragmentConfig != null){
                         configs = it.extensionParams.fragmentConfig;
                     }
-                    configs << [ patient: patient, patientId: isPatient ? patient.patient.id : person.person.id, app: it.appId ]
+                    configs << [ patient: patient, patientId: isPatientDashboard ? patient.patient.id : person.person.id, app: it.appId ]
             %>
                     ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, configs)}
-            <%   }
+            <% }
             } %>
 
         </div>
@@ -114,7 +135,7 @@
                         </ul>
                     <% } %>
                     <%
-                     def cxtModel = [ patientId: isPatient ? patient.patient.id : person.person.id, activeVisitId: activeVisit ? activeVisit.visit.id : null]
+                     def cxtModel = [ patientId: isPatientDashboard ? patient.patient.id : person.person.id, activeVisitId: activeVisit ? activeVisit.visit.id : null]
                      otherActions.each { action -> %>
                     <a id="${ action.id }" class="button medium" href="${ ui.escapeJs(action.url("/" + ui.contextPath(), cxtModel)) }" class="float-left">
                         <i class="${ action.icon } float-left"></i>${ ui.message(action.label) }
@@ -125,7 +146,7 @@
         <% } %>
     </div>
 </div>
-<% if (!isPatient) { %>
+<% if (!isPatientDashboard) { %>
     <div id="delete-person-creation-dialog" class="dialog" style="display: none">
         <div class="dialog-header">
             <i class="icon-remove"></i>

@@ -26,6 +26,8 @@ public final class CFLConstants {
             + "be restart after change this GP and in order to revert those changes you need to manually clean the "
             + "appframework_component_state table";
 
+    public static final String CAREGIVER_RELATIONSHIP_UUID = "acec590b-825e-45d2-876a-0028f174903d";
+
     public static final String TRUE = "true";
 
     public static final String DATETIME_WITH_ZONE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

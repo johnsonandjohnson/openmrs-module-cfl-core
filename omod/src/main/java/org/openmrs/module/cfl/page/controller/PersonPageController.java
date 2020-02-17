@@ -20,7 +20,9 @@ import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Program;
+import org.openmrs.Relationship;
 import org.openmrs.api.PatientService;
+import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.domain.AppDescriptor;
@@ -70,6 +72,7 @@ public class PersonPageController {
                                  @SpringBean("applicationEventService") ApplicationEventService applicationEventService,
                                  @SpringBean("coreAppsProperties") CoreAppsProperties coreAppsProperties,
                                  @SpringBean("patientService") PatientService patientService,
+                                 @SpringBean("personService") PersonService personService,
                                  PageModel model,
                                  UiSessionContext sessionContext) {
         PageAction redirect = getRedirectPage(person);
@@ -77,16 +80,40 @@ public class PersonPageController {
             return redirect;
         }
 
-        RequestParams params = new RequestParams(app, dashboardParam);
         SpringBeans beans = new SpringBeans(adtService, appFrameworkService, applicationEventService,
                 coreAppsProperties, patientService);
 
-        if (person.isPatient()) {
-            Patient patient = getPatient(beans, person);
-            return renderPatientDashboard(patient, params, beans, model, patientDomainWrapper, sessionContext);
+        model.addAttribute("isCaregiver", isCaregiver(person, personService));
+        model.addAttribute("isPatient", person.isPatient());
+
+        if (isPersonDashboardDesired(dashboardParam, person)) {
+            return renderPersonDashboard(person, app, beans, model, personDomainWrapper, sessionContext);
         } else {
-            return renderCaregiverDashboard(person, params, beans, model, personDomainWrapper, sessionContext);
+            Patient patient = getPatient(beans, person);
+            return renderPatientDashboard(patient, app, beans, model, patientDomainWrapper, sessionContext);
         }
+    }
+
+    private String getDesiredDashboard(String base) {
+        return base + "Dashboard";
+    }
+
+    private boolean isPersonDashboardDesired(String dashboardParam, Person person) {
+        if (!person.isPatient()) {
+            return true;
+        }
+        return StringUtils.isNotBlank(dashboardParam) && dashboardParam.equals(PERSON);
+    }
+
+    // TODO: move the logic for displaying the information panel to a separate fragment
+    private boolean isCaregiver(Person person, PersonService personService) {
+        for (Relationship relationship : personService.getRelationshipsByPerson(person)) {
+            if (relationship.getRelationshipType().getUuid().equals(CFLConstants.CAREGIVER_RELATIONSHIP_UUID)
+                    && relationship.getPersonA().getId().equals(person.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private PageAction getRedirectPage(Person person) {
@@ -102,16 +129,16 @@ public class PersonPageController {
         return beans.patientService.getPatient(((Patient) person).getPatientId());
     }
 
-    private PageAction renderCaregiverDashboard(Person person, RequestParams params, SpringBeans beans, PageModel model,
-                                            PersonDomainWrapper personDomainWrapper,
-                                            UiSessionContext sessionContext) {
+    private PageAction renderPersonDashboard(Person person, AppDescriptor app, SpringBeans beans, PageModel model,
+                                             PersonDomainWrapper personDomainWrapper,
+                                             UiSessionContext sessionContext) {
         if (person.isVoided()) {
             return new Redirect(CFLConstants.MODULE_ID, "deletedPerson", PERSON_ID + "=" + person.getId());
         }
-        String dashboard = StringUtils.isEmpty(params.dashboardParam) ? "personDashboard" : params.dashboardParam;
         personDomainWrapper.setPerson(person);
+        String dashboard = getDesiredDashboard(PERSON);
         model.addAttribute(PERSON, personDomainWrapper);
-        model.addAttribute("app", params.app);
+        model.addAttribute("app", app);
         model.addAttribute("activeVisit", null);
 
         AppContextModel contextModel = prepareContextModel(sessionContext, person);
@@ -119,21 +146,21 @@ public class PersonPageController {
 
         PersonExtensionBuilder builder = new PersonExtensionBuilder(beans.appFrameworkService, dashboard, contextModel);
         includeExtensions(model, builder);
-        includeDashboardParams(beans, model, dashboard, false);
+        includeDashboardParams(beans, model, dashboard);
         return REGULAR_ACTION;
     }
 
-    private PageAction renderPatientDashboard(Patient patient, RequestParams params, SpringBeans beans, PageModel model,
+    private PageAction renderPatientDashboard(Patient patient, AppDescriptor app, SpringBeans beans, PageModel model,
                                           PatientDomainWrapper patientDomainWrapper,
                                           UiSessionContext sessionContext) {
         if (patient.isVoided() || patient.isPersonVoided()) {
             return new Redirect(COREAPPS, "patientdashboard/deletedPatient",
                     PATIENT_ID + "=" + patient.getId());
         }
-        String dashboard = StringUtils.isEmpty(params.dashboardParam) ? "patientDashboard" : params.dashboardParam;
+        String dashboard = getDesiredDashboard(PATIENT);
         patientDomainWrapper.setPatient(patient);
         model.addAttribute(PATIENT, patientDomainWrapper);
-        model.addAttribute("app", params.app);
+        model.addAttribute("app", app);
 
         Location visitLocation = prepareVisitLocation(beans.adtService, sessionContext);
         VisitDomainWrapper activeVisit = prepareActiveVisit(patient, beans, visitLocation);
@@ -144,18 +171,17 @@ public class PersonPageController {
 
         PersonExtensionBuilder builder = new PersonExtensionBuilder(beans.appFrameworkService, dashboard, contextModel);
         includeExtensions(model, builder);
-        includeDashboardParams(beans, model, dashboard, true);
+        includeDashboardParams(beans, model, dashboard);
 
         beans.applicationEventService.patientViewed(patient, sessionContext.getCurrentUser());
         return REGULAR_ACTION;
     }
 
-    private void includeDashboardParams(SpringBeans beans, PageModel model, String dashboard, boolean isPatient) {
+    private void includeDashboardParams(SpringBeans beans, PageModel model, String dashboard) {
         // used for breadcrumbs to link back to the base dashboard in the case when this
         // is used to render a context-specific dashboard
         model.addAttribute("baseDashboardUrl", beans.coreAppsProperties.getDashboardUrl());
         model.addAttribute("dashboard", dashboard);
-        model.addAttribute("isPatient", isPatient);
     }
 
     private void includeExtensions(PageModel model, PersonExtensionBuilder builder) {
@@ -207,16 +233,6 @@ public class PersonPageController {
                 Representation.DEFAULT));
 
         return contextModel;
-    }
-
-    private class RequestParams {
-        private AppDescriptor app;
-        private String dashboardParam;
-
-        RequestParams(AppDescriptor app, String dashboardParam) {
-            this.app = app;
-            this.dashboardParam = dashboardParam;
-        }
     }
 
     private class SpringBeans {
