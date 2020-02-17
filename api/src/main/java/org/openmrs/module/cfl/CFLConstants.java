@@ -30,5 +30,13 @@ public final class CFLConstants {
 
     public static final String DATETIME_WITH_ZONE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
+    public static final String POSSIBLE_RELATIONSHIP_TYPES_KEY = "cfl.possibleRelationshipTypes";
+
+    public static final String POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION = "Comma separate list of relationship types "
+            + "UUIDs which can be use with the CFL person relationship fragment. "
+            + "If null then all possible types will be used.";
+
+    public static final String POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE = "";
+
     private CFLConstants() { }
 }

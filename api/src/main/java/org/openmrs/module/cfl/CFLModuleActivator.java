@@ -48,6 +48,10 @@ public class CFLModuleActivator extends BaseModuleActivator {
                     CFLConstants.DISABLED_CONTROL_KEY,
                     CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
                     CFLConstants.DISABLED_CONTROL_DESCRIPTION);
+            GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
+                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
+                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
             configureDistribution();
             installMetadataPackages();
         } catch (Exception e) {
