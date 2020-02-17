@@ -47,12 +47,12 @@ public final class CFLConstants {
     public static final String SUPPORTED_ACTOR_TYPE_DESCRIPTION = "The supported actor type which "
             + "will be used to determine if the redirection to separate dashboard should be shown.";
 
-    public static final String SUPPORTED_ACTOR_TYPE_NAME = "cfl.supportedActorTypeName";
+    public static final String SUPPORTED_ACTOR_TYPE_DIRECTION = "cfl.supportedActorType.actorPosition";
 
-    public static final String SUPPORTED_ACTOR_TYPE_NAME_DEFAULT_VALUE = "Caregiver";
+    public static final String SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE = "A";
 
-    public static final String SUPPORTED_ACTOR_TYPE_NAME_DESCRIPTION = "The supported actor type name which "
-            + "will be used to display information on UI.";
+    public static final String SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION = "Determine the position of actor in "
+            + "the supported relationship type. Possible values: A, B.";
 
     private CFLConstants() { }
 }

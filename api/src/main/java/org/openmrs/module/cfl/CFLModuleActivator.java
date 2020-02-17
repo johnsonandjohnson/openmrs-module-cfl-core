@@ -49,7 +49,6 @@ public class CFLModuleActivator extends BaseModuleActivator {
                     CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
                     CFLConstants.DISABLED_CONTROL_DESCRIPTION);
             GlobalPropertyUtils.createGlobalSettingIfNotExists(
-
                     CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
                     CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
                     CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
@@ -58,9 +57,9 @@ public class CFLModuleActivator extends BaseModuleActivator {
                     CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
                     CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
             GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_NAME,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_NAME_DEFAULT_VALUE,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_NAME_DESCRIPTION);
+                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
+                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
+                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
             configureDistribution();
             installMetadataPackages();
         } catch (Exception e) {

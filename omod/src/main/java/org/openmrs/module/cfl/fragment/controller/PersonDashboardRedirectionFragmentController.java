@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.fragment.controller;
 
 import org.openmrs.Person;
 import org.openmrs.Relationship;
+import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
@@ -21,6 +22,8 @@ public class PersonDashboardRedirectionFragmentController {
 
     private static final String ACTOR_UUID = "actorUuid";
 
+    public static final String A_POSITION = "A";
+
     public void controller(
             @SpringBean(PERSON_SERVICE) PersonService personService,
             @FragmentParam(IS_PATIENT_DASHBOARD) boolean isPatientDashboard,
@@ -31,7 +34,7 @@ public class PersonDashboardRedirectionFragmentController {
         model.addAttribute(IS_PATIENT_DASHBOARD, isPatientDashboard);
         model.addAttribute(SHOW_INFORMATION_ABOUT_ACTOR_DASHBOARD,
                 shouldShowActorDashboardRedirection(actorUuid, personService));
-        model.addAttribute(ACTOR_TYPE_NAME, getActorTypeName());
+        model.addAttribute(ACTOR_TYPE_NAME, getSupportedActorTypeName(personService));
     }
 
     /**
@@ -48,12 +51,21 @@ public class PersonDashboardRedirectionFragmentController {
         }
         String supportedActorType = getSupportedActorType();
         for (Relationship relationship : personService.getRelationshipsByPerson(person)) {
-            if (relationship.getRelationshipType().getUuid().equals(supportedActorType)
-                    && relationship.getPersonA().getId().equals(person.getId())) {
-                return true;
+            if (relationship.getRelationshipType().getUuid().equals(supportedActorType)) {
+                if (getActorPositionInRelationship().equals(A_POSITION)
+                        && relationship.getPersonA().getId().equals(person.getId())) {
+                    return true;
+                } else if (relationship.getPersonB().getId().equals(person.getId())) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    private String getSupportedActorTypeName(PersonService personService) {
+        RelationshipType type = personService.getRelationshipTypeByUuid(getSupportedActorType());
+        return getActorPositionInRelationship().equals(A_POSITION) ? type.getaIsToB() : type.getbIsToA();
     }
 
     /**
@@ -66,9 +78,9 @@ public class PersonDashboardRedirectionFragmentController {
 
     /**
      * Returns the value of global property
-     * @return - supported actor type name setting
+     * @return - supported actor type position in relationship
      */
-    private String getActorTypeName() {
-        return Context.getAdministrationService().getGlobalProperty(CFLConstants.SUPPORTED_ACTOR_TYPE_NAME);
+    private String getActorPositionInRelationship() {
+        return Context.getAdministrationService().getGlobalProperty(CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION);
     }
 }
