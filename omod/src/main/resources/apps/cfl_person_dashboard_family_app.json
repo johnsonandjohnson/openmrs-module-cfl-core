@@ -1,0 +1,26 @@
+[
+  {
+    "id": "cfl.personDashboard.relationships",
+    "instanceOf": "coreapps.template.dashboardWidget",
+    "description": "This app adds a relationship widget into the person dashboard",
+    "config": {
+      "widget": "relationships",
+      "icon": "icon-group",
+      "label": "FAMILY",
+      "editPrivilege": "Task: coreapps.editRelationships",
+      "maxRecords": "5"
+    },
+    "extensions": [
+      {
+        "id": "cfl.personDashboard.relationships.clinicianDashboardFirstColumn",
+        "appId": "cfl.personDashboard.relationships",
+        "order": 1,
+        "extensionPointId": "personDashboard.firstColumnFragments",
+        "extensionParams": {
+          "provider": "cfl",
+          "fragment": "dashboardwidgets/personDashboardWidget"
+        }
+      }
+    ]
+  }
+]
