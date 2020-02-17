@@ -40,5 +40,19 @@ public final class CFLConstants {
 
     public static final String POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE = "";
 
+    public static final String SUPPORTED_ACTOR_TYPE = "cfl.supportedActorType";
+
+    public static final String SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE = CAREGIVER_RELATIONSHIP_UUID;
+
+    public static final String SUPPORTED_ACTOR_TYPE_DESCRIPTION = "The supported actor type which "
+            + "will be used to determine if the redirection to separate dashboard should be shown.";
+
+    public static final String SUPPORTED_ACTOR_TYPE_NAME = "cfl.supportedActorTypeName";
+
+    public static final String SUPPORTED_ACTOR_TYPE_NAME_DEFAULT_VALUE = "Caregiver";
+
+    public static final String SUPPORTED_ACTOR_TYPE_NAME_DESCRIPTION = "The supported actor type name which "
+            + "will be used to display information on UI.";
+
     private CFLConstants() { }
 }

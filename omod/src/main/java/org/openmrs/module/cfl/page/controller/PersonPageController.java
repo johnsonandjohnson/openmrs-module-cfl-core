@@ -20,9 +20,7 @@ import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Program;
-import org.openmrs.Relationship;
 import org.openmrs.api.PatientService;
-import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.domain.AppDescriptor;
@@ -72,7 +70,6 @@ public class PersonPageController {
                                  @SpringBean("applicationEventService") ApplicationEventService applicationEventService,
                                  @SpringBean("coreAppsProperties") CoreAppsProperties coreAppsProperties,
                                  @SpringBean("patientService") PatientService patientService,
-                                 @SpringBean("personService") PersonService personService,
                                  PageModel model,
                                  UiSessionContext sessionContext) {
         PageAction redirect = getRedirectPage(person);
@@ -83,7 +80,6 @@ public class PersonPageController {
         SpringBeans beans = new SpringBeans(adtService, appFrameworkService, applicationEventService,
                 coreAppsProperties, patientService);
 
-        model.addAttribute("isCaregiver", isCaregiver(person, personService));
         model.addAttribute("isPatient", person.isPatient());
 
         if (isPersonDashboardDesired(dashboardParam, person)) {
@@ -103,17 +99,6 @@ public class PersonPageController {
             return true;
         }
         return StringUtils.isNotBlank(dashboardParam) && dashboardParam.equals(PERSON);
-    }
-
-    // TODO: move the logic for displaying the information panel to a separate fragment
-    private boolean isCaregiver(Person person, PersonService personService) {
-        for (Relationship relationship : personService.getRelationshipsByPerson(person)) {
-            if (relationship.getRelationshipType().getUuid().equals(CFLConstants.CAREGIVER_RELATIONSHIP_UUID)
-                    && relationship.getPersonA().getId().equals(person.getId())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private PageAction getRedirectPage(Person person) {
