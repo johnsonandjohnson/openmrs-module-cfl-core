@@ -14,11 +14,18 @@
 
 package org.openmrs.module.cfl.form;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.registrationapp.model.Field;
 import org.openmrs.module.registrationapp.model.NavigableFormStructure;
@@ -34,6 +41,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.CONFIG;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.FRAGMENT_ID;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_ATTRIBUTE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PROVIDER_NAME;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.SECTIONS;
+
 /**
  * Builds a registration form structure from the app configuration.
  * Based on openmrs-module-registrationapp v1.13.0
@@ -41,10 +54,9 @@ import java.util.Map;
  */
 public final class RegisterPersonFormBuilder {
 
-    private static final String PROVIDER_NAME = "providerName";
-    private static final String FRAGMENT_ID = "fragmentId";
-    private static final String CONFIG = "config";
-    private static final String SECTIONS = "sections";
+    private static final Log LOGGER = LogFactory.getLog(RegisterPersonFormBuilder.class);
+    private static final String MULTI_VALUES_WARN = "Multiple values for a single person attribute type not supported," +
+            " ignoring extra values";
 
     /**
      * Builds the navigable form structure for the specified app descriptor
@@ -128,6 +140,29 @@ public final class RegisterPersonFormBuilder {
             }
         }
         return obj;
+    }
+
+    public static void resolvePersonAttributeFields(NavigableFormStructure form, Person person,
+                                                    Map<String, String[]> parameterMap) {
+        for (Field field : form.getFields()) {
+            if (StringUtils.equals(field.getType(), PERSON_ATTRIBUTE_PROP)) {
+                String[] parameterValues = parameterMap.get(field.getFormFieldName());
+                if (parameterValues != null && parameterValues.length > 0) {
+                    if (parameterValues.length > 1) {
+                        LOGGER.warn(MULTI_VALUES_WARN);
+                    }
+                    String parameterValue = parameterValues[0];
+                    if (parameterValue != null) {
+                        PersonAttributeType attributeType = Context.getPersonService()
+                                .getPersonAttributeTypeByUuid(field.getUuid());
+                        if (attributeType != null) {
+                            PersonAttribute attribute = new PersonAttribute(attributeType, parameterValue);
+                            person.addAttribute(attribute);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private RegisterPersonFormBuilder() {

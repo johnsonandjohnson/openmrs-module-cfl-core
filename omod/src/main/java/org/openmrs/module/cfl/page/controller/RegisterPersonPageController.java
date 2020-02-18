@@ -35,37 +35,32 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.ADDRESS_TEMPLATE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.APP_ID_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BREADCRUMB_OVERRIDE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.COMBINE_SUB_SECTIONS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.COMMA;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.DASHBOARD_LINK_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.ENABLE_OVERRIDE_PATH;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.ENABLE_OVERRIDE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.FEMALE_SIGN;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.FORM_STRUCTURE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.FRAMEWORK_SERVICE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.GENDER_OPTIONS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.INCLUDE_FRAGMENTS_PATH;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.INCLUDE_FRAGMENTS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.MALE_SIGN;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.NAME_TEMPLATE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYPES_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.SPACE;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.TITLE_PROP;
 
 /**
  * Based on openmrs-module-registrationapp v1.13.0
  * omod/src/main/java/org/openmrs/module/registrationapp/page/controller/RegisterPatientPageController.java
  */
 public class RegisterPersonPageController {
-
-    private static final String SPACE = " ";
-    private static final String COMMA = ",";
-    private static final String DOT = ".";
-    private static final String MALE_SIGN = "M";
-    private static final String FEMALE_SIGN = "F";
-
-    private static final String APP_ID_PROP = "appId";
-    private static final String PERSON_PROP = "person";
-    private static final String FRAMEWORK_SERVICE_PROP = "appFrameworkService";
-    private static final String BREADCRUMB_OVERRIDE_PROP = "breadcrumbOverride";
-    private static final String FORM_STRUCTURE_PROP = "formStructure";
-    private static final String NAME_TEMPLATE_PROP = "nameTemplate";
-    private static final String ADDRESS_TEMPLATE_PROP = "addressTemplate";
-    private static final String ENABLE_OVERRIDE_PROP = "enableOverrideOfAddressPortlet";
-    private static final String RELATIONSHIP_TYPES_PROP = "relationshipTypes";
-    private static final String GENDER_OPTIONS_PROP = "genderOptions";
-    private static final String INCLUDE_FRAGMENTS_PROP = "includeFragments";
-    private static final String REGISTER_PERSON_PROP = "registerPerson";
-    private static final String ADDRESS_HIERARCHY_PROP = "addresshierarchy";
-    private static final String DASHBOARD_LINK_PROP = "personDashboardLink";
-    private static final String COMBINE_SUB_SECTIONS_PROP = "combineSubSections";
-    private static final String TITLE_PROP = "mainTitle";
-    private static final String ENABLE_OVERRIDE_PATH = ADDRESS_HIERARCHY_PROP + DOT + ENABLE_OVERRIDE_PROP;
-    private static final String INCLUDE_FRAGMENTS_PATH = REGISTER_PERSON_PROP + DOT + INCLUDE_FRAGMENTS_PROP;
 
     public void get(UiSessionContext sessionContext,
                     PageModel model,

@@ -20,6 +20,8 @@ import org.openmrs.PersonName;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.appframework.domain.AppDescriptor;
 
+import org.openmrs.module.cfl.form.RegisterPersonFormBuilder;
+import org.openmrs.module.registrationapp.model.NavigableFormStructure;
 import org.openmrs.module.registrationcore.RegistrationCoreUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -28,37 +30,42 @@ import org.openmrs.ui.framework.fragment.action.SuccessResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_URL_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.APP_ID_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BIRTH_DATE_MONTHS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BIRTH_DATE_YEARS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.DASHBOARD_LINK_ID_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_ADDRESS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_NAME_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_SERVICE_PROP;
+
 /**
  * Based on openmrs-module-registrationapp v1.13.0
  * omod/src/main/java/org/openmrs/module/registrationapp/fragment/controller/RegisterPatientFragmentController.java
  */
 public class RegisterPersonFragmentController {
 
-    private static final String APP_ID_PARAM = "appId";
-    private static final String PERSON_PARAM = "person";
-    private static final String PERSON_NAME_PARAM = "personName";
-    private static final String PERSON_ADDRESS_PARAM = "personAddress";
-    private static final String BIRTH_DATE_YEARS_PARAM = "birthdateYears";
-    private static final String BIRTH_DATE_MONTHS_PARAM = "birthdateMonths";
-
-    private static final String DASHBOARD_LINK_ID_PROP = "patientId";
-    private static final String PERSON_SERVICE_PROP = "personService";
-    private static final String AFTER_CREATED_URL_PROP = "afterCreatedUrl";
-
     @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList",
             "checkstyle:ParameterAssignment", "PMD.AvoidReassigningParameters"})
-    public FragmentActionResult submit(@RequestParam(value = APP_ID_PARAM) AppDescriptor app,
-                                       @ModelAttribute(PERSON_PARAM) @BindParams Person person,
-                                       @ModelAttribute(PERSON_NAME_PARAM) @BindParams PersonName name,
-                                       @ModelAttribute(PERSON_ADDRESS_PARAM) @BindParams PersonAddress address,
-                                       @RequestParam(value = BIRTH_DATE_YEARS_PARAM,
+    public FragmentActionResult submit(@RequestParam(value = APP_ID_PROP) AppDescriptor app,
+                                       @ModelAttribute(PERSON_PROP) @BindParams Person person,
+                                       @ModelAttribute(PERSON_NAME_PROP) @BindParams PersonName name,
+                                       @ModelAttribute(PERSON_ADDRESS_PROP) @BindParams PersonAddress address,
+                                       @RequestParam(value = BIRTH_DATE_YEARS_PROP,
                                                required = false) Integer birthdateYears,
-                                       @RequestParam(value = BIRTH_DATE_MONTHS_PARAM,
+                                       @RequestParam(value = BIRTH_DATE_MONTHS_PROP,
                                                required = false) Integer birthdateMonths,
-                                       @SpringBean(PERSON_SERVICE_PROP) PersonService personService) {
+                                       @SpringBean(PERSON_SERVICE_PROP) PersonService personService,
+                                       HttpServletRequest request) {
         person.addName(name);
         person.addAddress(address);
         handleBirthDate(person, birthdateYears, birthdateMonths);
+
+        NavigableFormStructure formStructure = RegisterPersonFormBuilder.buildFormStructure(app);
+        RegisterPersonFormBuilder.resolvePersonAttributeFields(formStructure, person, request.getParameterMap());
 
         person = personService.savePerson(person);
         return new SuccessResult(getRedirectUrl(person, app));

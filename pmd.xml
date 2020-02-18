@@ -130,7 +130,7 @@
     <rule ref="rulesets/java/naming.xml/BooleanGetMethodName"/>
     <rule ref="rulesets/java/naming.xml/ClassNamingConventions">
         <properties>
-            <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants)" />
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Builder)" />
         </properties>
     </rule>
     <rule ref="rulesets/java/naming.xml/GenericsNaming"/>
