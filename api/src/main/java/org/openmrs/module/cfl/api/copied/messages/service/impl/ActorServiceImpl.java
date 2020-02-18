@@ -11,7 +11,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.copied.messages.model.ActorType;
 import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirection;
 import org.openmrs.module.cfl.api.copied.messages.service.ActorService;
-import org.openmrs.module.cfl.api.copied.messages.service.ConfigService;
+import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 
 import java.util.Collections;

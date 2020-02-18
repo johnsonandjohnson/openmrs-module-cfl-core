@@ -7,8 +7,9 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-package org.openmrs.module.cfl.api.copied.messages.service;
+package org.openmrs.module.cfl.api.service;
 
+import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
 /**
  * Provides the module configuration set
@@ -16,8 +17,9 @@ package org.openmrs.module.cfl.api.copied.messages.service;
 public interface ConfigService {
 
     /**
-     * Provides the coma separated list of relationship types ({@link org.openmrs.module.messages.api.model.ActorType})
-     * used to control the list of possible targets of message (not including the patient as a target).
+     * Provides the coma separated list of relationship types ({@link
+     * org.openmrs.module.cfl.api.copied.messages.model.ActorType}) used to control the list of possible targets of
+     * message (not including the patient as a target).
      * @return coma separated list of relationship types
      */
     String getActorTypesConfiguration();
@@ -27,4 +29,10 @@ public interface ConfigService {
      * @return - the default value of direction
      */
     String getDefaultActorRelationDirection();
+
+    /**
+     * Provides filter strategy {@link FindPersonFilterStrategy} for find person controller
+     * @return - the determined strategy or null if not defined
+     */
+    FindPersonFilterStrategy getPersonFilterStrategy();
 }

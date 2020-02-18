@@ -6,7 +6,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.dto.PersonOverviewEntryDTO;
 import org.openmrs.module.cfl.api.dto.ResultsWrapperDTO;
 import org.openmrs.module.cfl.api.mapper.PersonOverviewMapper;
-import org.openmrs.module.cfl.api.strategy.FindActorFilterStrategy;
+import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,10 @@ public class PersonController extends BaseCflModuleRestController {
     @Qualifier("cfl.personOverviewMapper")
     private PersonOverviewMapper personOverviewMapper;
 
+    @Autowired
+    @Qualifier("cfl.configService")
+    private ConfigService configService;
+
     @RequestMapping(value = "/people", method = RequestMethod.GET)
     @ResponseBody
     public ResultsWrapperDTO<PersonOverviewEntryDTO> getPeople(@RequestParam("query") String query) {
@@ -33,7 +38,7 @@ public class PersonController extends BaseCflModuleRestController {
         if (StringUtils.isNotBlank(query)) {
             List<Person> foundPeople = Context.getPersonService().getPeople(query, false);
             for (Person person : foundPeople) {
-                if (getFindActorFilterStrategy().shouldBeDisplayed(person)) {
+                if (shouldBeReturned(person)) {
                     selectedPeople.add(personOverviewMapper.toDto(person));
                 }
             }
@@ -42,9 +47,8 @@ public class PersonController extends BaseCflModuleRestController {
         return new ResultsWrapperDTO<PersonOverviewEntryDTO>(selectedPeople);
     }
 
-    private FindActorFilterStrategy getFindActorFilterStrategy() {
-        // TODO: CFLM-196 move to configuration
-        return Context.getRegisteredComponent("cfl.findPersonWithCaregiverRoleStrategy",
-                FindActorFilterStrategy.class);
+    private boolean shouldBeReturned(Person person) {
+        FindPersonFilterStrategy filterStrategy = configService.getPersonFilterStrategy();
+        return filterStrategy != null ? filterStrategy.shouldBeReturned(person) : true;
     }
 }

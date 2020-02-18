@@ -10,6 +10,7 @@ import org.openmrs.module.Module;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.appframework.service.AppFrameworkService;
+import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
@@ -60,6 +61,7 @@ public class CFLModuleActivator extends BaseModuleActivator {
                     CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
                     CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
                     CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
+            createPersonFilterStrategyConfig();
             configureDistribution();
             installMetadataPackages();
         } catch (Exception e) {
@@ -139,5 +141,12 @@ public class CFLModuleActivator extends BaseModuleActivator {
         } catch (Exception e) {
             throw new ModuleException("Failed to load Metadata sharing packages", e);
         }
+    }
+
+    private void createPersonFilterStrategyConfig() {
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
+                ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DEFAULT_VALUE,
+                ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DESCRIPTION);
     }
 }

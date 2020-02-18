@@ -21,7 +21,7 @@
           class="org.openmrs.module.cfl.api.mapper.PersonOverviewMapper"/>
 
     <bean id="cfl.configService"
-          class="org.openmrs.module.cfl.api.copied.messages.service.impl.ConfigServiceImpl"/>
+          class="org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl"/>
 
     <bean id="cfl.actorService"
           class="org.openmrs.module.cfl.api.copied.messages.service.impl.ActorServiceImpl">
