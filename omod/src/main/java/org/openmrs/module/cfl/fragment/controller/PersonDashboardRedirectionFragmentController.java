@@ -24,6 +24,8 @@ public class PersonDashboardRedirectionFragmentController {
 
     public static final String A_POSITION = "A";
 
+    public static final String B_POSITION = "B";
+
     public void controller(
             @SpringBean(PERSON_SERVICE) PersonService personService,
             @FragmentParam(IS_PATIENT_DASHBOARD) boolean isPatientDashboard,
@@ -55,7 +57,8 @@ public class PersonDashboardRedirectionFragmentController {
                 if (getActorPositionInRelationship().equals(A_POSITION)
                         && relationship.getPersonA().getId().equals(person.getId())) {
                     return true;
-                } else if (relationship.getPersonB().getId().equals(person.getId())) {
+                } else if (getActorPositionInRelationship().equals(B_POSITION) &&
+                        relationship.getPersonB().getId().equals(person.getId())) {
                     return true;
                 }
             }

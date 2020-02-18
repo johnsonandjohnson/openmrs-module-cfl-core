@@ -40,7 +40,7 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
      *
      * @param relationshipsTypes - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} types
      * @param otherPeopleUUIDs   - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} other people UUIDs
-     * @param person             - related person which already exist in the database
+     * @param person             - related person which already exists in the database
      * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
      */
     @Override
