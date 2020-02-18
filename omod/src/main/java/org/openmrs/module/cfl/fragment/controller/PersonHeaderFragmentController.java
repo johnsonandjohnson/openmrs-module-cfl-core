@@ -17,6 +17,8 @@ package org.openmrs.module.cfl.fragment.controller;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -51,6 +53,8 @@ public class PersonHeaderFragmentController {
     private static final String PERSON = "person";
     private static final String PERSON_NAMES = "personNames";
     private static final String TELEPHONE = "telephone";
+    private static final String PERSON_IDENTIFIER_LABEL = "personIdentifierLabel";
+    private static final String PERSON_IDENTIFIER = "personIdentifier";
     private static final String PERSON_HEADER = "personHeader";
     private static final String APP_CONTEXT_MODEL = "appContextModel";
 
@@ -71,6 +75,8 @@ public class PersonHeaderFragmentController {
         config.addAttribute(PERSON, wrapper);
         config.addAttribute(PERSON_NAMES, getNames(wrapper.getPersonName()));
         config.addAttribute(TELEPHONE, wrapper.getPerson().getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
+        model.addAttribute(PERSON_IDENTIFIER_LABEL, getIdentifierLabelSetting());
+        model.addAttribute(PERSON_IDENTIFIER, getIdentifierValue(wrapper));
 
         if (appContextModel == null) {
             AppContextModel contextModel = sessionContext.generateAppContextModel();
@@ -128,5 +134,47 @@ public class PersonHeaderFragmentController {
         } catch (Exception e) {
             throw new APIException("Unable to generate name fields for patient header", e);
         }
+    }
+
+    /**
+     * Returns the value of global property for identifier label on person header
+     * @return - person header identifier label setting
+     */
+    private String getIdentifierLabelSetting() {
+        return Context.getAdministrationService().getGlobalProperty(CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY);
+    }
+
+    /**
+     * Returns the value of person identifier attribute based on global settings configuration
+     * @return - the person identifier attribute value
+     */
+    private PersonAttribute getIdentifierValue(
+            @InjectBeans PersonDomainWrapper wrapper) {
+        PersonAttributeType type = getPersonIdentifierAttributeType();
+        return wrapper.getPerson().getAttribute(type);
+    }
+
+    /**
+     * Returns the person attribute type which should be used to store the person identifier.
+     * The global setting is used to determine the attribute type.
+     *
+     * @return - attribute type or null if global setting incorrect
+     */
+    private PersonAttributeType getPersonIdentifierAttributeType() {
+        PersonAttributeType type = null;
+        String identifierAttributeTypeUUID = getPersonIdentifierTypeSetting();
+        if (StringUtils.isNotBlank(identifierAttributeTypeUUID)) {
+            type = Context.getPersonService().getPersonAttributeTypeByUuid(identifierAttributeTypeUUID);
+        }
+        return type;
+    }
+
+    /**
+     * Returns the settings for person identifier attribute type.
+     *
+     * @return - setting value
+     */
+    private String getPersonIdentifierTypeSetting() throws APIException  {
+        return Context.getAdministrationService().getGlobalProperty(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY);
     }
 }

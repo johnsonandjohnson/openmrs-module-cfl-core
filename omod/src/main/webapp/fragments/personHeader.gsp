@@ -87,6 +87,13 @@
         </h1>
     </div>
 
+    <% if (personIdentifier) { %>
+        <div class="identifiers">
+            <em>${ ui.message(personIdentifierLabel) }</em>
+            <span>${ personIdentifier }</span>
+        </div>
+    <% } %>
+
     <div class="secondLineFragments">
         <% secondLineFragments.each { %>
         ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, [patient: config.person])}

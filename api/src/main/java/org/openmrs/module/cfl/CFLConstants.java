@@ -60,5 +60,10 @@ public final class CFLConstants {
     public static final String PERSON_IDENTIFIER_SOURCE_DESCRIPTION = "Used to specify the ID or UUID of idgen identifier "
             + "source which will be used to generate person identifier.";
 
+    public static final String PERSON_HEADER_IDENTIFIER_LABEL_KEY = "cfl.personHeader.identifier.label";
+    public static final String PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE = "cfl.personHeader.identifier.label";
+    public static final String PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION = "Store the label for person id "
+            + "displayed on person header.";
+
     private CFLConstants() { }
 }

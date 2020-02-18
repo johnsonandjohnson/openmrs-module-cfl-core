@@ -115,6 +115,10 @@ public class CFLModuleActivator extends BaseModuleActivator {
                 CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
                 CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE,
                 CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
+                CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
+                CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
     }
 
     private void configureDistribution() {
