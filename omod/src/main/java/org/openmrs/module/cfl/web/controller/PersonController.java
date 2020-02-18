@@ -44,7 +44,7 @@ public class PersonController extends BaseCflModuleRestController {
 
     private FindActorFilterStrategy getFindActorFilterStrategy() {
         // TODO: CFLM-196 move to configuration
-        return Context.getRegisteredComponent("cfl.findPersonWithCflRelationshipStrategy",
+        return Context.getRegisteredComponent("cfl.findPersonWithCaregiverRoleStrategy",
                 FindActorFilterStrategy.class);
     }
 }

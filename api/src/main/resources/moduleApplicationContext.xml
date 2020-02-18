@@ -12,11 +12,21 @@
 
     <context:component-scan base-package="org.openmrs.module.cfl" />
 
-    <bean id="cfl.findPersonWithCflRelationshipStrategy"
-          class="org.openmrs.module.cfl.api.strategy.impl.FindPersonWithCflRelationshipFilterStrategyImpl"/>
+    <bean id="cfl.findPersonWithCaregiverRoleStrategy"
+          class="org.openmrs.module.cfl.api.strategy.impl.FindPersonWithCaregiverRoleFilterStrategyImpl">
+        <property name="actorService" ref="cfl.actorService"/>
+    </bean>
 
     <bean id="cfl.personOverviewMapper"
           class="org.openmrs.module.cfl.api.mapper.PersonOverviewMapper"/>
+
+    <bean id="cfl.configService"
+          class="org.openmrs.module.cfl.api.copied.messages.service.impl.ConfigServiceImpl"/>
+
+    <bean id="cfl.actorService"
+          class="org.openmrs.module.cfl.api.copied.messages.service.impl.ActorServiceImpl">
+        <property name="configService" ref="cfl.configService"/>
+    </bean>
 
     <bean id="cfl.relationshipService" class="org.openmrs.module.cfl.api.service.impl.RelationshipServiceImpl">
         <property name="personService" ref="personService" />

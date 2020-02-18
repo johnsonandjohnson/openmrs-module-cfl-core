@@ -16,7 +16,7 @@
       }
     ],
     "config": {
-      "afterSelectedUrl": "/cfl/person.page?patientId={{ patientId }}&dashboard=person",
+      "afterSelectedUrl": "/coreapps/clinicianfacing/patient.page?patientId={{ patientId }}&dashboard=person",
       "label": "cfl.findPerson.app.label",
       "heading": "cfl.findPerson.app.heading"
     }

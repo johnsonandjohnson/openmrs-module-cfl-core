@@ -4,6 +4,8 @@ public final class CFLConstants {
 
     public static final String MODULE_ID = "cfl";
 
+    public static final String ACTOR_TYPES_KEY = "messages.actor.types";
+
     public static final String PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME = "cfl.redirectToPersonDashboard";
 
     public static final String PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE = "true";
