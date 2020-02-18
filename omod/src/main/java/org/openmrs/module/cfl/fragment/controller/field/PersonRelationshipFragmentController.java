@@ -20,22 +20,23 @@ import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.COMMA;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.INITIAL_RELATIONSHIPS_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.OTHER_PERSON_UUID_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYPES_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYPE_PROP;
+
 public class PersonRelationshipFragmentController {
-
-    private static final String RELATIONSHIP_TYPE = "relationship_type";
-
-    private static final String OTHER_PERSON_UUID = "other_person_uuid";
-
-    private static final String COMMA = ",";
 
     public void controller(
             FragmentModel model,
             UiUtils uiUtils,
             PageModel pageModel) {
-        model.addAttribute("relationshipTypes", getRelationshipTypes());
+        model.addAttribute(RELATIONSHIP_TYPES_PROP, getRelationshipTypes());
         Person person = getPerson(pageModel);
-        model.addAttribute("person", person);
-        model.addAttribute("initialRelationships", buildInitialRelationships(person, uiUtils));
+        model.addAttribute(PERSON_PROP, person);
+        model.addAttribute(INITIAL_RELATIONSHIPS_PROP, buildInitialRelationships(person, uiUtils));
     }
 
     /**
@@ -47,10 +48,10 @@ public class PersonRelationshipFragmentController {
     public void updateRelationships(
             @ModelAttribute("person") @BindParams Person person,
             HttpServletRequest request) {
-        if (request.getParameterMap().containsKey(RELATIONSHIP_TYPE)
-                && request.getParameterMap().containsKey(OTHER_PERSON_UUID)) {
-            getCflRelationshipService().updatedRelationships(request.getParameterValues(RELATIONSHIP_TYPE),
-                    request.getParameterValues(OTHER_PERSON_UUID), person);
+        if (request.getParameterMap().containsKey(RELATIONSHIP_TYPE_PROP)
+                && request.getParameterMap().containsKey(OTHER_PERSON_UUID_PROP)) {
+            getCflRelationshipService().updatedRelationships(request.getParameterValues(RELATIONSHIP_TYPE_PROP),
+                    request.getParameterValues(OTHER_PERSON_UUID_PROP), person);
         }
     }
 

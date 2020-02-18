@@ -18,4 +18,14 @@ public interface RelationshipService extends OpenmrsService {
      * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
      */
     List<Relationship> updatedRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person);
+
+    /**
+     * Creates and saves a new relationships based on types from {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}.
+     *
+     * @param relationshipsTypes - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} types
+     * @param otherPeopleUUIDs   - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} other people UUIDs
+     * @param person             - related person which already exist in the database
+     * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
+     */
+    List<Relationship> createNewRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person);
 }

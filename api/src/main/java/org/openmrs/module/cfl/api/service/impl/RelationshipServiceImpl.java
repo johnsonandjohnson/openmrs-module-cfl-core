@@ -32,11 +32,7 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
     @Override
     public List<Relationship> updatedRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person) {
         voidOldRelationships(person);
-        return saveNewRelationships(relationshipsTypes, otherPeopleUUIDs, person);
-    }
-
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
+        return createNewRelationships(relationshipsTypes, otherPeopleUUIDs, person);
     }
 
     /**
@@ -44,10 +40,11 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
      *
      * @param relationshipsTypes - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} types
      * @param otherPeopleUUIDs   - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} other people UUIDs
-     * @param person             - related person
+     * @param person             - related person which already exist in the database
      * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
      */
-    private List<Relationship> saveNewRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person) {
+    @Override
+    public List<Relationship> createNewRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person) {
         List<Relationship> relationships = new ArrayList<Relationship>();
         for (int i = 0; i < relationshipsTypes.length; i++) {
             String newType = relationshipsTypes[i];
@@ -67,6 +64,10 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
             }
         }
         return relationships;
+    }
+
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
     }
 
     /**

@@ -17,6 +17,9 @@ public final class CFLRegisterPersonConstants {
     public static final String ADDRESS_TEMPLATE_PROP = "addressTemplate";
     public static final String ENABLE_OVERRIDE_PROP = "enableOverrideOfAddressPortlet";
     public static final String RELATIONSHIP_TYPES_PROP = "relationshipTypes";
+    public static final String INITIAL_RELATIONSHIPS_PROP = "initialRelationships";
+    public static final String RELATIONSHIP_TYPE_PROP = "relationship_type";
+    public static final String OTHER_PERSON_UUID_PROP = "other_person_uuid";
     public static final String GENDER_OPTIONS_PROP = "genderOptions";
     public static final String INCLUDE_FRAGMENTS_PROP = "includeFragments";
     public static final String REGISTER_PERSON_PROP = "registerPerson";

@@ -18,8 +18,9 @@ import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonName;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.AppDescriptor;
-
+import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.openmrs.module.cfl.form.RegisterPersonFormBuilder;
 import org.openmrs.module.registrationapp.model.NavigableFormStructure;
 import org.openmrs.module.registrationcore.RegistrationCoreUtil;
@@ -30,6 +31,7 @@ import org.openmrs.ui.framework.fragment.action.SuccessResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_URL_PROP;
@@ -37,10 +39,12 @@ import static org.openmrs.module.cfl.CFLRegisterPersonConstants.APP_ID_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BIRTH_DATE_MONTHS_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BIRTH_DATE_YEARS_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.DASHBOARD_LINK_ID_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.OTHER_PERSON_UUID_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_ADDRESS_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_NAME_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_SERVICE_PROP;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYPE_PROP;
 
 /**
  * Based on openmrs-module-registrationapp v1.13.0
@@ -66,8 +70,8 @@ public class RegisterPersonFragmentController {
 
         NavigableFormStructure formStructure = RegisterPersonFormBuilder.buildFormStructure(app);
         RegisterPersonFormBuilder.resolvePersonAttributeFields(formStructure, person, request.getParameterMap());
-
         person = personService.savePerson(person);
+        resolvePersonRelationships(person, request.getParameterMap());
         return new SuccessResult(getRedirectUrl(person, app));
     }
 
@@ -94,6 +98,24 @@ public class RegisterPersonFragmentController {
 
     private boolean isEstimationOfBirthDatePossible(Integer birthdateYears, Integer birthdateMonths) {
         return birthdateYears != null || birthdateMonths != null;
+    }
+
+    private void resolvePersonRelationships(Person person, Map<String, String[]> parameterMap) {
+        if (person != null && parameterMap.containsKey(RELATIONSHIP_TYPE_PROP)
+                && parameterMap.containsKey(OTHER_PERSON_UUID_PROP)) {
+            String[] relationshipsTypes = parameterMap.get(RELATIONSHIP_TYPE_PROP);
+            String[] otherPeopleUUIDs = parameterMap.get(OTHER_PERSON_UUID_PROP);
+            getCflRelationshipService().createNewRelationships(relationshipsTypes, otherPeopleUUIDs, person);
+        }
+    }
+
+    /**
+     * Returns the CFL relationship service based on the actual application context.
+     *
+     * @return - person service
+     */
+    private RelationshipService getCflRelationshipService() {
+        return Context.getRegisteredComponent("cfl.relationshipService", RelationshipService.class);
     }
 
 }
