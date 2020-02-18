@@ -23,6 +23,9 @@
 		<require_module version="${appframeworkVersion}">
 			org.openmrs.module.appframework
 		</require_module>
+		<require_module version="${idgenVersion}">
+			org.openmrs.module.idgen
+		</require_module>
 		<require_module version="${uiframeworkVersion}">
 			org.openmrs.module.uiframework
 		</require_module>

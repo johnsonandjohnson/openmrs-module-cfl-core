@@ -10,6 +10,7 @@ public final class CFLRegisterPersonConstants {
 
     public static final String APP_ID_PROP = "appId";
     public static final String PERSON_PROP = "person";
+    public static final String AFTER_CREATED_ACTIONS_PROP = "afterCreatedActions";
     public static final String FRAMEWORK_SERVICE_PROP = "appFrameworkService";
     public static final String BREADCRUMB_OVERRIDE_PROP = "breadcrumbOverride";
     public static final String FORM_STRUCTURE_PROP = "formStructure";

@@ -2,8 +2,10 @@ package org.openmrs.module.cfl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
+import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.Module;
@@ -38,30 +40,9 @@ public class CFLModuleActivator extends BaseModuleActivator {
         log.info("Started CFL Module");
         try {
             setupHtmlForms();
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
-                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
-                    CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
-                    CFLConstants.LOCATION_ATTRIBUTE_TYPE_UUID);
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.DISABLED_CONTROL_KEY,
-                    CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
-                    CFLConstants.DISABLED_CONTROL_DESCRIPTION);
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
-                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
-                    CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.SUPPORTED_ACTOR_TYPE,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
-            GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
-                    CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
             createPersonFilterStrategyConfig();
+            createGlobalSettings();
+            createPersonAttributeTypes();
             configureDistribution();
             installMetadataPackages();
         } catch (Exception e) {
@@ -76,6 +57,64 @@ public class CFLModuleActivator extends BaseModuleActivator {
      */
     public void shutdown() {
         log.info("Shutdown CFL Module");
+    }
+
+    private void createPersonAttributeTypes() {
+        createPersonIdentifierAttributeType();
+    }
+
+    /**
+     * Creates person attribute type used to store information about additional person identifier.
+     */
+    private void createPersonIdentifierAttributeType() {
+        PersonAttributeType attributeType = new PersonAttributeType();
+        attributeType.setName(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_NAME);
+        attributeType.setFormat(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_FORMAT);
+        attributeType.setDescription(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_DESCRIPTION);
+        attributeType.setUuid(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_UUID);
+        createPersonAttributeTypeIfNotExists(attributeType);
+    }
+
+    private void createPersonAttributeTypeIfNotExists(PersonAttributeType attributeType) {
+        PersonService personService = Context.getPersonService();
+        PersonAttributeType actual = personService.getPersonAttributeTypeByUuid(attributeType.getUuid());
+        if (actual == null) {
+            personService.savePersonAttributeType(attributeType);
+        }
+    }
+
+    private void createGlobalSettings() {
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+                CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
+                CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
+                CFLConstants.LOCATION_ATTRIBUTE_TYPE_UUID);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.DISABLED_CONTROL_KEY,
+                CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
+                CFLConstants.DISABLED_CONTROL_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
+                CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
+                CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.SUPPORTED_ACTOR_TYPE,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
+                CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DEFAULT_VALUE,
+                CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
+                CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE,
+                CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
     }
 
     private void configureDistribution() {

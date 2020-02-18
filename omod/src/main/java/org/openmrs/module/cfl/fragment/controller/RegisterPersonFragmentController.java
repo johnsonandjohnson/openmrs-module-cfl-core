@@ -14,12 +14,18 @@
 
 package org.openmrs.module.cfl.fragment.controller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonName;
+import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.AppDescriptor;
+import org.openmrs.module.cfl.api.registration.person.action.AfterPersonCreatedAction;
 import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.openmrs.module.cfl.form.RegisterPersonFormBuilder;
 import org.openmrs.module.registrationapp.model.NavigableFormStructure;
@@ -34,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_ACTIONS_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_URL_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.APP_ID_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.BIRTH_DATE_MONTHS_PROP;
@@ -51,6 +58,8 @@ import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYP
  * omod/src/main/java/org/openmrs/module/registrationapp/fragment/controller/RegisterPatientFragmentController.java
  */
 public class RegisterPersonFragmentController {
+
+    private static final Log LOGGER = LogFactory.getLog(RegisterPersonFragmentController.class);
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList",
             "checkstyle:ParameterAssignment", "PMD.AvoidReassigningParameters"})
@@ -72,6 +81,7 @@ public class RegisterPersonFragmentController {
         RegisterPersonFormBuilder.resolvePersonAttributeFields(formStructure, person, request.getParameterMap());
         person = personService.savePerson(person);
         resolvePersonRelationships(person, request.getParameterMap());
+        performAfterPersonCreatedActions(person, app, request.getParameterMap());
         return new SuccessResult(getRedirectUrl(person, app));
     }
 
@@ -110,11 +120,37 @@ public class RegisterPersonFragmentController {
     }
 
     /**
+     * Performs all actions that are configured to run after creating a person,
+     * for a particular instance of the registration app
+     *
+     * @param person - related person already exists in the database
+     * @param app - the app description - used to fetch config
+     * @param parameterMap - parameters, typically from an HttpServletRequest
+     */
+    private void performAfterPersonCreatedActions(Person person, AppDescriptor app, Map<String, String[]> parameterMap) {
+        ArrayNode afterCreatedArray = (ArrayNode) app.getConfig().get(AFTER_CREATED_ACTIONS_PROP);
+        if (afterCreatedArray != null) {
+            for (JsonNode actionNode : afterCreatedArray) {
+                String beanName = actionNode.getTextValue();
+                try {
+                    AfterPersonCreatedAction action = Context.getRegisteredComponent(beanName,
+                            AfterPersonCreatedAction.class);
+                    action.afterCreated(person, parameterMap);
+                } catch (APIException ex) {
+                    LOGGER.warn(String.format("Error occurred during executing after "
+                            + "creating person action from bean: %s ", beanName));
+                }
+            }
+        }
+    }
+
+    /**
      * Returns the CFL relationship service based on the actual application context.
      *
      * @return - person service
      */
     private RelationshipService getCflRelationshipService() {
+
         return Context.getRegisteredComponent("cfl.relationshipService", RelationshipService.class);
     }
 

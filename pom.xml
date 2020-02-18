@@ -171,6 +171,20 @@
                 <version>${uicommonsVersion}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>idgen-api</artifactId>
+                <version>${idgenVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>idgen-api</artifactId>
+                <version>${idgenVersion}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -339,5 +353,6 @@
         <registrationappVersion>1.13.0</registrationappVersion>
         <registrationcoreVersion>1.8.0</registrationcoreVersion>
         <uicommonsVersion>2.6.1</uicommonsVersion>
+        <idgenVersion>4.3</idgenVersion>
     </properties>
 </project>

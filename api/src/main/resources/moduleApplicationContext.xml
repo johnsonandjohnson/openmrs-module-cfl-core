@@ -31,4 +31,11 @@
     <bean id="cfl.relationshipService" class="org.openmrs.module.cfl.api.service.impl.RelationshipServiceImpl">
         <property name="personService" ref="personService" />
     </bean>
+
+    <bean id="cfl.personIdentifierAction"
+          class="org.openmrs.module.cfl.api.registration.person.action.impl.PersonIdentifierActionImpl">
+        <property name="personService" ref="personService" />
+        <property name="administrationService" ref="adminService" />
+        <property name="identifierSourceService" ref="baseIdentifierSourceService" />
+    </bean>
 </beans>
