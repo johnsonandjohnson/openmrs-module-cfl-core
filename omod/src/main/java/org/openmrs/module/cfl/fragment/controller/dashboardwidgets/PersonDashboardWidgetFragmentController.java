@@ -15,10 +15,28 @@ import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 
 import java.util.Map;
 
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_PROP;
+
 /**
  * Controller copied from coreapps module and adapted to handel the person object
  */
 public class PersonDashboardWidgetFragmentController {
+
+    private static final String PATIENT = "patient";
+
+    private static final String PATIENT_ID = "patientId";
+
+    private static final String PATIENT_UUID = "patientUuid";
+
+    private static final String DATE_FORMAT = "dateFormat";
+
+    private static final String FORMAT = "yyyy-MM-dd";
+
+    private static final String LOCALE = "locale";
+
+    private static final String LANGUAGE = "language";
+
+    private static final String JSON = "json";
 
     public void controller(
             FragmentConfiguration config, @FragmentParam("app") AppDescriptor app,
@@ -27,26 +45,30 @@ public class PersonDashboardWidgetFragmentController {
         ObjectMapper mapper = new ObjectMapper();
 
         Object person = null;
-        person = config.get("person");
-        if (person == null ) {
-            person = config.get("person");
+        person = config.get(PERSON_PROP);
+        if (person == null) {
+            person = config.get(PATIENT);
+        }
+        if (person == null && config.containsKey(PATIENT_ID) && config.get(PATIENT_ID) != null) {
+            person = Context.getPersonService().getPerson((Integer) config.get(PATIENT_ID));
         }
 
         ObjectNode appConfig = app.getConfig();
+
         if (person != null) {
-            appConfig.put("patientUuid", ((Person) person).getUuid());
+            appConfig.put(PATIENT_UUID, ((Person) person).getUuid());
         }
 
-        if (appConfig.get("dateFormat") == null) {
-            appConfig.put("dateFormat",
-                    adminService.getGlobalProperty(UiFrameworkConstants.GP_FORMATTER_DATE_FORMAT, "yyyy-MM-dd"));
+        if (appConfig.get(DATE_FORMAT) == null) {
+            appConfig.put(DATE_FORMAT,
+                    adminService.getGlobalProperty(UiFrameworkConstants.GP_FORMATTER_DATE_FORMAT, FORMAT));
         }
 
-        appConfig.put("locale", Context.getLocale().toString());
-        appConfig.put("language", Context.getLocale().getLanguage().toString());
+        appConfig.put(LOCALE, Context.getLocale().toString());
+        appConfig.put(LANGUAGE, Context.getLocale().getLanguage().toString());
 
         Map<String, Object> appConfigMap = mapper.convertValue(appConfig, Map.class);
         config.merge(appConfigMap);
-        config.addAttribute("json", appConfig.toString().replace('\"', '\''));
+        config.addAttribute(JSON, appConfig.toString().replace('\"', '\''));
     }
 }

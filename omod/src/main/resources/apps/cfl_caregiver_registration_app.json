@@ -16,7 +16,7 @@
       }
     ],
     "config": {
-      "afterCreatedUrl": "/cfl/person.page?patientId={{patientId}}&dashboard=person",
+      "afterCreatedUrl": "/coreapps/clinicianfacing/patient.page?patientId={{patientId}}&dashboard=person",
       "sections": [
         {
           "id": "demographics",

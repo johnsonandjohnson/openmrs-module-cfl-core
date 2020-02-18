@@ -8,7 +8,8 @@
       "icon": "icon-group",
       "label": "FAMILY",
       "editPrivilege": "Task: coreapps.editRelationships",
-      "maxRecords": "5"
+      "maxRecords": "5",
+      "providerPage": "/coreapps/clinicianfacing/patient.page?patientId={{personUuid}}&dashboard=person"
     },
     "extensions": [
       {
