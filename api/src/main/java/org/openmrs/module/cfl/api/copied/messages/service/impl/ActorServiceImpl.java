@@ -64,9 +64,9 @@ public class ActorServiceImpl implements ActorService {
     private boolean isInCaregiverRole(Person person, ActorType actorType) {
         boolean isInAnyRelationship = false;
         if (RelationshipTypeDirection.A.equals(actorType.getDirection())) {
-            isInAnyRelationship = isInCaregiverRoleToPerson(person, actorType.getRelationshipType());
-        } else if (RelationshipTypeDirection.B.equals(actorType.getDirection())) {
             isInAnyRelationship = isInCaregiverRoleFromPerson(person, actorType.getRelationshipType());
+        } else if (RelationshipTypeDirection.B.equals(actorType.getDirection())) {
+            isInAnyRelationship = isInCaregiverRoleToPerson(person, actorType.getRelationshipType());
         }
         return isInAnyRelationship;
     }
