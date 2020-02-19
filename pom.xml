@@ -185,6 +185,18 @@
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.openmrs</groupId>
+                <artifactId>event-api</artifactId>
+                <version>${eventVersion}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-codec</groupId>
+                        <artifactId>commons-codec</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -354,5 +366,6 @@
         <registrationcoreVersion>1.8.0</registrationcoreVersion>
         <uicommonsVersion>2.6.1</uicommonsVersion>
         <idgenVersion>4.3</idgenVersion>
+        <eventVersion>2.6.0</eventVersion>
     </properties>
 </project>

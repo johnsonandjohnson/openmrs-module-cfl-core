@@ -87,7 +87,7 @@ function PersonSearchWidget(configuration){
             initialPatientData.push({uuid: p.uuid});
             initialPatientUuids.push(p.uuid);
             var widgetBirthdate = p.widgetBirthdate;
-            var bdate = p.birthdate;
+            var bdate = moment(p.birthdate).format(configuration.dateFormat)
             if( p.birthdateEstimated == true){
                 bdate = "~ "+bdate;
             }else{
@@ -97,8 +97,10 @@ function PersonSearchWidget(configuration){
             if(age == '' && widgetBirthdate != ''){
                 age = formatAge(widgetBirthdate);
             }
-            var initialPatient = [p.identifier+" <span class='recent-lozenge'>"+config.messages.recent+"</span>",
-                p.name, p.gender, age, bdate];
+
+            var personIdentifier = p.personIdentifier + " <span class='recent-lozenge'>"+config.messages.recent+"</span>";
+            var name = p.name;
+            var initialPatient = [personIdentifier, name, p.gender, age, bdate];
             jq.each(attributeTypes, function(key, attributeTypeName){
                 initialPatient.push(p[attributeTypeName]);
             });
@@ -261,13 +263,15 @@ function PersonSearchWidget(configuration){
                     }
                 }
 
-                var personName = person.personName || "";
+                var personIdentifier = person.personIdentifier || "";
                 if (_.contains(initialPatientUuids, person.uuid)) {
-                    personName += " <span class='recent-lozenge'>" + config.messages.recent + "</span>";
+                    personIdentifier += " <span class='recent-lozenge'>" + config.messages.recent + "</span>";
                 }
                 if (person.onlyInMpi === true) {
-                    personName += " <span class='recent-lozenge'>" + config.messages.onlyInMpi + "</span>";
+                    personIdentifier += " <span class='recent-lozenge'>" + config.messages.onlyInMpi + "</span>";
                 }
+
+                var personName = person.personName || "";
 
                 var age = person.age;
                 if(age == '' && widgetBirthdate != ''){

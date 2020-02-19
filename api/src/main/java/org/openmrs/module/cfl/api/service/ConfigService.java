@@ -35,4 +35,10 @@ public interface ConfigService {
      * @return - the determined strategy or null if not defined
      */
     FindPersonFilterStrategy getPersonFilterStrategy();
+
+    /**
+     * Provides the max number of people to store as last viewed for a single user.
+     * @return - the configured last viewed people number limit or the default value if not defined
+     */
+    int getLastViewedPersonSizeLimit();
 }

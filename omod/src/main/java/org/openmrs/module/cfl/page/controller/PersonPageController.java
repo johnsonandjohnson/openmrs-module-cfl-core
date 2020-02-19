@@ -27,6 +27,7 @@ import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.event.ApplicationEventService;
 import org.openmrs.module.cfl.extension.builder.PersonExtensionBuilder;
 import org.openmrs.module.cfl.extension.domain.PersonDomainWrapper;
 import org.openmrs.module.coreapps.CoreAppsConstants;
@@ -35,7 +36,6 @@ import org.openmrs.module.coreapps.contextmodel.PatientContextModel;
 import org.openmrs.module.coreapps.contextmodel.PersonContextModel;
 import org.openmrs.module.coreapps.contextmodel.VisitContextModel;
 import org.openmrs.module.emrapi.adt.AdtService;
-import org.openmrs.module.emrapi.event.ApplicationEventService;
 import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
 import org.openmrs.module.emrapi.visit.VisitDomainWrapper;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -67,7 +67,7 @@ public class PersonPageController {
                                  @InjectBeans PersonDomainWrapper personDomainWrapper,
                                  @SpringBean("adtService") AdtService adtService,
                                  @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
-                                 @SpringBean("applicationEventService") ApplicationEventService applicationEventService,
+                                 @SpringBean("cfl.applicationEventService") ApplicationEventService appEventService,
                                  @SpringBean("coreAppsProperties") CoreAppsProperties coreAppsProperties,
                                  @SpringBean("patientService") PatientService patientService,
                                  PageModel model,
@@ -77,7 +77,7 @@ public class PersonPageController {
             return redirect;
         }
 
-        SpringBeans beans = new SpringBeans(adtService, appFrameworkService, applicationEventService,
+        SpringBeans beans = new SpringBeans(adtService, appFrameworkService, appEventService,
                 coreAppsProperties, patientService);
 
         model.addAttribute("isPatient", person.isPatient());
@@ -132,6 +132,7 @@ public class PersonPageController {
         PersonExtensionBuilder builder = new PersonExtensionBuilder(beans.appFrameworkService, dashboard, contextModel);
         includeExtensions(model, builder);
         includeDashboardParams(beans, model, dashboard);
+        beans.applicationEventService.personViewed(person, sessionContext.getCurrentUser());
         return REGULAR_ACTION;
     }
 

@@ -24,11 +24,12 @@
         gender:"${ ui.escapeJs(ui.encodeHtmlContent(it.gender)) }",
         // it.age is of type int (doesn't need sanitization)
         age:"${ it.age ?: '' }",
-        birthdate:"${ it.birthdate ? ui.escapeJs(ui.encodeHtmlContent(dateFormatter.format(it.birthdate))) : '' }",
+        birthdate:"${ it.birthdate ? ui.escapeJs(ui.encodeHtmlContent(it.birthdate)) : '' }",
         // it.birthdateEstimated is of type boolean (doesn't need sanitization)
         birthdateEstimated: ${ it.birthdateEstimated },
-        identifier:"${ it.patientIdentifier ? ui.escapeJs(ui.encodeHtmlContent(it.patientIdentifier.identifier)) : '' }",
-        widgetBirthdate:"${ it.birthdate ? ui.escapeJs(ui.encodeHtmlContent(searchWidgetDateFormatter.format(it.birthdate))) : '' }"
+        personIdentifier:"${ it.personIdentifier ? ui.escapeJs(ui.encodeHtmlContent(it.personIdentifier)) : '' }",
+        patientIdentifier:"${ it.patientIdentifier ? ui.escapeJs(ui.encodeHtmlContent(it.patientIdentifier)) : '' }",
+        widgetBirthdate:"${ it.birthdate ? ui.escapeJs(ui.encodeHtmlContent(it.birthdate)) : '' }"
     }
         <% listingAttributeTypeNames.each { attributeName -> %>
             patientObj["${ ui.encodeHtml(attributeName) }"] = "${ it.getAttribute(attributeName) ? ui.encodeHtml(String.valueOf(it.getAttribute(attributeName))) :'' }";
@@ -56,7 +57,7 @@
     var patientSearchWidget;
     jq(function() {
         var widgetConfig = {
-            initialPatients: [], // TODO: CFLM-196 initial patient functionality has been skipped for now
+            initialPatients: lastViewedPatients,
             doInitialSearch: ${ doInitialSearch ? "\"" + ui.escapeJs(doInitialSearch) + "\"" : "null" },
             minSearchCharacters: ${ minSearchCharacters ?: 3 },
             afterSelectedUrl: '${ ui.escapeJs(config.afterSelectedUrl) }',

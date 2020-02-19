@@ -5,10 +5,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 
 public final class GlobalPropertyUtils {
 
     private static Log log = LogFactory.getLog(GlobalPropertyUtils.class);
+
+    public static int parseInt(String name, String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ex) {
+            throw new CflRuntimeException(
+                    String.format("Cannot parse the global property %s=%s. Expected int value.", name, value),
+                    ex
+            );
+        }
+    }
 
     public static String getGlobalProperty(String key) {
         return Context.getAdministrationService().getGlobalProperty(key);

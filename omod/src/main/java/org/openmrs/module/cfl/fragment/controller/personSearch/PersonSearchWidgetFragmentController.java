@@ -1,14 +1,16 @@
 package org.openmrs.module.cfl.fragment.controller.personSearch;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.cfl.api.dto.PersonOverviewEntryDTO;
+import org.openmrs.module.cfl.api.mapper.PersonOverviewMapper;
+import org.openmrs.module.cfl.api.util.UserUtil;
 import org.openmrs.module.coreapps.CoreAppsConstants;
-import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.ui.framework.UiFrameworkConstants;
 import org.openmrs.ui.framework.annotation.FragmentParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -34,6 +36,7 @@ public class PersonSearchWidgetFragmentController {
     public void controller(FragmentModel model, UiSessionContext sessionContext, HttpServletRequest request,
                 @SpringBean("adminService") AdministrationService administrationService,
                 @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
+                @SpringBean("cfl.personOverviewMapper") PersonOverviewMapper personOverviewMapper,
                 @FragmentParam(value = "showLastViewedPatients", required = false) Boolean showLastViewedPatientsParam,
                 @FragmentParam(value = "initialSearchFromParameter", required = false) String searchByParam,
                 @FragmentParam(value = "registrationAppLink", required = false) String registrationAppLink) {
@@ -68,8 +71,8 @@ public class PersonSearchWidgetFragmentController {
         model.addAttribute("doInitialSearch", doInitialSearch);
 
         if (showLastViewedPatients) {
-            List<Patient> patients = GeneralUtils.getLastViewedPatients(sessionContext.getCurrentUser());
-            model.addAttribute("lastViewedPatients", patients);
+            List<Person> people = UserUtil.getLastViewedPeople(sessionContext.getCurrentUser());
+            model.addAttribute("lastViewedPatients", convertToDTO(people, personOverviewMapper));
         }
 
         String listingAttributeTypesStr = administrationService.getGlobalProperty(
@@ -90,5 +93,13 @@ public class PersonSearchWidgetFragmentController {
                 "coreapps.patientSearch.extension");
         Collections.sort(patientSearchExtensions);
         model.addAttribute("patientSearchExtensions", patientSearchExtensions);
+    }
+
+    private List<PersonOverviewEntryDTO> convertToDTO(List<Person> people, PersonOverviewMapper mapper) {
+        ArrayList<PersonOverviewEntryDTO> results = new ArrayList<PersonOverviewEntryDTO>();
+        for (Person person : people) {
+            results.add(mapper.toDto(person));
+        }
+        return results;
     }
 }

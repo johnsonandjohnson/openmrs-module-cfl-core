@@ -32,6 +32,13 @@
         <property name="personService" ref="personService" />
     </bean>
 
+    <bean id="cfl.applicationEventService" class="org.openmrs.module.cfl.api.event.ApplicationEventServiceImpl">
+        <property name="emrapiAppEventService" ref="applicationEventService" />
+    </bean>
+
+    <bean id="cfl.personViewedEventListener"
+          class="org.openmrs.module.cfl.api.event.PersonViewedEventListener"/>
+
     <bean id="cfl.personIdentifierAction"
           class="org.openmrs.module.cfl.api.registration.person.action.impl.PersonIdentifierActionImpl">
         <property name="personService" ref="personService" />

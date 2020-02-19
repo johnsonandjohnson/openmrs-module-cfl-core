@@ -60,6 +60,11 @@ public final class CFLConstants {
     public static final String PERSON_IDENTIFIER_SOURCE_DESCRIPTION = "Used to specify the ID or UUID of idgen identifier "
             + "source which will be used to generate person identifier.";
 
+    public static final String USER_PROPERTY_NAME_LAST_VIEWED_PERSON_IDS = "cfl.lastViewedPersonIds";
+    public static final String EVENT_TOPIC_NAME_PERSON_VIEWED = "org.openmrs.module.cfl.api.event.PersonViewed";
+    public static final String EVENT_KEY_PERSON_UUID = "personUuid";
+    public static final String EVENT_KEY_USER_UUID = "userUuid";
+
     public static final String PERSON_HEADER_IDENTIFIER_LABEL_KEY = "cfl.personHeader.identifier.label";
     public static final String PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE = "cfl.personHeader.identifier.label";
     public static final String PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION = "Store the label for person id "

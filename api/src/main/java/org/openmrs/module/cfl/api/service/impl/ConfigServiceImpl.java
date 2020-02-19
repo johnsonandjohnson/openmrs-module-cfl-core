@@ -7,6 +7,7 @@ import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirection;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
+import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 
 public class ConfigServiceImpl implements ConfigService {
 
@@ -29,7 +30,19 @@ public class ConfigServiceImpl implements ConfigService {
         return Context.getRegisteredComponent(beanName, FindPersonFilterStrategy.class);
     }
 
+    @Override
+    public int getLastViewedPersonSizeLimit() {
+        String gpName = ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY;
+        return GlobalPropertyUtils.parseInt(
+                gpName,
+                getGp(gpName, ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE));
+    }
+
     private String getGp(String propertyName) {
         return Context.getAdministrationService().getGlobalProperty(propertyName);
+    }
+
+    private String getGp(String propertyName, String defaultValue) {
+        return Context.getAdministrationService().getGlobalProperty(propertyName, defaultValue);
     }
 }

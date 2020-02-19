@@ -8,11 +8,15 @@ import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.DaemonToken;
+import org.openmrs.module.DaemonTokenAware;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
+import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
+import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
@@ -28,7 +32,7 @@ import java.util.List;
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class CFLModuleActivator extends BaseModuleActivator {
+public class CFLModuleActivator extends BaseModuleActivator implements DaemonTokenAware {
 
     private Log log = LogFactory.getLog(this.getClass());
 
@@ -40,11 +44,12 @@ public class CFLModuleActivator extends BaseModuleActivator {
         log.info("Started CFL Module");
         try {
             setupHtmlForms();
-            createPersonFilterStrategyConfig();
+            createPersonOverviewConfig();
             createGlobalSettings();
             createPersonAttributeTypes();
             configureDistribution();
             installMetadataPackages();
+            CflEventListenerFactory.registerEventListeners();
         } catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
             ModuleFactory.stopModule(mod);
@@ -57,6 +62,26 @@ public class CFLModuleActivator extends BaseModuleActivator {
      */
     public void shutdown() {
         log.info("Shutdown CFL Module");
+        CflEventListenerFactory.unRegisterEventListeners();
+    }
+
+    /**
+     * @see #stopped()
+     */
+    @Override
+    public void stopped() {
+        log.info("Stopped CFL Module");
+        CflEventListenerFactory.unRegisterEventListeners();
+    }
+
+    @Override
+    public void setDaemonToken(DaemonToken token) {
+        log.info("Set daemon token to CFL Module event listeners");
+        List<AbstractMessagesEventListener> eventComponents =
+                Context.getRegisteredComponents(AbstractMessagesEventListener.class);
+        for (AbstractMessagesEventListener eventListener : eventComponents) {
+            eventListener.setDaemonToken(token);
+        }
     }
 
     private void createPersonAttributeTypes() {
@@ -186,10 +211,15 @@ public class CFLModuleActivator extends BaseModuleActivator {
         }
     }
 
-    private void createPersonFilterStrategyConfig() {
+    private void createPersonOverviewConfig() {
         GlobalPropertyUtils.createGlobalSettingIfNotExists(
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DEFAULT_VALUE,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DESCRIPTION);
+
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
+                ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE,
+                ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DESCRIPTION);
     }
 }
