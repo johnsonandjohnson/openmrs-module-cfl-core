@@ -22,6 +22,16 @@
         }
       },
       {
+        "id": "cfl.editPersonInfo",
+        "extensionPointId": "personDashboard.overallActions",
+        "type": "link",
+        "label": "cfl.editPersonInfo.label",
+        "url": "cfl/editPersonSection.page?personId={{personId}}&sectionId=demographics&appId=cfl.registerCaregiver",
+        "icon": "icon-pencil",
+        "order": 2,
+        "requiredPrivilege": "App: registrationapp.registerPatient"
+      },
+      {
         "id": "cfl.basicMessages.personDashboardLink",
         "extensionPointId": "personDashboard.overallActions",
         "type": "link",
