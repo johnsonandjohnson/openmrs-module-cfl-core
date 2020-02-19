@@ -23,7 +23,7 @@ function PersonSearchWidget(configuration){
     var tableHtml = '<table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl}" id="'+tableId+'">'+
                         '<thead>'+
                             '<tr>'+
-                                // '<th>'+config.messages.identifierColHeader+'</th>'+
+                                '<th>'+config.messages.identifierColHeader+'</th>'+
                                 '<th>'+config.messages.nameColHeader+'</th>'+
                                 '<th>'+config.messages.genderColHeader+'</th>'+
                                 '<th>'+config.messages.ageColHeader+'</th>'+
@@ -249,6 +249,7 @@ function PersonSearchWidget(configuration){
             var results = removeDuplicates(results);
             searchResultsData = searchResultsData.concat(results);
             _.each(results, function(person) {
+                var personIdentifier = person.personIdentifier || "";
                 var birthdate = '';
                 var widgetBirthdate = person.birthdate;
                 if (person.birthdate) {
@@ -272,7 +273,7 @@ function PersonSearchWidget(configuration){
                 if(age == '' && widgetBirthdate != ''){
                     age = formatAge(widgetBirthdate);
                 }
-                var dataRow = [personName, person.gender, age, birthdate];
+                var dataRow = [personIdentifier, personName, person.gender, age, birthdate];
 
                 jq.each(attributeTypes, function(index, typeName) {
                     var attributeValue = "";
@@ -314,7 +315,7 @@ function PersonSearchWidget(configuration){
     var removeDuplicates = function(results) {
         return _.reject(results, function(result) {
             return _.some(searchResultsData, function(existing) {
-                return existing.patientId == result.patientId;
+                return existing.uuid === result.uuid;
             })
         });
 

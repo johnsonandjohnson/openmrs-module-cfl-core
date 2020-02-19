@@ -8,13 +8,14 @@ import java.util.List;
 
 public class PersonOverviewEntryDTO {
 
-    private int personId;
     private String gender;
     private Integer age;
     private String birthdate;
     private boolean birthdateEstimated;
     private String personName;
     private String uuid;
+    private String patientIdentifier;
+    private String personIdentifier;
     private List<PersonAttributeDTO> attributes = new ArrayList<PersonAttributeDTO>();
 
     @Override
@@ -33,14 +34,6 @@ public class PersonOverviewEntryDTO {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    public int getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(int personId) {
-        this.personId = personId;
     }
 
     public String getGender() {
@@ -97,5 +90,21 @@ public class PersonOverviewEntryDTO {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getPatientIdentifier() {
+        return patientIdentifier;
+    }
+
+    public void setPatientIdentifier(String patientIdentifier) {
+        this.patientIdentifier = patientIdentifier;
+    }
+
+    public String getPersonIdentifier() {
+        return personIdentifier;
+    }
+
+    public void setPersonIdentifier(String personIdentifier) {
+        this.personIdentifier = personIdentifier;
     }
 }
