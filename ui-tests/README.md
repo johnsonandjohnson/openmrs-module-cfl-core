@@ -32,6 +32,24 @@ Running
 -------
 
 Run the following commands in `ui-tests` directory with parameters specifying a browser, a profile and a webdriver's path (make sure it's adequate to your local environment).
+The webdrivers need to be accessible at the locations specified in webdriver's paths.
+They can be downloaded from e.g.
+
+# Firefox
+
+https://github.com/mozilla/geckodriver/releases
+
+# Chrome
+
+https://chromedriver.chromium.org/
+
+# Safari
+
+Driver is installed along with the browser
+
+# Edge
+
+https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
 Example:
 

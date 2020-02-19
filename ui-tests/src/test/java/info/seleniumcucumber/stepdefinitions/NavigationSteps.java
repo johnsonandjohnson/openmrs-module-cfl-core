@@ -17,12 +17,12 @@ public class NavigationSteps {
     }
 
     @Then("^I navigate to patient \"([^\"]*)\" messages$")
-    public void iNavigateToPatientVisits(String patient) {
+    public void iNavigateToPatientMessages(String patient) {
         navigateToPatientDashboardElement(patient, "messagesapp.basicMessages.patientDashboardLink");
     }
 
     @Then("^I navigate to patient \"([^\"]*)\" visits$")
-    public void iNavigateToPatientMessages(String patient) {
+    public void iNavigateToPatientVisits(String patient) {
         navigateToPatientDashboardElement(patient, "visitsapp.basicVisits.patientDashboardLink");
     }
 
