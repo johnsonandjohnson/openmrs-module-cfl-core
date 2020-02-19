@@ -14,12 +14,10 @@
 
 package org.openmrs.module.cfl.fragment.controller;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
-import org.openmrs.PersonName;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
@@ -29,7 +27,6 @@ import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.extension.domain.PersonDomainWrapper;
 import org.openmrs.module.coreapps.CoreAppsProperties;
-import org.openmrs.module.coreapps.NameSupportCompatibility;
 import org.openmrs.module.coreapps.contextmodel.PersonContextModel;
 import org.openmrs.ui.framework.annotation.FragmentParam;
 import org.openmrs.ui.framework.annotation.InjectBeans;
@@ -38,15 +35,13 @@ import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Ideally you pass in a PersonDomainWrapper as the "person" config parameter. But if you pass in
  * a Person, then this controller will wrap that for you.
  */
-public class PersonHeaderFragmentController {
+public class PersonHeaderFragmentController extends HeaderFragment {
 
     private static final String FIRST_LINE = "firstLineFragments";
     private static final String SECOND_LINE = "secondLineFragments";
@@ -95,45 +90,6 @@ public class PersonHeaderFragmentController {
         model.addAttribute(SECOND_LINE, secondLineFragments);
 
         config.addAttribute("dashboardUrl", coreAppsProperties.getDashboardUrl());
-    }
-
-    private Map<String, String> getNames(PersonName personName) {
-
-        NameSupportCompatibility nameSupport = Context
-                .getRegisteredComponent("coreapps.NameSupportCompatibility", NameSupportCompatibility.class);
-
-        Map<String, String> nameFields = new LinkedHashMap<String, String>();
-        List<List<Map<String, String>>> lines = nameSupport.getLines();
-        String layoutToken = nameSupport.getLayoutToken();
-
-        // note that the assumption is one one field per "line",
-        // otherwise the labels that appear under each field may not render properly
-        try {
-            for (List<Map<String, String>> line : lines) {
-                String nameLabel = "";
-                StringBuilder nameLine = new StringBuilder();
-                boolean hasToken = false;
-                for (Map<String, String> lineToken : line) {
-                    if (lineToken.get("isToken").equals(layoutToken)) {
-                        String tokenValue = BeanUtils.getProperty(personName, lineToken.get("codeName"));
-                        nameLabel = nameSupport.getNameMappings().get(lineToken.get("codeName"));
-                        if (StringUtils.isNotBlank(tokenValue)) {
-                            hasToken = true;
-                            nameLine.append(tokenValue);
-                        }
-                    } else {
-                        nameLine.append(lineToken.get("displayText"));
-                    }
-                }
-                // only display a line if there's a token within it we've been able to resolve
-                if (StringUtils.isNotBlank(nameLine.toString()) && hasToken) {
-                    nameFields.put(nameLabel, nameLine.toString());
-                }
-            }
-            return nameFields;
-        } catch (Exception e) {
-            throw new APIException("Unable to generate name fields for patient header", e);
-        }
     }
 
     /**

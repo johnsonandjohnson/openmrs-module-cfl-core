@@ -41,7 +41,7 @@
 } %>
 
 <% if(isPatientDashboard) { %>
-    ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
+    ${ ui.includeFragment("cfl", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
 <% } else { %>
     ${ ui.includeFragment("cfl", "personHeader", [ person: person.person, appContextModel: appContextModel ]) }
 <% } %>
