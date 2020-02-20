@@ -196,7 +196,11 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         FormService formService = Context.getFormService();
         HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
 
-        List<String> htmlforms = Arrays.asList("cfl:htmlforms/cfl-HIV.xml", "cfl:htmlforms/cfl-check-in.xml");
+        List<String> htmlforms = Arrays.asList(
+                "cfl:htmlforms/cfl-HIV.xml",
+                "cfl:htmlforms/cfl-check-in.xml",
+                "cfl:htmlforms/cfl-visit-note.xml"
+        );
 
         for (String htmlform : htmlforms) {
             HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
