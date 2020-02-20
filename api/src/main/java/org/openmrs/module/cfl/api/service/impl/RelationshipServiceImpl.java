@@ -58,7 +58,7 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
                 if (relationshipType != null && otherPerson != null) {
                     Relationship relationship = createNewRelationship(person, relationshipDirection, relationshipType,
                             otherPerson);
-                    personService.saveRelationship(relationship);
+                    saveRelationship(person, otherPerson, relationship);
                     relationships.add(relationship);
                 }
             }
@@ -124,5 +124,19 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
      */
     private String getRelationshipTypeUuid(String type) {
         return type.substring(0, type.length() - 2);
+    }
+
+    /**
+     * Verify if valid and saves new relationship in database.
+     *
+     * @param person - related person
+     * @param otherPerson - related other person
+     * @param relationship - relationship
+     */
+    private void saveRelationship(Person person, Person otherPerson, Relationship relationship) {
+        if (person.getId() != null && person.getId().equals(otherPerson.getId())) {
+            throw new APIException("Person A and Person B can't be the same");
+        }
+        personService.saveRelationship(relationship);
     }
 }

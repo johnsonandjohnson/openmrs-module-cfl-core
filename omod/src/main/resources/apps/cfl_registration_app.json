@@ -40,7 +40,7 @@
       "sections":[
         {
           "id":"demographics",
-          "label":"registrationapp.patient.contactInfo.label",
+          "label":"Demographics",
           "questions":[
             {
               "legend": "Person.address",
