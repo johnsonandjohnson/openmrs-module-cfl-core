@@ -18,6 +18,7 @@ angular.module('personRelationships', ['personService', 'ui.bootstrap'])
                 $scope.relationships.splice($scope.relationships.indexOf(relationship), 1);
             } else {
                 jq(function () {
+                    $scope.relationships[0].uuid = '';
                     jq(".rel_type").val('');
                     jq(".person-typeahead").val('');
                     jq(".person-typeahead").removeClass('ng-touched');
@@ -33,19 +34,44 @@ angular.module('personRelationships', ['personService', 'ui.bootstrap'])
             $scope.relationships[index].name = person.display;
         };
 
-        // this is a (hack?) that provides integration with the one-question-per-screen navigator, since the navigator doesn't play well with angular
-        // specifically, we override the "displayValue" function on the relationship_type field within the navigator so that:
-        // 1) the checkmark in the left-hand navigation of the is properly rendered when data is filled out
-        // 2) the confirmation screen at the end of the workflow properly displays the relationships that have been entered
+        configureRelationshipDisplayField();
+
         function configureRelationshipDisplayField() {
-            if (typeof(NavigatorController) != 'undefined') {
-                var field = NavigatorController.getFieldById("relationship_type");
-                field.displayValue = function() {
-                    return $scope.relationships.map(function(r) {
-                        return r.name +  " - " + jq('.rel_type:first').children("[value='" + r.type + "']").text();
-                    }).join(', ');
-                }
+            if (typeof (NavigatorController) != 'undefined') {
+                let isFirstField = true;
+                angular.forEach(NavigatorController.getFields(), function (field) {
+                    if (shouldOverrideDisplay(field)) {
+                        if (isFirstField) {
+                            isFirstField = false;
+                            overrideFirstField(field);
+                        } else {
+                            cleanupOtherFields(field);
+                        }
+                    }
+                });
             }
         }
-    }]);
 
+        function overrideFirstField(field) {
+            field.displayValue = function () {
+                return $scope.relationships.map(function (r) {
+                    if (r.uuid) {
+                        return (r.uuid !== "") ? r.name + " - " + jq('.rel_type:first').children("[value='" + r.type + "']").text() : "";
+                    } else {
+                        return "--";
+                    }
+                }).join(', ');
+            };
+        }
+
+        function cleanupOtherFields(field) {
+            field.displayValue = function () {
+                return "";
+            };
+        }
+
+        function shouldOverrideDisplay(field) {
+            return field.id && field.id.includes("relationship_type")
+                || field.id.includes("other_person_uuid");
+        }
+    }]);

@@ -10,9 +10,9 @@
 <div ng-app="personRelationships" ng-controller="PersonRelationshipController"
      ng-init='relationships = ${ groovy.json.JsonOutput.toJson(initialRelationships) }'>
 
-    <div ng-repeat="relationship in relationships">
+    <div ng-repeat="(index, relationship) in relationships">
         <p class="left">
-            <select id="relationship_type" name="relationship_type" class="rel_type" ng-model="relationship.type">
+            <select id="{{'relationship_type-' + index}}" name="relationship_type" class="rel_type" ng-model="relationship.type">
                 <option value="">${ui.message('registrationapp.person.relationship.selectRelationshipType')}</option>
                 <% relationshipTypes.each { type -> %>
                 <option value="${type.uuid}-A">${type.aIsToB}</option>
@@ -26,7 +26,7 @@
         </p>
 
         <p class="left">
-            <input type="text" class="person-typeahead" placeholder="${ui.message('registrationapp.person.name')}"
+            <input type="text" id="{{'other_person_uuid-' + index}}" class="person-typeahead" placeholder="${ui.message('registrationapp.person.name')}"
                    ng-model="relationship.name"
                    typeahead="person as person.display for person in getPersons(\$viewValue) | limitTo:5"
                    typeahead-min-length="3"
@@ -51,6 +51,7 @@
                 formData += "&personId=" + ${ person.personId };
                 var url = '/' + OPENMRS_CONTEXT_PATH + '/cfl/field/personRelationship/updateRelationships.action';
                 jq.ajax({
+                    async: false,
                     url: url,
                     type: "POST",
                     data: formData,
