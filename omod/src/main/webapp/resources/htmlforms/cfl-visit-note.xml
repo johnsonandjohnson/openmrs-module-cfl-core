@@ -91,4 +91,5 @@
             <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
         </div>
     </ifMode>
+    <visitNoteMetaTag />
 </htmlform>
