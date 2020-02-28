@@ -10,6 +10,92 @@
             display: block;
         }
 
+        .visit-dates-container {
+            display: flex;
+        }
+
+        .date-container {
+            display: flex;
+            flex-direction: column;
+            margin-right: 50px;
+            justify-content: space-between;
+        }
+
+        .section {
+            border-bottom: solid 1px lightgray;
+            margin: 20px 0px;
+            padding: 20px 0px;
+        }
+
+        #vitals {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .left {
+            float: none
+        }
+
+        .obs-field {
+            display: flex;
+            flex-direction: row;
+            width: 100px;
+        }
+
+        .vital-parameter-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .append-to-value {
+            align-self: flex-end;
+            margin: 0px 5px;
+        }
+
+        h3 {
+            font-size: 1em;
+        }
+
+        #calculated-bmi-continue {
+            display: none;
+        }
+
+        .left-vitals {
+            flex-grow: 1;
+        }
+
+
+        .right-vitals {
+            flex-grow: 2;
+            padding: 0px 25px;
+            margin: 0px 25px;
+            height: 100px;
+            border-left: solid 1px lightgray;
+        }
+
+        .blood-pressure-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .separator {
+            padding: 10px
+        }
+
+        #capture-vitals-accordion {
+            background-color: rgba(243, 243, 243, 1);
+            box-sizing: border-box;
+            border-width: 1px;
+            border-style: solid;
+            border-color: rgba(226, 226, 226, 1);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 14pt;
+            height: 40px;
+            cursor: pointer;
+        }
+
         <ifMode mode="VIEW" include="false">
             #data-collection {
                 display: inline-block;
@@ -26,40 +112,145 @@
                 margin-bottom: 20px;
             }
         </ifMode>
+
+        #calculated-bmi {
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+
+        .encounter-summary-container #calculated-bmi {
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        #additional-info-subsection-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #additional-info-subsection-container > .section {
+            width: 450px;
+        }
     </style>
 
     <script type="text/javascript">
         jQuery(document).ready(function(){
-            var dateToDMY = function dateToDMY(date) {
+            const dateToDMY = function(date) {
                 var d = date.getDate();
                 var m = date.getMonth() + 1; //Month from 0 to 11
                 var y = date.getFullYear();
                 return '' + (d > 9 ? d : '0' + d) + '.' + (m > 9 ? m : '0' + m ) + '.' + y;
             };
 
-            var actualDate = jQuery('#encounterDate > input').val();
-            jQuery('#actualDate').text(dateToDMY(new Date(actualDate)));
+            const addAccordionToVitalsSection = function() {
+                jQuery('#capture-vitals-accordion').click(() => {
+                    if (jQuery('#vitals:visible').length) {
+                        // hide vitals section
+                        jQuery('#vitals').slideUp();
+                        jQuery('#capture-vitals-accordion > i').removeClass('icon-chevron-down');
+                        jQuery('#capture-vitals-accordion > i').addClass('icon-chevron-right');
+                    } else {
+                        // show vitals section
+                        jQuery('#vitals').slideDown();
+                        jQuery('#capture-vitals-accordion > i').removeClass('icon-chevron-right');
+                        jQuery('#capture-vitals-accordion > i').addClass('icon-chevron-down');
+                    }
+                });
+                // set vitals hidden by default
+                jQuery('#vitals').slideUp();
+            }
 
-            var plannedDate = jQuery('#plannedDate').text();
-            jQuery('#plannedDate').text(dateToDMY(new Date(plannedDate)));
+            const convertPlannedDateToDMYFormat = function() {
+                var plannedDate = jQuery('#plannedDate').text();
+                jQuery('#plannedDate').text(dateToDMY(new Date(plannedDate)));
+            }
+
+            const convertActualVisitDateDatePickerToDMYFormat = function() {
+                $('#encounterDate')[0].innerHTML = $('#encounterDate')[0].innerHTML.replace('(mm/dd/yyyy)','');
+                jQuery('#w1-display').removeClass('hasDatepicker');
+                var selectedDate = jQuery('#w1').attr('value');
+                // we need to instantiate new date picker
+                setupDatePicker('dd.mm.yy', '110,20','en-GB', '#w1-display', '#w1', selectedDate);
+            }
+
+            const replaceDiagnosisSectionLabels = function() {
+                $('[for="diagnosis-search"]').after('&lt;i>Choose primary diagnosis first, then secondary diagnosis&lt;/i>');
+                $('[for="diagnosis-search"]').text('Add diagnoses - presumed or confirmed (optional)');
+            }
+
+            const calculateBmi = function(wt, ht) {
+                var bmi = null;
+                if (wt &amp;&amp; ht) {
+                    bmi = wt / ((ht/100) * (ht/100));
+                }
+                return bmi;
+            }
+
+            const updateBmi = function() {
+                const wt = htmlForm.getValueIfLegal('weight.value');
+                const ht = htmlForm.getValueIfLegal('height.value');
+
+                const bmi = calculateBmi(wt, ht);
+
+                if (bmi == null || isNaN(bmi)) {
+                    jq('#calculated-bmi-wrapper').hide();
+                } else {
+                    jq('#no-calculated-bmi').hide();
+                    jq('#calculated-bmi-wrapper').show();
+                    jq('#calculated-bmi').html(bmi.toFixed(1));
+                    jq('#hidden-calculated-bmi').val(bmi.toFixed(1));
+                }
+            };
+
+            const attachBmiHandler = function() {
+                jq(function() {
+                    jq('#calculated-bmi-wrapper').hide();
+                    getField('weight.value').change(updateBmi);
+                    getField('height.value').change(updateBmi);
+                    updateBmi();
+                });
+
+                jq(function() {
+                    jq('#bp_systolic input[type=text]').attr('min', '50');
+                });
+
+                jq(function() {
+                    jq('#bp_diastolic input[type=text]').attr('min', '30');
+                });
+            }
+
+            // executions
+            addAccordionToVitalsSection();
+            convertPlannedDateToDMYFormat();
+            convertActualVisitDateDatePickerToDMYFormat();
+            replaceDiagnosisSectionLabels();
+            attachBmiHandler();
         });
     </script>
 
     <ifMode mode="VIEW" include="false">
         <h2><uimessage code="referenceapplication.visitNote.title"/></h2>
-        <div>
-            <span>
-                for planned visit:
-            </span>
-            <span id="plannedDate">
-                <lookup expression="visit.startDatetime"/>
-            </span>
-            <span>
-                , actual visit:
-            </span>
-            <span id="actualDate" />
-            <encounterDate id="encounterDate" default="now" widget="hidden"/>
+        <div class="section">
+            <div class="visit-dates-container">
+                <div class="date-container">
+                    <div>
+                        Planned Visit date
+                    </div>
+                    <div id="plannedDate">
+                        <lookup expression="visit.startDatetime"/>
+                    </div>
+                </div>
+                <div class="date-container">
+                    <div>
+                        Actual Visit date
+                    </div>
+                    <div>
+                        <encounterDate id="encounterDate" default="now" />
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div id="metadata">
             <p>
                 <label><uimessage code="coreapps.patientDashBoard.provider"/></label>
@@ -71,20 +262,224 @@
             </p>
         </div>
     </ifMode>
-    <div id="note">
-        <p>
-            <label><uimessage code="coreapps.consult.freeTextComments"/></label>
-            <obs conceptId="CIEL:162169" style="textarea" rows="5"/>
-        </p>
+    <div class="section">
+        <div id="data-collection">
+            <encounterDiagnoses selectedDiagnosesTarget="#encounter-diagnoses-target"/>
+        </div>
+
+        <div id="encounter-diagnoses-target">
+        </div>
     </div>
 
-    <div id="data-collection">
-        <encounterDiagnoses required="true" selectedDiagnosesTarget="#encounter-diagnoses-target"/>
+        <ifMode mode="VIEW">
+            <script type="text/javascript">
+
+                // handle displaying the bmi when in VIEW mode
+                jq(function() {
+
+                // we have to iterate through in case there are multiple vitals forms
+                // displayed on a single page
+
+                jq('htmlform').each(function(index, form) {
+                jq(form).find('#calculated-bmi-continue').hide();
+                jq(form).find('#no-calculated-bmi').hide();
+
+                var wt = jq(form).find('#weight').find('.value').text();
+                var ht = jq(form).find('#height').find('.value').text();
+
+                var bmi = calculateBmi(wt, ht);
+
+                if (bmi != null &amp;&amp; !isNaN(bmi)) {
+                jq(form).find('#calculated-bmi-wrapper').show();
+                jq(form).find('#calculated-bmi').html(bmi.toFixed(1));
+                jq(form).find('#hidden-calculated-bmi').val(bmi.toFixed(1));
+                }
+                });
+
+                });
+
+            </script>
+        </ifMode>
+    
+    <div class="section">
+        <div id="capture-vitals-accordion">
+            <i class="icon-chevron-right link" />
+            <i class="icon-vitals" />
+            <span>Capture Vitals (optional)</span>
+        </div>
+        <section id="vitals" sectionTag="section">
+            <div class="left-vitals">
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5090').name"/></h3>
+
+                    <p class="left">
+                        <obs conceptId="CIEL:5090" id="height" showUnits="uicommons.units.centimeters" unitsCssClass="append-to-value"/>
+                    </p>
+
+                </div>
+
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5089').name"/></h3>
+
+                    <p class="left">
+                        <obs conceptId="CIEL:5089" id="weight" showUnits="uicommons.units.kilograms" unitsCssClass="append-to-value"/>
+                    </p>
+
+                </div>
+
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5088').name"/></h3>
+
+                    <p class="left">
+                        <obs conceptId="CIEL:5088" id="temperature" showUnits="uicommons.units.degreesCelsius" unitsCssClass="append-to-value"/>
+                    </p>
+
+                </div>
+
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5087').name"/></h3>
+
+                    <p>
+                        <obs conceptId="CIEL:5087" id="heart_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
+                    </p>
+                </div>
+
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5242').name"/></h3>
+
+                    <p>
+                        <obs conceptId="CIEL:5242" id="respiratory_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
+                    </p>
+                </div>
+
+                <div field-separator=" / ">
+                    <h3><uimessage code="referenceapplication.vitals.bloodPressure.title"/></h3>
+                    <div class="blood-pressure-container">
+                        <p class="left">
+                            <obs conceptId="CIEL:5085" id="bp_systolic"/>
+                        </p>
+                        <p class="separator">
+                            /
+                        </p>
+                        <p class="left">
+                            <obs conceptId="CIEL:5086" id="bp_diastolic"/>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="vital-parameter-container">
+                    <h3><lookup expression="fn.getConcept('CIEL:5092').name"/></h3>
+
+                    <p>
+                        <obs conceptId="CIEL:5092" id="o2_sat" showUnits="uicommons.units.percent" unitsCssClass="append-to-value"/>
+                    </p>
+                </div>
+            </div>
+
+            <div class="right-vitals">
+                <div class="vital-parameter-container">
+                    <h3><uimessage code="referenceapplication.vitals.bmi.title"/></h3>
+
+                    <span id="no-calculated-bmi">
+                        <uimessage code="referenceapplication.vitals.bmi.instructions"/>
+                    </span>
+                    <span id="calculated-bmi-wrapper">
+                        <ifMode mode="VIEW" include="false">
+                            <uimessage code="referenceapplication.vitals.bmi.display"/>
+                        </ifMode>
+                        <span id='calculated-bmi' />
+                    </span>
+
+                    <p id="calculated-bmi-continue">
+                        <input type="hidden" name="focus-in-bmi-question" id="hidden-calculated-bmi" />
+                        <uimessage code="referenceapplication.vitals.calculatedField.continue"/>
+                    </p>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div id="encounter-diagnoses-target">
+    <div class="section">
+        <h3>
+            <i class="icon-medkit" />
+            Additional Information
+        </h3>
+        <span>Visit Outcome (required)</span>
+        <div id="additional-info-subsection-container">
+            <section headerLabel="Consents">
+                <table>
+                    <tr>
+                        <td>
+                            <repeat with="
+                            ['fe9b0196-2e73-4922-b1de-bd1f60206a85', 'Patient provided consent to be in the program'],
+                            ['91a7c134-4503-48ff-85cd-3617849646ce', 'Patient did not provide consent to be in the program'],
+                            ['0e551876-b0b2-4962-ac43-2dfb47d0a742', 'Patient provided consent for home visits'],
+                            ['65d0ef34-b720-4ba7-8d42-167cf3730f4c', 'Patient did not provide consent for home visits'],
+                            ['a1a90a72-45fc-4e74-bc6e-94b3fbf6e907', 'Patient did not provide consent for both call and home visit']">
+                                <obs conceptId="1f73dfc6-083e-48fe-b4ef-ae29b12dadf9" answerConceptId="{0}" style="checkbox" /><br/>
+                            </repeat>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section headerLabel="Adherence">
+                <table>
+                    <tr>
+                        <td>
+                            <repeat with="
+                            ['87c318e3-a2d4-47de-a6cb-383cf29738d3', 'Patient is adhering to the treatment'],
+                            ['501ed57a-eff8-40f7-9b0a-1857bac76d89', 'Patient is not adhering to the treatment'],
+                            ['fcd62a44-7c3d-440e-95e6-70b1c3b5a422', 'Patient was not available at home'],
+                            ['7bd891e8-b2ee-4bf3-92e7-ad8ada3c44b6', 'Patient did not pick up the call'],
+                            ['bf83a918-c849-46ee-bf62-ebaec76af633', 'Patient was counselled for treatment adherence and importance of follow up tests']">
+                                <obs conceptId="195fb24f-2c50-4052-9c66-ced95ce36fb0" answerConceptId="{0}" style="checkbox" /><br/>
+                            </repeat>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section headerLabel="Other">
+                <table>
+                    <tr>
+                        <td>
+                            <repeat with="
+                            ['f194ee80-35e3-4daf-afbc-0c6465ef2434', 'Incorrect contact number'],
+                            ['b91a5c1e-874c-433b-86ce-3cdb580977ec', 'Patient's number not reachable/switched off']">
+                                <obs conceptId="b2f5be6e-47af-4dda-991b-383084126c61" answerConceptId="{0}" style="checkbox" /><br/>
+                            </repeat>
+                            <obs id="otherField" conceptId="b2f5be6e-47af-4dda-991b-383084126c61" answerConceptId="5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                 answerLabel="Other" style="checkbox" commentFieldLabel=""/><br/>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+        <section headerLabel="Next Steps (required)">
+            <table>
+                <tr>
+                    <td>
+                        <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Scheduled home visit in the coming weeks'],
+                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Scheduled call in the coming weeks'],
+                        ['bc3c1970-38f0-4dc3-8dba-36a1640016e5', 'Additional calls/home visits are required']">
+                            <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}" style="checkbox" /><br/>
+                        </repeat>
+                        <!-- Other -->
+                        <obs id="otherRemarksField" conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="4e93fcc8-c18f-48c2-8c58-b4b9de9d0d4d"
+                             answerLabel="Other remarks" style="checkbox" commentFieldLabel=""/><br/>
+                    </td>
+                </tr>
+            </table>
+        </section>
     </div>
 
+    <div class="section">
+        <div id="note">
+            <p>
+                <label><uimessage code="coreapps.consult.freeTextComments"/></label>
+                <obs conceptId="CIEL:162169" style="textarea" rows="5"/>
+            </p>
+        </div>
+    </div>
     <ifMode mode="VIEW" include="false">
         <div id="buttons">
             <submit submitClass="confirm right" submitCode="general.save"/>
