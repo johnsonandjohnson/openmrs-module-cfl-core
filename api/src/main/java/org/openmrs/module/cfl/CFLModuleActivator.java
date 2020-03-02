@@ -47,6 +47,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             createPersonOverviewConfig();
             createGlobalSettings();
             createPersonAttributeTypes();
+            createHtmlFormProperties();
             configureDistribution();
             installMetadataPackages();
             CflEventListenerFactory.registerEventListeners();
@@ -225,5 +226,12 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DESCRIPTION);
+    }
+
+    private void createHtmlFormProperties() {
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.HTML_FORM_DATE_FORMAT_KEY,
+                CFLConstants.HTML_FORM_DATE_FORMAT_DEFAULT_VALUE,
+                CFLConstants.HTML_FORM_DATE_FORMAT_DESCRIPTION);
     }
 }

@@ -70,5 +70,10 @@ public final class CFLConstants {
     public static final String PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION = "Store the label for person id "
             + "displayed on person header.";
 
+    public static final String HTML_FORM_DATE_FORMAT_KEY = "htmlformentry.dateFormat";
+    public static final String HTML_FORM_DATE_FORMAT_DEFAULT_VALUE = "d M yy";
+    public static final String HTML_FORM_DATE_FORMAT_DESCRIPTION = "Display dates in HTML Forms in jQuery (js)" +
+     " date format. E.g. 'd M yy' for 31 Jan 2012.";
+
     private CFLConstants() { }
 }
