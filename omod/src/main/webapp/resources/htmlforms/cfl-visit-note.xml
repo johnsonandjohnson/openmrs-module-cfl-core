@@ -207,6 +207,10 @@
             color: grey;
             font-size: 0.9em;
         }
+
+        .error {
+            color: red;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -341,7 +345,7 @@
                 }
             }
 
-            const isValid = function (checkedSelector, errorFieldSelector) {
+            const isValid = function (checkedSelector) {
                 if ($(checkedSelector).length === 0) {
                     return false;
                 } else {
@@ -358,14 +362,16 @@
             const attachValidationsToSubmit = function () {
                 $('.submitButton').attr('onclick', ''); //removing default handling
                 $('.submitButton').click(() => {
-                    const isVisitOutcomeValid = isValid(
-                        '#additional-info-subsection-container [type=checkbox]:checked',
-                        '#visit-outcome-error-field'
-                    );
-                    const isNextStepsValid = isValid(
-                        '.next-steps [type=checkbox]:checked',
-                        '#next-steps-error-field'
-                    );
+                    const visitOutcomeCheckedSelector = '#additional-info-subsection-container [type=checkbox]:checked';
+                    const visitOutcomeErrorSelector = '#visit-outcome-error-field';
+                    const nextStepsCheckedSelector = '.next-steps [type=checkbox]:checked';
+                    const nextStepsErrorSelector = '#next-steps-error-field';
+
+                    validateFields(visitOutcomeCheckedSelector, visitOutcomeErrorSelector);
+                    validateFields(nextStepsCheckedSelector, nextStepsErrorSelector);
+
+                    const isVisitOutcomeValid = isValid(visitOutcomeCheckedSelector);
+                    const isNextStepsValid = isValid(nextStepsCheckedSelector);
                     if (isVisitOutcomeValid &amp;&amp; isNextStepsValid) {
                         submitHtmlForm();
                     }
