@@ -230,8 +230,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
     private void createHtmlFormProperties() {
         GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.HTML_FORM_DATE_FORMAT_KEY,
-                CFLConstants.HTML_FORM_DATE_FORMAT_DEFAULT_VALUE,
-                CFLConstants.HTML_FORM_DATE_FORMAT_DESCRIPTION);
+                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
+                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
+                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
     }
 }
