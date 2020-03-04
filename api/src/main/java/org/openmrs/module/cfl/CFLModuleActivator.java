@@ -200,7 +200,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         List<String> htmlforms = Arrays.asList(
                 "cfl:htmlforms/cfl-HIV.xml",
                 "cfl:htmlforms/cfl-check-in.xml",
-                "cfl:htmlforms/cfl-visit-note.xml"
+                "cfl:htmlforms/cfl-visit-note.xml",
+                "cfl:htmlforms/cfl-medicine-refill.xml"
         );
 
         for (String htmlform : htmlforms) {

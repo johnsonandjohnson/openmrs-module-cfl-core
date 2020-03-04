@@ -211,6 +211,11 @@
         .error {
             color: red;
         }
+
+        .subsection-by-indentation {
+            padding-left: 20px;
+            padding-top: 10px;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -399,7 +404,7 @@
 
     <ifMode mode="VIEW" include="false">
         <h2><uimessage code="referenceapplication.visitNote.title"/></h2>
-        <div class="section">
+        <div class="section subsection-by-indentation">
             <div class="visit-dates-container">
                 <div class="date-container">
                     <div>
