@@ -26,6 +26,10 @@ public final class GlobalPropertyUtils {
         return Context.getAdministrationService().getGlobalProperty(key);
     }
 
+    public static void createGlobalSettingIfNotExists(GPDefinition gpDefinition) {
+        createGlobalSettingIfNotExists(gpDefinition.getKey(), gpDefinition.getDefaultValue(), gpDefinition.getDescription());
+    }
+
     public static void createGlobalSettingIfNotExists(String key, String value) {
         createGlobalSettingIfNotExists(key, value, null);
     }

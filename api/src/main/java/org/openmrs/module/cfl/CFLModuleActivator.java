@@ -18,6 +18,7 @@ import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
+import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
@@ -48,6 +49,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             createGlobalSettings();
             createPersonAttributeTypes();
             createHtmlFormProperties();
+            createVisitNoteUrlProperties();
             configureDistribution();
             installMetadataPackages();
             CflEventListenerFactory.registerEventListeners();
@@ -145,6 +147,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
+    }
+
+    private void createVisitNoteUrlProperties() {
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
     }
 
     private void configureDistribution() {
