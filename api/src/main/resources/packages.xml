@@ -14,7 +14,7 @@
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>Medicine_Refill_Visit</filenameBase>
-            <groupUuid>0946700a-55c3-44d7-870a-ddda33cb6712</groupUuid>
+            <groupUuid>035f8357-25fd-404a-baee-e42d7f92eef9</groupUuid>
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
