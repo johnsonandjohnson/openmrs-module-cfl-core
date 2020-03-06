@@ -116,7 +116,7 @@
                         Actual Visit date
                     </div>
                     <div>
-                        <encounterDate id="encounterDate" class="date-container" default="now" />
+                        <encounterDate id="encounterDate" default="now" />
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                 <span><encounterLocation default="SessionAttribute:emrContext.sessionLocationId"/></span>
             </p>
             <div id="global-property-date-format">
-                <lookup expression="fn.globalProperty('htmlformentry.dateFormat')"/>
+                <lookup expression="fn.globalProperty('htmlformentry.jQueryDateFormat')"/>
             </div>
         </div>
     </ifMode>
