@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.page.requestmapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.cfl.CFLConstants;
@@ -7,6 +8,8 @@ import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.openmrs.ui.framework.page.PageRequestMapper;
 import org.springframework.stereotype.Component;
+
+import static org.openmrs.module.cfl.CFLConstants.PERSON_DASHBOARD_ATTR_VALUE;
 
 @Component
 public class ClinicianfacingPageRequestMapper implements PageRequestMapper {
@@ -23,7 +26,7 @@ public class ClinicianfacingPageRequestMapper implements PageRequestMapper {
 
     @Override
     public boolean mapRequest(PageRequest request) {
-        if (isCoreappsPatientDashboard(request) && isRedirectingToPersonDashboardEnabled()) {
+        if (isCoreappsPatientOrPersonDashboard(request) && isRedirectingToPersonDashboardEnabled()) {
             LOGGER.info(String.format(
                     "The redirection to person dashboard is enabled - redirecting FROM %s.%s TO %s.%s",
                     COREAPPS_PROVIDER_NAME, PATIENT_PAGE_NAME,
@@ -39,9 +42,16 @@ public class ClinicianfacingPageRequestMapper implements PageRequestMapper {
         return GlobalPropertyUtils.isTrue(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME);
     }
 
-    private boolean isCoreappsPatientDashboard(PageRequest request) {
+    private boolean isCoreappsPatientOrPersonDashboard(PageRequest request) {
         return request.getProviderName().equals(COREAPPS_PROVIDER_NAME)
                 && request.getPageName().equals(PATIENT_PAGE_NAME)
-                && request.getAttribute(CUSTOM_DASHBOARD_ATTR_NAME) == null;
+                && areAttributesPointsAtPatientOrPersonDashboard(request);
+    }
+
+    private boolean areAttributesPointsAtPatientOrPersonDashboard(PageRequest request) {
+        String dashboardAttr = (String) request.getAttribute(CUSTOM_DASHBOARD_ATTR_NAME);
+        boolean isPatientDashboard = dashboardAttr == null;
+        boolean isPersonDashboard = StringUtils.equals(dashboardAttr, PERSON_DASHBOARD_ATTR_VALUE);
+        return isPatientDashboard || isPersonDashboard;
     }
 }

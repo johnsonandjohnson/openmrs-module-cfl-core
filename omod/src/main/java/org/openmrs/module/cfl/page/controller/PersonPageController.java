@@ -50,12 +50,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.openmrs.module.cfl.CFLConstants.PERSON_DASHBOARD_ATTR_VALUE;
+
 public class PersonPageController {
 
     private static final PageAction REGULAR_ACTION = null;
     private static final String COREAPPS = "coreapps";
     private static final String PATIENT = "patient";
-    private static final String PERSON = "person";
     private static final String PATIENT_ID = "patientId";
     private static final String PERSON_ID = "personId";
 
@@ -98,7 +99,7 @@ public class PersonPageController {
         if (!person.isPatient()) {
             return true;
         }
-        return StringUtils.isNotBlank(dashboardParam) && dashboardParam.equals(PERSON);
+        return StringUtils.isNotBlank(dashboardParam) && dashboardParam.equals(PERSON_DASHBOARD_ATTR_VALUE);
     }
 
     private PageAction getRedirectPage(Person person) {
@@ -121,8 +122,8 @@ public class PersonPageController {
             return new Redirect(CFLConstants.MODULE_ID, "deletedPerson", PERSON_ID + "=" + person.getId());
         }
         personDomainWrapper.setPerson(person);
-        String dashboard = getDesiredDashboard(PERSON);
-        model.addAttribute(PERSON, personDomainWrapper);
+        String dashboard = getDesiredDashboard(PERSON_DASHBOARD_ATTR_VALUE);
+        model.addAttribute(PERSON_DASHBOARD_ATTR_VALUE, personDomainWrapper);
         model.addAttribute("app", app);
         model.addAttribute("activeVisit", null);
 
@@ -198,7 +199,7 @@ public class PersonPageController {
 
     private AppContextModel prepareContextModel(UiSessionContext sessionContext, Person person) {
         AppContextModel contextModel = sessionContext.generateAppContextModel();
-        contextModel.put(PERSON, new PersonContextModel(person));
+        contextModel.put(PERSON_DASHBOARD_ATTR_VALUE, new PersonContextModel(person));
         contextModel.put(PERSON_ID, person.getId());
         return contextModel;
     }
