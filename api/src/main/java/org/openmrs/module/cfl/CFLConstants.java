@@ -1,10 +1,22 @@
 package org.openmrs.module.cfl;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public final class CFLConstants {
 
     public static final String MODULE_ID = "cfl";
 
     public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
+
+    public static final String SUPER_USER_ROLE_UUID = "b8149685-c585-4330-a9fe-b644402e5d11";
+
+    public static final String ENROLL_IN_PROGRAM_PRIVILEGE = "2ed63dd0-1064-4077-b3a4-e2236159c444";
+    public static final String EDIT_PATIENT_PROGRAM_PRIVILEGE = "d5a321e3-4f0b-42b3-ac23-3e9a48b26784";
+    public static final String DELETE_PATIENT_PROGRAM_PRIVILEGE = "e8626e15-7fcf-4c4b-a414-12c6ff34f228";
+    public static final List<String> PROGRAM_MANAGING_PRIVILEGES_UUIDS = Collections.unmodifiableList(Arrays.asList(
+            ENROLL_IN_PROGRAM_PRIVILEGE, EDIT_PATIENT_PROGRAM_PRIVILEGE, DELETE_PATIENT_PROGRAM_PRIVILEGE));
 
     public static final String ACTOR_TYPES_KEY = "messages.actor.types";
 

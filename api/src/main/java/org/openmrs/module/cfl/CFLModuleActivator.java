@@ -3,9 +3,12 @@ package org.openmrs.module.cfl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAttributeType;
+import org.openmrs.Privilege;
+import org.openmrs.Role;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.DaemonToken;
@@ -29,6 +32,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -44,6 +48,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     public void started() {
         log.info("Started CFL Module");
         try {
+            attachProgramsManagingPrivilegesToSuperUser();
             setupHtmlForms();
             createPersonOverviewConfig();
             createGlobalSettings();
@@ -85,6 +90,11 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         for (AbstractMessagesEventListener eventListener : eventComponents) {
             eventListener.setDaemonToken(token);
         }
+    }
+
+    private void attachProgramsManagingPrivilegesToSuperUser() {
+        Role superUserRole = Context.getUserService().getRoleByUuid(CFLConstants.SUPER_USER_ROLE_UUID);
+        attachMissingPrivileges(CFLConstants.PROGRAM_MANAGING_PRIVILEGES_UUIDS, superUserRole);
     }
 
     private void createPersonAttributeTypes() {
@@ -241,5 +251,27 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
+    }
+
+    private void attachMissingPrivileges(List<String> privilegeUuids, Role role) {
+        Set<Privilege> privileges = role.getPrivileges();
+        UserService userService = Context.getUserService();
+        boolean updated = false;
+        for (String privilegeUuid : privilegeUuids) {
+            Privilege privilege = userService.getPrivilegeByUuid(privilegeUuid);
+            if (privilege == null) {
+                log.warn(String.format("Cannot find the privilege with uuid %s, "
+                            + "so it will not be attached to the role %s at the startup",
+                        privilegeUuid, role.getName()));
+            } else if (!privileges.contains(privilege)) {
+                log.info(String.format("Attached the privilege %s to the role %s",
+                        privilege.getName(), role.getName()));
+                role.addPrivilege(privilege);
+                updated = true;
+            }
+        }
+        if (updated) {
+            userService.saveRole(role);
+        }
     }
 }
