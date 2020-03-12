@@ -383,6 +383,10 @@
                 });
             }
 
+            const reloadActualDate = function () {
+                eval($('#encounterDate > script').text());
+            }
+
             // executions
             addAccordionToVitalsSection();
             convertPlannedDateToProperFormat();
@@ -399,6 +403,7 @@
             addRequiredCheckboxesValidation('#additional-info-subsection-container', '#visit-outcome-error-field');
             addRequiredCheckboxesValidation('.next-steps', '#next-steps-error-field');
             attachValidationsToSubmit();
+            reloadActualDate();
         });
     </script>
 

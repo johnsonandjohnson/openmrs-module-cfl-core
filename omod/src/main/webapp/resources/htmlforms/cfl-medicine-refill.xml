@@ -93,9 +93,14 @@
                 );
             }
 
+            const reloadActualDate = function () {
+                eval($('#encounterDate > script').text());
+            }
+
             // executions
             convertPlannedDateToProperFormat();
             convertActualVisitDateDatePickerToProperFormat();
+            reloadActualDate();
         });
     </script>
 

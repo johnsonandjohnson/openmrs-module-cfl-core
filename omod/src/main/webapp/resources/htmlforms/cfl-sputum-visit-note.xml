@@ -195,6 +195,10 @@
                 $(selector).attr('readonly', 'readonly');
             }
 
+            const reloadActualDate = function () {
+                eval($('#encounterDate > script').text());
+            }
+
             // executions
             convertPlannedDateToProperFormat();
             convertActualVisitDateDatePickerToProperFormat();
@@ -202,6 +206,7 @@
             attachValidationsToSubmit();
             appendRequiredLabel('span:contains(Sputum Collection Date)');
             addReadonlyAttribute('#w8-display');
+            reloadActualDate();
         });
     </script>
 
