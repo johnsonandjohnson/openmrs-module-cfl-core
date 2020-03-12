@@ -94,6 +94,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
     private void attachProgramsManagingPrivilegesToSuperUser() {
         Role superUserRole = Context.getUserService().getRole(CFLConstants.SUPER_USER_ROLE_NAME);
+        if (superUserRole == null) {
+            log.warn(String.format("Cannot find the super user role (%s)", CFLConstants.SUPER_USER_ROLE_NAME));
+            return;
+        }
         attachMissingPrivileges(CFLConstants.PROGRAM_MANAGING_PRIVILEGES_NAMES, superUserRole);
     }
 
