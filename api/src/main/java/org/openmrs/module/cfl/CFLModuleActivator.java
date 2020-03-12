@@ -93,8 +93,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void attachProgramsManagingPrivilegesToSuperUser() {
-        Role superUserRole = Context.getUserService().getRoleByUuid(CFLConstants.SUPER_USER_ROLE_UUID);
-        attachMissingPrivileges(CFLConstants.PROGRAM_MANAGING_PRIVILEGES_UUIDS, superUserRole);
+        Role superUserRole = Context.getUserService().getRole(CFLConstants.SUPER_USER_ROLE_NAME);
+        attachMissingPrivileges(CFLConstants.PROGRAM_MANAGING_PRIVILEGES_NAMES, superUserRole);
     }
 
     private void createPersonAttributeTypes() {
@@ -253,16 +253,16 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
     }
 
-    private void attachMissingPrivileges(List<String> privilegeUuids, Role role) {
+    private void attachMissingPrivileges(List<String> privilegeNames, Role role) {
         Set<Privilege> privileges = role.getPrivileges();
         UserService userService = Context.getUserService();
         boolean updated = false;
-        for (String privilegeUuid : privilegeUuids) {
-            Privilege privilege = userService.getPrivilegeByUuid(privilegeUuid);
+        for (String privilegeName : privilegeNames) {
+            Privilege privilege = userService.getPrivilege(privilegeName);
             if (privilege == null) {
-                log.warn(String.format("Cannot find the privilege with uuid %s, "
+                log.warn(String.format("Cannot find the privilege %s, "
                             + "so it will not be attached to the role %s at the startup",
-                        privilegeUuid, role.getName()));
+                        privilegeName, role.getName()));
             } else if (!privileges.contains(privilege)) {
                 log.info(String.format("Attached the privilege %s to the role %s",
                         privilege.getName(), role.getName()));
