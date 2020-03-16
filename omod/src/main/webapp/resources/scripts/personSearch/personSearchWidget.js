@@ -25,9 +25,6 @@ function PersonSearchWidget(configuration){
                             '<tr>'+
                                 '<th>'+config.messages.identifierColHeader+'</th>'+
                                 '<th>'+config.messages.nameColHeader+'</th>'+
-                                '<th>'+config.messages.genderColHeader+'</th>'+
-                                '<th>'+config.messages.ageColHeader+'</th>'+
-                                '<th>'+config.messages.birthdateColHeader+'</th>'+
                                 attributeHeaders+
                             '</tr>'+
                         '</thead>'+
@@ -100,7 +97,7 @@ function PersonSearchWidget(configuration){
 
             var personIdentifier = p.personIdentifier + " <span class='recent-lozenge'>"+config.messages.recent+"</span>";
             var name = p.name;
-            var initialPatient = [personIdentifier, name, p.gender, age, bdate];
+            var initialPatient = [personIdentifier, name];
             jq.each(attributeTypes, function(key, attributeTypeName){
                 initialPatient.push(p[attributeTypeName]);
             });

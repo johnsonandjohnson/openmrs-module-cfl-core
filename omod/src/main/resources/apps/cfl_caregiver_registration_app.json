@@ -28,53 +28,6 @@
               "legend": "cfl.registration.name.label"
             },
             {
-              "id": "gender",
-              "legend": "cfl.registration.gender.label",
-              "fields": [
-                {
-                  "type": "gender",
-                  "label": "cfl.registration.caregiver.gender.question",
-                  "formFieldName": "gender",
-                  "widget": {
-                    "providerName": "uicommons",
-                    "fragmentId": "field/dropDown",
-                    "config": {
-                      "id": "gender",
-                      "hideEmptyLabel": true,
-                      "expanded": true
-                    }
-                  },
-                  "cssClasses": [
-                    "required"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "birthdate",
-              "legend": "cfl.registration.birthdate.label",
-              "fields": [
-                {
-                  "type": "birthdate",
-                  "label": "cfl.registration.caregiver.birthdate.question",
-                  "formFieldName": "birthdate",
-                  "widget": {
-                    "providerName": "uicommons",
-                    "fragmentId": "field/multipleInputDate",
-                    "config": {
-                      "left": true,
-                      "showEstimated": true
-                    }
-                  }
-                }
-              ],
-              "cssClasses": [
-                "multiple-input-date",
-                "date-required",
-                "no-future-date"
-              ]
-            },
-            {
               "legend": "cfl.registration.language.label",
               "id": "language",
               "fields": [
@@ -131,42 +84,6 @@
                     "phone",
                     "required",
                     "regex"
-                  ]
-                }
-              ]
-            },
-            {
-              "legend": "cfl.registration.address.label",
-              "id": "address",
-              "fields": [
-                {
-                  "type": "personAddress",
-                  "label": "cfl.registration.caregiver.address.question",
-                  "widget": {
-                    "providerName": "uicommons",
-                    "fragmentId": "field/personAddress"
-                  }
-                }
-              ],
-              "cssClasses": [
-                "requireOne"
-              ]
-            },
-            {
-              "legend": "cfl.registration.caregiver.location.label",
-              "id": "patientLocation",
-              "fields": [
-                {
-                  "type": "personAttribute",
-                  "label": "cfl.registration.caregiver.location.question",
-                  "formFieldName": "locationId",
-                  "uuid": "bfdf8ed0-87e3-437e-897d-81434393a233",
-                  "widget": {
-                    "providerName": "locationbasedaccess",
-                    "fragmentId": "field/locations"
-                  },
-                  "cssClasses": [
-                    "required"
                   ]
                 }
               ]
