@@ -3,14 +3,6 @@
     "id": "cfl.personDashboard.relationships",
     "instanceOf": "coreapps.template.dashboardWidget",
     "description": "This app adds a relationship widget into the person dashboard",
-    "config": {
-      "widget": "relationships",
-      "icon": "icon-group",
-      "label": "FAMILY",
-      "editPrivilege": "Task: coreapps.editRelationships",
-      "maxRecords": "5",
-      "providerPage": "/coreapps/clinicianfacing/patient.page?patientId={{personUuid}}&dashboard=person"
-    },
     "extensions": [
       {
         "id": "cfl.personDashboard.relationships.clinicianDashboardFirstColumn",
@@ -19,7 +11,14 @@
         "extensionPointId": "personDashboard.firstColumnFragments",
         "extensionParams": {
           "provider": "cfl",
-          "fragment": "dashboardwidgets/personDashboardWidget"
+          "fragment": "dashboardwidgets/personFamilyWidget",
+          "fragmentConfig": {
+            "personPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}&dashboard=person",
+            "patientPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}&dashboard=patient",
+            "label": "cfl.dashboard.relationship.label",
+            "icon": "icon-group",
+            "maxRecords": "5"
+          }
         }
       }
     ]
