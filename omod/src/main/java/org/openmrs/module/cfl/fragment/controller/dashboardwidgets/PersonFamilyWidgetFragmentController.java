@@ -8,6 +8,7 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.Relationship;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.emrapi.patient.PatientDomainWrapper;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 
@@ -33,21 +34,21 @@ public class PersonFamilyWidgetFragmentController {
     public void controller(FragmentConfiguration config, FragmentModel model) {
         Person person = getPerson(config);
         
-        List<Relationship> relationships = getAllRelationshipsByPerson((Person) person);
+        List<Relationship> relationships = getAllRelationshipsByPerson(person);
     
         int maxRecords = (StringUtils.isNotBlank((String) config.get("maxRecords")))
                 ? Integer.parseInt((String) config.get("maxRecords"))
                 : DEFAULT_MAX_RECORDS;
         
-        List<Person> relatedPeople = getRelatedPeople(relationships, (Person) person);
+        List<Person> relatedPeople = getRelatedPeople(relationships, person);
         if (relatedPeople.size() > maxRecords) {
             relatedPeople.subList(maxRecords, relatedPeople.size()).clear();
         }
-        List<String> relationshipNames = getPeopleRelationshipNames(relationships, (Person) person);
+        List<String> relationshipNames = getPeopleRelationshipNames(relationships, person);
         if (relationshipNames.size() > maxRecords) {
             relationshipNames.subList(maxRecords, relationshipNames.size()).clear();
         }
-        List<String> relatedPeopleIdentifiers = getRelatedPeopleIdentifiers(relationships, (Person) person);
+        List<String> relatedPeopleIdentifiers = getRelatedPeopleIdentifiers(relationships, person);
         if (relatedPeopleIdentifiers.size() > maxRecords) {
             relatedPeopleIdentifiers.subList(maxRecords, relatedPeopleIdentifiers.size()).clear();
         }
@@ -64,6 +65,12 @@ public class PersonFamilyWidgetFragmentController {
         }
         if (person == null && config.containsKey(PATIENT_ID) && config.get(PATIENT_ID) != null) {
             person = Context.getPersonService().getPerson((Integer) config.get(PATIENT_ID));
+        }
+        if (person instanceof PatientDomainWrapper) {
+            PatientDomainWrapper patientWrapper = new PatientDomainWrapper();
+            Patient patient = getPatientService().getPatient(((PatientDomainWrapper) person).getId());
+            patientWrapper.setPatient(patient);
+            return patientWrapper.getPatient();
         }
         return (Person) person;
     }
