@@ -13,8 +13,8 @@
           "provider": "cfl",
           "fragment": "dashboardwidgets/personFamilyWidget",
           "fragmentConfig": {
-            "personPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}&dashboard=person",
-            "patientPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}&dashboard=patient",
+            "personPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}",
+            "patientPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}",
             "label": "cfl.dashboard.relationship.label",
             "icon": "icon-group",
             "maxRecords": "5"

@@ -25,8 +25,9 @@
             <% relatedPeople.each { person -> %>
                 <li class="relationship-li">
                     <div class="relationship-wrapper">
-                        <div class="fifty-percent relationship-inner">                       
+                        <div class="fifty-percent relationship-inner">         
                             <% def page = person.isPatient() ? config.patientPage : config.personPage %> 
+                            <% if(page) { %>           
                             <a href="/${contextPath}${page.replace(personUuid, person.uuid)}">
                                 <% if (!relatedPeopleIdentifiers.isEmpty()) { %>
                                     ${relatedPeopleIdentifiers.get(relatedPeopleIterator++)}
@@ -35,6 +36,11 @@
                                 ${person.middleName == null ? "" : person.middleName} 
                                 ${person.familyName}
                             </a> 
+                            <% } else { %>
+                                ${person.givenName} 
+                                ${person.middleName == null ? "" : person.middleName} 
+                                ${person.familyName}
+                            <% } %>
                         </div>
                         <div class="tag forty-percent relationship-inner">
                             ${relationshipNames.get(relationshipNamesIterator++)}
