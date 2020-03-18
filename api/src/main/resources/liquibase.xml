@@ -689,4 +689,26 @@
             <column name="uuid">7e0800f0-f3bd-4f64-82e2-266644e3473a</column>
         </insert>
     </changeSet>
+
+    <changeSet id="cfl-20200318-07:50" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="relationship_type" />
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM relationship_type WHERE uuid = "acec590b-825e-45d2-876a-0028f174903d" AND b_is_to_a = "Caretaker";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Updates the caregiver relationship type.
+        </comment>
+        <update tableName="relationship_type">
+            <column name="a_is_to_b">Caregiver</column>
+            <column name="b_is_to_a">Patient</column>
+            <column name="preferred">0</column>
+            <column name="weight">0</column>
+            <column name="description">Relationship type used to represent the relationship between Caregiver and Patient</column>
+            <column name="date_changed">2020-03-18</column>
+            <column name="changed_by">1</column>
+            <where>uuid = "acec590b-825e-45d2-876a-0028f174903d"</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
