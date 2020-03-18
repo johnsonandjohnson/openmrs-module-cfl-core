@@ -29,6 +29,8 @@ public final class AppFrameworkConstants {
 
     public static final String COREAPPS_MOST_RECENT_VITALS_APP = "coreapps.mostRecentVitals";
 
+    public static final String COREAPPS_ACTIVE_VISITS_APP = "coreapps.activeVisits";
+
     public static final String APPOINTMENTSCHEDULINGUI_TAB_EXT = "appointmentschedulingui.tab";
 
     public static final String PATIENT_DASHBOARD_APPOINTMENTS_EXT = "org.openmrs.module." +
@@ -67,7 +69,7 @@ public final class AppFrameworkConstants {
     public static final List<String> APP_IDS = Arrays.asList(APPOINTMENTSCHEDULINGUI_HOME_APP,
             SCHEDULING_APPOINTMENT_APP, REQUEST_APPOINTMENT_APP, COREAPPS_CONDITIONLIST_APP,
             COREAPPS_LATEST_OBS_FOR_CONCEPT_LIST_APP, COREAPPS_OBS_ACROSS_ENCOUNTERS_APP, COREAPPS_OBS_GRAPH_APP,
-            COREAPPS_RELATIONSHIPS_APP, COREAPPS_MOST_RECENT_VITALS_APP);
+            COREAPPS_RELATIONSHIPS_APP, COREAPPS_MOST_RECENT_VITALS_APP, COREAPPS_ACTIVE_VISITS_APP);
 
     public static final List<String> CFL_ADDITIONAL_MODIFICATION_APP_IDS = Arrays.asList(
             CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP, CFL_RELATIONSHIPS_APP, CFL_LATESTOBSFORCONCEPTLIS_APP);
