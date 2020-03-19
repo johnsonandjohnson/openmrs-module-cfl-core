@@ -12,6 +12,7 @@
 
         .visit-dates-container {
             display: flex;
+            margin-bottom: 20px;
         }
 
         .date-container {
@@ -41,6 +42,10 @@
             display: flex;
             flex-direction: row;
             width: 100px;
+        }
+
+        #vitals .obs-field {
+            flex-direction: column;
         }
 
         .vital-parameter-container {
@@ -216,6 +221,11 @@
             padding-left: 20px;
             padding-top: 10px;
         }
+
+        .field-as-row {
+            display: flex;
+            flex-direction: row;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -387,6 +397,16 @@
                 eval($('#encounterDate > script').text());
             }
 
+            const correctVitalFieldsDisplay = function () {
+                $('#vitals .obs-field > .error').each(function(index, value) {
+                    const errorField = $(`.obs-field > .error:eq(${index})`);
+                    const parent = errorField.parent();
+
+                    // wrap the children which are not an error span into a div (which displays items as a row)
+                    parent.children().not('.error').wrapAll("&lt;div class='field-as-row' />");
+                });
+            }
+
             // executions
             addAccordionToVitalsSection();
             convertPlannedDateToProperFormat();
@@ -404,6 +424,7 @@
             addRequiredCheckboxesValidation('.next-steps', '#next-steps-error-field');
             attachValidationsToSubmit();
             reloadActualDate();
+            correctVitalFieldsDisplay();
         });
     </script>
 
