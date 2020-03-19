@@ -711,4 +711,131 @@
             <where>uuid = "acec590b-825e-45d2-876a-0028f174903d"</where>
         </update>
     </changeSet>
+
+    <changeSet id="cfl-20200319-13:02" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = '60c36969-e85c-4e72-bcef-43e0e106a7f1';
+            </sqlCheck>
+        </preConditions>
+        <comment>Updated the patient flag (missed at least 3 visits).</comment>
+        <sql>
+            <![CDATA[
+            UPDATE openmrs.patientflags_flag
+                SET name = 'CFL flag - missed at last 3 visits',
+                    criteria = 'SELECT
+                        i.patient_id
+                        FROM
+                        (
+                            SELECT
+                            st.patient_id,
+                            st.status,
+                            Count(st.status) AS missed_count
+                            FROM
+                            (
+                            SELECT
+                            *
+                            FROM
+                            (
+                            SELECT
+                            a.patient_id,
+                            a.status,
+                            @rn := IF(@prev = a.patient_id, @rn + 1, 1) as rn,
+                            @prev := a.patient_id
+                            FROM
+                            (
+                            SELECT
+                            v.visit_id,
+                            v.patient_id,
+                            va.value_reference as status,
+                            v.date_started as scheduled_date
+                            FROM
+                            openmrs.visit v
+                            INNER JOIN (
+                            SELECT
+                            *
+                            FROM
+                            openmrs.visit_attribute
+                            WHERE
+                            attribute_type_id = (
+                            SELECT
+                            vat.visit_attribute_type_id
+                            FROM
+                            openmrs.visit_attribute_type vat
+                            WHERE
+                            vat.uuid = "70ca70ac-53fd-49e4-9abe-663d4785fe62"
+                            )
+                            AND voided = 0
+                            AND value_reference <> "SCHEDULED"
+                            ORDER BY
+                            date_created DESC
+                            ) va ON v.visit_id = va.visit_id
+                            ORDER BY
+                            v.patient_id DESC,
+                            v.date_started DESC
+                            ) a
+                            JOIN (
+                            SELECT
+                            @prev := NULL,
+                            @rn := 0
+                            ) AS vars
+                            ORDER BY
+                            a.patient_id,
+                            a.scheduled_date DESC
+                            ) test
+                            WHERE
+                            test.rn < 4
+                            ) st
+                            GROUP BY
+                            st.patient_id,
+                            st.status
+                            ) i
+                        WHERE
+                        i.status = "MISSED"
+                        AND missed_count > 2;',
+                    message = 'Missed at last 3 visits',
+                    changed_by = 1,
+                    date_changed = '2020-03-19 12:52:30'
+            WHERE uuid = '60c36969-e85c-4e72-bcef-43e0e106a7f1';
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="cfl-20200319-14:02" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = 'eebf7ed0-6a86-4de7-8ab3-ab781926c191';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the 'Consent Pending' patient flag and connect with flag tag</comment>
+        <sql>
+            INSERT INTO patientflags_flag
+            (name, criteria, message, enabled, evaluator, creator, date_created, uuid, priority_id)
+            VALUES('Consent Pending', 'SELECT
+            a.patient_id
+            FROM
+            patient a
+            WHERE
+            a.patient_id in (SELECT
+            person_id
+            FROM
+            person_attribute
+            WHERE
+            person_attribute_type_id IN (SELECT pat.person_attribute_type_id FROM person_attribute_type pat WHERE pat.name = ''Person status'')
+            AND voided = 0
+            AND value = ''NO_CONSENT'');',
+            'Consent Pending', 1, 'org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator',
+            1, '2020-03-19', 'eebf7ed0-6a86-4de7-8ab3-ab781926c191',
+            (SELECT priority_id FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff'));
+
+            INSERT INTO patientflags_flag_tag
+            (flag_id, tag_id)
+            VALUES ((SELECT flag_id FROM patientflags_flag WHERE uuid = 'eebf7ed0-6a86-4de7-8ab3-ab781926c191'),
+            (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
+        </sql>
+    </changeSet>
 </databaseChangeLog>
