@@ -22,10 +22,10 @@
         }
       },
       {
-        "id": "cfl.editPersonInfo",
+        "id": "cfl.caregiverProfile",
         "extensionPointId": "personDashboard.overallActions",
         "type": "link",
-        "label": "cfl.editPersonInfo.label",
+        "label": "cfl.caregiverProfile.label",
         "url": "cfl/editPersonSection.page?personId={{personId}}&sectionId=demographics&appId=cfl.registerCaregiver",
         "icon": "icon-pencil",
         "order": 2,
