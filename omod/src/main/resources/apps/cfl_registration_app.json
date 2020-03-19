@@ -24,10 +24,10 @@
         }
       },
       {
-        "id": "cfl.editPatientInfo",
+        "id": "cfl.patientProfile",
         "extensionPointId": "patientDashboard.overallActions",
         "type": "link",
-        "label": "cfl.editPatientInfo.label",
+        "label": "cfl.patientProfile.label",
         "url": "registrationapp/editSection.page?patientId={{patient.patientId}}&sectionId=demographics&appId=cfl.registerPatient",
         "icon": "icon-pencil",
         "order": 2,
