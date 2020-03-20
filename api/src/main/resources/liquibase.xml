@@ -810,6 +810,9 @@
             <sqlCheck expectedResult="0">
                 SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = 'eebf7ed0-6a86-4de7-8ab3-ab781926c191';
             </sqlCheck>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name) FROM patientflags_flag WHERE name = 'Consent Pending';
+            </sqlCheck>
         </preConditions>
         <comment>Added the 'Consent Pending' patient flag and connect with flag tag</comment>
         <sql>
