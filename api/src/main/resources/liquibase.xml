@@ -932,4 +932,19 @@
             ]]>
         </sql>
     </changeSet>
+
+    <changeSet id="cfl-20200323-10:07" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="user_property" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(user_id) FROM user_property WHERE user_id = 1 AND property = "locationUuid";
+            </sqlCheck>
+        </preConditions>
+        <comment>Assign the default location to the default admin user</comment>
+        <insert tableName="user_property">
+            <column name="user_id">1</column>
+            <column name="property">locationUuid</column>
+            <column name="property_value">b1a8b05e-3542-4037-bbd3-998ee9c40574</column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
