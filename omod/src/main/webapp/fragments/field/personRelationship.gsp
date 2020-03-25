@@ -5,18 +5,21 @@
     ui.includeJavascript("uicommons", "angular-ui/ui-bootstrap-tpls-0.6.0.min.js")
     ui.includeJavascript("uicommons", "services/personService.js")
     ui.includeJavascript("cfl", "field/personRelationship.js")
+    ui.includeJavascript("cfl", "validator/personRelationshipValidator.js")
 %>
 
 <div ng-app="personRelationships" ng-controller="PersonRelationshipController"
      ng-init='relationships = ${ groovy.json.JsonOutput.toJson(initialRelationships) }'>
 
-    <div ng-repeat="(index, relationship) in relationships">
-        
+    <span id="person_relationship_field_error_global" class="field-error" style="display: none"></span>
+
+    <div ng-repeat="(index, relationship) in relationships" class="person-relationship-entry">
         <p class="left">
-            <select id="{{'relationship_type-' + index}}" name="relationship_type" class="rel_type" ng-model="relationship.type">
+            <select id="{{'relationship_type-' + index}}" name="relationship_type"
+                    class="rel_type" ng-model="relationship.type">
                 <option value="">${ui.message('registrationapp.person.relationship.selectRelationshipType')}</option>
                 <% relationshipTypes.each { relName, relUuid -> %>
-                <option value="${relUuid}">${relName}</option>
+                    <option value="${relUuid}">${relName}</option>
                 <% } %>
             </select>
         </p>
@@ -38,6 +41,7 @@
                 <i class="icon-minus-sign edit-action"></i>
             </a>
         </p>
+        <span id="{{'person_relationship_field_error-' + index}}" class="field-error" style="display: none"></span>
     </div>
 
     <% if (person) { %>

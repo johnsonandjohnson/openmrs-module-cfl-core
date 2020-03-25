@@ -90,6 +90,8 @@
             },
             {
               "legend": "cfl.registration.relationship.label",
+              "id": "personRelationship",
+              "cssClasses": ["person-relationship-validator"],
               "header": "cfl.registration.caregiver.relationship.question",
               "fields": [
                 {

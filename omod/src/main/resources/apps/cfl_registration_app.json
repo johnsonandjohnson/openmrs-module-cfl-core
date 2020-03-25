@@ -169,6 +169,8 @@
             },
             {
               "legend": "registrationapp.person.relationship.label",
+              "id": "personRelationship",
+              "cssClasses": ["person-relationship-validator"],
               "header": "registrationapp.person.relationship.question",
               "fields": [
                 {
