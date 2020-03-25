@@ -16,5 +16,14 @@
     "icon": "icon-medical",
     "order": 7,
     "url": "allergyui/allergies.page?patientId={{patient.uuid}}"
+  },
+  {
+    "id": "cfl.patientDashboard.initCall",
+    "extensionPointId": "patientDashboard.overallActions",
+    "type": "script",
+    "order": 26,
+    "label": "cfl.initcall.button",
+    "icon":"icon-phone-sign",
+    "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Patient&#x27;)"
   }
 ]
