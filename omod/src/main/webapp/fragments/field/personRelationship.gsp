@@ -27,6 +27,7 @@
         <p class="left">
             <input type="text" id="{{'other_person_uuid-' + index}}" class="person-typeahead" placeholder="${ui.message('registrationapp.person.name')}"
                    ng-model="relationship.name"
+                   ng-change="onChangedPersonName(\$index)"
                    typeahead="person as person.display for person in getPersons(\$viewValue) | limitTo:5"
                    typeahead-min-length="3"
                    typeahead-on-select="selectPerson(\$item, \$index)"/>

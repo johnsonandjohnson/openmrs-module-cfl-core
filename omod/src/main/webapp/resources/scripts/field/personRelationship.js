@@ -34,6 +34,10 @@ angular.module('personRelationships', ['personService', 'ui.bootstrap'])
             $scope.relationships[index].name = person.display;
         };
 
+        $scope.onChangedPersonName = function (index) {
+            $scope.relationships[index].uuid = null;
+        };
+
         configureRelationshipDisplayField();
 
         function configureRelationshipDisplayField() {
