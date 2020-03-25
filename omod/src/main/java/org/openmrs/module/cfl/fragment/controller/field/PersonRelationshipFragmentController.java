@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.COMMA;
@@ -29,11 +31,15 @@ import static org.openmrs.module.cfl.CFLRegisterPersonConstants.RELATIONSHIP_TYP
 
 public class PersonRelationshipFragmentController {
 
+    private static final String PERSON_A_SUFFIX = "-A";
+    
+    private static final String PERSON_B_SUFFIX = "-B";
+    
     public void controller(
             FragmentModel model,
             UiUtils uiUtils,
             PageModel pageModel) {
-        model.addAttribute(RELATIONSHIP_TYPES_PROP, getRelationshipTypes());
+        model.addAttribute(RELATIONSHIP_TYPES_PROP, sortRelationshipNamesAlphabetically(getRelationshipTypes()));
         Person person = getPerson(pageModel);
         model.addAttribute(PERSON_PROP, person);
         model.addAttribute(INITIAL_RELATIONSHIPS_PROP, buildInitialRelationships(person, uiUtils));
@@ -144,6 +150,22 @@ public class PersonRelationshipFragmentController {
             result = getPersonService().getAllRelationshipTypes();
         }
         return result;
+    }
+    
+    /**
+     * Returns map of relationship types names and its relationship types uuids with appropriate suffixes
+     * @param relationshipTypes - supported relationship types
+     * @return - map of relationship types names and uuids
+     */
+    private Map<String, String> sortRelationshipNamesAlphabetically(List<RelationshipType> relationshipTypes) {
+        TreeMap<String, String> relationshipTypesMap = new TreeMap<String, String>();
+        for (RelationshipType relationshipType : relationshipTypes) {
+            relationshipTypesMap.put(relationshipType.getaIsToB(), relationshipType.getUuid() + PERSON_A_SUFFIX);
+            if (!relationshipType.getbIsToA().equals(relationshipType.getaIsToB())) {
+                relationshipTypesMap.put(relationshipType.getbIsToA(), relationshipType.getUuid() + PERSON_B_SUFFIX);
+            }
+        }
+        return relationshipTypesMap;
     }
 
     /**

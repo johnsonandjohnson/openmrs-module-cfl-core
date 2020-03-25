@@ -11,16 +11,12 @@
      ng-init='relationships = ${ groovy.json.JsonOutput.toJson(initialRelationships) }'>
 
     <div ng-repeat="(index, relationship) in relationships">
+        
         <p class="left">
             <select id="{{'relationship_type-' + index}}" name="relationship_type" class="rel_type" ng-model="relationship.type">
                 <option value="">${ui.message('registrationapp.person.relationship.selectRelationshipType')}</option>
-                <% relationshipTypes.each { type -> %>
-                <option value="${type.uuid}-A">${type.aIsToB}</option>
-                <% } %>
-                <% relationshipTypes.each { type -> %>
-                <% if (type.aIsToB != type.bIsToA) { %>
-                <option value="${type.uuid}-B">${type.bIsToA}</option>
-                <% } %>
+                <% relationshipTypes.each { relName, relUuid -> %>
+                <option value="${relUuid}">${relName}</option>
                 <% } %>
             </select>
         </p>
