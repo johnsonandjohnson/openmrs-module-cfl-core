@@ -7,11 +7,11 @@
       {
         "id": "cfl.personDashboard.outgoing",
         "extensionPointId": "personDashboard.overallActions",
-        "type": "link",
+        "type": "script",
         "order": 1,
         "label": "cfl.initcall.button",
         "icon":"icon-phone-sign",
-        "url": "/ws/callflows/person/{{person.uuid}}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=Caregiver"
+        "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;)"
       },
       {
         "id": "cfl.personDashboard.includeFragments.changeStatus",
