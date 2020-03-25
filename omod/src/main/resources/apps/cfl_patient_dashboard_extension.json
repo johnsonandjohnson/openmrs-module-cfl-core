@@ -24,6 +24,6 @@
     "order": 26,
     "label": "cfl.initcall.button",
     "icon":"icon-phone-sign",
-    "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Patient&#x27;)"
+    "script": "initCall.showInitCallCreationDialog(&#x27;{{patient.uuid}}&#x27;,&#x27;Patient&#x27;)"
   }
 ]
