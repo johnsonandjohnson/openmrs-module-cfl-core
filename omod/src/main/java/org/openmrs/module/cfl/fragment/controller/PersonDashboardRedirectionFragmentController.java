@@ -12,15 +12,15 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 
 public class PersonDashboardRedirectionFragmentController {
 
-    private static final String SHOW_INFORMATION_ABOUT_ACTOR_DASHBOARD = "showInformationAboutActorDashboard";
+    public static final String SHOW_INFORMATION_ABOUT_ACTOR_DASHBOARD = "showInformationAboutActorDashboard";
 
     private static final String PERSON_SERVICE = "personService";
 
-    private static final String IS_PATIENT_DASHBOARD = "isPatientDashboard";
+    public static final String IS_PATIENT_DASHBOARD = "isPatientDashboard";
 
-    private static final String ACTOR_TYPE_NAME = "actorTypeName";
+    public static final String ACTOR_TYPE_NAME = "actorTypeName";
 
-    private static final String ACTOR_UUID = "actorUuid";
+    public static final String ACTOR_UUID = "actorUuid";
 
     public static final String A_POSITION = "A";
 
@@ -68,7 +68,9 @@ public class PersonDashboardRedirectionFragmentController {
 
     private String getSupportedActorTypeName(PersonService personService) {
         RelationshipType type = personService.getRelationshipTypeByUuid(getSupportedActorType());
-        return getActorPositionInRelationship().equals(A_POSITION) ? type.getaIsToB() : type.getbIsToA();
+
+        return type == null ? null :
+                getActorPositionInRelationship().equals(A_POSITION) ? type.getaIsToB() : type.getbIsToA();
     }
 
     /**
