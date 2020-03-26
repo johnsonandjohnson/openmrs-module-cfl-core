@@ -1,9 +1,15 @@
 <org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>
     <packages>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>Health_Tips</filenameBase>
-            <groupUuid>f6a636a5-28a6-4a07-b3de-27a35a500831</groupUuid>
-            <version>2</version>
+            <filenameBase>Health_Tips_Concepts</filenameBase>
+            <groupUuid>b9c0c2b5-bc8f-4dd4-b720-4e7faa3d773b</groupUuid>
+            <version>1</version>
+            <importMode>MIRROR</importMode>
+        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+            <filenameBase>Actor_Questions_Responses</filenameBase>
+            <groupUuid>e5a6cdbf-be76-4794-ae54-996f80191866</groupUuid>
+            <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
