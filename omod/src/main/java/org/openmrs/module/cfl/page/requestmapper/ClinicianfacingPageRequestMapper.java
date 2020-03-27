@@ -9,6 +9,7 @@ import org.openmrs.ui.framework.page.PageRequest;
 import org.openmrs.ui.framework.page.PageRequestMapper;
 import org.springframework.stereotype.Component;
 
+import static org.openmrs.module.cfl.CFLConstants.PATIENT_DASHBOARD_ATTR_VALUE;
 import static org.openmrs.module.cfl.CFLConstants.PERSON_DASHBOARD_ATTR_VALUE;
 
 @Component
@@ -50,7 +51,8 @@ public class ClinicianfacingPageRequestMapper implements PageRequestMapper {
 
     private boolean areAttributesPointsAtPatientOrPersonDashboard(PageRequest request) {
         String dashboardAttr = (String) request.getAttribute(CUSTOM_DASHBOARD_ATTR_NAME);
-        boolean isPatientDashboard = dashboardAttr == null;
+        boolean isPatientDashboard = dashboardAttr == null
+                || StringUtils.equals(dashboardAttr, PATIENT_DASHBOARD_ATTR_VALUE);
         boolean isPersonDashboard = StringUtils.equals(dashboardAttr, PERSON_DASHBOARD_ATTR_VALUE);
         return isPatientDashboard || isPersonDashboard;
     }

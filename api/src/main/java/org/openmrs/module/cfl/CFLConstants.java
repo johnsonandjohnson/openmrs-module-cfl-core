@@ -9,6 +9,7 @@ public final class CFLConstants {
     public static final String MODULE_ID = "cfl";
 
     public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
+    public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";
 
     public static final String SUPER_USER_ROLE_NAME = "Application: Has Super User Privileges";
 
