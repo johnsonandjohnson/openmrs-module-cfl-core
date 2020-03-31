@@ -294,6 +294,7 @@ function PersonSearchWidget(configuration){
             //show the recently viewed
             searchResultsData = initialPatientData;
             dataRows = initialData;
+            reset();
         }
 
         dTable.fnAddData(dataRows);
