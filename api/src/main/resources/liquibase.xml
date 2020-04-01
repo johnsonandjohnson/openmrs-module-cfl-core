@@ -947,4 +947,23 @@
             <column name="property_value">b1a8b05e-3542-4037-bbd3-998ee9c40574</column>
         </insert>
     </changeSet>
+
+    <changeSet id="cfl-20200401-17:53" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patient_identifier_type" />
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM patient_identifier_type WHERE uuid ="4aa897a3-0b05-4ec9-8d70-a93a336be548";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the format validation for the Aadhar Number patientIdentifierType.
+        </comment>
+        <update tableName="patient_identifier_type">
+            <column name="date_changed">2020-04-01</column>
+            <column name="changed_by">1</column>
+            <column name="format">[0-9]{12}$</column>
+            <column name="format_description">Aadhar number should be 12 digits</column>
+            <where>uuid = "4aa897a3-0b05-4ec9-8d70-a93a336be548"</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
