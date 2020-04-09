@@ -26,6 +26,8 @@ import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
+import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
+import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
@@ -58,6 +60,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             configureDistribution();
             installMetadataPackages();
             CflEventListenerFactory.registerEventListeners();
+            deployMetadataPackages();
         } catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
             ModuleFactory.stopModule(mod);
@@ -277,5 +280,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         if (updated) {
             userService.saveRole(role);
         }
+    }
+
+    private void deployMetadataPackages() {
+        MetadataDeployService service = Context.getRegisteredComponent("metadataDeployService",
+                MetadataDeployService.class);
+        MetadataBundle rolesAndPrivileges = Context.getRegisteredComponent("cflRolePrivilegeProfiles",
+                MetadataBundle.class);
+        service.installBundles(Collections.singletonList(rolesAndPrivileges));
     }
 }

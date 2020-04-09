@@ -197,6 +197,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>metadatadeploy-api</artifactId>
+                <version>${metadatadeployVersion}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -367,5 +373,6 @@
         <uicommonsVersion>2.6.1</uicommonsVersion>
         <idgenVersion>4.3</idgenVersion>
         <eventVersion>2.6.0</eventVersion>
+        <metadatadeployVersion>1.10.0</metadatadeployVersion>
     </properties>
 </project>

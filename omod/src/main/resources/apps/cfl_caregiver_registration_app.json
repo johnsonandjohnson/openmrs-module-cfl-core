@@ -12,7 +12,7 @@
         "url": "cfl/registerPerson.page?appId=cfl.registerCaregiver",
         "icon": "icon-user",
         "order": 4,
-        "requiredPrivilege": "App: cfl.registerCaregiver"
+        "requiredPrivilege": "App: registrationapp.registerPatient"
       }
     ],
     "config": {

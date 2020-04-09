@@ -45,4 +45,6 @@
         <property name="administrationService" ref="adminService" />
         <property name="identifierSourceService" ref="baseIdentifierSourceService" />
     </bean>
+
+    <bean id="cflRolePrivilegeProfiles" class="org.openmrs.module.cfl.api.metadata.RolePrivilegeProfilesMetadata" />
 </beans>
