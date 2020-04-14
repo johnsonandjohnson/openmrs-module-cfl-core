@@ -89,6 +89,25 @@
               ]
             },
             {
+              "legend":"Person Location ",
+              "id":"personLocationLabel",
+              "fields":[
+                {
+                  "type":"personAttribute",
+                  "label":"Select Location",
+                  "formFieldName":"locationId",
+                  "uuid":"bfdf8ed0-87e3-437e-897d-81434393a233",
+                  "widget":{
+                    "providerName":"locationbasedaccess",
+                    "fragmentId":"field/locations"
+                  },
+                  "cssClasses":[
+                    "required"
+                  ]
+                }
+              ]
+            },
+            {
               "legend": "cfl.registration.relationship.label",
               "id": "personRelationship",
               "cssClasses": ["person-relationship-validator"],
