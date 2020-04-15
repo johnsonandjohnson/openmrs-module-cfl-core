@@ -17,6 +17,11 @@
         <property name="actorService" ref="cfl.actorService"/>
     </bean>
 
+    <bean id="cfl.findPersonWithoutRelationshipOrWithCaregiverRoleStrategy"
+          class="org.openmrs.module.cfl.api.strategy.impl.FindPersonWithoutRelationshipOrWithCaregiverRoleFilterStrategyImpl">
+        <property name="actorService" ref="cfl.actorService"/>
+    </bean>
+
     <bean id="cfl.personOverviewMapper"
           class="org.openmrs.module.cfl.api.mapper.PersonOverviewMapper"/>
 

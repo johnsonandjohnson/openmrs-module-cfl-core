@@ -966,4 +966,19 @@
             <where>uuid = "4aa897a3-0b05-4ec9-8d70-a93a336be548"</where>
         </update>
     </changeSet>
+
+    <changeSet id="cfl-20200415-12:53" author="Arkadiusz Lalo">
+        <preConditions>
+            <tableExists tableName="global_property"/>
+        </preConditions>
+
+        <comment>Resets cfl.findPerson.filter.strategy to the default value (the property structure and its description
+            have been changed). It is in order to apply the new changes to all already existing environments. The
+            migration can be removed if the liquibase refactor will be conducted (eg. replacing all changes by one
+            changeSet).</comment>
+
+        <delete tableName="global_property">
+            <where>property='cfl.findPerson.filter.strategy'</where>
+        </delete>
+    </changeSet>
 </databaseChangeLog>
