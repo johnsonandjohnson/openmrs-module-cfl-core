@@ -38,7 +38,7 @@
         "label": "messages.title",
         "icon": "icon-comment",
         "order": 3,
-        "url": "owa/messages/index.html#/messages/{{personId}}&patientUuid={{person.uuid}}"
+        "url": "owa/messages/index.html#/messages/person/{{personId}}&patientUuid={{person.uuid}}"
       },
       {
         "id": "cfl.personDashboard.deletePerson",
