@@ -981,4 +981,28 @@
             <where>property='cfl.findPerson.filter.strategy'</where>
         </delete>
     </changeSet>
+
+    <changeSet id="cfl-20200416-10:00" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patient_identifier_type" />
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM patient_identifier_type WHERE uuid ="4aa897a3-0b05-4ec9-8d70-a93a336be548";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Voiding all patient identifiers which were created before adding validation constraints on that type.
+            We need to do this because identifiers with the wrong format couldn't be saving as voided (by the system).
+        </comment>
+        <sql>
+            UPDATE patient_identifier pi
+            SET pi.voided=1,
+            pi.voided_by=1,
+            pi.date_voided='2020-04-16 10:47:27',
+            pi.void_reason='Voided after changing validation constraints for those type'
+            WHERE identifier_type IN (SELECT pit.patient_identifier_type_id
+                FROM   patient_identifier_type pit
+                WHERE
+                pit.uuid = '4aa897a3-0b05-4ec9-8d70-a93a336be548');
+        </sql>
+    </changeSet>
 </databaseChangeLog>
