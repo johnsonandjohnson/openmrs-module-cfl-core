@@ -13,7 +13,9 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>CFL Module</name>
-    <description>CFL module used to customization the reference application</description>
+    <description>
+        CFL module used to customization the CFL distribution
+    </description>
 
     <url>https://wiki.openmrs.org/x/FQ4z</url>
 
@@ -28,6 +30,30 @@
         <module>omod</module>
         <module>ui-tests</module>
     </modules>
+
+    <properties>
+        <metadatamappingVersion>1.3.4</metadatamappingVersion>
+        <idgenVersion>4.5.0</idgenVersion>
+        <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
+        <pmdPluginVersion>3.12.0</pmdPluginVersion>
+        <checkStylePluginVersion>3.0.0</checkStylePluginVersion>
+        <findBugsPluginVersion>3.0.5</findBugsPluginVersion>
+        <appuiVersion>1.9.0</appuiVersion>
+        <coreappsVersion>1.21.0</coreappsVersion>
+        <uiframeworkVersion>3.9</uiframeworkVersion>
+        <htmlformentryVersion>3.8.0</htmlformentryVersion>
+        <htmlformentryuiVersion>1.7.0</htmlformentryuiVersion>
+        <patientFlagVersion>3.0.1</patientFlagVersion>
+        <appframeworkVersion>2.9</appframeworkVersion>
+        <emrapiVersion>1.26.0</emrapiVersion>
+        <webservicesRestVersion>2.11</webservicesRestVersion>
+        <registrationappVersion>1.13.0</registrationappVersion>
+        <registrationcoreVersion>1.8.0</registrationcoreVersion>
+        <uicommonsVersion>2.6.1</uicommonsVersion>
+        <idgenVersion>4.3</idgenVersion>
+        <eventVersion>2.6.0</eventVersion>
+        <metadatadeployVersion>1.10.0</metadatadeployVersion>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -351,28 +377,4 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
-    <properties>
-        <metadatamappingVersion>1.3.4</metadatamappingVersion>
-        <idgenVersion>4.5.0</idgenVersion>
-        <openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
-        <pmdPluginVersion>3.12.0</pmdPluginVersion>
-        <checkStylePluginVersion>3.0.0</checkStylePluginVersion>
-        <findBugsPluginVersion>3.0.5</findBugsPluginVersion>
-        <appuiVersion>1.9.0</appuiVersion>
-        <coreappsVersion>1.21.0</coreappsVersion>
-        <uiframeworkVersion>3.9</uiframeworkVersion>
-        <htmlformentryVersion>3.8.0</htmlformentryVersion>
-        <htmlformentryuiVersion>1.7.0</htmlformentryuiVersion>
-        <patientFlagVersion>3.0.1</patientFlagVersion>
-        <appframeworkVersion>2.9</appframeworkVersion>
-        <emrapiVersion>1.26.0</emrapiVersion>
-        <webservicesRestVersion>2.11</webservicesRestVersion>
-        <registrationappVersion>1.13.0</registrationappVersion>
-        <registrationcoreVersion>1.8.0</registrationcoreVersion>
-        <uicommonsVersion>2.6.1</uicommonsVersion>
-        <idgenVersion>4.3</idgenVersion>
-        <eventVersion>2.6.0</eventVersion>
-        <metadatadeployVersion>1.10.0</metadatadeployVersion>
-    </properties>
 </project>
