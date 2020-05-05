@@ -164,6 +164,11 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
+                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE,
+                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DESCRIPTION
+        );
     }
 
     private void createVisitNoteUrlProperties() {

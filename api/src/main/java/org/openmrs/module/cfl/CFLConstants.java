@@ -90,5 +90,10 @@ public final class CFLConstants {
     public static final String HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION = "Display dates in HTML Forms in jQuery (js)" +
      " date format. E.g. 'd M yy' for 31 Jan 2012.";
 
+    public static final String PERSON_LOCATION_ATTRIBUTE_KEY = "cfl.person.attribute.location";
+    public static final String PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE = "LocationAttribute";
+    public static final String PERSON_LOCATION_ATTRIBUTE_DESCRIPTION = "Specifies attribute name used to store " +
+            "information about person localization";
+
     private CFLConstants() { }
 }

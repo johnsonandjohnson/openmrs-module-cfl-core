@@ -17,7 +17,7 @@
             "patientPage": "/coreapps/clinicianfacing/patient.page?patientId={personUuid}",
             "label": "cfl.dashboard.relationship.label",
             "icon": "icon-group",
-            "maxRecords": "5"
+            "maxRecords": "15"
           }
         }
       }

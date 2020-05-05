@@ -4,10 +4,43 @@
     ui.includeJavascript("uicommons", "handlebars/handlebars.js")
 
     def editIcon = config.editIcon ?: "icon-share-alt"
-    def relatedPeopleIterator = 0
-    def relationshipNamesIterator = 0
     def personUuid = "{personUuid}"
+    def recordIterator = 0
 %>
+<style>
+.relationship-wrapper .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.relationship-wrapper:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.relationship-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.relationship-message {
+    color: red;
+    font-style: italic;
+}
+</style>
+
 <div id="coreapps-${config.id}" class="info-section openmrs-contrib-dashboardwidgets">
     <div class="info-header">
         <i class="${config.icon}"></i>
@@ -23,31 +56,45 @@
         <% } %>
        <ul>
             <% relatedPeople.each { person -> %>
-                <li class="relationship-li">
-                    <div class="relationship-wrapper">
-                        <div class="fifty-percent relationship-inner">         
-                            <% def page = person.isPatient() ? config.patientPage : config.personPage %> 
-                            <% if(page) { %>           
-                            <a href="/${contextPath}${page.replace(personUuid, person.uuid)}">
-                                <% if (!relatedPeopleIdentifiers.isEmpty()) { %>
-                                    ${relatedPeopleIdentifiers.get(relatedPeopleIterator++)}
+                <% if(recordIterator < maxRecords) { %>
+                    <li class="relationship-li">
+                        <div class="relationship-wrapper">
+                            <div class="fifty-percent relationship-inner">
+                                <% def page = person.isPatient() ? config.patientPage : config.personPage %>
+                                <% if(page && currentPersonLocation == person.location) { %>
+                                <a href="/${contextPath}${page.replace(personUuid, person.uuid)}">
+                                    <span>
+                                        ${person.identifier == null ? "" : person.identifier}
+                                        ${person.givenName}
+                                        ${person.middleName == null ? "" : person.middleName}
+                                        ${person.familyName}
+                                        <g:set var="recordIterator" value="${recordIterator++}"/>
+                                    </span>
+                                </a>
+                                <% } else { %>
+                                    <span>
+                                        ${person.identifier == null ? "" : person.identifier}
+                                        ${person.givenName}
+                                        ${person.middleName == null ? "" : person.middleName}
+                                        ${person.familyName}
+                                        <g:set var="recordIterator" value="${recordIterator++}"/>
+
+                                <span class="tooltiptext">${ui.message("cfl.familyWidget.tooltip")}</span>
+                                    </span>
                                 <% } %>
-                                ${person.givenName} 
-                                ${person.middleName == null ? "" : person.middleName} 
-                                ${person.familyName}
-                            </a> 
-                            <% } else { %>
-                                ${person.givenName} 
-                                ${person.middleName == null ? "" : person.middleName} 
-                                ${person.familyName}
-                            <% } %>
+                            </div>
+                            <div class="tag forty-percent relationship-inner">
+                                ${person.relationshipName}
+                            </div>
                         </div>
-                        <div class="tag forty-percent relationship-inner">
-                            ${relationshipNames.get(relationshipNamesIterator++)}
-                        </div>
-                    </div>
-                </li>
-            <% } %>
+                    </li>
+              <% } %>
+          <% } %>
+          <% if(relatedPeople.size() > maxRecords) { %>
+            <span class="relationship-message">
+                ${String.format(ui.message("cfl.familyWidget.relationships.overflow.message"), maxRecords)}
+            </span>
+          <% } %>
        </ul>
     </div>
 </div>
