@@ -58,7 +58,7 @@ public class PersonDTOBuilder implements Serializable {
         } else {
             PersonAttribute location = relatedPerson.getAttribute(Context.getAdministrationService()
                     .getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY));
-            return StringUtils.isNotBlank(location.getValue()) ? location.getValue() : "";
+            return location == null ? "" : location.getValue();
         }
     }
 
