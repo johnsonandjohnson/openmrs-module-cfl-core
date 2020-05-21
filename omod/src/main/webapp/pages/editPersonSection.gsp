@@ -56,127 +56,124 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
     ];
 </script>
 
+<h2>
+    ${ ui.message(section.label)  }
+</h2>
 
-<div id="content" class="container">
-    <h2>
-        ${ ui.message(section.label)  }
-    </h2>
-
-    <div id="exit-form-container">
-        <a id="save-form">
-            <i class="icon-save small"></i>
-            ${ ui.message("htmlformentryui.saveForm") }
+<div id="exit-form-container">
+    <a id="save-form">
+        <i class="icon-save small"></i>
+        ${ ui.message("htmlformentryui.saveForm") }
+    </a>
+    <% if (returnUrl) { %>
+        <a href="${ ui.escapeAttribute(returnUrl) }">
+            <i class="icon-signout small"></i>
+            ${ ui.message("htmlformentryui.exitForm") }
         </a>
-        <% if (returnUrl) { %>
-            <a href="${ ui.escapeAttribute(returnUrl) }">
-                <i class="icon-signout small"></i>
-                ${ ui.message("htmlformentryui.exitForm") }
-            </a>
-        <% } %>
-    </div>
-
-    <form
-            id="registration-section-form"
-            class="simple-form-ui ${ section.skipConfirmation ? 'skip-confirmation-section' : '' }"
-            method="POST"
-            action="/${ contextPath }/cfl/editPersonSection.page?personId=${ person.personId }&returnUrl=${ ui.urlEncode(returnUrl) }&appId=${ app.id }&sectionId=${ ui.encodeHtml(section.id) }">
-
-        <section id="${ section.id }" class="non-collapsible">
-
-            <span id="${ section.id }_label" class="title">
-                ${ ui.message(section.label) }
-            </span>
-            <% section.questions.each { question ->
-                    def fields=question.fields
-            %>
-                <fieldset id="${ question.id }"
-                    <% if (question.cssClasses) { %>
-                          class="${ question.cssClasses?.join(' ') }"
-                    <% } %>
-                    <% if (question.fieldSeparator) { %>
-                          field-separator="${ question.fieldSeparator }"
-                    <% } %>
-                    <% if (question.displayTemplate) { %>
-                          display-template="${ ui.escapeAttribute(question.displayTemplate) }"
-                    <% } %>>
-
-                    <legend>${ ui.message(question.legend) }</legend>
-                     <% if(question.header) { %>
-                        <h3>${ ui.message(question.header) }</h3>
-                     <% } %>
-
-                     <% if (question.id == 'name') { %>
-                         <% nameTemplate.lines.each { line ->
-                             // go through each line in the template and find the first name token;
-                             // assumption is there is only one name token per line
-                             def name = line.find({ it['isToken'] == 'IS_NAME_TOKEN' })['codeName'] as String
-                             def initialNameFieldValue = ''
-                             if (person.personName && person.personName[name]) {
-                                 initialNameFieldValue = ui.encodeHtml(person.personName[name])
-                             } %>
-                         ${ui.includeFragment('registrationapp', 'field/personName', [
-                                 label        : ui.message(nameTemplate.nameMappings[name]),
-                                 size         : nameTemplate.sizeMappings[name],
-                                 formFieldName: name,
-                                 dataItems    : 4,
-                                 left         : true,
-                                 ignoreCheckForSimilarNames: true,
-                                 initialValue : initialNameFieldValue,
-                                 classes      : [(name == 'givenName' || name == 'familyName') ? 'required' : '']])}
-                         <% } %>
-                         <input type="hidden" name="preferred" value="true"/>
-                    <% } else { %>
-                        <% fields.each { field ->
-                            def configOptions = (field.fragmentRequest.configuration != null)
-                                    ? field.fragmentRequest.configuration
-                                    : [:]
-                            configOptions.label = ui.message(field.label)
-                            configOptions.formFieldName = field.formFieldName
-                            configOptions.left = true
-                            configOptions.classes = field.cssClasses
-
-                            if (field.type == 'gender') {
-                                configOptions.initialValue = person.gender
-                                configOptions.options = genderOptions
-                            }
-                            if (field.type == 'birthdate') {
-                                configOptions.estimated = person.birthdateEstimated
-                                configOptions.initialValue = person.birthdate
-                            }
-                            if (field.type == 'personAddress') {
-                                configOptions.addressTemplate = addressTemplate
-                                configOptions.initialValue = person.personAddress
-                            }
-                            if(field.type == 'personAttribute'){
-                                configOptions.initialValue = ui.escapeAttribute(uiUtils.getAttribute(person, field.uuid))
-                            } %>
-                            ${ ui.includeFragment(field.fragmentRequest.providerName, field.fragmentRequest.fragmentId, configOptions) }
-                        <% } %>
-                    <% } %>
-                </fieldset>
-            <% } %>
-        </section>
-
-        <div id="confirmation">
-            <span id="confirmation_label" class="title">
-                ${ ui.message("cfl.registration.confirm.label") }
-            </span>
-            <div class="before-dataCanvas"></div>
-            <div id="dataCanvas"></div>
-            <div class="after-data-canvas"></div>
-            <div id="confirmationQuestion">
-                ${ ui.message("cfl.registration.confirm") }
-                <p style="display: inline">
-                    <button id="registration-submit" type="submit" class="submitButton confirm right">
-                        ${ui.message("cfl.registration.confirm.label")}
-                    </button>
-                </p>
-                <p style="display: inline">
-                    <button id="cancelSubmission" class="cancel" type="button">
-                        ${ui.message("cfl.registration.cancel")}
-                    </button>
-                </p>
-            </div>
-        </div>
-    </form>
+    <% } %>
 </div>
+
+<form
+        id="registration-section-form"
+        class="simple-form-ui ${ section.skipConfirmation ? 'skip-confirmation-section' : '' }"
+        method="POST"
+        action="/${ contextPath }/cfl/editPersonSection.page?personId=${ person.personId }&returnUrl=${ ui.urlEncode(returnUrl) }&appId=${ app.id }&sectionId=${ ui.encodeHtml(section.id) }">
+
+    <section id="${ section.id }" class="non-collapsible">
+
+        <span id="${ section.id }_label" class="title">
+            ${ ui.message(section.label) }
+        </span>
+        <% section.questions.each { question ->
+                def fields=question.fields
+        %>
+            <fieldset id="${ question.id }"
+                <% if (question.cssClasses) { %>
+                      class="${ question.cssClasses?.join(' ') }"
+                <% } %>
+                <% if (question.fieldSeparator) { %>
+                      field-separator="${ question.fieldSeparator }"
+                <% } %>
+                <% if (question.displayTemplate) { %>
+                      display-template="${ ui.escapeAttribute(question.displayTemplate) }"
+                <% } %>>
+
+                <legend>${ ui.message(question.legend) }</legend>
+                 <% if(question.header) { %>
+                    <h3>${ ui.message(question.header) }</h3>
+                 <% } %>
+
+                 <% if (question.id == 'name') { %>
+                     <% nameTemplate.lines.each { line ->
+                         // go through each line in the template and find the first name token;
+                         // assumption is there is only one name token per line
+                         def name = line.find({ it['isToken'] == 'IS_NAME_TOKEN' })['codeName'] as String
+                         def initialNameFieldValue = ''
+                         if (person.personName && person.personName[name]) {
+                             initialNameFieldValue = ui.encodeHtml(person.personName[name])
+                         } %>
+                     ${ui.includeFragment('registrationapp', 'field/personName', [
+                             label        : ui.message(nameTemplate.nameMappings[name]),
+                             size         : nameTemplate.sizeMappings[name],
+                             formFieldName: name,
+                             dataItems    : 4,
+                             left         : true,
+                             ignoreCheckForSimilarNames: true,
+                             initialValue : initialNameFieldValue,
+                             classes      : [(name == 'givenName' || name == 'familyName') ? 'required' : '']])}
+                     <% } %>
+                     <input type="hidden" name="preferred" value="true"/>
+                <% } else { %>
+                    <% fields.each { field ->
+                        def configOptions = (field.fragmentRequest.configuration != null)
+                                ? field.fragmentRequest.configuration
+                                : [:]
+                        configOptions.label = ui.message(field.label)
+                        configOptions.formFieldName = field.formFieldName
+                        configOptions.left = true
+                        configOptions.classes = field.cssClasses
+
+                        if (field.type == 'gender') {
+                            configOptions.initialValue = person.gender
+                            configOptions.options = genderOptions
+                        }
+                        if (field.type == 'birthdate') {
+                            configOptions.estimated = person.birthdateEstimated
+                            configOptions.initialValue = person.birthdate
+                        }
+                        if (field.type == 'personAddress') {
+                            configOptions.addressTemplate = addressTemplate
+                            configOptions.initialValue = person.personAddress
+                        }
+                        if(field.type == 'personAttribute'){
+                            configOptions.initialValue = ui.escapeAttribute(uiUtils.getAttribute(person, field.uuid))
+                        } %>
+                        ${ ui.includeFragment(field.fragmentRequest.providerName, field.fragmentRequest.fragmentId, configOptions) }
+                    <% } %>
+                <% } %>
+            </fieldset>
+        <% } %>
+    </section>
+
+    <div id="confirmation">
+        <span id="confirmation_label" class="title">
+            ${ ui.message("cfl.registration.confirm.label") }
+        </span>
+        <div class="before-dataCanvas"></div>
+        <div id="dataCanvas"></div>
+        <div class="after-data-canvas"></div>
+        <div id="confirmationQuestion">
+            ${ ui.message("cfl.registration.confirm") }
+            <p style="display: inline">
+                <button id="registration-submit" type="submit" class="submitButton confirm right">
+                    ${ui.message("cfl.registration.confirm.label")}
+                </button>
+            </p>
+            <p style="display: inline">
+                <button id="cancelSubmission" class="cancel" type="button">
+                    ${ui.message("cfl.registration.cancel")}
+                </button>
+            </p>
+        </div>
+    </div>
+</form>
