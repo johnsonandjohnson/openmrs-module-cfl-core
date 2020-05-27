@@ -1,7 +1,10 @@
 package org.openmrs.module.cfl.api.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,29 @@ public class PersonOverviewEntryDTO {
 
     public void setAttributes(List<PersonAttributeDTO> attributes) {
         this.attributes = attributes;
+    }
+
+    /**
+     * Convenience method to get this person's first attribute that has a PersonAttributeType.name
+     * equal to <code>attributeName</code>.<br/>
+     * <br/>
+     * Returns null if this person has no non-voided {@link PersonAttribute} with the given type
+     * name, the given name is null, or this person has no attributes.
+     *
+     * @param attributeName the name string to match on
+     * @return PersonAttributeDTO whose {@link PersonAttributeType#getName()} match the given name
+     *         string
+     */
+    public PersonAttributeDTO getAttribute(String attributeName) {
+        if (StringUtils.isNotBlank(attributeName)) {
+            for (PersonAttributeDTO attribute : getAttributes()) {
+                String type = attribute.getName();
+                if (StringUtils.isNotBlank(type) && attributeName.equals(type)) {
+                    return attribute;
+                }
+            }
+        }
+        return null;
     }
 
     public String getUuid() {

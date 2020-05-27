@@ -32,7 +32,8 @@
         widgetBirthdate:"${ it.birthdate ? ui.escapeJs(ui.encodeHtmlContent(it.birthdate)) : '' }"
     }
         <% listingAttributeTypeNames.each { attributeName -> %>
-            patientObj["${ ui.encodeHtml(attributeName) }"] = "${ it.getAttribute(attributeName) ? ui.encodeHtml(String.valueOf(it.getAttribute(attributeName))) :'' }";
+            patientObj["${ ui.encodeHtml(attributeName) }"] = "${ it.getAttribute(attributeName) ?
+                ui.encodeHtml(it.getAttribute(attributeName).value) : '' }";
         <% } %>
     lastViewedPatients.push(patientObj);
     <%      }

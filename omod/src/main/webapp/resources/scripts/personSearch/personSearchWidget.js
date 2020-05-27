@@ -274,7 +274,7 @@ function PersonSearchWidget(configuration){
                 if(age == '' && widgetBirthdate != ''){
                     age = formatAge(widgetBirthdate);
                 }
-                var dataRow = [personIdentifier, personName, person.gender, age, birthdate];
+                var dataRow = [personIdentifier, personName];
 
                 jq.each(attributeTypes, function(index, typeName) {
                     var attributeValue = "";

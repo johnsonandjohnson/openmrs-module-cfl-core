@@ -1027,4 +1027,36 @@
                 pit.uuid = '4aa897a3-0b05-4ec9-8d70-a93a336be548');
         </sql>
     </changeSet>
+
+    <changeSet id="cfl-20200526-15:43" author="Arkadiusz Lalo">
+        <preConditions>
+            <tableExists tableName="person_attribute_type"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM person_attribute_type WHERE name = "Telephone Number";
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Made changes required to search by telephone number attribute</comment>
+
+        <update tableName="person_attribute_type">
+            <column name="searchable" value="1"/>
+            <where>name = "Telephone Number"</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="cfl-20200526-16:43" author="Arkadiusz Lalo">
+        <preConditions>
+            <tableExists tableName="person_attribute_type"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM person_attribute_type WHERE name = "Person identifier";
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Made changes required to search by person identifier attribute</comment>
+
+        <update tableName="person_attribute_type">
+            <column name="searchable" value="1"/>
+            <where>name = "Person identifier"</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
