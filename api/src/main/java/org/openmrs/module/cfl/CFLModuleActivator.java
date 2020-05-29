@@ -117,6 +117,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         attributeType.setFormat(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_FORMAT);
         attributeType.setDescription(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_DESCRIPTION);
         attributeType.setUuid(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_UUID);
+        attributeType.setSearchable(true);
         createPersonAttributeTypeIfNotExists(attributeType);
     }
 

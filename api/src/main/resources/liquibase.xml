@@ -1029,7 +1029,7 @@
     </changeSet>
 
     <changeSet id="cfl-20200526-15:43" author="Arkadiusz Lalo">
-        <preConditions>
+        <preConditions  onFail="MARK_RAN">
             <tableExists tableName="person_attribute_type"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM person_attribute_type WHERE name = "Telephone Number";
@@ -1045,7 +1045,7 @@
     </changeSet>
 
     <changeSet id="cfl-20200526-16:43" author="Arkadiusz Lalo">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="person_attribute_type"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM person_attribute_type WHERE name = "Person identifier";
