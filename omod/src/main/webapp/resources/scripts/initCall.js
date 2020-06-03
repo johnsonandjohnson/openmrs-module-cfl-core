@@ -22,12 +22,14 @@ initCall.createInitCallCreationDialog = function() {
                     type: 'GET',
                     success: function() {
                         emr.successMessage("cfl.initCall.success");
-                        jq('#init-call-dialog' + ' .icon-spin').css('display', 'inline-block').parent().addClass('disabled');
                         initCall.initCallCreationDialog.close();
                     },
                     error: function() {
                         emr.errorMessage("cfl.initCall.failed");
                         initCall.initCallCreationDialog.close();
+                    },
+                    final: function() {
+                        initCall.enableConfirmButton();
                     }
                 });
             },
@@ -50,3 +52,7 @@ initCall.showInitCallCreationDialog = function(personUUID, actorType) {
 initCall.goToReturnUrl = function() {
     emr.navigateTo({ applicationUrl: emr.applyContextModel(initCall.returnUrl)});
 };
+
+initCall.enableConfirmButton = function() {
+    jq('#init-call-dialog' + ' .icon-spin').css('display', 'inline-block').parent().addClass('enabled');
+}
