@@ -95,9 +95,16 @@ function PersonSearchWidget(configuration){
                 age = formatAge(widgetBirthdate);
             }
 
-            var personIdentifier = p.personIdentifier + " <span class='recent-lozenge'>"+config.messages.recent+"</span>";
+            var identifier = "";
+            if (p.personIdentifier === "") {
+                identifier = p.patientIdentifier;
+            } else {
+                identifier = p.personIdentifier;
+            }
+
+            var identifierLabel = identifier + " <span class='recent-lozenge'>"+config.messages.recent+"</span>";
             var name = p.name;
-            var initialPatient = [personIdentifier, name];
+            var initialPatient = [identifierLabel, name];
             jq.each(attributeTypes, function(key, attributeTypeName){
                 initialPatient.push(p[attributeTypeName]);
             });
@@ -260,14 +267,13 @@ function PersonSearchWidget(configuration){
                     }
                 }
 
-                var personIdentifier = person.personIdentifier || "";
+                var personIdentifier = person.personIdentifier || person.patientIdentifier;
                 if (_.contains(initialPatientUuids, person.uuid)) {
                     personIdentifier += " <span class='recent-lozenge'>" + config.messages.recent + "</span>";
                 }
                 if (person.onlyInMpi === true) {
                     personIdentifier += " <span class='recent-lozenge'>" + config.messages.onlyInMpi + "</span>";
                 }
-
                 var personName = person.personName || "";
 
                 var age = person.age;
