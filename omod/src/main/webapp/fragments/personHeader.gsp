@@ -52,24 +52,26 @@
                 <% } %>
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
-                    <span class="gender-age">
-                        <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
-                        <span>
+                    <% if (person.gender || person.birthdate) { %>
+                        <span class="gender-age">
+                            <% if (person.gender) { %>
+                                <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
+                            <% } %>
                             <% if (person.birthdate) { %>
-                                <% if (person.age > 0) { %>
+                                <span>
+                                    <% if (person.age > 0) { %>
                                     ${ui.message("coreapps.ageYears", person.age)}
-                                <% } else if (person.ageInMonths > 0) { %>
+                                    <% } else if (person.ageInMonths > 0) { %>
                                     ${ui.message("coreapps.ageMonths", person.ageInMonths)}
-                                <% } else { %>
+                                    <% } else { %>
                                     ${ui.message("coreapps.ageDays", person.ageInDays)}
-                                <% } %>
-                                (<% if (person.birthdateEstimated) { %>~<% } %>
-                                ${ ui.formatDatePretty(person.birthdate) })
-                            <% } else { %>
-                                ${ui.message("coreapps.unknownAge")}
+                                    <% } %>
+                                    (<% if (person.birthdateEstimated) { %>~<% } %>
+                                    ${ ui.formatDatePretty(person.birthdate) })
+                                </span>
                             <% } %>
                         </span>
-                    </span>
+                    <% } %>
                     <% if (telephone) { %>
                         <span class="gender-age">
                             <span>${ui.message("cfl.telephone")}:&nbsp;</span>
