@@ -1121,4 +1121,106 @@
             ]]>
         </sql>
     </changeSet>
+
+    <changeSet id="cfl-20200609-16:00" author="Dawid Ruchniewicz">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = '23798bf9-aa32-11ea-9e5e-0242ac160002';
+            </sqlCheck>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name) FROM patientflags_flag WHERE name = 'Decreasing adherence of a patient';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the 'Decreasing adherence of a patient' patient flag and connect with flag tag</comment>
+        <sql>
+            <![CDATA[
+            INSERT INTO patientflags_flag
+            (name, criteria, message, enabled, evaluator, creator, date_created, uuid, priority_id)
+            VALUES('Decreasing adherence',
+            'SELECT adhTrend.patient_id FROM (
+            SELECT adhLev1.patient_id,
+            adhLev1.adh - adhLev2.adh AS adhLevDiff
+            FROM (
+            SELECT sum(text_response = \'YES\') / sum(text_response = \'YES\' OR text_response = \'NO\') adh,
+            mar.patient_id
+            FROM (
+            SELECT * FROM messages_actor_response mar
+            WHERE source_type LIKE \'SCHEDULED_SERVICE_GROUP\') mar
+            JOIN messages_scheduled_service_group mssg ON mar.source_id = mssg.messages_scheduled_service_group_id
+            JOIN messages_scheduled_service mss ON mssg.messages_scheduled_service_group_id = mss.group_id
+            JOIN messages_patient_template mpt ON mss.patient_template_id = mpt.messages_patient_template_id
+            JOIN messages_template mt ON mpt.template_id = mt.messages_template_id
+            WHERE mt.NAME = \'Adherence report daily\'
+            AND mar.answered_time >= (
+            SELECT date_add(now(), interval - (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\') DAY))
+            AND mar.answered_time <= now()
+            OR mt.NAME = \'Adherence report weekly\'
+            AND mar.answered_time >= (
+            SELECT date_add(now(), interval - (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\') DAY))
+            AND mar.answered_time <= now()
+            GROUP BY mar.patient_id) adhLev1
+            LEFT JOIN (
+            SELECT sum(text_response = \'YES\') / sum(text_response = \'YES\' OR text_response = \'NO\') AS adh,
+            mar.patient_id
+            FROM (
+            SELECT * FROM messages_actor_response mar
+            WHERE source_type LIKE \'SCHEDULED_SERVICE_GROUP\') mar
+            JOIN messages_scheduled_service_group mssg ON mar.source_id = mssg.messages_scheduled_service_group_id
+            JOIN messages_scheduled_service mss ON mssg.messages_scheduled_service_group_id = mss.group_id
+            JOIN messages_patient_template mpt ON mss.patient_template_id = mpt.messages_patient_template_id
+            JOIN messages_template mt ON mpt.template_id = mt.messages_template_id
+            WHERE mt.NAME = \'Adherence report daily\'
+            AND mar.answered_time >= (
+            SELECT date_add(now(), interval - (
+            SELECT 2 * (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\')) DAY))
+            AND mar.answered_time <= (
+            SELECT date_add(now(), interval - (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\') DAY))
+            OR mt.NAME = \'Adherence report weekly\'
+            AND mar.answered_time >= (
+            SELECT date_add(now(), interval - (
+            SELECT 2 * (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\')) DAY))
+            AND mar.answered_time <= (
+            SELECT date_add(now(), interval - (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.benchmarkPeriod\') DAY))
+            GROUP BY mar.patient_id) adhLev2
+            ON adhLev1.patient_id = adhLev2.patient_id) adhTrend
+            WHERE adhLevDiff < -1 * (
+            SELECT (
+            SELECT property_value
+            FROM global_property
+            WHERE property = \'messages.cutOffScoreForAdherenceTrend\') / 100)',
+            'Decreasing adherence of a patient',
+            1,
+            'org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator',
+            1,
+            '2020-06-09',
+            '23798bf9-aa32-11ea-9e5e-0242ac160002',
+            (SELECT priority_id FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff'));
+
+            INSERT INTO patientflags_flag_tag
+            (flag_id, tag_id)
+            VALUES ((SELECT flag_id FROM patientflags_flag WHERE uuid = '23798bf9-aa32-11ea-9e5e-0242ac160002'),
+            (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
+            ]]>
+        </sql>
+    </changeSet>
 </databaseChangeLog>
