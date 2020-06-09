@@ -1059,4 +1059,66 @@
             <where>name = "Person identifier"</where>
         </update>
     </changeSet>
+
+    <changeSet id="cfl-20200609-14:02" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="patientflags_flag" />
+            <tableExists tableName="patientflags_flag_tag" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM patientflags_flag WHERE uuid = 'ff94b5da-1962-41c3-8b68-334a75c479a7';
+            </sqlCheck>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name) FROM patientflags_flag WHERE name = 'Incorrect pincode';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added the 'Incorrect pincode' patient flag and connect with flag tag</comment>
+        <sql>
+            <![CDATA[
+            INSERT INTO patientflags_flag
+            (name, criteria, message, enabled, evaluator, creator, date_created, uuid, priority_id)
+            VALUES('Incorrect pincode',
+            'SELECT
+                q.patient_id
+            FROM
+                (
+                SELECT
+                    actor_id as patient_id, text_response, count(*) rn
+                FROM
+                    messages_actor_response mar
+                WHERE
+                    mar.messages_actor_response_id IN (
+                    SELECT
+                        m.messages_actor_response_id
+                    FROM
+                        (
+                        SELECT
+                            m.messages_actor_response_id, m.actor_id, @rn := IF(@prev = m.actor_id, @rn + 1, 1) rn, @prev := m.actor_id
+                        FROM
+                            messages_actor_response m
+                        JOIN (
+                            SELECT
+                                @prev := NULL, @rn := 0 ) AS vars
+                        WHERE
+                            m.text_question = "PIN"
+                        ORDER BY
+                            m.actor_id , m.answered_time DESC) m
+                    WHERE
+                        m.actor_id = mar.actor_id
+                        AND m.rn < 4)
+                GROUP BY
+                    mar.actor_id, mar.text_response) q
+            WHERE
+                q.rn >= 3
+                AND q.text_response = "INVALID"',
+            'Incorrect pincode entered last 3 times', 1, 'org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator',
+            1, '2020-06-09', 'ff94b5da-1962-41c3-8b68-334a75c479a7',
+            (SELECT priority_id FROM patientflags_priority WHERE uuid = '15d23b9b-1dc1-448c-81ce-8c5d191b0fff'));
+
+            INSERT INTO patientflags_flag_tag
+            (flag_id, tag_id)
+            VALUES ((SELECT flag_id FROM patientflags_flag WHERE uuid = 'ff94b5da-1962-41c3-8b68-334a75c479a7'),
+            (SELECT tag_id FROM patientflags_tag WHERE uuid = 'ef1a1b2d-c7a5-44d7-a518-ef78087abb23'));
+            ]]>
+        </sql>
+    </changeSet>
 </databaseChangeLog>
