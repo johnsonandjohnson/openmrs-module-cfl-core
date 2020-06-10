@@ -61,10 +61,10 @@
                                 <span>
                                     <% if (person.age > 0) { %>
                                     ${ui.message("coreapps.ageYears", person.age)}
-                                    <% } else if (person.ageInMonths > 0) { %>
-                                    ${ui.message("coreapps.ageMonths", person.ageInMonths)}
+                                    <% } else if (config.person.ageInMonths > 0) { %>
+                                    ${ui.message("coreapps.ageMonths", config.person.ageInMonths)}
                                     <% } else { %>
-                                    ${ui.message("coreapps.ageDays", person.ageInDays)}
+                                    ${ui.message("coreapps.ageDays", config.person.ageInDays)}
                                     <% } %>
                                     (<% if (person.birthdateEstimated) { %>~<% } %>
                                     ${ ui.formatDatePretty(person.birthdate) })
