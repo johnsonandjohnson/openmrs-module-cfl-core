@@ -15,10 +15,7 @@
         }
 
         .date-container {
-            display: flex;
-            flex-direction: column;
             margin-right: 50px;
-            justify-content: space-between;
         }
 
         .section {
@@ -62,6 +59,10 @@
             color: transparent;
             margin-bottom: -30px;
             display: block;
+        }
+
+        #encounterDate .error {
+            padding-bottom: 30px;
         }
 
         .optional-label {
