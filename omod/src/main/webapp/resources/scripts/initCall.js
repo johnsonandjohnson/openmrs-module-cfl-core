@@ -24,9 +24,12 @@ initCall.createInitCallCreationDialog = function() {
                         emr.successMessage("cfl.initCall.success");
                         initCall.initCallCreationDialog.close();
                     },
-                    error: function() {
+                    error: function(data) {
                         emr.errorMessage("cfl.initCall.failed");
                         initCall.initCallCreationDialog.close();
+                        if (data.status == 403) {
+                            window.location.href = `/${OPENMRS_CONTEXT_PATH}/login.htm`;
+                        }
                     },
                     final: function() {
                         initCall.enableConfirmButton();
