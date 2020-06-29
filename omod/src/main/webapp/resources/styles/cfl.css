@@ -1,0 +1,64 @@
+header {
+    background-color: #00455C;
+    color: white;
+}
+
+header .navbar {
+    height: auto;
+}
+
+header .user-options li.change-location {
+    border: none;
+}
+
+header .user-options li.change-location:hover, header .user-options li.change-location .focus {
+    background: #10708E;
+}
+
+header #session-location {
+    border: 2px solid #10708E;
+}
+
+header a:active, a:hover {
+    text-decoration: none;
+}
+
+#app header {
+    background-color: #00455C;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+}
+
+#app header .logo {
+    max-height: initial;
+    margin: 4px;
+}
+
+#app header .user-options {
+    margin-top: 10px;
+    margin-right: 0;
+}
+
+#app header .location-container {
+    border: 2px solid #10708E;
+    padding: 0 20px;
+    font-size: 0.8em;
+}
+
+#app header .location-container li {
+    width: 30%;
+    margin: 0 10px !important;
+}
+
+#app header #user-account-menu {
+    position: absolute;
+    background: #5B57A6;
+    border-radius: 4px;
+}
+
+#app header #user-account-menu li {
+    margin: 10px;
+    padding: 0;
+}
