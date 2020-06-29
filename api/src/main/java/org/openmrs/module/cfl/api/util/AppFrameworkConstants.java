@@ -69,6 +69,8 @@ public final class AppFrameworkConstants {
 
     public static final String REFAPP_CAPTURE_VITALS_APP = "referenceapplication.vitals";
 
+    public static final String COREAPPS_DATA_MANAGEMENT_APP = "coreapps.dataManagementApp";
+
     /**
      * The list of app which should be disabled
      */
@@ -76,7 +78,7 @@ public final class AppFrameworkConstants {
             SCHEDULING_APPOINTMENT_APP, REQUEST_APPOINTMENT_APP, COREAPPS_CONDITIONLIST_APP,
             COREAPPS_LATEST_OBS_FOR_CONCEPT_LIST_APP, COREAPPS_OBS_ACROSS_ENCOUNTERS_APP, COREAPPS_OBS_GRAPH_APP,
             COREAPPS_RELATIONSHIPS_APP, COREAPPS_MOST_RECENT_VITALS_APP, COREAPPS_ACTIVE_VISITS_APP,
-            REFAPP_REGISTER_PATIENT_APP, REFAPP_CAPTURE_VITALS_APP);
+            REFAPP_REGISTER_PATIENT_APP, REFAPP_CAPTURE_VITALS_APP, COREAPPS_DATA_MANAGEMENT_APP);
 
     public static final List<String> CFL_ADDITIONAL_MODIFICATION_APP_IDS = Arrays.asList(
             CFL_PATIENT_DASHBOARD_IMPROVEMENTS_APP, CFL_RELATIONSHIPS_APP, CFL_LATESTOBSFORCONCEPTLIS_APP);

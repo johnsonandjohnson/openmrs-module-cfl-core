@@ -1223,4 +1223,20 @@
             ]]>
         </sql>
     </changeSet>
+
+    <changeSet id="cfl-20200624-13:00" author="Dawid Ruchniewicz">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="relationship_type"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM relationship_type WHERE uuid = 'acec590b-825e-45d2-876a-0028f174903d';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Retired all unnecessary relationship types</comment>
+
+        <update tableName="relationship_type">
+            <column name="retired" value="1"/>
+            <where>uuid != 'acec590b-825e-45d2-876a-0028f174903d'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
