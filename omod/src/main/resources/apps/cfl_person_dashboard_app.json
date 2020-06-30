@@ -8,7 +8,7 @@
         "id": "cfl.personDashboard.outgoing",
         "extensionPointId": "personDashboard.overallActions",
         "type": "script",
-        "order": 1,
+        "order": 4,
         "label": "cfl.initcall.button",
         "icon":"icon-phone-sign",
         "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;)"
@@ -28,7 +28,7 @@
         "label": "cfl.caregiverProfile.label",
         "url": "cfl/editPersonSection.page?personId={{personId}}&sectionId=demographics&appId=cfl.registerCaregiver",
         "icon": "icon-pencil",
-        "order": 2,
+        "order": 1,
         "requiredPrivilege": "App: registrationapp.registerPatient"
       },
       {
@@ -37,7 +37,7 @@
         "type": "link",
         "label": "messages.title",
         "icon": "icon-comment",
-        "order": 3,
+        "order": 2,
         "url": "owa/messages/index.html#/messages/person/{{personId}}&patientUuid={{person.uuid}}"
       },
       {
@@ -47,7 +47,7 @@
         "label": "cfl.deletePerson.label",
         "script": "delPerson.showDeletePersonCreationDialog(&#x27;{{person.uuid}}&#x27;)",
         "icon": "icon-remove",
-        "order": 4,
+        "order": 3,
         "requiredPrivilege": "Delete People"
       }
     ]

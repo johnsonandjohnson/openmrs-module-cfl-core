@@ -30,7 +30,7 @@
         "label": "cfl.patientProfile.label",
         "url": "registrationapp/editSection.page?patientId={{patient.patientId}}&sectionId=demographics&appId=cfl.registerPatient",
         "icon": "icon-pencil",
-        "order": 2,
+        "order": 1,
         "requiredPrivilege": "App: registrationapp.registerPatient"
       }
     ],
