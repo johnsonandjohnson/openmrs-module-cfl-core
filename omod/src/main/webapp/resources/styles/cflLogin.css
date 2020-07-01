@@ -1,0 +1,83 @@
+#body-wrapper.custom-body-wrapper{
+    background-color: #E7F6FB;
+}
+
+#title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #10708E;
+}
+
+#main-content {
+    height: 250px;
+    background-color: white;
+    border-radius: 3px;
+    padding-top: 55px;
+    min-width: 930px;
+}
+
+#log-in-wrapper {
+    margin-bottom: 5px;
+}
+
+#username {
+    border-radius: 0;
+    margin-right: 30px;
+}
+
+.username-block {
+    margin-left: 20px;
+    margin-right: 30px;
+}
+
+#password {
+    border-radius: 0;
+}
+
+.log-in-header-text {
+    font-weight: bold;
+    margin-left: 15px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    color: #2B3640;
+}
+
+.field-set-wrapper {
+    border: 0px;
+}
+
+.credential-label {
+    font-size: 16px;
+    color: #2B3640;
+}
+
+.form-control.credential-input:focus {
+    border-color: #10708E;
+    border-width: 2px;
+    box-shadow: none;
+}
+
+.header {
+    background-color: #00455C;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+}
+
+#login-form p input.login-input {
+    margin-top: -10px;
+    background: -webkit-linear-gradient(bottom, #10708E 15%, #00455C 97%);
+    color: white;
+}
+
+#login-form p input.login-input:hover {
+    margin-top: -10px;
+    background: -webkit-linear-gradient(bottom, #00455C, #00455C);
+    color: white;
+    border-width: 1px;
+}
+
+#login-form input.form-control-lg.credential-input {
+    width: 420px;
+}

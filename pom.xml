@@ -53,6 +53,8 @@
         <idgenVersion>4.3</idgenVersion>
         <eventVersion>2.6.0</eventVersion>
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
+        <referenceapplication>2.10.0</referenceapplication>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
     </properties>
 
     <dependencyManagement>
@@ -227,6 +229,18 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>metadatadeploy-api</artifactId>
                 <version>${metadatadeployVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>referenceapplication-omod</artifactId>
+                <version>${referenceapplication}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
