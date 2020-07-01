@@ -62,3 +62,13 @@ header a:active, a:hover {
     margin: 10px;
     padding: 0;
 }
+
+#apps a {
+    background: -webkit-linear-gradient(bottom, #E7F6FB, white);
+    color: #00455C;
+}
+
+#tasks a {
+    background: -webkit-linear-gradient(bottom, #E7F6FB, white);
+    color: #00455C;
+}
