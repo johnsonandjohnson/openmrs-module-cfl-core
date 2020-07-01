@@ -23,6 +23,10 @@ header a:active, a:hover {
     text-decoration: none;
 }
 
+.navbar-nav {
+    color: #FFF !important;
+}
+
 #app header {
     background-color: #00455C;
     padding-bottom: 8px;
@@ -52,15 +56,75 @@ header a:active, a:hover {
     margin: 0 10px !important;
 }
 
-#app header #user-account-menu {
-    position: absolute;
-    background: #5B57A6;
-    border-radius: 4px;
+header #user-account-menu li a:hover, .location-container li.selected,
+    .location-container li:hover, #session-location li:hover, #session-location li.selected {
+    background-color: #10708E;
+    color: #FFF;
 }
 
-#app header #user-account-menu li {
+header #user-account-menu {
+    position: absolute;
+    background: #FFF;
+    color: #10708E;
+    border: 2px solid #10708E;
+    border-radius: 0;
+    padding: 5px 10px 5px 10px;
+}
+
+header #user-account-menu li {
     margin: 10px;
     padding: 0;
+}
+
+header #user-account-menu li a {
+    padding: 5px;
+    background: #FFF;
+    color: #10708E;
+}
+
+header .location-container li, #session-location li  {
+    color: #10708E;
+}
+
+.cfl-dialog-header {
+    background: #00455C;
+}
+
+.dialog .dialog-header {
+    background: #00455C;
+}
+
+.patient-header {
+    margin: -10px -15px 10px -15px;
+}
+
+.patient-header-container {
+    margin: 5px 0px 10px 0px;
+}
+
+.patient-header-container .patient-header {
+    margin: 0;
+}
+
+
+.patient-header, .patient-header-container {
+    background: #E7F6FB;
+    border-bottom: 2px solid #C6ECF9;
+}
+
+.patient-header h1 {
+    color: #2B3640;
+}
+
+.patient-header .identifiers em,
+    .patient-header-container .patient-header .identifiers em {
+    color: #2B3640;
+    text-align: right;
+}
+
+.patient-header .identifiers span,
+    .patient-header-container .patient-header .identifiers .identifiers-number span {
+    background: #2B3640;
 }
 
 #apps a {

@@ -46,17 +46,6 @@
                 url: "${ ui.urlBind("/" + contextPath + config.dashboardUrl, [ patientId: patient.patient.id ] ) }"
             });
         })
-        jq("#patient-header-contactInfo").click(function (){
-            var contactInfoDialogDiv = jq("#contactInfoContent");
-            if (contactInfoDialogDiv.hasClass('hidden')) {
-                contactInfoDialogDiv.removeClass('hidden');
-                jq(this).addClass('expanded');
-            } else {
-                contactInfoDialogDiv.addClass('hidden');
-                jq(this).removeClass('expanded');
-            }
-            return false;
-        });
     })
 </script>
 
@@ -106,12 +95,6 @@
                                 <%= ui.includeFragment("appui", "extensionPoint", [ id: "patientHeader.editPatientDemographics", contextModel: appContextModel ]) %>
                             </small>
                         </span>
-                        <a href="#" id="patient-header-contactInfo" class="contact-info-label">
-                            <span id="coreapps-showContactInfo" class="show">${ui.message("coreapps.patientHeader.showcontactinfo")}</span>
-                            <i class="toggle-icon icon-caret-down small"></i>
-                            <span class="hide">${ui.message("coreapps.patientHeader.hidecontactinfo")}</span>
-                            <i class="toggle-icon icon-caret-up small"></i>
-                        </a>
                     </span>
                     <% if (telephone) { %>
                         <span class="gender-age">
@@ -126,10 +109,6 @@
                 <% firstLineFragments.each { %>
                 ${ ui.includeFragment(it.extensionParams.provider, it.extensionParams.fragment, [patient: config.patient])}
                 <% } %>
-            </div>
-
-            <div class="hidden" id="contactInfoContent" class="contact-info-content">
-                ${ ui.includeFragment("coreapps", "patientdashboard/contactInfoInline", [ patient: config.patient, contextModel: appContextModel ]) }
             </div>
         </h1>
 

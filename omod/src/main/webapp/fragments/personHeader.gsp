@@ -14,17 +14,6 @@
                 url: "${ ui.urlBind("/" + contextPath + config.dashboardUrl, [ patientId: person.uuid ] ) }"
             });
         })
-        jq("#patient-header-contactInfo").click(function (){
-            var contactInfoDialogDiv = jq("#contactInfoContent");
-            if (contactInfoDialogDiv.hasClass('hidden')) {
-                contactInfoDialogDiv.removeClass('hidden');
-                jq(this).addClass('expanded');
-            } else {
-                contactInfoDialogDiv.addClass('hidden');
-                jq(this).removeClass('expanded');
-            }
-            return false;
-        });
     })
 </script>
 

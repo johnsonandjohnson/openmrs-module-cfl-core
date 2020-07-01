@@ -16,14 +16,6 @@
         "requiredPrivilege":"App: registrationapp.registerPatient"
       },
       {
-        "id": "cfl.registrationSummary.includeFragments",
-        "extensionPointId": "patientDashboard.includeFragments",
-        "extensionParams": {
-          "provider": "cfl",
-          "fragment": "includeFragments/disableLegacyPatientEdit"
-        }
-      },
-      {
         "id": "cfl.patientProfile",
         "extensionPointId": "patientDashboard.overallActions",
         "type": "link",
