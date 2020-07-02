@@ -136,3 +136,9 @@ header .location-container li, #session-location li  {
     background: -webkit-linear-gradient(bottom, #E7F6FB, white);
     color: #00455C;
 }
+
+#content h4 {
+    color: #A34A3D;
+    margin-left: 15px;
+    font-weight: bold;
+}
