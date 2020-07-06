@@ -142,3 +142,37 @@ header .location-container li, #session-location li  {
     margin-left: 15px;
     font-weight: bold;
 }
+
+#content .info-body {
+    background-color: #E7F6FB;
+}
+
+.dashboard .info-header {
+    color: #00455C;
+    border-bottom: 6px solid #00455C;
+}
+
+.dashboard .info-header i {
+    color: #00455C;
+}
+
+.dashboard .info-header h3 {
+    color: #00455C;
+    text-transform: uppercase;
+}
+
+.dashboard .action-section ul {
+    background-color: #00455C;
+}
+
+.dashboard .action-section h3:before {
+    font-family: "FontAwesome";
+    content: "\f013";
+    position: absolute;
+    margin-left: -17px;
+}
+
+.dashboard .action-section h3 {
+    margin-left: 15px;
+}
+
