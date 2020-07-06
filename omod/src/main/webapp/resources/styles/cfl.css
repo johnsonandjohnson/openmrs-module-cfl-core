@@ -236,3 +236,34 @@ header .location-container li, #session-location li  {
     background-color: #E7F6FB;
 }
 
+#breadcrumbs a i, #breadcrumbs svg {
+    color: #51606E;
+}
+
+#breadcrumbs a i:hover, #breadcrumbs a svg:hover {
+    color:  #2B3640;
+}
+
+#breadcrumbs .icon-chevron-right, #breadcrumbs .breadcrumb-delimiter svg {
+    color: #2B3640 !important;
+}
+
+#breadcrumbs a, #breadcrumbs a:link, #breadcrumbs a:visited {
+    color: #51606E;
+}
+
+#breadcrumbs a:hover, #breadcrumbs a:link:hover, #breadcrumbs a:visited:hover {
+    color: #2B3640;
+}
+
+#breadcrumbs li, #breadcrumbs .breadcrumb-last-item {
+    color: #00455C;
+}
+
+#breadcrumbs .breadcrumb-last-item {
+    font-family: "OpenSansBold";
+}
+
+#breadcrumbs {
+    font-size: 16px;
+}
