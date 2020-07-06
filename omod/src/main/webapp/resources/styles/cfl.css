@@ -127,12 +127,12 @@ header .location-container li, #session-location li  {
     background: #2B3640;
 }
 
-#apps a {
+#apps a.button {
     background: -webkit-linear-gradient(bottom, #E7F6FB, white);
     color: #00455C;
 }
 
-#tasks a {
+#tasks a.button {
     background: -webkit-linear-gradient(bottom, #E7F6FB, white);
     color: #00455C;
 }
@@ -174,5 +174,65 @@ header .location-container li, #session-location li  {
 
 .dashboard .action-section h3 {
     margin-left: 15px;
+}
+
+#app .panel-body a.button {
+    background: -webkit-linear-gradient(bottom, #E7F6FB, white);
+    color: #00455C;
+}
+
+#app .ReactTable .rt-tbody .rt-tr .rt-td .rt-th {
+    border: #E3EBF2;
+}
+
+#app .ReactTable .rt-thead.-header {
+    background-color: #E7F6FB !important;
+    color: #10708E;
+    font-weight: bold;
+}
+
+#app .ReactTable .rt-tr.-odd {
+    background-color: #F7FDFF !important;
+    color: #2B3640;
+}
+
+#app .ReactTable .rt-tr.-even {
+    background-color: white !important;
+    color: #2B3640;
+}
+
+#app .ReactTable .rt-tr:hover {
+    background-color: #E7F6FB !important;
+}
+
+#body-wrapper table td tr th{
+    border: #E3EBF2;
+}
+
+#body-wrapper table thead th {
+    background: none;
+    background-color: #E7F6FB;
+}
+
+#body-wrapper table tbody tr {
+    background-color: #F7FDFF;
+}
+
+#body-wrapper table tbody tr.odd {
+    background-color: #F7FDFF;
+}
+
+#body-wrapper table tbody tr.even {
+    background-color: white;
+}
+
+#body-wrapper table tbody tr:hover {
+    background-color: #E7F6FB !important;
+    color: black !important;
+}
+
+.ui-state-default {
+    background: none;
+    background-color: #E7F6FB;
 }
 
