@@ -125,6 +125,10 @@ select:disabled, .form-group div.disabled input {
     margin: -10px -15px 10px -15px;
 }
 
+.patient-header h1 {
+    font-weight: normal !important;
+}
+
 .patient-header-container {
     margin: 5px 0px 10px 0px;
 }
@@ -230,6 +234,17 @@ select:disabled, .form-group div.disabled input {
 
 #app .ReactTable .rt-tr:hover {
     background-color: #E7F6FB !important;
+}
+
+.body-wrapper h1, .body-wrapper h2, #body-wrapper h2 {
+    color: #10708E;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.body-wrapper, #body-wrapper {
+    color: #2B3640;
+    font-size: 16px;
 }
 
 #body-wrapper table td tr th{
