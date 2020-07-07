@@ -163,8 +163,18 @@ select:disabled, .form-group div.disabled input {
     color: #00455C;
 }
 
+#apps a.button:hover {
+    background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
+    color: #00455C;
+}
+
 #tasks a.button {
     background: -webkit-linear-gradient(bottom, #E7F6FB, white);
+    color: #00455C;
+}
+
+#tasks a.button:hover {
+    background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
     color: #00455C;
 }
 
@@ -209,6 +219,11 @@ select:disabled, .form-group div.disabled input {
 
 #app .panel-body a.button {
     background: -webkit-linear-gradient(bottom, #E7F6FB, white);
+    color: #00455C;
+}
+
+#app .panel-body a.button:hover {
+    background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
     color: #00455C;
 }
 
@@ -435,4 +450,9 @@ ul#formBreadcrumb li.doing ul li.focused {
 
 #form-entry .nav-pills > li.active > a:focus {
     background-color: #00455C;
+}
+
+.simple-form-ui #demographics h3 {
+    color: #2B3640;
+    font-size: 16px;
 }
