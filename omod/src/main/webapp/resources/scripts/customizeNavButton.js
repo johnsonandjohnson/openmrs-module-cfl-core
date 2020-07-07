@@ -3,7 +3,6 @@ jq(document).ready(function () {
         "general.next",
         "general.previous"
     ], () => customizeNavButtons());
-
 });
 
 function customizeNavButtons() {

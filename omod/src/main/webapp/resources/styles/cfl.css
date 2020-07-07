@@ -96,21 +96,53 @@ label {
     box-shadow: none;
 }
 
+.select__control {
+    border: 1px solid #AEC2D5;
+    border-radius: 0;
+    margin-top: 2px;
+}
+
+.select__control--is-focused, .select__control:hover {
+    border: 2px solid #10708E !important;
+    box-shadow: none;
+}
+
+.select__control--is-focused input:focus {
+    outline: 0px !important;
+}
+
+input.ant-time-picker-panel-input:focus {
+    outline: 0px !important;
+}
+
+.ant-time-picker-input:hover {
+    border: 2px solid #10708E !important;
+    outline: 0px !important;
+}
+
+#allergy-comment, #sputum-date, #diagnosis-search, .vital-parameter-container, .section #note,
+    .overview-visits .search-bar input {
+    margin-left: 3px;
+}
+
 input[type=text], input[type=number], select, textarea {
     outline: 1px solid #AEC2D5;
     border-radius: 0;
+    border: 0px;
 }
 
 input:focus, textarea:focus,
 select:focus {
-    outline: 2px solid #10708E !important;
+    outline: 3px solid #10708E !important;
     box-shadow: none;
+    border: none !important;
 }
 
 input[type=text]:disabled, input[type=number]:disabled, input[type=checkbox]:disabled,
 select:disabled, .form-group div.disabled input {
     outline: 1px solid #AEC2D5;
     background-color: #E3EBF2;
+    border: 0px;
 }
 
 .cfl-dialog-header {
@@ -424,7 +456,7 @@ select:disabled, .form-group div.disabled input {
 }
 
 .nav-button:hover {
-    background: -webkit-linear-gradient( #E7F6FB,  #E7F6FB);
+    background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
     color: #2B3640;
 }
 
