@@ -86,6 +86,33 @@ header .location-container li, #session-location li  {
     color: #10708E;
 }
 
+label {
+    font-size: 16px !important;
+    color: #2B3640;
+}
+
+#patient-search-form input {
+    margin: 2px;
+    box-shadow: none;
+}
+
+input[type=text], input[type=number], select, textarea {
+    outline: 1px solid #AEC2D5;
+    border-radius: 0;
+}
+
+input:focus, textarea:focus,
+select:focus {
+    outline: 2px solid #10708E !important;
+    box-shadow: none;
+}
+
+input[type=text]:disabled, input[type=number]:disabled, input[type=checkbox]:disabled,
+select:disabled, .form-group div.disabled input {
+    outline: 1px solid #AEC2D5;
+    background-color: #E3EBF2;
+}
+
 .cfl-dialog-header {
     background: #00455C;
 }
