@@ -384,9 +384,10 @@ select:disabled, .form-group div.disabled input {
 
 #app .body-wrapper .add-btn {
     background: -webkit-linear-gradient(bottom, #10708E 15%, #00455C 97%);
-    border: #00455C;
+    border-color: #00455C;
     color: white;
     font-size: 16px;
+    margin-right: 1px;
 }
 
 #app .body-wrapper .add-btn:hover {
@@ -397,9 +398,10 @@ select:disabled, .form-group div.disabled input {
 
 #app .sec-btn {
     background: -webkit-linear-gradient(top, #ffffff, #e7f6fb);
-    border: #00455C;
+    border-color: #C6ECF9;
     color: #2B3640;
     font-size: 16px;
+    margin-right: 1px;
 }
 
 #app .sec-btn:hover {
@@ -520,4 +522,17 @@ ul#formBreadcrumb li.doing ul li.focused {
 .simple-form-ui #demographics h3 {
     color: #2B3640;
     font-size: 16px;
+}
+
+.body-wrapper h5 {
+    color: #00455C;
+    font-size: 16px;
+}
+
+#app .panel-body .pull-right .sec-btn {
+    margin-right: 7px;
+}
+
+#app .panel-body form .sec-btn {
+    margin-right: 1px;
 }
