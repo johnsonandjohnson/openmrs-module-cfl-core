@@ -457,9 +457,11 @@ select:disabled, .form-group div.disabled input {
 
 .nav-button {
     background: -webkit-linear-gradient(top, #ffffff, #e7f6fb);
+    border-color: #C6ECF9 !important;
     color: #2B3640;
     font-size: 16px;
     margin-top: 5px;
+    padding: 6px 12px;
 }
 
 .nav-button:hover {
