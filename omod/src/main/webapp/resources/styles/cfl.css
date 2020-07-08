@@ -587,3 +587,8 @@ ul#formBreadcrumb li.doing ul li.focused {
     background: -webkit-linear-gradient(bottom, #00455C, #00455C);
     color: white;
 }
+
+#body-wrapper #content #registration-section-form #confirmation #confirmationQuestion #registration-submit {
+    background: linear-gradient(180deg, rgba(161, 208, 48, 1) 35%, rgba(136, 175, 40, 1) 100%);
+    border-color: #88af28;
+}
