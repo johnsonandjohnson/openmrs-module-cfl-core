@@ -136,6 +136,10 @@ input[type=text], input[type=number], select, textarea {
     border: 0px !important;
 }
 
+#demographics select {
+    padding: 4px;
+}
+
 input:focus, textarea:focus,
 select:focus {
     outline: 2px solid #10708E !important;
