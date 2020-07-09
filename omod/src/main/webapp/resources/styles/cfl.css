@@ -133,12 +133,7 @@ input.ant-time-picker-panel-input:focus {
 input[type=text], input[type=number], select, textarea {
     outline: 1px solid #AEC2D5;
     border-radius: 0;
-    border: 0px;
-}
-
-input[type=text], input[type=number] {
-    padding-bottom: 6px;
-    padding-top: 6px;
+    border: 0px !important;
 }
 
 input:focus, textarea:focus,
