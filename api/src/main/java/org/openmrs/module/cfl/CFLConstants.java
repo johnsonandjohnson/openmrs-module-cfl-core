@@ -32,7 +32,7 @@ public final class CFLConstants {
     public static final String TELEPHONE_ATTRIBUTE_NAME = "Telephone Number";
 
     public static final String DISABLED_CONTROL_KEY = "cfl.shouldDisableAppsAndExtensions";
-    public static final String DISABLED_CONTROL_DEFAULT_VALUE = "false";
+    public static final String DISABLED_CONTROL_DEFAULT_VALUE = "true";
     public static final String DISABLED_CONTROL_DESCRIPTION = "Used to determine if the module should disable "
             + "specified apps and extensions on module startup. Possible values: true/false. Note: the server need to "
             + "be restart after change this GP and in order to revert those changes you need to manually clean the "

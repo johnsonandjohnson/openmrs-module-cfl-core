@@ -1239,4 +1239,33 @@
             <where>uuid != 'acec590b-825e-45d2-876a-0028f174903d'</where>
         </update>
     </changeSet>
+
+    <changeSet id="cfl-20200708-13:00" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="cfl_callflows"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM cfl_callflows</sqlCheck>
+        </preConditions>
+        <comment>
+            Inserts the Call Flows designs into the database.
+        </comment>
+        <sqlFile encoding="UTF-8"
+                 path="mysql/callflows.sql"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="cfl-20200708-13:01" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM openmrs.user_role
+                WHERE role='Privilege Level: Full' AND user_id=1</sqlCheck>
+        </preConditions>
+        <comment>
+            Assign the 'Privilege Level: Full' role to the admin user (id = 1).
+        </comment>
+        <sql>
+            INSERT INTO openmrs.user_role
+            (user_id, `role`)
+            VALUES(1, 'Privilege Level: Full');
+        </sql>
+    </changeSet>
 </databaseChangeLog>
