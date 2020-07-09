@@ -136,9 +136,14 @@ input[type=text], input[type=number], select, textarea {
     border: 0px;
 }
 
+input[type=text], input[type=number] {
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
 input:focus, textarea:focus,
 select:focus {
-    outline: 3px solid #10708E !important;
+    outline: 2px solid #10708E !important;
     box-shadow: none;
     border: none !important;
 }
@@ -591,4 +596,8 @@ ul#formBreadcrumb li.doing ul li.focused {
 #body-wrapper #content #registration-section-form #confirmation #confirmationQuestion #registration-submit {
     background: linear-gradient(180deg, rgba(161, 208, 48, 1) 35%, rgba(136, 175, 40, 1) 100%);
     border-color: #88af28;
+}
+
+.admin-settings .panel-body {
+    padding: 0;
 }
