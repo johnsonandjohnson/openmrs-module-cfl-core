@@ -32,7 +32,7 @@
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>CfL_Concept_Dictionary</filenameBase>
-            <groupUuid>3ae16de4-c227-11ea-95ad-0242ac150002</groupUuid>
+            <groupUuid>c8b357b9-c28b-11ea-9b7b-0242ac160002</groupUuid>
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>

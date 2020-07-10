@@ -224,7 +224,7 @@
             flex-direction: row;
         }
 
-        .code {
+        .ui-menu-item .code {
             display: none;
         }
     </style>
