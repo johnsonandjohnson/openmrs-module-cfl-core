@@ -95,5 +95,10 @@ public final class CFLConstants {
     public static final String PERSON_LOCATION_ATTRIBUTE_DESCRIPTION = "Specifies attribute name used to store " +
             "information about person localization";
 
+    public static final String CONDITION_LIST_CLASSES_KEY = "coreapps.conditionListClasses";
+    public static final String CONDITION_LIST_CLASSES_DEFAULT_VALUE = "d9cab7ff-d2ed-42b2-a2f2-64e677370ff5";
+    public static final String CONDITION_LIST_CLASSES_DESCRIPTION = "List of concept uuid's which limits the answers " +
+            "for condition list";
+
     private CFLConstants() { }
 }

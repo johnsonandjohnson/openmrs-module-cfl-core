@@ -223,6 +223,10 @@
             display: flex;
             flex-direction: row;
         }
+
+        .code {
+            display: none;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -467,7 +471,7 @@
             <span>Diagnoses</span>
         </h3>
         <div id="data-collection">
-            <encounterDiagnoses selectedDiagnosesTarget="#encounter-diagnoses-target"/>
+            <encounterDiagnoses selectedDiagnosesTarget="#encounter-diagnoses-target" diagnosisSets="aa4d89b0-b0cf-4b68-9432-d0352d0be2c9" />
         </div>
 
         <div id="encounter-diagnoses-target">
