@@ -408,7 +408,7 @@ select:disabled, .form-group div.disabled input {
 
 #app .body-wrapper .add-btn:hover {
     background: -webkit-linear-gradient(#00455C, #00455C);
-    border: #00455C;
+    border-color: #00455C;
     color: white;
 }
 
@@ -422,7 +422,7 @@ select:disabled, .form-group div.disabled input {
 
 #app .sec-btn:hover {
     background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
-    border: #00455C;
+    border-color: #C6ECF9;
     color: #2B3640;
 }
 
@@ -552,8 +552,18 @@ ul#formBreadcrumb li.doing ul li.focused {
     margin-right: 7px;
 }
 
+#app .panel-body .pull-right .sec-btn:hover {
+    margin-right: 7px;
+    border-color: #C6ECF9;
+}
+
 #app .panel-body form .sec-btn {
     margin-right: 1px;
+}
+
+#app .panel-body form .sec-btn:hover {
+    margin-right: 1px;
+    border-color: #C6ECF9;
 }
 
 #body-wrapper #content.container-fluid button.confirm {
@@ -597,6 +607,95 @@ ul#formBreadcrumb li.doing ul li.focused {
     border-color: #88af28;
 }
 
+#body-wrapper #content #registration-section-form #confirmation #confirmationQuestion #registration-submit:hover {
+    background: linear-gradient(rgba(136, 175, 40, 1), rgba(136, 175, 40, 1));
+    color: white;
+}
+
 .admin-settings .panel-body {
     padding: 0;
+}
+
+#body-wrapper #content.container-fluid #manage-system-settings button.confirm {
+    background: linear-gradient(180deg, rgba(161, 208, 48, 1) 35%, rgba(136, 175, 40, 1) 100%);
+    border-color: #88af28;
+    font-size: 16px;
+}
+
+#body-wrapper #content.container-fluid #manage-system-settings button.confirm:hover {
+    background: linear-gradient(rgba(136, 175, 40, 1), rgba(136, 175, 40, 1));
+    color: white;
+}
+
+#body-wrapper #content.container-fluid #manage-system-settings button.cancel {
+    background: linear-gradient(180deg, rgba(255, 102, 102, 1) 28%, rgba(255, 61, 61, 1) 100%);
+    font-size: 16px;
+    border-color: #ff3d3d;
+}
+
+#body-wrapper #content.container-fluid #manage-system-settings button.cancel:hover {
+    background: linear-gradient(#d9534f, #d9534f);
+}
+
+#body-wrapper #content.container-fluid .dialog-content button.confirm {
+    background: linear-gradient(180deg, rgba(161, 208, 48, 1) 35%, rgba(136, 175, 40, 1) 100%);
+    border-color: #88af28;
+    font-size: 16px;
+}
+
+#body-wrapper #content.container-fluid .dialog-content button.confirm:hover {
+    background: linear-gradient(rgba(136, 175, 40, 1), rgba(136, 175, 40, 1));
+    color: white;
+}
+
+#app .body-wrapper .accordion.border {
+    border: 1px #C6ECF9 solid;
+    border-radius: 0px;
+}
+
+#app .body-wrapper .accordion .content.open {
+    background-color: #F7FDFF;
+    border: 1px #C6ECF9 solid;
+    border-radius: 0px;
+}
+
+#app .body-wrapper .accordion.border .content.close {
+    background-color: #E7F6FB;
+    border-radius: 0px;
+    border: none;
+}
+
+#app .body-wrapper .accordion.border .header {
+    background-color: #F7FDFF;
+    border: 1px #C6ECF9 solid;
+    border-radius: 0px;
+}
+
+#app .body-wrapper .accordion.border .header:focus {
+    outline: 0;
+}
+
+#app .body-wrapper .accordion .content.open button {
+    background: -webkit-linear-gradient(top, #ffffff, #e7f6fb);
+    border-color: #C6ECF9;
+    color: #2B3640;
+    font-size: 16px;
+}
+
+#app .body-wrapper .accordion .content.open button:hover {
+    background: -webkit-linear-gradient(#E7F6FB, #E7F6FB);
+    border-color: #C6ECF9;
+    color: #2B3640;
+}
+
+#app .body-wrapper .accordion .content.open form button.confirm {
+    background: linear-gradient(180deg, rgba(161, 208, 48, 1) 35%, rgba(136, 175, 40, 1) 100%);
+    border-color: #88af28;
+    font-size: 16px;
+    color: white;
+}
+
+#app .body-wrapper .accordion .content.open form button.confirm:hover {
+    background: linear-gradient(rgba(136, 175, 40, 1), rgba(136, 175, 40, 1));
+    color: white;
 }
