@@ -1287,4 +1287,22 @@
             <where>property='coreapps.conditionListClasses'</where>
         </delete>
     </changeSet>
+
+    <changeSet id="cfl-2020-07-14-16:00" author="Arkadiusz Lalo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="global_property"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM global_property WHERE property='emrapi.useLegacyDiagnosisService'
+            </sqlCheck>
+        </preConditions>
+
+        <comment>
+            Updates emrapi.useLegacyDiagnosisService property in order to change the default value.
+        </comment>
+
+        <update tableName="global_property">
+            <column name="property_value">true</column>
+            <where>property='emrapi.useLegacyDiagnosisService'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
