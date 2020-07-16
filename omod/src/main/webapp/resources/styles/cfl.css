@@ -130,6 +130,15 @@ input.ant-time-picker-panel-input:focus {
     padding-right: 3px;
 }
 
+#app .ReactTable .-pagination .-pageJump, #app .ReactTable .-pagination .-pageSizeOptions {
+    border: none;
+}
+
+#app .ReactTable .-pagination .-pageJump input, #app .ReactTable .-pagination select {
+    border: 1px solid #AEC2D5 !important;
+    border-radius: 0;
+}
+
 input[type=text], input[type=number], select, textarea {
     outline: 1px solid #AEC2D5;
     border-radius: 0;
@@ -302,14 +311,6 @@ select:disabled, .form-group div.disabled input {
     border: 1px solid #AEC2D5;
     color: #AEC2D5;
     opacity: inherit;
-}
-
-#app .ReactTable .-pagination .-pageJump {
-    border: 1px #AEC2D5 solid;
-}
-
-#app .ReactTable .-pagination .-pageSizeOptions {
-    border: 1px #AEC2D5 solid;
 }
 
 .body-wrapper h1, .body-wrapper h2, #body-wrapper h2 {
