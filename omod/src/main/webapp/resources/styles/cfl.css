@@ -111,6 +111,11 @@ label {
     outline: 0px !important;
 }
 
+#app .select-wrap select {
+    min-height: 34px;
+    min-width: 150px;
+}
+
 input.ant-time-picker-panel-input:focus {
     outline: 0px !important;
 }
@@ -161,6 +166,10 @@ select:disabled, .form-group div.disabled input {
     outline: 1px solid #AEC2D5;
     background-color: #E3EBF2;
     border: 0px;
+}
+
+#default-locale-field {
+    margin-left: 2px;
 }
 
 .cfl-dialog-header {
