@@ -575,18 +575,6 @@ ul#formBreadcrumb li.doing ul li.focused {
     border-color: #C6ECF9;
 }
 
-#body-wrapper #content.container-fluid button.confirm {
-    background: -webkit-linear-gradient(bottom, #10708E 15%, #00455C 97%);
-    border-color: #00455C;
-    color: white;
-    font-size: 16px;
-}
-
-#body-wrapper #content.container-fluid button.confirm:hover {
-    background: -webkit-linear-gradient(bottom, #00455C, #00455C);
-    color: white;
-}
-
 #body-wrapper #content.container-fluid a.button {
     background: -webkit-linear-gradient(bottom, #10708E 15%, #00455C 97%);
     border-color: #00455C;
