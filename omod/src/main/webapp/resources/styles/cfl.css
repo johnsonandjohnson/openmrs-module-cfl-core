@@ -706,6 +706,36 @@ ul#formBreadcrumb li.doing ul li.focused {
     color: white;
 }
 
+#body-wrapper #content.container-fluid button.confirm {
+    background: -webkit-linear-gradient(bottom, #10708E 15%, #00455C 97%);
+    border-color: #00455C;
+    color: white;
+    font-size: 16px;
+}
+
+#body-wrapper #content.container-fluid programstatus button.confirm {
+    background-color: #88af28;
+    background: -webkit-linear-gradient(top, #a1d030, #88af28);
+    border-color: #88af28;
+}
+
+#body-wrapper #content.container-fluid programstatus button.confirm:hover {
+    background-color: #88af28;
+    background: -webkit-linear-gradient(top, #88af28, #88af28);
+}
+
+#body-wrapper #content.container-fluid programstatus button.confirm:disabled {
+    background: #EEE;
+    border: #cccccc 1px solid;
+    color: #CCC;
+    cursor: default;
+}
+
+#body-wrapper #content.container-fluid button.confirm:hover {
+    background: -webkit-linear-gradient(bottom, #00455C, #00455C);
+    color: white;
+}
+
 #body-wrapper #content.container-fluid textarea {
     border: 1px solid #AEC2D5 !important;
     border-radius: 0;
