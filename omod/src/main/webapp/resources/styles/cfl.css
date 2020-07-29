@@ -176,7 +176,7 @@ select:disabled, .form-group div.disabled input {
     background: #00455C;
 }
 
-.dialog .dialog-header {
+.dialog .dialog-header, .modal-dialog .modal-header {
     background: #00455C;
 }
 
