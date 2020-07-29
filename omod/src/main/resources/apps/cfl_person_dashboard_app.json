@@ -14,14 +14,6 @@
         "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;)"
       },
       {
-        "id": "cfl.personDashboard.includeFragments.changeStatus",
-        "extensionPointId": "personDashboard.includeFragments",
-        "extensionParams": {
-          "provider": "messages",
-          "fragment": "patientdashboard/changeStatus"
-        }
-      },
-      {
         "id": "cfl.caregiverProfile",
         "extensionPointId": "personDashboard.overallActions",
         "type": "link",
