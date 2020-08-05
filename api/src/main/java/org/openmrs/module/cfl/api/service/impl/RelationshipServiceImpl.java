@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.Relationship;
@@ -7,6 +8,7 @@ import org.openmrs.RelationshipType;
 import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.cfl.api.dto.RelationshipDTO;
 import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,54 +18,42 @@ import java.util.List;
 public class RelationshipServiceImpl extends BaseOpenmrsService implements RelationshipService {
 
     private static final String VOIDED_REASON = "Voided during update relationships.";
+    private static final String PERSON_A_SUFFIX = "-A";
+    private static final String PERSON_B_SUFFIX = "-B";
 
     private PersonService personService;
 
     /**
-     * Voids the legacy relationships for provided person and create a new one based on types from
-     * {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}.
-     *
-     * @param relationshipsTypes - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} types
-     * @param otherPeopleUUIDs   - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} other people UUIDs
-     * @param person             - related person
-     * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
+     * @see RelationshipService#updatedRelationships(List, Person)
      */
     @Transactional
     @Override
-    public List<Relationship> updatedRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person) {
-        voidOldRelationships(person);
-        return createNewRelationships(relationshipsTypes, otherPeopleUUIDs, person);
+    public List<Relationship> updatedRelationships(List<RelationshipDTO> receivedRelationships, Person person) {
+        List<RelationshipDTO> newRelationshipToCreate = voidOldAndExtractNewRelationship(receivedRelationships, person);
+        return createNewRelationships(newRelationshipToCreate, person);
     }
 
     /**
-     * Creates and saves a new relationships based on types from {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}.
-     *
-     * @param relationshipsTypes - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} types
-     * @param otherPeopleUUIDs   - list of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} other people UUIDs
-     * @param person             - related person which already exists in the database
-     * @return - list of new relationships creates based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO}
+     * @see RelationshipService#createNewRelationships(List, Person)
      */
     @Override
-    public List<Relationship> createNewRelationships(String[] relationshipsTypes, String[] otherPeopleUUIDs, Person person) {
-        List<Relationship> relationships = new ArrayList<Relationship>();
-        for (int i = 0; i < relationshipsTypes.length; i++) {
-            String newType = relationshipsTypes[i];
-            String otherPersonUuid = (i < otherPeopleUUIDs.length) ? otherPeopleUUIDs[i] : null;
+    public List<Relationship> createNewRelationships(List<RelationshipDTO> currentRelationships, Person person) {
+        for (RelationshipDTO relationshipDTO : currentRelationships) {
+            String newType = relationshipDTO.getType();
+            String otherPersonUuid = relationshipDTO.getUuid();
             if (StringUtils.isNotBlank(newType) && StringUtils.isNotBlank(otherPersonUuid)) {
                 String relationshipTypeUUID = getRelationshipTypeUuid(newType);
                 char relationshipDirection = getRelationshipDirection(newType);
-
                 RelationshipType relationshipType = personService.getRelationshipTypeByUuid(relationshipTypeUUID);
                 Person otherPerson = personService.getPersonByUuid(otherPersonUuid);
                 if (relationshipType != null && otherPerson != null) {
                     Relationship relationship = createNewRelationship(person, relationshipDirection, relationshipType,
                             otherPerson);
                     saveRelationship(person, otherPerson, relationship);
-                    relationships.add(relationship);
                 }
             }
         }
-        return relationships;
+        return personService.getRelationshipsByPerson(person);
     }
 
     public void setPersonService(PersonService personService) {
@@ -93,22 +83,10 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
     }
 
     /**
-     * Voids the actual relationships for provided person.
-     *
-     * @param person - a related person
-     */
-    private void voidOldRelationships(Person person) {
-        for (Relationship relationship : personService.getRelationshipsByPerson(person)) {
-            personService.voidRelationship(relationship, VOIDED_REASON);
-            personService.saveRelationship(relationship);
-        }
-    }
-
-    /**
-     * Gets the relationships direction based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} type.
+     * Gets the relationships direction based on {@link RelationshipDTO} type.
      * Last character reveals relationship direction (aIsToB or bIsToA)
      *
-     * @param type - the value of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} type
+     * @param type - the value of {@link RelationshipDTO} type
      * @return - relationship direction
      */
     private char getRelationshipDirection(String type) {
@@ -116,10 +94,10 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
     }
 
     /**
-     * Gets the relationships type UUID based on {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} type.
+     * Gets the relationships type UUID based on {@link RelationshipDTO} type.
      * Remove flag characters at the end (used for relationship direction)
      *
-     * @param type - the value of {@link org.openmrs.module.cfl.api.domain.RelationshipDTO} type
+     * @param type - the value of {@link RelationshipDTO} type
      * @return - relationship type UUID
      */
     private String getRelationshipTypeUuid(String type) {
@@ -138,5 +116,51 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
             throw new APIException("Person A and Person B can't be the same");
         }
         personService.saveRelationship(relationship);
+    }
+
+    /**
+     * Voids relationships which have been removed or changed and returns only those relationship which should be saved.
+     *
+     * @param receivedRelationships - current relationship
+     * @param person - related person
+     * @return - relationships which should be saved
+     */
+    private List<RelationshipDTO> voidOldAndExtractNewRelationship(List<RelationshipDTO> receivedRelationships,
+                                                                   Person person) {
+        List<RelationshipDTO> alreadyExistingRelationships = new ArrayList<RelationshipDTO>();
+        for (Relationship relationship : personService.getRelationshipsByPerson(person)) {
+            RelationshipDTO existing = buildRelationshipDTO(person, relationship);
+            if (receivedRelationships.contains(existing)) {
+                alreadyExistingRelationships.add(existing);
+            } else {
+                personService.voidRelationship(relationship, VOIDED_REASON);
+            }
+        }
+        List<RelationshipDTO> newRelationshipToCreate = (List<RelationshipDTO>) CollectionUtils
+                .subtract(receivedRelationships, alreadyExistingRelationships);
+        return newRelationshipToCreate;
+    }
+
+    /**
+     * Builds {@link RelationshipDTO} based on existing relationship and existing person (required person id).
+     *
+     * @param person - related person used to determine the relationship direction
+     * @param relationship - related relationship
+     * @return - the DTO representation. Returns null if missing person id
+     */
+    private RelationshipDTO buildRelationshipDTO(Person person, Relationship relationship) {
+        RelationshipDTO result = null;
+        if (person.getId() != null) {
+            if (relationship.getPersonA().getId().equals(person.getId())) {
+                result = new RelationshipDTO()
+                        .setUuid(relationship.getPersonB().getUuid())
+                        .setType(relationship.getRelationshipType().getUuid() + PERSON_B_SUFFIX);
+            } else {
+                result = new RelationshipDTO()
+                        .setUuid(relationship.getPersonA().getUuid())
+                        .setType(relationship.getRelationshipType().getUuid() + PERSON_A_SUFFIX);
+            }
+        }
+        return result;
     }
 }

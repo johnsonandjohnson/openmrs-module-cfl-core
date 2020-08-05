@@ -25,6 +25,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.AppDescriptor;
+import org.openmrs.module.cfl.api.dto.RelationshipDTOsBuilder;
 import org.openmrs.module.cfl.api.registration.person.action.AfterPersonCreatedAction;
 import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.openmrs.module.cfl.form.RegisterPersonFormBuilder;
@@ -37,8 +38,8 @@ import org.openmrs.ui.framework.fragment.action.SuccessResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_ACTIONS_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.AFTER_CREATED_URL_PROP;
@@ -115,7 +116,9 @@ public class RegisterPersonFragmentController {
                 && parameterMap.containsKey(OTHER_PERSON_UUID_PROP)) {
             String[] relationshipsTypes = parameterMap.get(RELATIONSHIP_TYPE_PROP);
             String[] otherPeopleUUIDs = parameterMap.get(OTHER_PERSON_UUID_PROP);
-            getCflRelationshipService().createNewRelationships(relationshipsTypes, otherPeopleUUIDs, person);
+            getCflRelationshipService().createNewRelationships(
+                    new RelationshipDTOsBuilder().withRelationshipsTypes(relationshipsTypes)
+                            .withOtherPeopleUUIDs(otherPeopleUUIDs).build(), person);
         }
     }
 

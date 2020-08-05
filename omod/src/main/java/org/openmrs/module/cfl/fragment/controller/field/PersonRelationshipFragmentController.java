@@ -7,7 +7,8 @@ import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.domain.RelationshipDTO;
+import org.openmrs.module.cfl.api.dto.RelationshipDTO;
+import org.openmrs.module.cfl.api.dto.RelationshipDTOsBuilder;
 import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.BindParams;
@@ -15,12 +16,12 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.servlet.http.HttpServletRequest;
 
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.COMMA;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.INITIAL_RELATIONSHIPS_PROP;
@@ -56,8 +57,11 @@ public class PersonRelationshipFragmentController {
             HttpServletRequest request) {
         if (request.getParameterMap().containsKey(RELATIONSHIP_TYPE_PROP)
                 && request.getParameterMap().containsKey(OTHER_PERSON_UUID_PROP)) {
-            getCflRelationshipService().updatedRelationships(request.getParameterValues(RELATIONSHIP_TYPE_PROP),
-                    request.getParameterValues(OTHER_PERSON_UUID_PROP), person);
+            String[] relationshipsTypes = request.getParameterValues(RELATIONSHIP_TYPE_PROP);
+            String[] otherPeopleUUIDs = request.getParameterValues(OTHER_PERSON_UUID_PROP);
+            getCflRelationshipService().updatedRelationships(new RelationshipDTOsBuilder()
+                    .withRelationshipsTypes(relationshipsTypes)
+                    .withOtherPeopleUUIDs(otherPeopleUUIDs).build(), person);
         }
     }
 

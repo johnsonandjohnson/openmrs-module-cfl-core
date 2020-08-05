@@ -1,4 +1,7 @@
-package org.openmrs.module.cfl.api.domain;
+package org.openmrs.module.cfl.api.dto;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 
@@ -37,5 +40,19 @@ public class RelationshipDTO implements Serializable {
     public RelationshipDTO setType(String type) {
         this.type = type;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
