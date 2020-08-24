@@ -5,15 +5,6 @@
     "description": "CFL configuration of person dashboard",
     "extensions": [
       {
-        "id": "cfl.personDashboard.outgoing",
-        "extensionPointId": "personDashboard.overallActions",
-        "type": "script",
-        "order": 4,
-        "label": "cfl.initcall.button",
-        "icon":"icon-phone-sign",
-        "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;)"
-      },
-      {
         "id": "cfl.caregiverProfile",
         "extensionPointId": "personDashboard.overallActions",
         "type": "link",

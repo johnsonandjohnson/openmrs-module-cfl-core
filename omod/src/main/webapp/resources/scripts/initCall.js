@@ -18,7 +18,7 @@ initCall.createInitCallCreationDialog = function() {
         actions: {
             confirm: function() {
                 jq.ajax({
-                    url: `/${OPENMRS_CONTEXT_PATH}/ws/callflows/person/${initCall.personUUID}/out/voxeo-mobile/flows/MainFlow.ccxml?actorType=${initCall.actorType}`,
+                    url: `/${OPENMRS_CONTEXT_PATH}/ws/callflows/person/${initCall.personUUID}/out/${initCall.ivrProvider}/flows/MainFlow.ccxml?actorType=${initCall.actorType}`,
                     type: 'GET',
                     success: function() {
                         emr.successMessage("cfl.initCall.success");
@@ -43,9 +43,10 @@ initCall.createInitCallCreationDialog = function() {
     });
 };
 
-initCall.showInitCallCreationDialog = function(personUUID, actorType) {
+initCall.showInitCallCreationDialog = function(personUUID, actorType, ivrProvider) {
     initCall.personUUID = personUUID;
     initCall.actorType = actorType;
+    initCall.ivrProvider = ivrProvider;
     if (initCall.initCallCreationDialog == null) {
         initCall.createInitCallCreationDialog();
     }

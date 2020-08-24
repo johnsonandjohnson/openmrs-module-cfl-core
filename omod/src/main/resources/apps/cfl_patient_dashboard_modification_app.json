@@ -1,7 +1,7 @@
 [
   {
-    "id":"cfl.patientDashboard.improvements",
-    "description":"Make some additional improvement in the patient dashboard",
+    "id": "cfl.patientDashboard.improvements",
+    "description": "Make some additional improvement in the patient dashboard",
     "extensions": [
       {
         "id": "cfl.patientDashboard.includeFragments.disableVisitActions",
@@ -10,6 +10,60 @@
           "provider": "cfl",
           "fragment": "includeFragments/disableVisitActions"
         }
+      }
+    ]
+  },
+  {
+    "id": "cfl.patientflags",
+    "description": "App related to patientflags functionalities",
+    "extensions": [
+      {
+        "id": "cfl.patientflags.patientDashboard.secondColumnFragments",
+        "extensionPointId": "patientDashboard.secondColumnFragments",
+        "order": -1,
+        "extensionParams": {
+          "provider": "patientflags",
+          "fragment": "patientflagsDashboard"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cfl.allergies",
+    "description": "App related to allergies functionalities",
+    "extensions": [
+      {
+        "id": "cfl.overallActions.allergies",
+        "extensionPointId": "patientDashboard.overallActions",
+        "type": "link",
+        "label": "allergyui.allergies",
+        "icon": "icon-medical",
+        "order": 7,
+        "url": "allergyui/allergies.page?patientId={{patient.uuid}}"
+      },
+      {
+        "id": "cfl.allergies.widget",
+        "extensionPointId": "patientDashboard.firstColumnFragments",
+        "order": 4,
+        "extensionParams": {
+          "provider": "allergyui",
+          "fragment": "allergies"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cfl.conditions",
+    "description": "App related to conditions functionalities",
+    "extensions": [
+      {
+        "id": "cfl.overallActions.conditions",
+        "extensionPointId": "patientDashboard.overallActions",
+        "type": "link",
+        "label": "coreapps.conditionui.conditions",
+        "icon": "icon-diagnosis",
+        "order": 6,
+        "url": "coreapps/conditionlist/manageConditions.page?patientId={{patient.uuid}}"
       },
       {
         "id": "cfl.conditionlist",
@@ -21,24 +75,30 @@
           "provider": "coreapps",
           "fragment": "conditionlist/conditions"
         }
+      }
+    ]
+  },
+  {
+    "id": "cfl.init.call",
+    "description": "App related to init call functionalities",
+    "extensions": [
+      {
+        "id": "cfl.patientDashboard.initCall",
+        "extensionPointId": "patientDashboard.overallActions",
+        "type": "script",
+        "order": 26,
+        "label": "cfl.initcall.button",
+        "icon": "icon-phone-sign",
+        "script": "initCall.showInitCallCreationDialog(&#x27;{{patient.uuid}}&#x27;,&#x27;Patient&#x27;,&#x27;voxeo-mobile&#x27;)"
       },
       {
-        "id": "cfl.allergies",
-        "extensionPointId": "patientDashboard.firstColumnFragments",
+        "id": "cfl.personDashboard.outgoing",
+        "extensionPointId": "personDashboard.overallActions",
+        "type": "script",
         "order": 4,
-        "extensionParams": {
-          "provider": "allergyui",
-          "fragment": "allergies"
-        }
-      },
-      {
-        "id": "cfl.patientflags.patientDashboard.secondColumnFragments",
-        "extensionPointId": "patientDashboard.secondColumnFragments",
-        "order": -1,
-        "extensionParams": {
-          "provider": "patientflags",
-          "fragment": "patientflagsDashboard"
-        }
+        "label": "cfl.initcall.button",
+        "icon":"icon-phone-sign",
+        "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;,&#x27;voxeo-mobile&#x27;)"
       }
     ]
   },
