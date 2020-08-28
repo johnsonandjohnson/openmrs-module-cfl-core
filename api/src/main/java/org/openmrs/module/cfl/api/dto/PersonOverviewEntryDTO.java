@@ -89,8 +89,8 @@ public class PersonOverviewEntryDTO {
 
     /**
      * Convenience method to get this person's first attribute that has a PersonAttributeType.name
-     * equal to <code>attributeName</code>.<br/>
-     * <br/>
+     * equal to <code>attributeName</code>.
+     * <p></p>
      * Returns null if this person has no non-voided {@link PersonAttribute} with the given type
      * name, the given name is null, or this person has no attributes.
      *
