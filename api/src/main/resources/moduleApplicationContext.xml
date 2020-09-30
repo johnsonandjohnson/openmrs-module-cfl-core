@@ -44,6 +44,19 @@
     <bean id="cfl.personViewedEventListener"
           class="org.openmrs.module.cfl.api.event.PersonViewedEventListener"/>
 
+    <bean id="cfl.peopleActionListener"
+          class="org.openmrs.module.messages.api.event.listener.subscribable.PeopleActionListener"
+          abstract="true">
+        <property name="personService" ref="personService"/>
+    </bean>
+
+    <bean id="cfl.registeringPeopleListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscibable.RegisteringPeopleListener"
+          init-method="init"
+          destroy-method="close"
+          parent="cfl.peopleActionListener">
+    </bean>
+
     <bean id="cfl.personIdentifierAction"
           class="org.openmrs.module.cfl.api.registration.person.action.impl.PersonIdentifierActionImpl">
         <property name="personService" ref="personService" />

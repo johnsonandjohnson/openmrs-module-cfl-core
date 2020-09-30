@@ -173,6 +173,18 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.CONDITION_LIST_CLASSES_KEY,
                 CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE,
                 CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_KEY,
+                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_DEFAULT_VALUE,
+                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY,
+                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_DEFAULT_VALUE,
+                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
+                CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
+                CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

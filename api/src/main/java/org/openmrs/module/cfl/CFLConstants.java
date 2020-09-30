@@ -31,6 +31,8 @@ public final class CFLConstants {
 
     public static final String TELEPHONE_ATTRIBUTE_NAME = "Telephone Number";
 
+    public static final String UUID_KEY = "uuid";
+
     public static final String DISABLED_CONTROL_KEY = "cfl.shouldDisableAppsAndExtensions";
     public static final String DISABLED_CONTROL_DEFAULT_VALUE = "true";
     public static final String DISABLED_CONTROL_DESCRIPTION = "Used to determine if the module should disable "
@@ -99,6 +101,21 @@ public final class CFLConstants {
     public static final String CONDITION_LIST_CLASSES_DEFAULT_VALUE = "d9cab7ff-d2ed-42b2-a2f2-64e677370ff5";
     public static final String CONDITION_LIST_CLASSES_DESCRIPTION = "List of concept uuid's which limits the answers " +
             "for condition list";
+
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_KEY = "cfl.sendSmsOnPatientRegistration";
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive SMS " +
+            "after being registered.";
+
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY = "cfl.performCallOnPatientRegistration";
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive " +
+        "a call after being registered.";
+
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "patientRegistrationCallFlowName";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that should be used " +
+        "in call to registered patient.";
 
     private CFLConstants() { }
 }
