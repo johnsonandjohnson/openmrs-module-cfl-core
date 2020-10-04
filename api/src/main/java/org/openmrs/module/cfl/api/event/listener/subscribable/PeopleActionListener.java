@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.api.event.listener.subscibable;
+package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import java.util.ArrayList;
 import java.util.List;

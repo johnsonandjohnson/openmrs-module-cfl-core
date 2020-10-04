@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.api.event.listener.subscibable;
+package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Daemon;

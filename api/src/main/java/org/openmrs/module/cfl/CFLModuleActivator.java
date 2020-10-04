@@ -20,6 +20,7 @@ import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
+import org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
@@ -92,6 +93,12 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 Context.getRegisteredComponents(AbstractMessagesEventListener.class);
         for (AbstractMessagesEventListener eventListener : eventComponents) {
             eventListener.setDaemonToken(token);
+        }
+
+        List<RegisteringPeopleListener> registeringPeopleListeners =
+                Context.getRegisteredComponents(RegisteringPeopleListener.class);
+        for (RegisteringPeopleListener registeringPeopleListener : registeringPeopleListeners) {
+            registeringPeopleListener.setDaemonToken(token);
         }
     }
 
@@ -185,6 +192,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY,
+                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE,
+                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

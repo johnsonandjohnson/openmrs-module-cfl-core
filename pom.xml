@@ -55,6 +55,8 @@
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <javax.servlet.version>3.1.0</javax.servlet.version>
+        <callflowsVersion>1.0.0-SNAPSHOT</callflowsVersion>
+        <smsVersion>1.0.0-SNAPSHOT</smsVersion>
     </properties>
 
     <dependencyManagement>
@@ -241,6 +243,20 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>callflows-api</artifactId>
+                <version>${callflowsVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>sms-api</artifactId>
+                <version>${smsVersion}</version>
+                <type>jar</type>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

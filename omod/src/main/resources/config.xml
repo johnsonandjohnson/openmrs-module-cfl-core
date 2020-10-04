@@ -62,6 +62,12 @@
 		<require_module version="${metadatadeployVersion}">
 			org.openmrs.module.metadatadeploy
 		</require_module>
+		<require_module version="${callflowsVersion}">
+			org.openmrs.module.callflows
+		</require_module>
+		<require_module version="${smsVersion}">
+			org.openmrs.module.sms
+		</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->

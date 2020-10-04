@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
-import org.openmrs.module.cfl.api.event.listener.subscibable.BaseActionListener;
+import org.openmrs.module.cfl.api.event.listener.subscribable.BaseActionListener;
 
 public final class CflEventListenerFactory {
     private static final Log LOGGER = LogFactory.getLog(CflEventListenerFactory.class);

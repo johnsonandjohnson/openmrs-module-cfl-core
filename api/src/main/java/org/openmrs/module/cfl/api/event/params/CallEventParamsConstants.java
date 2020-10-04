@@ -5,7 +5,11 @@ public final class CallEventParamsConstants {
   private CallEventParamsConstants() {
   }
 
-  public static final String PARAM_CONFIG = "config";
-  public static final String PARAM_FLOW_NAME = "flowName";
   public static final String PARAM_PHONE = "phone";
+  public static final String PARAM_ACTOR_TYPE = "actorType";
+  public static final String PARAM_PERSON_ID = "personId";
+  public static final String PATIENT_ACTOR_TYPE = "Patient";
+  public static final String CALL_CONFIG = "messages.callConfig";
+  public static final String CALL_CONFIG_DEFAULT_VALUE = "voxeo-mobile";
+
 }

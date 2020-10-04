@@ -113,9 +113,15 @@ public final class CFLConstants {
         "a call after being registered.";
 
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
-    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "patientRegistrationCallFlowName";
-    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that should be used " +
-        "in call to registered patient.";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that will be used " +
+        "in call after patient registration.";
+
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_KEY = "cfl.smsMessageAfterRegistration";
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE = "Hello, you have just registered in " +
+            "our system";
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
+            "be sent immediately after registration";
 
     private CFLConstants() { }
 }
