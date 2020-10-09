@@ -30,4 +30,8 @@ public class Vaccination {
     public void setVisits(List<VisitInformation> visits) {
         this.visits = visits;
     }
+
+    public VisitInformation findByVisitName(String visitName) {
+        return null;
+    }
 }

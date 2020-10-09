@@ -9,7 +9,7 @@
 
 package org.openmrs.module.cfl.api.service;
 
-import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
 /**
@@ -43,5 +43,5 @@ public interface ConfigService {
      */
     int getLastViewedPersonSizeLimit();
 
-    Vaccination getVaccinationGlobalProperty();
+    Randomization getRandomizationGlobalProperty();
 }
