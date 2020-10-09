@@ -123,5 +123,9 @@ public final class CFLConstants {
     public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
             "be sent immediately after registration";
 
+    public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccination.programs";
+    public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
+    public static final String VACCINATION_PROGRAM_DESCRIPTION = "Stores information about vaccination programs";
+
     private CFLConstants() { }
 }

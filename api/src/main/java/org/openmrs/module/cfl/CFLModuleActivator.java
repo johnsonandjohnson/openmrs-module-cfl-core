@@ -196,6 +196,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY,
                 CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE,
                 CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.VACCINATION_PROGRAM_KEY,
+                CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE,
+                CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

@@ -68,6 +68,9 @@
 		<require_module version="${smsVersion}">
 			org.openmrs.module.sms
 		</require_module>
+		<require_module version="${visitVersion}">
+			org.openmrs.module.visits
+		</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->

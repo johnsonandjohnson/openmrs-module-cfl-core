@@ -9,6 +9,7 @@
 
 package org.openmrs.module.cfl.api.service;
 
+import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
 /**
@@ -41,4 +42,6 @@ public interface ConfigService {
      * @return - the configured last viewed people number limit or the default value if not defined
      */
     int getLastViewedPersonSizeLimit();
+
+    Vaccination getVaccinationGlobalProperty();
 }
