@@ -1,13 +1,21 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.openmrs.Person;
+import org.openmrs.Visit;
+import org.openmrs.VisitAttribute;
+import org.openmrs.VisitAttributeType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.callflows.api.service.CallService;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
+import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.event.params.CallEventParamsConstants;
 import org.openmrs.module.cfl.api.event.params.SmsEventParamsConstants;
+import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.sms.api.event.SmsEvent;
 import org.openmrs.module.sms.api.service.OutgoingSms;
@@ -26,6 +34,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private static final String SMS_SERVICE_BEAN_NAME = "sms.SmsService";
 
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
+  private static final String CONFIG_SERVICE_BEAN_NAME = "cfl.configService";
 
   @Override
   public List<String> subscribeToActions() {
@@ -47,6 +56,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
       }
 
       createVisitReminder(channel, person.getUuid());
+      createVisit(person.getUuid(), getVaccinationProgram(person));
     }
   }
 
@@ -92,6 +102,10 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
   }
 
+  private String getVaccinationProgram(Person person) {
+    return person.getAttribute("Vaccination program").getValue();
+  }
+
   private String getCallConfig() {
     return getAdministrationService().getGlobalProperty(CallEventParamsConstants.CALL_CONFIG,
             CallEventParamsConstants.CALL_CONFIG_DEFAULT_VALUE);
@@ -101,8 +115,34 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     return Context.getAdministrationService();
   }
 
+  private ConfigService getConfigService() {
+    return Context.getRegisteredComponent(CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+  }
+
   private void createVisitReminder(String channel, String patientUuid) {
     Context.getRegisteredComponent(PATIENT_TEMPLATE_SERVICE_BEAN_NAME, PatientTemplateService.class)
             .createVisitReminder(channel, patientUuid);
+  }
+
+  private void createVisit(String patientUuid, String vaccinationProgram) {
+    Randomization randomization = getConfigService().getRandomizationGlobalProperty();
+    Vaccination vaccination = randomization.findByVaccinationName(vaccinationProgram);
+
+    VisitInformation visitInformation = vaccination.findByVisitName("DOSE 1 VISIT");
+    Visit visit = new Visit();
+    visit.setPatient(Context.getPatientService().getPatientByUuid(patientUuid));
+    visit.setStartDatetime(DateUtil.getDatePlusDays(visitInformation.getMidPointWindow()));
+    visit.setVisitType(Context.getVisitService()
+            .getVisitTypeByUuid("72f4205b-2818-4290-9b0b-288777a998c6")); // DOSE 1 VISIT UUID
+
+    VisitAttributeType visitAttributeType =
+            Context.getVisitService().getVisitAttributeTypeByUuid("70ca70ac-53fd-49e4-9abe-663d4785fe62");
+    VisitAttribute visitAttribute = new VisitAttribute();
+    visitAttribute.setAttributeType(visitAttributeType);
+    visitAttribute.setValueReferenceInternal("SCHEDULED");
+
+    visit.setAttribute(visitAttribute);
+
+    Context.getVisitService().saveVisit(visit);
   }
 }

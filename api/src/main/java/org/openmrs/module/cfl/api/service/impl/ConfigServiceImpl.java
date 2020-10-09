@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
@@ -9,6 +10,8 @@ import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirectio
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
+
+import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_KEY;
 
 public class ConfigServiceImpl implements ConfigService {
 
@@ -41,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Randomization getRandomizationGlobalProperty() {
-        return null;
+        return new Gson().fromJson(getGp(VACCINATION_PROGRAM_KEY), Randomization.class);
     }
 
     private String getGp(String propertyName) {

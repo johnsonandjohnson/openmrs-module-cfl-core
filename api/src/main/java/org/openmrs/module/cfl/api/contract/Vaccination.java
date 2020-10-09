@@ -1,11 +1,14 @@
 package org.openmrs.module.cfl.api.contract;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Vaccination {
     private String name;
     private int numberOfDose;
-    private List<VisitInformation> visits;
+    private List<VisitInformation> visits = new ArrayList<VisitInformation>();
 
     public String getName() {
         return name;
@@ -32,6 +35,13 @@ public class Vaccination {
     }
 
     public VisitInformation findByVisitName(String visitName) {
-        return null;
+        VisitInformation visitInformation = null;
+        for (VisitInformation vi : getVisits()) {
+            if (StringUtils.equals(vi.getNameOfDose(), visitName)) {
+                visitInformation = vi;
+                break;
+            }
+        }
+        return visitInformation;
     }
 }
