@@ -1,6 +1,5 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
-import javax.jms.Message;
 import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
@@ -13,11 +12,12 @@ import org.openmrs.module.sms.api.event.SmsEvent;
 import org.openmrs.module.sms.api.service.OutgoingSms;
 import org.openmrs.module.sms.api.service.SmsService;
 
+import javax.jms.Message;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
 
@@ -70,7 +70,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     Map<String, Object> additionalParams = new HashMap<String, Object>();
     additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_TYPE, CallEventParamsConstants.PATIENT_ACTOR_TYPE);
     additionalParams.put(CallEventParamsConstants.PARAM_PHONE, getPhoneNumber(person));
-    additionalParams.put(CallEventParamsConstants.PARAM_PERSON_ID, person.getPersonId());
+    additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_ID, person.getPersonId());
 
     Context.getRegisteredComponent(CALL_SERVICE_BEAN_NAME, CallService.class)
             .makeCall(getCallConfig(), getCallFlowName(), additionalParams);
