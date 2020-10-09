@@ -58,6 +58,7 @@
         <callflowsVersion>1.0.0</callflowsVersion>
         <smsVersion>1.0.0</smsVersion>
         <visitVersion>1.0.0</visitVersion>
+        <messagesVersion>1.0.1-SNAPSHOT</messagesVersion>
     </properties>
 
     <dependencyManagement>
@@ -264,6 +265,13 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>visits-api</artifactId>
                 <version>${visitVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>messages-api</artifactId>
+                <version>${messagesVersion}</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>

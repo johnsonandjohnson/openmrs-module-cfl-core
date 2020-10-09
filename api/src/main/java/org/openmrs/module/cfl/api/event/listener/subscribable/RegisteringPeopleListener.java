@@ -8,6 +8,7 @@ import org.openmrs.module.callflows.api.service.CallService;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.event.params.CallEventParamsConstants;
 import org.openmrs.module.cfl.api.event.params.SmsEventParamsConstants;
+import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.sms.api.event.SmsEvent;
 import org.openmrs.module.sms.api.service.OutgoingSms;
 import org.openmrs.module.sms.api.service.SmsService;
@@ -24,6 +25,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private static final String CALL_SERVICE_BEAN_NAME = "callService";
   private static final String SMS_SERVICE_BEAN_NAME = "sms.SmsService";
 
+  private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
+
   @Override
   public List<String> subscribeToActions() {
     return Collections.singletonList(Event.Action.CREATED.name());
@@ -31,14 +34,19 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   @Override
   public void performAction(Message message) {
+    String channel = null;
     Person person = extractPerson(message);
     if (person != null) {
       if (isSmsEnabled()) {
         sendSms(person);
+        channel = "SMS";
       }
       if (isCallEnabled()) {
         performCall(person);
+        channel = "Call";
       }
+
+      createVisitReminder(channel, person.getUuid());
     }
   }
 
@@ -91,5 +99,10 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private AdministrationService getAdministrationService() {
     return Context.getAdministrationService();
+  }
+
+  private void createVisitReminder(String channel, String patientUuid) {
+    Context.getRegisteredComponent(PATIENT_TEMPLATE_SERVICE_BEAN_NAME, PatientTemplateService.class)
+            .createVisitReminder(channel, patientUuid);
   }
 }
