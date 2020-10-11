@@ -9,32 +9,30 @@ import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.callflows.api.service.CallService;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.event.params.CallEventParamsConstants;
 import org.openmrs.module.cfl.api.event.params.SmsEventParamsConstants;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.util.DateUtil;
+import org.openmrs.module.cfl.api.util.VisitUtil;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.sms.api.event.SmsEvent;
 import org.openmrs.module.sms.api.service.OutgoingSms;
 import org.openmrs.module.sms.api.service.SmsService;
 
 import javax.jms.Message;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
 
   private static final String CALL_SERVICE_BEAN_NAME = "callService";
   private static final String SMS_SERVICE_BEAN_NAME = "sms.SmsService";
-
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
-  private static final String CONFIG_SERVICE_BEAN_NAME = "cfl.configService";
 
   @Override
   public List<String> subscribeToActions() {
@@ -56,7 +54,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
       }
 
       createVisitReminder(channel, person.getUuid());
-      createVisit(person.getUuid(), getVaccinationProgram(person));
+      createFirstVisit(person.getUuid(), getVaccinationProgram(person));
     }
   }
 
@@ -103,7 +101,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private String getVaccinationProgram(Person person) {
-    return person.getAttribute("Vaccination program").getValue();
+    return person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue();
   }
 
   private String getCallConfig() {
@@ -111,38 +109,37 @@ public class RegisteringPeopleListener extends PeopleActionListener {
             CallEventParamsConstants.CALL_CONFIG_DEFAULT_VALUE);
   }
 
-  private AdministrationService getAdministrationService() {
-    return Context.getAdministrationService();
-  }
-
-  private ConfigService getConfigService() {
-    return Context.getRegisteredComponent(CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
-  }
-
   private void createVisitReminder(String channel, String patientUuid) {
     Context.getRegisteredComponent(PATIENT_TEMPLATE_SERVICE_BEAN_NAME, PatientTemplateService.class)
             .createVisitReminder(channel, patientUuid);
   }
 
-  private void createVisit(String patientUuid, String vaccinationProgram) {
-    Randomization randomization = getConfigService().getRandomizationGlobalProperty();
-    Vaccination vaccination = randomization.findByVaccinationName(vaccinationProgram);
+  private void createFirstVisit(String patientUuid, String vaccinationProgram) {
+    Vaccination[] vaccinations = getConfigService().getRandomizationGlobalProperty();
 
-    VisitInformation visitInformation = vaccination.findByVisitName("DOSE 1 VISIT");
+    Vaccination vaccination = Vaccination.findByVaccinationProgram(vaccinations, vaccinationProgram);
+    VisitInformation visitInformation = vaccination.findByVisitName(CFLConstants.DOSE_1_VISIT_NAME);
+
     Visit visit = new Visit();
     visit.setPatient(Context.getPatientService().getPatientByUuid(patientUuid));
-    visit.setStartDatetime(DateUtil.getDatePlusDays(visitInformation.getMidPointWindow()));
-    visit.setVisitType(Context.getVisitService()
-            .getVisitTypeByUuid("72f4205b-2818-4290-9b0b-288777a998c6")); // DOSE 1 VISIT UUID
+    visit.setStartDatetime(DateUtil.addDaysToDate(DateUtil.now(), visitInformation.getMidPointWindow()));
+    visit.setVisitType(VisitUtil.getProperVisitType(visitInformation));
 
     VisitAttributeType visitAttributeType =
-            Context.getVisitService().getVisitAttributeTypeByUuid("70ca70ac-53fd-49e4-9abe-663d4785fe62");
+            Context.getVisitService().getVisitAttributeTypeByUuid(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID);
     VisitAttribute visitAttribute = new VisitAttribute();
     visitAttribute.setAttributeType(visitAttributeType);
-    visitAttribute.setValueReferenceInternal("SCHEDULED");
-
+    visitAttribute.setValueReferenceInternal(CFLConstants.SCHEDULED_VISIT_STATUS);
     visit.setAttribute(visitAttribute);
 
     Context.getVisitService().saveVisit(visit);
+  }
+
+  private AdministrationService getAdministrationService() {
+    return Context.getAdministrationService();
+  }
+
+  private ConfigService getConfigService() {
+    return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
   }
 }

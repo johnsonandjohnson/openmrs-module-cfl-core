@@ -21,6 +21,7 @@ import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener;
+import org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
@@ -99,6 +100,12 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 Context.getRegisteredComponents(RegisteringPeopleListener.class);
         for (RegisteringPeopleListener registeringPeopleListener : registeringPeopleListeners) {
             registeringPeopleListener.setDaemonToken(token);
+        }
+
+        List<UpdatingVisitListener> updatingVisitListeners =
+                Context.getRegisteredComponents(UpdatingVisitListener.class);
+        for (UpdatingVisitListener updatingVisitListener : updatingVisitListeners) {
+            updatingVisitListener.setDaemonToken(token);
         }
     }
 

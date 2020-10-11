@@ -39,8 +39,8 @@ public final class DateUtil {
         return new SimpleDateFormat(toFormat).format(date);
     }
 
-    public static Date getDatePlusDays(int days) {
-        return DateUtils.addDays(DateUtil.now(), days);
+    public static Date addDaysToDate(Date date, int days) {
+        return DateUtils.addDays(date, days);
     }
 
     private DateUtil() {

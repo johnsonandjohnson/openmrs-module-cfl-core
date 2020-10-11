@@ -44,4 +44,15 @@ public class Vaccination {
         }
         return visitInformation;
     }
+
+    public static Vaccination findByVaccinationProgram(Vaccination[] vaccinations, String vaccinationProgram) {
+        Vaccination vaccination = null;
+        for (Vaccination vacc : vaccinations) {
+            if (StringUtils.equals(vacc.getName(), vaccinationProgram)) {
+                vaccination = vacc;
+                break;
+            }
+        }
+        return vaccination;
+    }
 }
