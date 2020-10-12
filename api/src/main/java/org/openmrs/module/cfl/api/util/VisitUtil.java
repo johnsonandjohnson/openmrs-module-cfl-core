@@ -15,15 +15,15 @@ public final class VisitUtil {
 
     public static VisitType getProperVisitType(VisitInformation visitInformation) {
         VisitType visitType = null;
-        if (visitInformation.getNameOfDose().equals(CFLConstants.DOSE_1_VISIT_NAME)) {
+        if (CFLConstants.DOSE_1_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
             visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_VISIT_VISIT_TYPE_UUID);
-        } else if (visitInformation.getNameOfDose().equals(CFLConstants.DOSE_1_2_VISIT_NAME)) {
+        } else if (CFLConstants.DOSE_1_2_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
             visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_VISIT_VISIT_TYPE_UUID);
-        } else if (visitInformation.getNameOfDose().equals(CFLConstants.DOSE_1_2_3_VISIT_NAME)) {
+        } else if (CFLConstants.DOSE_1_2_3_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
             visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_3_VISIT_VISIT_TYPE_UUID);
-        } else if (visitInformation.getNameOfDose().equals(CFLConstants.DOSE_1_2_3_4_VISIT_NAME)) {
+        } else if (CFLConstants.DOSE_1_2_3_4_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
             visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_3_4_VISIT_VISIT_TYPE_UUID);
-        } else if (visitInformation.getNameOfDose().equals(CFLConstants.FOLLOW_UP_VISIT_NAME)) {
+        } else if (CFLConstants.FOLLOW_UP_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
             visitType = getVisitTypeByUuid(CFLConstants.FOLLOW_UP_VISIT_TYPE_UUID);
         }
         return visitType;
