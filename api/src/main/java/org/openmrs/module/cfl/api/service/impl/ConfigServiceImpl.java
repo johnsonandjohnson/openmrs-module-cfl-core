@@ -50,7 +50,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getVaccinationProgram(Person person) {
-        return person.getAttribute("Vaccination program").getValue();
+        return person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue();
     }
 
     private String getGp(String propertyName) {

@@ -32,6 +32,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private static final String CALL_SERVICE_BEAN_NAME = "callService";
   private static final String SMS_SERVICE_BEAN_NAME = "sms.SmsService";
+  private static final String SMS_CHANNEL = "SMS";
+  private static final String CALL_CHANNEL = "Call";
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
 
   @Override
@@ -46,15 +48,15 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     if (person != null) {
       if (isSmsEnabled()) {
         sendSms(person);
-        channel = "SMS";
+        channel = SMS_CHANNEL;
       }
       if (isCallEnabled()) {
         performCall(person);
-        channel = "Call";
+        channel = CALL_CHANNEL;
       }
 
       createVisitReminder(channel, person.getUuid());
-      createFirstVisit(person.getUuid(), getVaccinationProgram(person));
+      createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
     }
   }
 
@@ -98,10 +100,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private String getPhoneNumber(Person person) {
     return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
-  }
-
-  private String getVaccinationProgram(Person person) {
-    return person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue();
   }
 
   private String getCallConfig() {
