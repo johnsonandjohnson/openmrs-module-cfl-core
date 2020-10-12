@@ -62,11 +62,12 @@ public class UpdatingVisitListener extends VisitActionListener {
         List<VisitInformation> visits = vaccination.getVisits();
         List<VisitInformation> futureVisitInformation = new ArrayList<VisitInformation>();
         for (int i = 0; i < visits.size(); i++) {
-            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), previousVisit.getVisitType().getName()))
+            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), previousVisit.getVisitType().getName())) {
                 for (int j = 1; j <= visits.get(i).getNumberOfFutureVisit(); j++) {
                     futureVisitInformation.add(visits.get(i + j));
                 }
             }
+        }
         return futureVisitInformation;
     }
 
