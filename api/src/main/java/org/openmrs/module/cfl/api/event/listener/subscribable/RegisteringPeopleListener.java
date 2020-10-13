@@ -36,6 +36,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private static final String SMS_CHANNEL = "SMS";
   private static final String CALL_CHANNEL = "Call";
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
+  private String channel = "";
 
   @Override
   public List<String> subscribeToActions() {
@@ -44,21 +45,24 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   @Override
   public void performAction(Message message) {
-    String channel = null;
     Person person = extractPerson(message);
     if (person != null) {
       createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
       if (!StringUtils.isBlank(getPhoneNumber(person))) {
-        if (isSmsEnabled()) {
-          sendSms(person);
-          channel = SMS_CHANNEL;
-        }
-        if (isCallEnabled()) {
-          performCall(person);
-          channel = CALL_CHANNEL;
-        }
+        sendWelcomeMessages(person);
         createVisitReminder(channel, person.getUuid());
       }
+    }
+  }
+
+  private void sendWelcomeMessages(Person person) {
+    if (isSmsEnabled()) {
+      sendSms(person);
+      channel = SMS_CHANNEL;
+    }
+    if (isCallEnabled()) {
+      performCall(person);
+      channel = CALL_CHANNEL;
     }
   }
 
