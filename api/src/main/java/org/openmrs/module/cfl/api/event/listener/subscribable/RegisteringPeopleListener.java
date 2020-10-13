@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -46,17 +47,18 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     String channel = null;
     Person person = extractPerson(message);
     if (person != null) {
-      if (isSmsEnabled()) {
-        sendSms(person);
-        channel = SMS_CHANNEL;
-      }
-      if (isCallEnabled()) {
-        performCall(person);
-        channel = CALL_CHANNEL;
-      }
-
-      createVisitReminder(channel, person.getUuid());
       createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
+      if (!StringUtils.isBlank(getPhoneNumber(person))) {
+        if (isSmsEnabled()) {
+          sendSms(person);
+          channel = SMS_CHANNEL;
+        }
+        if (isCallEnabled()) {
+          performCall(person);
+          channel = CALL_CHANNEL;
+        }
+        createVisitReminder(channel, person.getUuid());
+      }
     }
   }
 
@@ -99,7 +101,11 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private String getPhoneNumber(Person person) {
-    return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
+    if (person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME) != null) {
+      return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
+    } else {
+      return "";
+    }
   }
 
   private String getCallConfig() {
