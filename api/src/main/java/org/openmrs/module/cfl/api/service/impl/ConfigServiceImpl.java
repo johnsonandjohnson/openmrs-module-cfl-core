@@ -53,6 +53,12 @@ public class ConfigServiceImpl implements ConfigService {
         return person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue();
     }
 
+    @Override
+    public boolean isVaccinationInfoIsEnabled() {
+        return Boolean.parseBoolean(Context.getAdministrationService()
+                .getGlobalProperty(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY));
+    }
+
     private String getGp(String propertyName) {
         return Context.getAdministrationService().getGlobalProperty(propertyName);
     }

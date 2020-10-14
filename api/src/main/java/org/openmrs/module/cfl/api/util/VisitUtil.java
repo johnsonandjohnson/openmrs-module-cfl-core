@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
@@ -8,23 +9,23 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 
+import java.util.List;
+
 public final class VisitUtil {
 
     private VisitUtil() {
     }
 
     public static VisitType getProperVisitType(VisitInformation visitInformation) {
+        List<VisitType> visitTypes = Context.getVisitService().getAllVisitTypes();
         VisitType visitType = null;
-        if (CFLConstants.DOSE_1_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
-            visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_VISIT_VISIT_TYPE_UUID);
-        } else if (CFLConstants.DOSE_1_2_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
-            visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_VISIT_VISIT_TYPE_UUID);
-        } else if (CFLConstants.DOSE_1_2_3_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
-            visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_3_VISIT_VISIT_TYPE_UUID);
-        } else if (CFLConstants.DOSE_1_2_3_4_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
-            visitType = getVisitTypeByUuid(CFLConstants.DOSE_1_2_3_4_VISIT_VISIT_TYPE_UUID);
-        } else if (CFLConstants.FOLLOW_UP_VISIT_NAME.equals(visitInformation.getNameOfDose())) {
-            visitType = getVisitTypeByUuid(CFLConstants.FOLLOW_UP_VISIT_TYPE_UUID);
+        for (VisitType vt : visitTypes) {
+            if (visitType == null && StringUtils.equalsIgnoreCase(vt.getName(), CFLConstants.OTHER_VISIT_TYPE_NAME)) {
+                visitType = vt;
+            } else if (StringUtils.equalsIgnoreCase(vt.getName(), visitInformation.getNameOfDose())) {
+                visitType = vt;
+                break;
+            }
         }
         return visitType;
     }
@@ -43,9 +44,5 @@ public final class VisitUtil {
         visit.setAttribute(visitAttribute);
 
         return visit;
-    }
-
-    private static VisitType getVisitTypeByUuid(String visitTypeUuid) {
-        return Context.getVisitService().getVisitTypeByUuid(visitTypeUuid);
     }
 }

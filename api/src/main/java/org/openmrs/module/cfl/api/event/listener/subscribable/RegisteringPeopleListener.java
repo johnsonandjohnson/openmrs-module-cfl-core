@@ -36,7 +36,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private static final String SMS_CHANNEL = "SMS";
   private static final String CALL_CHANNEL = "Call";
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
-  private String channel = "";
 
   @Override
   public List<String> subscribeToActions() {
@@ -45,13 +44,20 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   @Override
   public void performAction(Message message) {
+    if (getConfigService().isVaccinationInfoIsEnabled()) {
     Person person = extractPerson(message);
-    if (person != null) {
-      createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
-      if (!StringUtils.isBlank(getPhoneNumber(person))) {
-        sendWelcomeMessages(person);
-        setChannelTypesForMessages();
-        createVisitReminder(channel, person.getUuid());
+      if (person != null) {
+        createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
+        performActionsAfterPatientRegistration(person);
+      }
+    }
+  }
+
+  private void performActionsAfterPatientRegistration(Person person) {
+    if (!StringUtils.isBlank(getPhoneNumber(person))) {
+      sendWelcomeMessages(person);
+      if (!StringUtils.isBlank(getChannelTypesForMessages())) {
+        createVisitReminder(getChannelTypesForMessages(), person.getUuid());
       }
     }
   }
@@ -59,25 +65,22 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private void sendWelcomeMessages(Person person) {
     if (isSmsEnabled()) {
       sendSms(person);
-      channel = SMS_CHANNEL;
     }
     if (isCallEnabled()) {
       performCall(person);
-      channel = CALL_CHANNEL;
     }
   }
 
-  private void setChannelTypesForMessages() {
-    if (isReminderViaSmsIsEnabled()) {
+  private String getChannelTypesForMessages() {
+    String channel = "";
+    if (isReminderViaSmsIsEnabled() && isReminderViaCallIsEnabled()) {
+      channel = SMS_CHANNEL.concat("," + CALL_CHANNEL);
+    } else if (isReminderViaCallIsEnabled()) {
+      channel = CALL_CHANNEL;
+    } else if (isReminderViaSmsIsEnabled()) {
       channel = SMS_CHANNEL;
     }
-    if (isReminderViaCallIsEnabled()) {
-      if (StringUtils.isBlank(channel)) {
-        channel = CALL_CHANNEL;
-      } else {
-        channel = channel.concat("," + CALL_CHANNEL);
-      }
-    }
+    return channel;
   }
 
   private boolean isSmsEnabled() {
@@ -118,8 +121,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     Map<String, Object> additionalParams = new HashMap<String, Object>();
     additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_TYPE, CallEventParamsConstants.PATIENT_ACTOR_TYPE);
     additionalParams.put(CallEventParamsConstants.PARAM_PHONE, getPhoneNumber(person));
-    additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_ID, person.getPersonId());
-    additionalParams.put(CallEventParamsConstants.PARAM_REF_KEY, person.getPersonId());
+    additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_ID, person.getPersonId().toString());
+    additionalParams.put(CallEventParamsConstants.PARAM_REF_KEY, person.getPersonId().toString());
 
     Context.getRegisteredComponent(CALL_SERVICE_BEAN_NAME, CallService.class)
             .makeCall(getCallConfig(), getCallFlowName(), additionalParams);
@@ -151,7 +154,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     Vaccination[] vaccinations = getConfigService().getRandomizationGlobalProperty();
 
     Vaccination vaccination = Vaccination.findByVaccinationProgram(vaccinations, vaccinationProgram);
-    VisitInformation visitInformation = vaccination.findByVisitName(CFLConstants.DOSE_1_VISIT_NAME);
+    VisitInformation visitInformation = vaccination.getVisits().get(0);
 
     Visit visit = new Visit();
     visit.setPatient(Context.getPatientService().getPatientByUuid(patientUuid));

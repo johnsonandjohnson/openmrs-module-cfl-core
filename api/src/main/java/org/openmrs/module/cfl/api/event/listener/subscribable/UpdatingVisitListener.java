@@ -27,21 +27,22 @@ public class UpdatingVisitListener extends VisitActionListener {
 
     @Override
     public void performAction(Message message) {
-        Visit visit = extractVisit(message);
+        if (getConfigService().isVaccinationInfoIsEnabled()) {
+            Visit visit = extractVisit(message);
 
-        String visitStatus = "";
-        Collection<VisitAttribute> activeAttributes = visit.getActiveAttributes();
-        for (VisitAttribute visitAttribute : activeAttributes) {
-            if (visitAttribute.getAttributeType().getUuid().equals(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID)) {
-                visitStatus = visitAttribute.getValueReference();
+            String visitStatus = "";
+            Collection<VisitAttribute> activeAttributes = visit.getActiveAttributes();
+            for (VisitAttribute visitAttribute : activeAttributes) {
+                if (visitAttribute.getAttributeType().getUuid().equals(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID)) {
+                    visitStatus = visitAttribute.getValueReference();
+                }
+            }
+
+            if (visitStatus.equals(Context.getAdministrationService()
+                    .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
+                createFutureVisits(visit);
             }
         }
-
-        if (visitStatus.equals(Context.getAdministrationService()
-                .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
-            createFutureVisits(visit);
-        }
-
     }
 
     private void createFutureVisits(Visit previousVisit) {

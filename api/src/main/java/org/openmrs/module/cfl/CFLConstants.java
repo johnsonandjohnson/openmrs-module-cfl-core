@@ -127,17 +127,7 @@ public final class CFLConstants {
     public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
     public static final String VACCINATION_PROGRAM_DESCRIPTION = "Stores information about vaccination programs";
 
-    public static final String DOSE_1_VISIT_NAME = "DOSE 1 VISIT";
-    public static final String DOSE_1_2_VISIT_NAME = "DOSE 1 & 2 VISIT";
-    public static final String DOSE_1_2_3_VISIT_NAME = "DOSE 1, 2 & 3 VISIT";
-    public static final String DOSE_1_2_3_4_VISIT_NAME = "DOSE 1, 2, 3 & 4 VISIT";
-    public static final String FOLLOW_UP_VISIT_NAME = "FOLLOW UP";
-
-    public static final String DOSE_1_VISIT_VISIT_TYPE_UUID = "ce117dad-c096-45f8-9982-9ac214728fc4";
-    public static final String DOSE_1_2_VISIT_VISIT_TYPE_UUID = "47d7d863-ef1f-4b85-ab8b-0798b06b4a7d";
-    public static final String DOSE_1_2_3_VISIT_VISIT_TYPE_UUID = "41608597-9ed4-4f29-a9e1-56c2499d4341";
-    public static final String DOSE_1_2_3_4_VISIT_VISIT_TYPE_UUID = "598afa89-ecdd-4f09-938f-e25932222d60";
-    public static final String FOLLOW_UP_VISIT_TYPE_UUID = "d65fbf28-35ee-4792-bafa-bb8595806152";
+    public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
 
     public static final String VISIT_STATUS_ATTRIBUTE_TYPE_UUID = "70ca70ac-53fd-49e4-9abe-663d4785fe62";
     public static final String SCHEDULED_VISIT_STATUS = "SCHEDULED";
@@ -157,6 +147,11 @@ public final class CFLConstants {
     public static final String SEND_REMINDER_VIA_CALL_DEFAULT_VALUE = "false";
     public static final String SEND_REMINDER_VIA_CALL_DESCRIPTION = "Specifies if patient should receive reminder " +
             "via Call.";
+
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY = "who.vaccinationInformationEnabled";
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE = "false";
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION = "Specifies if vaccination information" +
+            "is available";
 
     private CFLConstants() { }
 }

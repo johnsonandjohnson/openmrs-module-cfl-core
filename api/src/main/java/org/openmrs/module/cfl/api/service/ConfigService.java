@@ -47,4 +47,6 @@ public interface ConfigService {
     Vaccination[] getRandomizationGlobalProperty();
 
     String getVaccinationProgram(Person person);
+
+    boolean isVaccinationInfoIsEnabled();
 }
