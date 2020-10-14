@@ -148,5 +148,15 @@ public final class CFLConstants {
 
     public static final String STATUS_OF_OCCURRED_VISIT_KEY = "visits.statusOfOccurredVisit";
 
+    public static final String SEND_REMINDER_VIA_SMS_KEY = "cfl.shouldSendReminderViaSms";
+    public static final String SEND_REMINDER_VIA_SMS_DEFAULT_VALUE = "false";
+    public static final String SEND_REMINDER_VIA_SMS_DESCRIPTION = "Specifies if patient should receive reminder " +
+            "via SMS.";
+
+    public static final String SEND_REMINDER_VIA_CALL_KEY = "cfl.shouldSendReminderViaCall";
+    public static final String SEND_REMINDER_VIA_CALL_DEFAULT_VALUE = "false";
+    public static final String SEND_REMINDER_VIA_CALL_DESCRIPTION = "Specifies if patient should receive reminder " +
+            "via Call.";
+
     private CFLConstants() { }
 }

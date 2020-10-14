@@ -50,6 +50,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
       createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
       if (!StringUtils.isBlank(getPhoneNumber(person))) {
         sendWelcomeMessages(person);
+        setChannelTypesForMessages();
         createVisitReminder(channel, person.getUuid());
       }
     }
@@ -66,9 +67,32 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     }
   }
 
+  private void setChannelTypesForMessages() {
+    if (isReminderViaSmsIsEnabled()) {
+      channel = SMS_CHANNEL;
+    }
+    if (isReminderViaCallIsEnabled()) {
+      if (StringUtils.isBlank(channel)) {
+        channel = CALL_CHANNEL;
+      } else {
+        channel = channel.concat("," + CALL_CHANNEL);
+      }
+    }
+  }
+
   private boolean isSmsEnabled() {
     return Boolean.parseBoolean(getAdministrationService()
         .getGlobalProperty(CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_KEY));
+  }
+
+  private boolean isReminderViaSmsIsEnabled() {
+    return Boolean.parseBoolean(getAdministrationService()
+            .getGlobalProperty(CFLConstants.SEND_REMINDER_VIA_SMS_KEY));
+  }
+
+  private boolean isReminderViaCallIsEnabled() {
+    return Boolean.parseBoolean(getAdministrationService()
+            .getGlobalProperty(CFLConstants.SEND_REMINDER_VIA_CALL_KEY));
   }
 
   private void sendSms(Person person) {
@@ -95,6 +119,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_TYPE, CallEventParamsConstants.PATIENT_ACTOR_TYPE);
     additionalParams.put(CallEventParamsConstants.PARAM_PHONE, getPhoneNumber(person));
     additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_ID, person.getPersonId());
+    additionalParams.put(CallEventParamsConstants.PARAM_REF_KEY, person.getPersonId());
 
     Context.getRegisteredComponent(CALL_SERVICE_BEAN_NAME, CallService.class)
             .makeCall(getCallConfig(), getCallFlowName(), additionalParams);

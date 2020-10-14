@@ -11,5 +11,6 @@ public final class CallEventParamsConstants {
   public static final String PATIENT_ACTOR_TYPE = "Patient";
   public static final String CALL_CONFIG = "messages.callConfig";
   public static final String CALL_CONFIG_DEFAULT_VALUE = "voxeo-mobile";
+  public static final String PARAM_REF_KEY = "refKey";
 
 }
