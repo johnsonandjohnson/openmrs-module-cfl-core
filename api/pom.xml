@@ -46,18 +46,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
-			<artifactId>callflows-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>sms-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>visits-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
 			<artifactId>messages-api</artifactId>
 		</dependency>
 	</dependencies>

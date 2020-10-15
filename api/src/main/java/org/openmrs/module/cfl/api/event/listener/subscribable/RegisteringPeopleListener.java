@@ -8,34 +8,39 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
-import org.openmrs.module.callflows.api.service.CallService;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
-import org.openmrs.module.cfl.api.event.params.CallEventParamsConstants;
-import org.openmrs.module.cfl.api.event.params.SmsEventParamsConstants;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.openmrs.module.messages.api.constants.ConfigConstants;
+import org.openmrs.module.messages.api.constants.MessagesConstants;
+import org.openmrs.module.messages.api.event.CallFlowParamConstants;
+import org.openmrs.module.messages.api.event.MessagesEvent;
+import org.openmrs.module.messages.api.event.SmsEventParamConstants;
+import org.openmrs.module.messages.api.service.MessagesEventService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
-import org.openmrs.module.sms.api.event.SmsEvent;
-import org.openmrs.module.sms.api.service.OutgoingSms;
-import org.openmrs.module.sms.api.service.SmsService;
 
 import javax.jms.Message;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.FLOW_NAME;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
 
-  private static final String CALL_SERVICE_BEAN_NAME = "callService";
-  private static final String SMS_SERVICE_BEAN_NAME = "sms.SmsService";
   private static final String SMS_CHANNEL = "SMS";
   private static final String CALL_CHANNEL = "Call";
   private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
+  private static final String MESSAGES_EVENT_SERVICE_BEAN_NAME = "messages.messagesEventService";
+  private static final String SMS_INITIATE_EVENT = "send_sms";
+  private static final String PATIENT_ACTOR_TYPE = "patient";
 
   @Override
   public List<String> subscribeToActions() {
@@ -109,12 +114,12 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private void sendSms(Person person) {
     Map<String, Object> properties = new HashMap<String, Object>();
-    properties.put(SmsEventParamsConstants.RECIPIENTS,
+    properties.put(SmsEventParamConstants.RECIPIENTS,
             new ArrayList<String>(Collections.singletonList(getPhoneNumber(person))));
-    properties.put(SmsEventParamsConstants.MESSAGE, getWelcomeMessage());
+    properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage());
 
-    Context.getRegisteredComponent(SMS_SERVICE_BEAN_NAME, SmsService.class)
-            .send(new OutgoingSms(new SmsEvent(properties)));
+    Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
+            .sendEventMessage(new MessagesEvent(SMS_INITIATE_EVENT, properties));
   }
 
   private String getWelcomeMessage() {
@@ -127,14 +132,20 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private void performCall(Person person) {
-    Map<String, Object> additionalParams = new HashMap<String, Object>();
-    additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_TYPE, CallEventParamsConstants.PATIENT_ACTOR_TYPE);
-    additionalParams.put(CallEventParamsConstants.PARAM_PHONE, getPhoneNumber(person));
-    additionalParams.put(CallEventParamsConstants.PARAM_ACTOR_ID, person.getPersonId().toString());
-    additionalParams.put(CallEventParamsConstants.PARAM_REF_KEY, person.getPersonId().toString());
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put(CONFIG, getCallConfig());
+    params.put(FLOW_NAME, getCallFlowName());
 
-    Context.getRegisteredComponent(CALL_SERVICE_BEAN_NAME, CallService.class)
-            .makeCall(getCallConfig(), getCallFlowName(), additionalParams);
+    Map<String, Object> additionalParams = new HashMap<String, Object>();
+    additionalParams.put(CallFlowParamConstants.ACTOR_TYPE, PATIENT_ACTOR_TYPE);
+    additionalParams.put(CallFlowParamConstants.PHONE, getPhoneNumber(person));
+    additionalParams.put(CallFlowParamConstants.ACTOR_ID, person.getPersonId().toString());
+    additionalParams.put(CallFlowParamConstants.REF_KEY, person.getPersonId().toString());
+
+    params.put(ADDITIONAL_PARAMS, additionalParams);
+
+    Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
+            .sendEventMessage(new MessagesEvent(MessagesConstants.CALL_FLOW_INITIATE_CALL_EVENT, params));
   }
 
   private String getCallFlowName() {
@@ -151,8 +162,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private String getCallConfig() {
-    return getAdministrationService().getGlobalProperty(CallEventParamsConstants.CALL_CONFIG,
-            CallEventParamsConstants.CALL_CONFIG_DEFAULT_VALUE);
+    return getAdministrationService().getGlobalProperty(ConfigConstants.CALL_CONFIG,
+            ConfigConstants.CALL_CONFIG_DEFAULT_VALUE);
   }
 
   private void createVisitReminder(String channel, String patientUuid) {

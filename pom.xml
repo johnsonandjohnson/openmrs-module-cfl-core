@@ -250,27 +250,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
-                <artifactId>callflows-api</artifactId>
-                <version>${callflowsVersion}</version>
-                <type>jar</type>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>sms-api</artifactId>
-                <version>${smsVersion}</version>
-                <type>jar</type>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>visits-api</artifactId>
-                <version>${visitVersion}</version>
-                <type>jar</type>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
                 <artifactId>messages-api</artifactId>
                 <version>${messagesVersion}</version>
                 <type>jar</type>
