@@ -3,6 +3,9 @@ package org.openmrs.module.cfl.api.service.impl;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Person;
+import org.openmrs.Visit;
+import org.openmrs.VisitAttribute;
+import org.openmrs.VisitAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
@@ -11,6 +14,8 @@ import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirectio
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
+
+import java.util.Iterator;
 
 import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_KEY;
 
@@ -62,6 +67,21 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public String getRefreshDate(Person person) {
         return person.getAttribute(CFLConstants.REFRESH_DATE_ATTRIBUTE_NAME).getValue();
+    }
+
+    @Override
+    public String getRefreshDate(Visit visit) {
+            Iterator iterator = visit.getActiveAttributes().iterator();
+
+            while (iterator.hasNext()) {
+                VisitAttribute attribute = (VisitAttribute) iterator.next();
+                VisitAttributeType type = attribute.getAttributeType();
+                if (type != null && CFLConstants.REFRESH_DATE_ATTRIBUTE_NAME.equals(type.getName())
+                    && !attribute.isVoided()) {
+                    return (String) attribute.getValue();
+                }
+            }
+        return null;
     }
 
     @Override

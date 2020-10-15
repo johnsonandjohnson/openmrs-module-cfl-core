@@ -16,7 +16,6 @@ import javax.jms.Message;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class UpdatingVisitListener extends VisitActionListener {
@@ -43,14 +42,15 @@ public class UpdatingVisitListener extends VisitActionListener {
                     .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
                 createFutureVisits(visit);
             }
-            updateGlobalProperty(visit.getStartDatetime());
+            updateGlobalProperty(getConfigService().getRefreshDate(visit));
         }
     }
 
-    private void updateGlobalProperty(Date startDatetime) {
+    private void updateGlobalProperty(String refreshDate) {
         long lastSaved = Long.parseLong(getConfigService().getLastVisitRefreshDate());
-        if (startDatetime.getTime() > lastSaved) {
-            getConfigService().setLastVisitRefreshDate(Long.toString(startDatetime.getTime()));
+        long visitRefreshDate = Long.parseLong(refreshDate);
+        if (visitRefreshDate > lastSaved) {
+            getConfigService().setLastVisitRefreshDate(Long.toString(visitRefreshDate));
         }
     }
 

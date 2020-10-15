@@ -10,6 +10,7 @@
 package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.Person;
+import org.openmrs.Visit;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
@@ -51,6 +52,8 @@ public interface ConfigService {
     boolean isVaccinationInfoIsEnabled();
 
     String getRefreshDate(Person person);
+
+    String getRefreshDate(Visit visit);
 
     String getLastVisitRefreshDate();
 
