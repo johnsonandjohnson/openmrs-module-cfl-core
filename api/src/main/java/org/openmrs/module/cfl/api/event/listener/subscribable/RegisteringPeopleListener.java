@@ -142,10 +142,11 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private String getPhoneNumber(Person person) {
-    if (person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME) != null) {
-      return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
-    } else {
+    if (person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME) == null ||
+            person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue().equals("-")) {
       return "";
+    } else {
+      return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
     }
   }
 
