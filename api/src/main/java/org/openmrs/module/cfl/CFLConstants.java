@@ -123,7 +123,7 @@ public final class CFLConstants {
     public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
             "be sent immediately after registration";
 
-    public static final String VACCINATION_PROGRAM_KEY = "who.vaccines";
+    public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccines";
     public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
     public static final String VACCINATION_PROGRAM_DESCRIPTION = "Stores information about vaccination programs";
 
@@ -148,13 +148,13 @@ public final class CFLConstants {
     public static final String SEND_REMINDER_VIA_CALL_DESCRIPTION = "Specifies if patient should receive reminder " +
             "via Call.";
 
-    public static final String VACCINATION_INFORMATION_ENABLED_KEY = "who.vaccinationInformationEnabled";
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY = "cfl.vaccinationInformationEnabled";
     public static final String VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE = "false";
     public static final String VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION = "Specifies if vaccination information" +
             "is available";
 
-    public static final String ZETES_LAST_VISIT_REFRESH_DATE = "zetes.lastVisitRefreshDate";
-    public static final String ZETES_LAST_PATIENT_REFRESH_DATE = "zetes.lastPatientRefreshDate";
+    public static final String IRIS_LAST_VISIT_REFRESH_DATE = "iris.lastVisitRefreshDate";
+    public static final String IRIS_LAST_PATIENT_REFRESH_DATE = "iris.lastPatientRefreshDate";
 
     public static final String REFRESH_DATE_ATTRIBUTE_NAME = "Refresh Date";
 

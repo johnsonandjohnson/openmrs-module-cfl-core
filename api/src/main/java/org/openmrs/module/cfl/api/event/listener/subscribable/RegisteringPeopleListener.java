@@ -44,31 +44,31 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   @Override
   public void performAction(Message message) {
-    if (getConfigService().isVaccinationInfoIsEnabled()) {
     Person person = extractPerson(message);
       if (person != null) {
-        createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
-        performActionsAfterPatientRegistration(person);
-        updateGlobalProperty(getConfigService().getRefreshDate(person));
+        sendWelcomeMessages(person);
+        if (getConfigService().isVaccinationInfoIsEnabled()) {
+          createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
+          performActionsAfterPatientRegistration(person);
+          updateGlobalProperty(getConfigService().getRefreshDate(person));
+        }
       }
     }
-  }
 
   private void performActionsAfterPatientRegistration(Person person) {
-    if (!StringUtils.isBlank(getPhoneNumber(person))) {
-      sendWelcomeMessages(person);
-      if (!StringUtils.isBlank(getChannelTypesForMessages())) {
+    if (StringUtils.isNotBlank(getPhoneNumber(person)) && StringUtils.isNotBlank(getChannelTypesForMessages())) {
         createVisitReminder(getChannelTypesForMessages(), person.getUuid());
-      }
     }
   }
 
   private void sendWelcomeMessages(Person person) {
-    if (isSmsEnabled()) {
-      sendSms(person);
-    }
-    if (isCallEnabled()) {
-      performCall(person);
+    if (StringUtils.isNotBlank(getPhoneNumber(person))) {
+      if (isSmsEnabled()) {
+        sendSms(person);
+      }
+      if (isCallEnabled()) {
+        performCall(person);
+      }
     }
   }
 

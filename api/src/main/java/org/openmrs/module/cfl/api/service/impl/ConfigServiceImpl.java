@@ -66,22 +66,22 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getLastVisitRefreshDate() {
-        return getGp(CFLConstants.ZETES_LAST_VISIT_REFRESH_DATE);
+        return getGp(CFLConstants.IRIS_LAST_VISIT_REFRESH_DATE);
     }
 
     @Override
     public void setLastVisitRefreshDate(String value) {
-      setGp(CFLConstants.ZETES_LAST_VISIT_REFRESH_DATE, value);
+      setGp(CFLConstants.IRIS_LAST_VISIT_REFRESH_DATE, value);
     }
 
     @Override
     public String getLastPatientRefreshDate() {
-        return getGp(CFLConstants.ZETES_LAST_PATIENT_REFRESH_DATE);
+        return getGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE);
     }
 
     @Override
     public void setLastPatientRefreshDate(String value) {
-        setGp(CFLConstants.ZETES_LAST_PATIENT_REFRESH_DATE, value);
+        setGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE, value);
     }
 
     private void setGp(String propertyName, String value) {
