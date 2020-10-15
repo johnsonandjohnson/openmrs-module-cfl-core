@@ -1,12 +1,13 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.service.ConfigService;
@@ -63,22 +64,27 @@ public class UpdatingVisitListener extends VisitActionListener {
     }
 
     private List<VisitInformation> getInformationForFutureVisits(Visit previousVisit) {
-        Vaccination[] vaccinations = getConfigService().getRandomizationGlobalProperty();
+        Randomization randomization = getConfigService().getRandomizationGlobalProperty();
 
         Patient patient = previousVisit.getPatient();
         String patientVaccinationProgram = getConfigService().getVaccinationProgram(patient);
-        Vaccination vaccination = Vaccination.findByVaccinationProgram(vaccinations, patientVaccinationProgram);
+        Vaccination vaccination = randomization.findByVaccinationProgram(patientVaccinationProgram);
 
-        List<VisitInformation> visits = vaccination.getVisits();
-        List<VisitInformation> futureVisitInformation = new ArrayList<VisitInformation>();
-        for (int i = 0; i < visits.size(); i++) {
-            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), previousVisit.getVisitType().getName())) {
-                for (int j = 1; j <= visits.get(i).getNumberOfFutureVisit(); j++) {
-                    futureVisitInformation.add(visits.get(i + j));
-                }
-            }
+        String visitType = previousVisit.getVisitType().getName();
+        List<VisitInformation> visitInformation = vaccination.findByVisitType(visitType);
+        if (CollectionUtils.isEmpty(visitInformation)) {
+            return new ArrayList<VisitInformation>();
+        } else if (visitInformation.size() == 1 && visitInformation.get(0).getMidPointWindow() == 0) {
+            return new ArrayList<VisitInformation>();
+        } else if (visitInformation.size() == 1) {
+            return vaccination.findFutureVisits(visitType, null);
+        } else {
+            return vaccination.findFutureVisits(visitType, getNumberOfVisits());
         }
-        return futureVisitInformation;
+    }
+
+    private int getNumberOfVisits() {
+        return 0;
     }
 
     private ConfigService getConfigService() {

@@ -10,6 +10,7 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.service.ConfigService;
@@ -174,9 +175,9 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private void createFirstVisit(String patientUuid, String vaccinationProgram) {
-    Vaccination[] vaccinations = getConfigService().getRandomizationGlobalProperty();
+    Randomization randomization = getConfigService().getRandomizationGlobalProperty();
 
-    Vaccination vaccination = Vaccination.findByVaccinationProgram(vaccinations, vaccinationProgram);
+    Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
     VisitInformation visitInformation = vaccination.getVisits().get(0);
 
     Visit visit = new Visit();

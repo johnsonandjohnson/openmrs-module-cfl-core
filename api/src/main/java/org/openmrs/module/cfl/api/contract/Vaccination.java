@@ -34,25 +34,25 @@ public class Vaccination {
         this.visits = visits;
     }
 
-    public VisitInformation findByVisitName(String visitName) {
-        VisitInformation visitInformation = null;
+    public List<VisitInformation> findByVisitType(String visitType) {
+        List<VisitInformation> visitInformation = new ArrayList<VisitInformation>();
         for (VisitInformation vi : getVisits()) {
-            if (StringUtils.equals(vi.getNameOfDose(), visitName)) {
-                visitInformation = vi;
-                break;
+            if (StringUtils.equals(vi.getNameOfDose(), visitType)) {
+                visitInformation.add(vi);
             }
         }
         return visitInformation;
     }
 
-    public static Vaccination findByVaccinationProgram(Vaccination[] vaccinations, String vaccinationProgram) {
-        Vaccination vaccination = null;
-        for (Vaccination vacc : vaccinations) {
-            if (StringUtils.equals(vacc.getName(), vaccinationProgram)) {
-                vaccination = vacc;
-                break;
+    public List<VisitInformation> findFutureVisits(String visitType, Integer numberOfVisits) {
+        List<VisitInformation> futureVisitInformation = new ArrayList<VisitInformation>();
+        for (int i = 0; i < visits.size(); i++) {
+            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), visitType)) {
+                for (int j = 1; j <= visits.get(i).getNumberOfFutureVisit(); j++) {
+                    futureVisitInformation.add(visits.get(i + j));
+                }
             }
         }
-        return vaccination;
+        return futureVisitInformation;
     }
 }

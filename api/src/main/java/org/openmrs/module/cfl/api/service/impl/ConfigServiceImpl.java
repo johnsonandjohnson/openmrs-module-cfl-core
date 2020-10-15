@@ -9,6 +9,7 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirection;
 import org.openmrs.module.cfl.api.service.ConfigService;
@@ -49,8 +50,8 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Vaccination[] getRandomizationGlobalProperty() {
-        return new Gson().fromJson(getGp(VACCINATION_PROGRAM_KEY), Vaccination[].class);
+    public Randomization getRandomizationGlobalProperty() {
+        return new Randomization(new Gson().fromJson(getGp(VACCINATION_PROGRAM_KEY), Vaccination[].class));
     }
 
     @Override
