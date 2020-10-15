@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
@@ -153,11 +154,12 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private String getPhoneNumber(Person person) {
-    if (person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME) == null ||
-            person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue().equals("-")) {
+    PersonAttribute phoneAttribute = person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME);
+    if (phoneAttribute == null ||
+            phoneAttribute.getValue().equals("-")) {
       return "";
     } else {
-      return person.getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME).getValue();
+      return phoneAttribute.getValue();
     }
   }
 
