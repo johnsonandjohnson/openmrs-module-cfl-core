@@ -49,4 +49,14 @@ public interface ConfigService {
     String getVaccinationProgram(Person person);
 
     boolean isVaccinationInfoIsEnabled();
+
+    String getRefreshDate(Person person);
+
+    String getLastVisitRefreshDate();
+
+    void setLastVisitRefreshDate(String value);
+
+    String getLastPatientRefreshDate();
+
+    void setLastPatientRefreshDate(String value);
 }

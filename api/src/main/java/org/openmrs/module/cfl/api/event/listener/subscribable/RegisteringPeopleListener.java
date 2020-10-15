@@ -49,6 +49,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
       if (person != null) {
         createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
         performActionsAfterPatientRegistration(person);
+        updateGlobalProperty(getConfigService().getRefreshDate(person));
       }
     }
   }
@@ -68,6 +69,14 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     }
     if (isCallEnabled()) {
       performCall(person);
+    }
+  }
+
+  private void updateGlobalProperty(String refreshDate) {
+    long lastSaved = Long.parseLong(getConfigService().getLastPatientRefreshDate());
+    long patientRefreshDate = Long.parseLong(refreshDate);
+    if (patientRefreshDate > lastSaved) {
+      getConfigService().setLastPatientRefreshDate(Long.toString(patientRefreshDate));
     }
   }
 

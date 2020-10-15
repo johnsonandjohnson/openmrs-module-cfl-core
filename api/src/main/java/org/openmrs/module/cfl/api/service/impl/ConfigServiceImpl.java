@@ -59,6 +59,35 @@ public class ConfigServiceImpl implements ConfigService {
                 .getGlobalProperty(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY));
     }
 
+    @Override
+    public String getRefreshDate(Person person) {
+        return person.getAttribute(CFLConstants.REFRESH_DATE_ATTRIBUTE_NAME).getValue();
+    }
+
+    @Override
+    public String getLastVisitRefreshDate() {
+        return getGp(CFLConstants.ZETES_LAST_VISIT_REFRESH_DATE);
+    }
+
+    @Override
+    public void setLastVisitRefreshDate(String value) {
+      setGp(CFLConstants.ZETES_LAST_VISIT_REFRESH_DATE, value);
+    }
+
+    @Override
+    public String getLastPatientRefreshDate() {
+        return getGp(CFLConstants.ZETES_LAST_PATIENT_REFRESH_DATE);
+    }
+
+    @Override
+    public void setLastPatientRefreshDate(String value) {
+        setGp(CFLConstants.ZETES_LAST_PATIENT_REFRESH_DATE, value);
+    }
+
+    private void setGp(String propertyName, String value) {
+      Context.getAdministrationService().setGlobalProperty(propertyName, value);
+    }
+
     private String getGp(String propertyName) {
         return Context.getAdministrationService().getGlobalProperty(propertyName);
     }

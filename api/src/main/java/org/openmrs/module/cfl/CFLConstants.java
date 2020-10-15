@@ -153,5 +153,10 @@ public final class CFLConstants {
     public static final String VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION = "Specifies if vaccination information" +
             "is available";
 
+    public static final String ZETES_LAST_VISIT_REFRESH_DATE = "zetes.lastVisitRefreshDate";
+    public static final String ZETES_LAST_PATIENT_REFRESH_DATE = "zetes.lastPatientRefreshDate";
+
+    public static final String REFRESH_DATE_ATTRIBUTE_NAME = "Refresh Date";
+
     private CFLConstants() { }
 }
