@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -77,14 +78,21 @@ public class UpdatingVisitListener extends VisitActionListener {
         } else if (visitInformation.size() == 1 && visitInformation.get(0).getMidPointWindow() == 0) {
             return new ArrayList<VisitInformation>();
         } else if (visitInformation.size() == 1) {
-            return vaccination.findFutureVisits(visitType, null);
+            return vaccination.findFutureVisits(visitType, 1);
         } else {
-            return vaccination.findFutureVisits(visitType, getNumberOfVisits());
+            return vaccination.findFutureVisits(visitType, getNumberOfVisits(patient, visitType));
         }
     }
 
-    private int getNumberOfVisits() {
-        return 0;
+    private int getNumberOfVisits(Patient patient, String visitType) {
+        List<Visit> allVisitsForPatient = Context.getVisitService().getVisitsByPatient(patient);
+        List<Visit> visitsForPatientByType = new ArrayList<Visit>();
+        for (Visit visit : allVisitsForPatient) {
+            if (StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), visitType)) {
+                visitsForPatientByType.add(visit);
+            }
+        }
+        return visitsForPatientByType.size();
     }
 
     private ConfigService getConfigService() {

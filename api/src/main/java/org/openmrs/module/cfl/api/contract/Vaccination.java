@@ -44,10 +44,11 @@ public class Vaccination {
         return visitInformation;
     }
 
-    public List<VisitInformation> findFutureVisits(String visitType, Integer numberOfVisits) {
+    public List<VisitInformation> findFutureVisits(String visitType, int numberOfVisits) {
         List<VisitInformation> futureVisitInformation = new ArrayList<VisitInformation>();
         for (int i = 0; i < visits.size(); i++) {
-            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), visitType)) {
+            if (StringUtils.equalsIgnoreCase(visits.get(i).getNameOfDose(), visitType)
+                    && visits.get(i).getDoseNumber() == numberOfVisits) {
                 for (int j = 1; j <= visits.get(i).getNumberOfFutureVisit(); j++) {
                     futureVisitInformation.add(visits.get(i + j));
                 }

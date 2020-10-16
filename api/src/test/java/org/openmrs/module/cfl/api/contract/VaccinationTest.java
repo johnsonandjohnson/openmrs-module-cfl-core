@@ -21,7 +21,7 @@ public class VaccinationTest {
     @Test
     public void shouldFindFutureVisitsForDifferentDoseTypesAndNullNumberOfVisits() throws IOException {
         Vaccination vaccination = loadVaccinationFromJSON(COVID);
-        List<VisitInformation> result = vaccination.findFutureVisits("DOSE 1 VISIT", null);
+        List<VisitInformation> result = vaccination.findFutureVisits("DOSE 1 VISIT", 1);
 
         Assert.assertThat(result.size(), is(2));
         assertVisitInformation(result.get(0), "FOLLOW UP", 1);
