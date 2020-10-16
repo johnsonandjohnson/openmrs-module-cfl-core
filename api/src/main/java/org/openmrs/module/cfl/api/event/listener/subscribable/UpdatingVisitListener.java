@@ -77,7 +77,7 @@ public class UpdatingVisitListener extends VisitActionListener {
         List<VisitInformation> visitInformation = vaccination.findByVisitType(visitType);
         if (CollectionUtils.isEmpty(visitInformation)) {
             return new ArrayList<VisitInformation>();
-        } else if (visitInformation.size() == 1 && visitInformation.get(0).getMidPointWindow() == 0) {
+        } else if (visitInformation.size() == 1 && visitInformation.get(0).getNumberOfFutureVisit() == 0) {
             return new ArrayList<VisitInformation>();
         } else if (visitInformation.size() == 1) {
             return vaccination.findFutureVisits(visitType, 1);
