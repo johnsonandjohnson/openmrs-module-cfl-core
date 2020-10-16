@@ -80,10 +80,12 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private void updateGlobalProperty(String refreshDate) {
-    long lastSaved = Long.parseLong(getConfigService().getLastPatientRefreshDate());
-    long patientRefreshDate = Long.parseLong(refreshDate);
-    if (patientRefreshDate > lastSaved) {
-      getConfigService().setLastPatientRefreshDate(Long.toString(patientRefreshDate));
+    if (StringUtils.isNotEmpty(refreshDate)) {
+      long lastSaved = Long.parseLong(getConfigService().getLastPatientRefreshDate());
+      long patientRefreshDate = Long.parseLong(refreshDate);
+      if (patientRefreshDate > lastSaved) {
+        getConfigService().setLastPatientRefreshDate(Long.toString(patientRefreshDate));
+      }
     }
   }
 

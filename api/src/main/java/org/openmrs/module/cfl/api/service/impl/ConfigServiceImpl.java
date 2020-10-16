@@ -3,6 +3,7 @@ package org.openmrs.module.cfl.api.service.impl;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
@@ -67,7 +68,8 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getRefreshDate(Person person) {
-        return person.getAttribute(CFLConstants.REFRESH_DATE_ATTRIBUTE_NAME).getValue();
+        PersonAttribute personAttribute = person.getAttribute(CFLConstants.REFRESH_DATE_ATTRIBUTE_NAME);
+        return personAttribute == null ? null : personAttribute.getValue();
     }
 
     @Override

@@ -49,10 +49,12 @@ public class UpdatingVisitListener extends VisitActionListener {
     }
 
     private void updateGlobalProperty(String refreshDate) {
-        long lastSaved = Long.parseLong(getConfigService().getLastVisitRefreshDate());
-        long visitRefreshDate = Long.parseLong(refreshDate);
-        if (visitRefreshDate > lastSaved) {
-            getConfigService().setLastVisitRefreshDate(Long.toString(visitRefreshDate));
+        if (StringUtils.isNotEmpty(refreshDate)) {
+            long lastSaved = Long.parseLong(getConfigService().getLastVisitRefreshDate());
+            long visitRefreshDate = Long.parseLong(refreshDate);
+            if (visitRefreshDate > lastSaved) {
+                getConfigService().setLastVisitRefreshDate(Long.toString(visitRefreshDate));
+            }
         }
     }
 
