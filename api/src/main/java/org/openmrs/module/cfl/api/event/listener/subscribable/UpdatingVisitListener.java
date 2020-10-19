@@ -80,6 +80,7 @@ public class UpdatingVisitListener extends VisitActionListener {
         } else if (visitInformation.size() == 1 && visitInformation.get(0).getNumberOfFutureVisit() == 0) {
             return new ArrayList<VisitInformation>();
         } else if (visitInformation.size() == 1) {
+            //We send 1 as numberOfVisits, because in this case we have only one visit with this visitType
             return vaccination.findFutureVisits(visitType, 1);
         } else {
             return vaccination.findFutureVisits(visitType, getNumberOfVisits(patient, visitType));

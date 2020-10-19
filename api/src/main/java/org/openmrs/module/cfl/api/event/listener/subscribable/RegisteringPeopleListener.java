@@ -1,8 +1,14 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.openmrs.Location;
+import org.openmrs.LocationAttribute;
+import org.openmrs.LocationAttributeType;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
@@ -25,11 +31,15 @@ import org.openmrs.module.messages.api.service.MessagesEventService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 
 import javax.jms.Message;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
@@ -43,6 +53,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   private static final String MESSAGES_EVENT_SERVICE_BEAN_NAME = "messages.messagesEventService";
   private static final String SMS_INITIATE_EVENT = "send_sms";
   private static final String PATIENT_ACTOR_TYPE = "patient";
+  private static final String HOUR_MINUTES_SEPARATOR = ":";
 
   @Override
   public List<String> subscribeToActions() {
@@ -172,8 +183,60 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private void createVisitReminder(String channel, String patientUuid) {
-    Context.getRegisteredComponent(PATIENT_TEMPLATE_SERVICE_BEAN_NAME, PatientTemplateService.class)
-            .createVisitReminder(channel, patientUuid);
+      saveBestContactTimeForPatient(patientUuid);
+      Context.getRegisteredComponent(PATIENT_TEMPLATE_SERVICE_BEAN_NAME, PatientTemplateService.class)
+              .createVisitReminder(channel, patientUuid);
+  }
+
+  private void saveBestContactTimeForPatient(String patientUuid) {
+    Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+
+    if (patient != null && patient.getPatientIdentifier() != null) {
+      Location patientLocation = patient.getPatientIdentifier().getLocation();
+      if (patientLocation != null) {
+        String patientTimeZone = getTimeZoneFromLocation(patientLocation);
+
+        PersonAttribute bestContactTimeAttribute = new PersonAttribute();
+        bestContactTimeAttribute.setAttributeType(getBestContactTimeAttrType());
+        bestContactTimeAttribute.setValue(getBestContactTimeInProperFormat(patientTimeZone));
+        patient.addAttribute(bestContactTimeAttribute);
+
+        Context.getPatientService().savePatient(patient);
+      }
+    }
+  }
+
+  private String getBestContactTimeInProperFormat(String timeZone) {
+    String defaultBestContactTime = getConfigService().getDefaultBestContactTime();
+    String[] splittedDefaultBestContactTime = defaultBestContactTime.split(HOUR_MINUTES_SEPARATOR);
+
+    if (StringUtils.isBlank(timeZone)) {
+      return "";
+    } else {
+      Calendar localTime = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+      localTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splittedDefaultBestContactTime[0]));
+      localTime.set(Calendar.MINUTE, Integer.parseInt(splittedDefaultBestContactTime[1]));
+      SimpleDateFormat sdf = new SimpleDateFormat(CFLConstants.BEST_CONTACT_TIME_FORMAT);
+      sdf.setCalendar(localTime);
+
+      Calendar defaultTime = Calendar.getInstance(TimeZone.getDefault());
+      defaultTime.setTime(localTime.getTime());
+      sdf.setTimeZone(TimeZone.getDefault());
+
+      return sdf.format(defaultTime.getTime());
+    }
+  }
+
+  private String getTimeZoneFromLocation(Location location) {
+    String patientTimeZone = "";
+    Collection<LocationAttribute> locationAttributes = location.getActiveAttributes();
+    for (LocationAttribute locationAttribute : locationAttributes) {
+      if (locationAttribute.getAttributeType().equals(getPatientTimeZoneAttrType())) {
+        patientTimeZone = locationAttribute.getValueReference();
+        break;
+      }
+    }
+    return patientTimeZone;
   }
 
   private void createFirstVisit(String patientUuid, String vaccinationProgram) {
@@ -203,5 +266,15 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private ConfigService getConfigService() {
     return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+  }
+
+  private LocationAttributeType getPatientTimeZoneAttrType() {
+    return Context.getLocationService()
+            .getLocationAttributeTypeByName(CFLConstants.PATIENT_TIMEZONE_LOCATION_ATTR_TYPE_NAME);
+  }
+
+  private PersonAttributeType getBestContactTimeAttrType() {
+    return Context.getPersonService()
+            .getPersonAttributeTypeByUuid(CFLConstants.BEST_CONTACT_TIME_ATTRIBUTE_TYPE_UUID);
   }
 }

@@ -158,5 +158,16 @@ public final class CFLConstants {
 
     public static final String REFRESH_DATE_ATTRIBUTE_NAME = "Refresh Date";
 
+    public static final String DEFAULT_BEST_CONTACT_TIME_KEY = "cfl.defaultBestContactTime";
+    public static final String DEFAULT_BEST_CONTACT_TIME_DEFAULT_VALUE = "10:00";
+    public static final String DEFAULT_BEST_CONTACT_TIME_DESCRIPTION = "Specifies the default best contact time for " +
+            "patient";
+
+    public static final String PATIENT_TIMEZONE_LOCATION_ATTR_TYPE_NAME = "Patient timezone";
+
+    public static final String BEST_CONTACT_TIME_ATTRIBUTE_TYPE_UUID = "7a8ad9aa-bd0e-48c0-826d-fa628f1db644";
+
+    public static final String BEST_CONTACT_TIME_FORMAT = "HH:mm";
+
     private CFLConstants() { }
 }
