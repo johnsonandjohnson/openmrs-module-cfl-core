@@ -257,6 +257,21 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     visitAttribute.setValueReferenceInternal(CFLConstants.SCHEDULED_VISIT_STATUS);
     visit.setAttribute(visitAttribute);
 
+    VisitAttribute upVisitAttribute = new VisitAttribute();
+    upVisitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME));
+    upVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getUpWindow()));
+    visit.setAttribute(upVisitAttribute);
+
+    VisitAttribute lowVisitAttribute = new VisitAttribute();
+    visitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME));
+    visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getLowWindow()));
+    visit.setAttribute(lowVisitAttribute);
+
+    VisitAttribute doseNumberVisitAttribute = new VisitAttribute();
+    visitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME));
+    visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getDoseNumber()));
+    visit.setAttribute(doseNumberVisitAttribute);
+
     Context.getVisitService().saveVisit(visit);
   }
 

@@ -43,6 +43,30 @@ public final class VisitUtil {
         visitAttribute.setValueReferenceInternal(CFLConstants.SCHEDULED_VISIT_STATUS);
         visit.setAttribute(visitAttribute);
 
+        VisitAttribute upVisitAttribute = new VisitAttribute();
+        upVisitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME));
+        upVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getUpWindow()));
+        visit.setAttribute(upVisitAttribute);
+
+        VisitAttribute lowVisitAttribute = new VisitAttribute();
+        visitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME));
+        visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getLowWindow()));
+        visit.setAttribute(lowVisitAttribute);
+
+        VisitAttribute doseNumberVisitAttribute = new VisitAttribute();
+        visitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME));
+        visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getDoseNumber()));
+        visit.setAttribute(doseNumberVisitAttribute);
+
         return visit;
+    }
+
+    public static VisitAttributeType getVisitAttributeTypeByName(String name) {
+        for (VisitAttributeType visitAttributeType : Context.getVisitService().getAllVisitAttributeTypes()) {
+            if (visitAttributeType.getName().toLowerCase().equals(name.toLowerCase())) {
+                return visitAttributeType;
+            }
+        }
+        return null;
     }
 }
