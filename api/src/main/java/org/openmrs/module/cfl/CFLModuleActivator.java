@@ -219,10 +219,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.DEFAULT_BEST_CONTACT_TIME_KEY,
-                CFLConstants.DEFAULT_BEST_CONTACT_TIME_DEFAULT_VALUE,
-                CFLConstants.DEFAULT_BEST_CONTACT_TIME_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

@@ -107,11 +107,6 @@ public class ConfigServiceImpl implements ConfigService {
         setGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE, value);
     }
 
-    @Override
-    public String getDefaultBestContactTime() {
-        return getGp(CFLConstants.DEFAULT_BEST_CONTACT_TIME_KEY);
-    }
-
     private void setGp(String propertyName, String value) {
       Context.getAdministrationService().setGlobalProperty(propertyName, value);
     }

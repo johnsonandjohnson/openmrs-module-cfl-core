@@ -62,6 +62,4 @@ public interface ConfigService {
     String getLastPatientRefreshDate();
 
     void setLastPatientRefreshDate(String value);
-
-    String getDefaultBestContactTime();
 }

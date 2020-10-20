@@ -29,6 +29,7 @@ import org.openmrs.module.messages.api.event.MessagesEvent;
 import org.openmrs.module.messages.api.event.SmsEventParamConstants;
 import org.openmrs.module.messages.api.service.MessagesEventService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
+import org.openmrs.module.messages.api.util.BestContactTimeHelper;
 
 import javax.jms.Message;
 import java.text.SimpleDateFormat;
@@ -198,7 +199,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
         PersonAttribute bestContactTimeAttribute = new PersonAttribute();
         bestContactTimeAttribute.setAttributeType(getBestContactTimeAttrType());
-        bestContactTimeAttribute.setValue(getBestContactTimeInProperFormat(patientTimeZone));
+        bestContactTimeAttribute.setValue(getBestContactTimeInProperFormat(patientTimeZone, patient));
         patient.addAttribute(bestContactTimeAttribute);
 
         Context.getPatientService().savePatient(patient);
@@ -206,8 +207,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     }
   }
 
-  private String getBestContactTimeInProperFormat(String timeZone) {
-    String defaultBestContactTime = getConfigService().getDefaultBestContactTime();
+  private String getBestContactTimeInProperFormat(String timeZone, Person person) {
+    String defaultBestContactTime = BestContactTimeHelper.getBestContactTime(person, null);
     String[] splittedDefaultBestContactTime = defaultBestContactTime.split(HOUR_MINUTES_SEPARATOR);
 
     if (StringUtils.isBlank(timeZone)) {
@@ -277,6 +278,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
   private PersonAttributeType getBestContactTimeAttrType() {
     return Context.getPersonService()
-            .getPersonAttributeTypeByUuid(CFLConstants.BEST_CONTACT_TIME_ATTRIBUTE_TYPE_UUID);
+            .getPersonAttributeTypeByUuid(ConfigConstants.PERSON_CONTACT_TIME_TYPE_UUID);
   }
 }
