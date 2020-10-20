@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
@@ -9,6 +10,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 
+import java.util.Date;
 import java.util.List;
 
 public final class VisitUtil {
@@ -30,48 +32,44 @@ public final class VisitUtil {
         return visitType;
     }
 
-    public static Visit createResourcesForVisit(Visit previousVisit, VisitInformation visitInformation) {
+    public static Visit createVisitResource(Patient patient, Date startDateTime, VisitInformation visitInformation) {
         Visit visit = new Visit();
-        visit.setPatient(previousVisit.getPatient());
-        visit.setStartDatetime(DateUtil.addDaysToDate(previousVisit.getStartDatetime(),
+
+        visit.setPatient(patient);
+        visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime,
                 visitInformation.getMidPointWindow()));
         visit.setVisitType(getProperVisitType(visitInformation));
-        VisitAttributeType visitAttributeType =
-                Context.getVisitService().getVisitAttributeTypeByUuid(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID);
-        VisitAttribute visitAttribute = new VisitAttribute();
-        visitAttribute.setAttributeType(visitAttributeType);
-        visitAttribute.setValueReferenceInternal(CFLConstants.SCHEDULED_VISIT_STATUS);
-        visit.setAttribute(visitAttribute);
+
+        visit.setAttribute(createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME,
+                CFLConstants.SCHEDULED_VISIT_STATUS));
+
+        visit.setAttribute(createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME,
+                String.valueOf(visitInformation.getUpWindow())));
+
+        visit.setAttribute(createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME,
+                String.valueOf(visitInformation.getLowWindow())));
+
+        visit.setAttribute(createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME,
+                String.valueOf(visitInformation.getDoseNumber())));
 
         return visit;
     }
 
-    public static Visit addVisitInformation(Visit visit, VisitInformation visitInformation) {
-        VisitAttribute upVisitAttribute = new VisitAttribute();
-        upVisitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME));
-        upVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getUpWindow()));
-        visit.setAttribute(upVisitAttribute);
-
-        VisitAttribute lowVisitAttribute = new VisitAttribute();
-        lowVisitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME));
-        lowVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getLowWindow()));
-        visit.setAttribute(lowVisitAttribute);
-
-        VisitAttribute doseNumberVisitAttribute = new VisitAttribute();
-        doseNumberVisitAttribute.setAttributeType(
-            VisitUtil.getVisitAttributeTypeByName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME));
-        doseNumberVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getDoseNumber()));
-        visit.setAttribute(doseNumberVisitAttribute);
-
-        return visit;
-    }
-
-    public static VisitAttributeType getVisitAttributeTypeByName(String name) {
+    private static VisitAttributeType getVisitAttributeTypeByName(String name) {
         for (VisitAttributeType visitAttributeType : Context.getVisitService().getAllVisitAttributeTypes()) {
             if (visitAttributeType.getName().toLowerCase().equals(name.toLowerCase())) {
                 return visitAttributeType;
             }
         }
         return null;
+    }
+
+    private static VisitAttribute createAttribute(String attributeType, String value) {
+        VisitAttribute visitAttribute = new VisitAttribute();
+        visitAttribute.setAttributeType(
+                VisitUtil.getVisitAttributeTypeByName(attributeType));
+        visitAttribute.setValueReferenceInternal(value);
+
+        return visitAttribute;
     }
 }
