@@ -62,6 +62,7 @@ public class UpdatingVisitListener extends VisitActionListener {
         List<VisitInformation> futureVisits = getInformationForFutureVisits(previousVisit);
         for (VisitInformation visitInformation : futureVisits) {
             Visit visit = VisitUtil.createResourcesForVisit(previousVisit, visitInformation);
+            visit = VisitUtil.addVisitInformation(visit, visitInformation);
             Context.getVisitService().saveVisit(visit);
         }
     }

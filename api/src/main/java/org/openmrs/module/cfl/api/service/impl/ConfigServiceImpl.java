@@ -89,7 +89,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getLastVisitRefreshDate() {
-        return getGp(CFLConstants.IRIS_LAST_VISIT_REFRESH_DATE);
+        return getGp(CFLConstants.IRIS_LAST_VISIT_REFRESH_DATE, "1");
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getLastPatientRefreshDate() {
-        return getGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE);
+        return getGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE, "1");
     }
 
     @Override
