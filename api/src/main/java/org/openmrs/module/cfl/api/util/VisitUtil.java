@@ -43,19 +43,24 @@ public final class VisitUtil {
         visitAttribute.setValueReferenceInternal(CFLConstants.SCHEDULED_VISIT_STATUS);
         visit.setAttribute(visitAttribute);
 
+        return visit;
+    }
+
+    public static Visit addVisitInformation(Visit visit, VisitInformation visitInformation) {
         VisitAttribute upVisitAttribute = new VisitAttribute();
-        upVisitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME));
+        upVisitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME));
         upVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getUpWindow()));
         visit.setAttribute(upVisitAttribute);
 
         VisitAttribute lowVisitAttribute = new VisitAttribute();
-        visitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME));
-        visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getLowWindow()));
+        lowVisitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME));
+        lowVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getLowWindow()));
         visit.setAttribute(lowVisitAttribute);
 
         VisitAttribute doseNumberVisitAttribute = new VisitAttribute();
-        visitAttribute.setAttributeType(getVisitAttributeTypeByName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME));
-        visitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getDoseNumber()));
+        doseNumberVisitAttribute.setAttributeType(
+            VisitUtil.getVisitAttributeTypeByName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME));
+        doseNumberVisitAttribute.setValueReferenceInternal(String.valueOf(visitInformation.getDoseNumber()));
         visit.setAttribute(doseNumberVisitAttribute);
 
         return visit;
