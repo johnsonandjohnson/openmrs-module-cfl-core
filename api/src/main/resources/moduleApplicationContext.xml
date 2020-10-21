@@ -44,6 +44,39 @@
     <bean id="cfl.personViewedEventListener"
           class="org.openmrs.module.cfl.api.event.PersonViewedEventListener"/>
 
+    <bean id="cfl.peopleActionListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.PeopleActionListener"
+          abstract="true">
+        <property name="personService" ref="personService"/>
+    </bean>
+
+    <bean id="cfl.visitReminderService"
+          class="org.openmrs.module.cfl.api.service.impl.VisitReminderServiceImpl"/>
+
+    <bean id="cfl.welcomeService"
+          class="org.openmrs.module.cfl.api.service.impl.WelcomeServiceImpl"/>
+
+    <bean id="cfl.registeringPeopleListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener"
+          init-method="init"
+          destroy-method="close"
+          parent="cfl.peopleActionListener">
+        <property name="welcomeService" ref="cfl.welcomeService"/>
+        <property name="visitReminderService" ref="cfl.visitReminderService"/>
+    </bean>
+
+    <bean id="cfl.visitActionListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.VisitActionListener"
+          abstract="true">
+    </bean>
+
+    <bean id="cfl.updatingVisitListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener"
+          init-method="init"
+          destroy-method="close"
+          parent="cfl.visitActionListener">
+    </bean>
+
     <bean id="cfl.personIdentifierAction"
           class="org.openmrs.module.cfl.api.registration.person.action.impl.PersonIdentifierActionImpl">
         <property name="personService" ref="personService" />

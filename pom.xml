@@ -55,6 +55,8 @@
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <javax.servlet.version>3.1.0</javax.servlet.version>
+        <messagesVersion>1.0.1-SNAPSHOT</messagesVersion>
+
     </properties>
 
     <dependencyManagement>
@@ -241,6 +243,13 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>messages-api</artifactId>
+                <version>${messagesVersion}</version>
+                <type>jar</type>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

@@ -31,6 +31,8 @@ public final class CFLConstants {
 
     public static final String TELEPHONE_ATTRIBUTE_NAME = "Telephone Number";
 
+    public static final String UUID_KEY = "uuid";
+
     public static final String DISABLED_CONTROL_KEY = "cfl.shouldDisableAppsAndExtensions";
     public static final String DISABLED_CONTROL_DEFAULT_VALUE = "true";
     public static final String DISABLED_CONTROL_DESCRIPTION = "Used to determine if the module should disable "
@@ -99,6 +101,70 @@ public final class CFLConstants {
     public static final String CONDITION_LIST_CLASSES_DEFAULT_VALUE = "d9cab7ff-d2ed-42b2-a2f2-64e677370ff5";
     public static final String CONDITION_LIST_CLASSES_DESCRIPTION = "List of concept uuid's which limits the answers " +
             "for condition list";
+
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_KEY = "cfl.sendSmsOnPatientRegistration";
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
+    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive SMS " +
+            "after being registered.";
+
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY = "cfl.performCallOnPatientRegistration";
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
+    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive " +
+        "a call after being registered.";
+
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that will be used " +
+        "in call after patient registration.";
+
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_KEY = "cfl.smsMessageAfterRegistration";
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE = "Hello, you have just registered in " +
+            "our system";
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
+            "be sent immediately after registration";
+
+    public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccines";
+    public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
+    public static final String VACCINATION_PROGRAM_DESCRIPTION = "Stores information about vaccination programs";
+
+    public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
+
+    public static final String VISIT_STATUS_ATTRIBUTE_TYPE_UUID = "70ca70ac-53fd-49e4-9abe-663d4785fe62";
+    public static final String VISIT_STATUS_ATTRIBUTE_TYPE_NAME = "Visit Status";
+    public static final String SCHEDULED_VISIT_STATUS = "SCHEDULED";
+
+    public static final String CFL_CONFIG_SERVICE_BEAN_NAME = "cfl.configService";
+
+    public static final String VACCINATION_PROGRAM_ATTRIBUTE_NAME = "Vaccination program";
+
+    public static final String STATUS_OF_OCCURRED_VISIT_KEY = "visits.statusOfOccurredVisit";
+
+    public static final String SEND_REMINDER_VIA_SMS_KEY = "cfl.shouldSendReminderViaSms";
+    public static final String SEND_REMINDER_VIA_SMS_DEFAULT_VALUE = "false";
+    public static final String SEND_REMINDER_VIA_SMS_DESCRIPTION = "Specifies if patient should receive reminder " +
+            "via SMS.";
+
+    public static final String SEND_REMINDER_VIA_CALL_KEY = "cfl.shouldSendReminderViaCall";
+    public static final String SEND_REMINDER_VIA_CALL_DEFAULT_VALUE = "false";
+    public static final String SEND_REMINDER_VIA_CALL_DESCRIPTION = "Specifies if patient should receive reminder " +
+            "via Call.";
+
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY = "cfl.vaccinationInformationEnabled";
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE = "false";
+    public static final String VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION = "Specifies if vaccination information" +
+            "is available";
+
+    public static final String IRIS_LAST_VISIT_REFRESH_DATE = "iris.lastVisitRefreshDate";
+    public static final String IRIS_LAST_PATIENT_REFRESH_DATE = "iris.lastPatientRefreshDate";
+
+    public static final String REFRESH_DATE_ATTRIBUTE_NAME = "Refresh Date";
+    public static final String UP_WINDOW_ATTRIBUTE_NAME = "Up Window";
+    public static final String LOW_WINDOW_ATTRIBUTE_NAME = "Low Window";
+    public static final String DOSE_NUMBER_ATTRIBUTE_NAME = "Dose Number";
+
+    public static final String PATIENT_TIMEZONE_LOCATION_ATTR_TYPE_NAME = "Time zone";
+
+    public static final String BEST_CONTACT_TIME_FORMAT = "HH:mm";
 
     private CFLConstants() { }
 }
