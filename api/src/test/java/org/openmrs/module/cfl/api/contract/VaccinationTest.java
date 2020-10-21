@@ -19,13 +19,32 @@ public class VaccinationTest {
     private static final int THREE = 3;
 
     @Test
-    public void shouldFindFutureVisitsForDifferentDoseTypesAndNullNumberOfVisits() throws IOException {
+    public void shouldFindFutureVisitsForDifferentDoseTypesAndDoseNumberOne() throws IOException {
         Vaccination vaccination = loadVaccinationFromJSON(COVID);
         List<VisitInformation> result = vaccination.findFutureVisits("DOSE 1 VISIT", 1);
 
         Assert.assertThat(result.size(), is(2));
         assertVisitInformation(result.get(0), "FOLLOW UP", 1);
         assertVisitInformation(result.get(1), "DOSE 1 & 2 VISIT", 2);
+    }
+
+    @Test
+    public void shouldFindFutureVisitsForDifferentDoseTypesAndDoseNumberTwo() throws IOException {
+        Vaccination vaccination = loadVaccinationFromJSON(COVID);
+        List<VisitInformation> result = vaccination.findFutureVisits("DOSE 1 & 2 VISIT", 1);
+
+        Assert.assertThat(result.size(), is(2));
+        assertVisitInformation(result.get(0), "FOLLOW UP", 2);
+        assertVisitInformation(result.get(1), "DOSE 1, 2 & 3 VISIT", THREE);
+    }
+
+    @Test
+    public void shouldFindFutureVisitsForDifferentDoseTypesAndDoseNumberThree() throws IOException {
+        Vaccination vaccination = loadVaccinationFromJSON(COVID);
+        List<VisitInformation> result = vaccination.findFutureVisits("DOSE 1, 2 & 3 VISIT", 1);
+
+        Assert.assertThat(result.size(), is(1));
+        assertVisitInformation(result.get(0), "FOLLOW UP", THREE);
     }
 
     @Test

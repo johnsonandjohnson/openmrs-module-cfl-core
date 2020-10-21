@@ -1,4 +1,5 @@
-{"numberOfDose": 3,
+{
+  "numberOfDose": 3,
   "visits": [
     {
       "doseNumber": 1,
