@@ -15,6 +15,7 @@ import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirection;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
+import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 
 import java.util.Iterator;
@@ -105,6 +106,11 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void setLastPatientRefreshDate(String value) {
         setGp(CFLConstants.IRIS_LAST_PATIENT_REFRESH_DATE, value);
+    }
+
+    @Override
+    public String getDefaultUserTimeZone() {
+        return getGp(CFLConstants.DEFAULT_USER_TIME_ZONE_GP_NAME, DateUtil.DEFAULT_SYSTEM_TIME_ZONE.getID());
     }
 
     private void setGp(String propertyName, String value) {

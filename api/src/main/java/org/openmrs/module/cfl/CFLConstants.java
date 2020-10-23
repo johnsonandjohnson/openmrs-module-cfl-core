@@ -166,5 +166,7 @@ public final class CFLConstants {
 
     public static final String BEST_CONTACT_TIME_FORMAT = "HH:mm";
 
+    public static final String DEFAULT_USER_TIME_ZONE_GP_NAME = "messages.defaultUserTimezone";
+
     private CFLConstants() { }
 }

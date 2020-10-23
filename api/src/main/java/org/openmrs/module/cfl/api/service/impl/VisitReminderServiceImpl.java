@@ -11,6 +11,7 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VisitReminderService;
 import org.openmrs.module.cfl.api.util.PersonUtil;
 import org.openmrs.module.messages.api.constants.ConfigConstants;
@@ -96,9 +97,10 @@ public class VisitReminderServiceImpl implements VisitReminderService {
             SimpleDateFormat sdf = new SimpleDateFormat(CFLConstants.BEST_CONTACT_TIME_FORMAT);
             sdf.setCalendar(localTime);
 
-            Calendar defaultTime = Calendar.getInstance(TimeZone.getDefault());
+            String defaultUserTimeZone = getConfigService().getDefaultUserTimeZone();
+            Calendar defaultTime = Calendar.getInstance(TimeZone.getTimeZone(defaultUserTimeZone));
             defaultTime.setTime(localTime.getTime());
-            sdf.setTimeZone(TimeZone.getDefault());
+            sdf.setTimeZone(TimeZone.getTimeZone(defaultUserTimeZone));
 
             return sdf.format(defaultTime.getTime());
         }
@@ -128,5 +130,9 @@ public class VisitReminderServiceImpl implements VisitReminderService {
 
     private AdministrationService getAdministrationService() {
         return Context.getAdministrationService();
+    }
+
+    private ConfigService getConfigService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 }
