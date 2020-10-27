@@ -8,7 +8,10 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.VisitType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
+import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
+import org.openmrs.module.cfl.api.service.ConfigService;
 
 import java.util.Date;
 import java.util.List;
@@ -55,6 +58,50 @@ public final class VisitUtil {
         return visit;
     }
 
+    public static Visit getLastDosingVisit(Patient patient) {
+        Randomization randomization = getConfigService().getRandomizationGlobalProperty();
+        String patientVaccinationProgram = getConfigService().getVaccinationProgram(patient);
+        Vaccination vaccination = randomization.findByVaccinationProgram(patientVaccinationProgram);
+
+        List<Visit> allPatientVisits = Context.getVisitService().getVisitsByPatient(patient);
+
+        String followUpTypeName = "";
+        Visit lastVisit = null;
+        for (VisitInformation vi : vaccination.getVisits()) {
+            if (isFollowUpVisit(vi)) {
+                followUpTypeName = vi.getNameOfDose();
+            }
+            for (Visit visit : allPatientVisits) {
+                if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName())
+                        && !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
+                    lastVisit = visit;
+                    break;
+                }
+            }
+        }
+        return lastVisit;
+    }
+
+    public static String getVisitStatus(Visit visit) {
+        VisitAttributeType visitStatusAttrType =
+                getVisitAttributeTypeByName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
+        for (VisitAttribute visitAttribute : visit.getActiveAttributes()) {
+            if (visitStatusAttrType != null && StringUtils.equalsIgnoreCase(visitAttribute.getAttributeType().getName(),
+                    visitStatusAttrType.getName())) {
+                return visitAttribute.getValueReference();
+            }
+        }
+        return "";
+    }
+
+    public static String getOccurredVisitStatus() {
+        return Context.getAdministrationService().getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+    }
+
+    private static boolean isFollowUpVisit(VisitInformation visitInformation) {
+        return visitInformation.getNumberOfFutureVisit() == 0;
+    }
+
     private static VisitAttributeType getVisitAttributeTypeByName(String name) {
         for (VisitAttributeType visitAttributeType : Context.getVisitService().getAllVisitAttributeTypes()) {
             if (visitAttributeType.getName().toLowerCase().equals(name.toLowerCase())) {
@@ -71,5 +118,9 @@ public final class VisitUtil {
         visitAttribute.setValueReferenceInternal(value);
 
         return visitAttribute;
+    }
+
+    private static ConfigService getConfigService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 }

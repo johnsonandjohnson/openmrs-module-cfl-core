@@ -42,7 +42,7 @@ public class UpdatingVisitListener extends VisitActionListener {
 
             if (visitStatus.equals(Context.getAdministrationService()
                     .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
-                createFutureVisits(visit);
+                createFutureVisits(visit.getPatient());
             }
             updateGlobalProperty(getConfigService().getRefreshDate(visit));
         }
@@ -58,13 +58,22 @@ public class UpdatingVisitListener extends VisitActionListener {
         }
     }
 
-    private void createFutureVisits(Visit previousVisit) {
-        List<VisitInformation> futureVisits = getInformationForFutureVisits(previousVisit);
-        for (VisitInformation visitInformation : futureVisits) {
-            Visit visit = VisitUtil.createVisitResource(previousVisit.getPatient(),
-                    previousVisit.getStartDatetime(), visitInformation);
-            Context.getVisitService().saveVisit(visit);
+    private void createFutureVisits(Patient patient) {
+        Visit lastDosingVisit = VisitUtil.getLastDosingVisit(patient);
+
+        if (StringUtils.equalsIgnoreCase(VisitUtil.getVisitStatus(lastDosingVisit),
+                VisitUtil.getOccurredVisitStatus())) {
+            List<VisitInformation> futureVisits = getInformationForFutureVisits(lastDosingVisit);
+            for (VisitInformation futureVisit : futureVisits) {
+                prepareDataAndSaveVisit(lastDosingVisit, futureVisit);
+            }
         }
+    }
+
+    private void prepareDataAndSaveVisit(Visit previousVisit, VisitInformation futureVisit) {
+        Visit visit = VisitUtil.createVisitResource(previousVisit.getPatient(),
+                previousVisit.getStartDatetime(), futureVisit);
+        Context.getVisitService().saveVisit(visit);
     }
 
     private List<VisitInformation> getInformationForFutureVisits(Visit previousVisit) {
@@ -76,6 +85,7 @@ public class UpdatingVisitListener extends VisitActionListener {
 
         String visitType = previousVisit.getVisitType().getName();
         List<VisitInformation> visitInformation = vaccination.findByVisitType(visitType);
+
         if (CollectionUtils.isEmpty(visitInformation)) {
             return new ArrayList<VisitInformation>();
         } else if (visitInformation.size() == 1 && visitInformation.get(0).getNumberOfFutureVisit() == 0) {
