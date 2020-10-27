@@ -37,6 +37,16 @@
         <property name="personService" ref="personService" />
     </bean>
 
+    <bean id="cfl.irisPatientService" class="org.openmrs.module.cfl.api.service.impl.IrisPatientServiceImpl">
+        <property name="patientService" ref="patientService" />
+        <property name="dbSessionFactory" ref="dbSessionFactory" />
+    </bean>
+
+    <bean id="cfl.irisVisitService" class="org.openmrs.module.cfl.api.service.impl.IrisVisitServiceImpl">
+        <property name="visitService" ref="visitService" />
+        <property name="dbSessionFactory" ref="dbSessionFactory" />
+    </bean>
+
     <bean id="cfl.applicationEventService" class="org.openmrs.module.cfl.api.event.ApplicationEventServiceImpl">
         <property name="emrapiAppEventService" ref="applicationEventService" />
     </bean>
