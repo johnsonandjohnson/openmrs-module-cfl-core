@@ -44,17 +44,6 @@ public class UpdatingVisitListener extends VisitActionListener {
                     .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
                 createFutureVisits(visit.getPatient());
             }
-            updateGlobalProperty(getConfigService().getRefreshDate(visit));
-        }
-    }
-
-    private void updateGlobalProperty(String refreshDate) {
-        if (StringUtils.isNotEmpty(refreshDate)) {
-            long lastSaved = Long.parseLong(getConfigService().getLastVisitRefreshDate());
-            long visitRefreshDate = Long.parseLong(refreshDate);
-            if (visitRefreshDate > lastSaved) {
-                getConfigService().setLastVisitRefreshDate(Long.toString(visitRefreshDate));
-            }
         }
     }
 

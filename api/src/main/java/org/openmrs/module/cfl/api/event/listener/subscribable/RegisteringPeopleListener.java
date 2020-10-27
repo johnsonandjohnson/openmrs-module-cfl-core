@@ -1,6 +1,5 @@
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
@@ -37,17 +36,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
       if (getConfigService().isVaccinationInfoIsEnabled()) {
         createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
         visitReminderService.create(person);
-        updateGlobalProperty(getConfigService().getRefreshDate(person));
-      }
-    }
-  }
-
-  private void updateGlobalProperty(String refreshDate) {
-    if (StringUtils.isNotEmpty(refreshDate)) {
-      long lastSaved = Long.parseLong(getConfigService().getLastPatientRefreshDate());
-      long patientRefreshDate = Long.parseLong(refreshDate);
-      if (patientRefreshDate > lastSaved) {
-        getConfigService().setLastPatientRefreshDate(Long.toString(patientRefreshDate));
       }
     }
   }
