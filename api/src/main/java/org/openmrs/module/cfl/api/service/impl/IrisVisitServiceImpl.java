@@ -28,7 +28,7 @@ public class IrisVisitServiceImpl  extends BaseOpenmrsService implements IrisVis
         try {
             tx = dbSessionFactory.getCurrentSession().getTransaction();
             if (tx != null && tx.isActive()) {
-                tx.rollback();
+                tx.commit();
                 dbSessionFactory.getCurrentSession().clear();
             }
             tx = dbSessionFactory.getCurrentSession().beginTransaction();

@@ -28,7 +28,7 @@ public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPa
         try {
             tx = dbSessionFactory.getCurrentSession().getTransaction();
             if (tx != null && tx.isActive()) {
-                tx.rollback();
+                tx.commit();
                 dbSessionFactory.getCurrentSession().clear();
             }
             tx = dbSessionFactory.getCurrentSession().beginTransaction();
