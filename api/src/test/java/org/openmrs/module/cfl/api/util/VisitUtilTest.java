@@ -14,7 +14,6 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
@@ -49,11 +48,11 @@ public class VisitUtilTest {
 
     private Patient patient;
 
-    private Randomization randomization;
+    private Vaccination vaccination;
 
     private static final String EXAMPLE_VACC_PROGRAM_NAME = "Vac_3 (three doses)";
 
-    private static final String RANDOMIZATION = "Randomization.json";
+    private static final String COVID = "COVID.json";
 
     private static final String OCCURRED = "OCCURRED";
 
@@ -79,10 +78,9 @@ public class VisitUtilTest {
         visits.add(VisitHelper.createVisit(2, patient, "FOLLOW UP", "OCCURRED"));
         visits.add(VisitHelper.createVisit(3, patient, "DOSE 1 & 2 VISIT", "OCCURRED"));
         when(visitService.getVisitsByPatient(patient)).thenReturn(visits);
-        randomization = loadRandomizationFromJSON(RANDOMIZATION);
-        when(configService.getRandomizationGlobalProperty()).thenReturn(randomization);
+        vaccination = loadVaccinationFromJSON(COVID);
 
-        Visit result = VisitUtil.getLastDosingVisit(patient);
+        Visit result = VisitUtil.getLastDosingVisit(patient, vaccination);
 
         Assert.assertThat(result.getId(), is(3));
         Assert.assertThat(result.getVisitType().getName(), is("DOSE 1 & 2 VISIT"));
@@ -110,8 +108,8 @@ public class VisitUtilTest {
         return patient;
     }
 
-    private Randomization loadRandomizationFromJSON(String jsonFile) throws IOException {
+    private Vaccination loadVaccinationFromJSON(String jsonFile) throws IOException  {
         InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsonFile);
-        return new Randomization(new Gson().fromJson(IOUtils.toString(in), Vaccination[].class));
+        return new Gson().fromJson(IOUtils.toString(in), Vaccination.class);
     }
 }
