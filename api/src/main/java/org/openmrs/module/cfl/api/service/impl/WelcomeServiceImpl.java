@@ -55,17 +55,18 @@ public class WelcomeServiceImpl implements WelcomeService {
         properties.put(SmsEventParamConstants.RECIPIENTS,
                 new ArrayList<String>(Collections.singletonList(PersonUtil.getPhoneNumber(person))));
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
-        properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage(params));
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
+        properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage(param));
 
         Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
                 .sendEventMessage(new MessagesEvent(SMS_INITIATE_EVENT, properties));
     }
 
-    private String getWelcomeMessage(Map<String, Object> params) {
+    private String getWelcomeMessage(Map<String, Object> param) {
         return Context.getRegisteredComponent(VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME,
-                VelocityNotificationTemplateServiceImpl.class).buildMessageByPatient(params);
+                VelocityNotificationTemplateServiceImpl.class)
+                .buildMessageByGlobalProperty(param, CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
     }
 
     private boolean isCallEnabled() {
