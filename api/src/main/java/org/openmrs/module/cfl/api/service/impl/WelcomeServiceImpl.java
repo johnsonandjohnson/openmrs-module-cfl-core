@@ -13,21 +13,25 @@ import org.openmrs.module.messages.api.event.CallFlowParamConstants;
 import org.openmrs.module.messages.api.event.MessagesEvent;
 import org.openmrs.module.messages.api.event.SmsEventParamConstants;
 import org.openmrs.module.messages.api.service.MessagesEventService;
+import org.openmrs.module.messages.api.service.impl.VelocityNotificationTemplateServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.FLOW_NAME;
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
 
 public class WelcomeServiceImpl implements WelcomeService {
 
     private static final String MESSAGES_EVENT_SERVICE_BEAN_NAME = "messages.messagesEventService";
+    private static final String VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME =
+            "messages.velocityNotificationTemplateServiceImpl";
     private static final String SMS_INITIATE_EVENT = "send_sms";
     private static final String PATIENT_ACTOR_TYPE = "patient";
+    private static final String PATIENT_PARAM = "patient";
 
     @Override
     public void sendWelcomeMessages(Person person) {
@@ -50,14 +54,18 @@ public class WelcomeServiceImpl implements WelcomeService {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(SmsEventParamConstants.RECIPIENTS,
                 new ArrayList<String>(Collections.singletonList(PersonUtil.getPhoneNumber(person))));
-        properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage());
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
+        properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage(params));
 
         Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
                 .sendEventMessage(new MessagesEvent(SMS_INITIATE_EVENT, properties));
     }
 
-    private String getWelcomeMessage() {
-        return getAdministrationService().getGlobalProperty(CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
+    private String getWelcomeMessage(Map<String, Object> params) {
+        return Context.getRegisteredComponent(VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME,
+                VelocityNotificationTemplateServiceImpl.class).buildMessageByPatient(params);
     }
 
     private boolean isCallEnabled() {
