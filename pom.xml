@@ -55,8 +55,7 @@
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <messagesVersion>1.0.1-SNAPSHOT</messagesVersion>
-
+        <messagesVersion>1.0.1</messagesVersion>
     </properties>
 
     <dependencyManagement>
