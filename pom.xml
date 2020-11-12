@@ -413,6 +413,11 @@
             <layout>default</layout>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
+        <repository>
+            <id>cfl-openmrs-repo</id>
+            <name>CfL OpenMRS Repository</name>
+            <url>https://bitbucket.org/soldevelo/cfl-openmrs/src/dev/cfl/web/cfl-modules</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
