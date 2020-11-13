@@ -4,4 +4,6 @@ import org.openmrs.Location;
 
 public interface IrisLocationService {
     Location saveLocation(Location location);
+
+    Location updateLocation(Location name);
 }

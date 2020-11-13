@@ -51,6 +51,7 @@
 
     <bean id="cfl.irisLocationService" class="org.openmrs.module.cfl.api.service.impl.IrisLocationServiceImpl">
         <property name="locationService" ref="locationService" />
+        <property name="locationDAO" ref="locationDAO" />
     </bean>
 
     <bean id="cfl.applicationEventService" class="org.openmrs.module.cfl.api.event.ApplicationEventServiceImpl">
