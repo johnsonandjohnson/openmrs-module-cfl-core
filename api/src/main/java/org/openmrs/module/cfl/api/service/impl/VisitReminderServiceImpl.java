@@ -8,11 +8,11 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VisitReminderService;
+import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PersonUtil;
 import org.openmrs.module.messages.api.constants.ConfigConstants;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
@@ -25,39 +25,15 @@ import java.util.TimeZone;
 
 public class VisitReminderServiceImpl implements VisitReminderService {
 
-    private static final String SMS_CHANNEL = "SMS";
-    private static final String CALL_CHANNEL = "Call";
     private static final String PATIENT_TEMPLATE_SERVICE_BEAN_NAME = "messages.patientTemplateService";
     private static final String HOUR_MINUTES_SEPARATOR = ":";
 
     @Override
     public void create(Person person) {
-        String channelType = getChannelTypesForMessages();
+        String channelType = CountrySettingUtil.getChannelTypesForVisitReminder(person);
         if (StringUtils.isNotBlank(PersonUtil.getPhoneNumber(person)) && StringUtils.isNotBlank(channelType)) {
             createVisitReminder(channelType, person.getUuid());
         }
-    }
-
-    private String getChannelTypesForMessages() {
-        String channel = "";
-        if (isReminderViaSmsIsEnabled() && isReminderViaCallIsEnabled()) {
-            channel = SMS_CHANNEL.concat("," + CALL_CHANNEL);
-        } else if (isReminderViaCallIsEnabled()) {
-            channel = CALL_CHANNEL;
-        } else if (isReminderViaSmsIsEnabled()) {
-            channel = SMS_CHANNEL;
-        }
-        return channel;
-    }
-
-    private boolean isReminderViaSmsIsEnabled() {
-        return Boolean.parseBoolean(getAdministrationService()
-                .getGlobalProperty(CFLConstants.SEND_REMINDER_VIA_SMS_KEY));
-    }
-
-    private boolean isReminderViaCallIsEnabled() {
-        return Boolean.parseBoolean(getAdministrationService()
-                .getGlobalProperty(CFLConstants.SEND_REMINDER_VIA_CALL_KEY));
     }
 
     private void createVisitReminder(String channel, String patientUuid) {
@@ -126,10 +102,6 @@ public class VisitReminderServiceImpl implements VisitReminderService {
     private PersonAttributeType getBestContactTimeAttrType() {
         return Context.getPersonService()
                 .getPersonAttributeTypeByUuid(ConfigConstants.PERSON_CONTACT_TIME_TYPE_UUID);
-    }
-
-    private AdministrationService getAdministrationService() {
-        return Context.getAdministrationService();
     }
 
     private ConfigService getConfigService() {

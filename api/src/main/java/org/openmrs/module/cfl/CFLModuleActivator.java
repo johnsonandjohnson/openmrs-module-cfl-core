@@ -188,14 +188,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE,
                 CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_KEY,
-                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_DEFAULT_VALUE,
-                CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY,
-                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_DEFAULT_VALUE,
-                CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
@@ -208,17 +200,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SEND_REMINDER_VIA_SMS_KEY,
-                CFLConstants.SEND_REMINDER_VIA_SMS_DEFAULT_VALUE,
-                CFLConstants.SEND_REMINDER_VIA_SMS_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SEND_REMINDER_VIA_CALL_KEY,
-                CFLConstants.SEND_REMINDER_VIA_CALL_DEFAULT_VALUE,
-                CFLConstants.SEND_REMINDER_VIA_CALL_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(
+                CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
+                CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE,
+                CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

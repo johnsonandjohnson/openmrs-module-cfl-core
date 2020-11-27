@@ -20,47 +20,47 @@ import java.util.List;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
 
-  private WelcomeService welcomeService;
-  private VisitReminderService visitReminderService;
+    private WelcomeService welcomeService;
+    private VisitReminderService visitReminderService;
 
-  @Override
-  public List<String> subscribeToActions() {
-    return Collections.singletonList(Event.Action.CREATED.name());
-  }
-
-  @Override
-  public void performAction(Message message) {
-    Person person = extractPerson(message);
-    if (person != null) {
-      welcomeService.sendWelcomeMessages(person);
-      if (getConfigService().isVaccinationInfoIsEnabled()) {
-        createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
-        visitReminderService.create(person);
-      }
+    @Override
+    public List<String> subscribeToActions() {
+        return Collections.singletonList(Event.Action.CREATED.name());
     }
-  }
 
-  private void createFirstVisit(String patientUuid, String vaccinationProgram) {
-    Randomization randomization = getConfigService().getRandomizationGlobalProperty();
+    @Override
+    public void performAction(Message message) {
+        Person person = extractPerson(message);
+        if (person != null) {
+            welcomeService.sendWelcomeMessages(person);
+            if (getConfigService().isVaccinationInfoIsEnabled()) {
+                createFirstVisit(person.getUuid(), getConfigService().getVaccinationProgram(person));
+                visitReminderService.create(person);
+            }
+        }
+    }
 
-    Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
-    VisitInformation visitInformation = vaccination.getVisits().get(0);
+    private void createFirstVisit(String patientUuid, String vaccinationProgram) {
+        Randomization randomization = getConfigService().getRandomizationGlobalProperty();
 
-    Visit visit = VisitUtil.createVisitResource(Context.getPatientService().getPatientByUuid(patientUuid),
-            DateUtil.now(), visitInformation);
+        Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
+        VisitInformation visitInformation = vaccination.getVisits().get(0);
 
-    Context.getVisitService().saveVisit(visit);
-  }
+        Visit visit = VisitUtil.createVisitResource(Context.getPatientService().getPatientByUuid(patientUuid),
+                DateUtil.now(), visitInformation);
 
-  private ConfigService getConfigService() {
-    return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
-  }
+        Context.getVisitService().saveVisit(visit);
+    }
 
-  public void setWelcomeService(WelcomeService welcomeService) {
-    this.welcomeService = welcomeService;
-  }
+    private ConfigService getConfigService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+    }
 
-  public void setVisitReminderService(VisitReminderService visitReminderService) {
-    this.visitReminderService = visitReminderService;
-  }
+    public void setWelcomeService(WelcomeService welcomeService) {
+        this.welcomeService = welcomeService;
+    }
+
+    public void setVisitReminderService(VisitReminderService visitReminderService) {
+        this.visitReminderService = visitReminderService;
+    }
 }

@@ -102,16 +102,6 @@ public final class CFLConstants {
     public static final String CONDITION_LIST_CLASSES_DESCRIPTION = "List of concept uuid's which limits the answers " +
             "for condition list";
 
-    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_KEY = "cfl.sendSmsOnPatientRegistration";
-    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
-    public static final String SEND_SMS_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive SMS " +
-            "after being registered.";
-
-    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY = "cfl.performCallOnPatientRegistration";
-    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DEFAULT_VALUE = "false";
-    public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_DESCRIPTION = "Specifies if patient should receive " +
-        "a call after being registered.";
-
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that will be used " +
@@ -139,16 +129,6 @@ public final class CFLConstants {
 
     public static final String STATUS_OF_OCCURRED_VISIT_KEY = "visits.statusOfOccurredVisit";
 
-    public static final String SEND_REMINDER_VIA_SMS_KEY = "cfl.shouldSendReminderViaSms";
-    public static final String SEND_REMINDER_VIA_SMS_DEFAULT_VALUE = "false";
-    public static final String SEND_REMINDER_VIA_SMS_DESCRIPTION = "Specifies if patient should receive reminder " +
-            "via SMS.";
-
-    public static final String SEND_REMINDER_VIA_CALL_KEY = "cfl.shouldSendReminderViaCall";
-    public static final String SEND_REMINDER_VIA_CALL_DEFAULT_VALUE = "false";
-    public static final String SEND_REMINDER_VIA_CALL_DESCRIPTION = "Specifies if patient should receive reminder " +
-            "via Call.";
-
     public static final String VACCINATION_INFORMATION_ENABLED_KEY = "cfl.vaccinationInformationEnabled";
     public static final String VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE = "false";
     public static final String VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION = "Specifies if vaccination information" +
@@ -163,6 +143,19 @@ public final class CFLConstants {
     public static final String BEST_CONTACT_TIME_FORMAT = "HH:mm";
 
     public static final String DEFAULT_USER_TIME_ZONE_GP_NAME = "messages.defaultUserTimezone";
+
+    public static final String COUNTRY_LOCATION_ATTR_TYPE_NAME = "Country decoded";
+
+    public static final String COUNTRY_SETTINGS_MAP_KEY = "cfl.countrySettingsMap";
+    public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE = "";
+    public static final String COUNTRY_SETTINGS_MAP_DESCRIPTION = "Specifies a map with countries as a keys and " +
+            "all country settings as a values";
+
+    public static final String DEFAULT_COUNTRY_SETTING_KEY = "default";
+
+    public static final String SMS_CHANNEL_TYPE = "SMS";
+
+    public static final String CALL_CHANNEL_TYPE = "Call";
 
     private CFLConstants() { }
 }

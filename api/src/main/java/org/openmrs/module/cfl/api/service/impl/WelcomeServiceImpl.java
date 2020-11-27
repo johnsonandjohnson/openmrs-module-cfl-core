@@ -5,7 +5,9 @@ import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.WelcomeService;
+import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PersonUtil;
 import org.openmrs.module.messages.api.constants.ConfigConstants;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
@@ -20,9 +22,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
 import static org.openmrs.module.messages.api.event.CallFlowParamConstants.FLOW_NAME;
-import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
 
 public class WelcomeServiceImpl implements WelcomeService {
 
@@ -35,19 +37,15 @@ public class WelcomeServiceImpl implements WelcomeService {
 
     @Override
     public void sendWelcomeMessages(Person person) {
+        CountrySetting countrySetting = CountrySettingUtil.getCountrySettingForPatient(person);
         if (StringUtils.isNotBlank(PersonUtil.getPhoneNumber(person))) {
-            if (isSmsEnabled()) {
+            if (countrySetting.isSendSmsOnPatientRegistration()) {
                 sendSms(person);
             }
-            if (isCallEnabled()) {
+            if (countrySetting.isPerformCallOnPatientRegistration()) {
                 performCall(person);
             }
         }
-    }
-
-    private boolean isSmsEnabled() {
-        return Boolean.parseBoolean(getAdministrationService()
-                .getGlobalProperty(CFLConstants.SEND_SMS_ON_PATIENT_REGISTRATION_KEY));
     }
 
     private void sendSms(Person person) {
@@ -67,11 +65,6 @@ public class WelcomeServiceImpl implements WelcomeService {
         return Context.getRegisteredComponent(VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME,
                 VelocityNotificationTemplateServiceImpl.class)
                 .buildMessageByGlobalProperty(param, CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
-    }
-
-    private boolean isCallEnabled() {
-        return Boolean.parseBoolean(getAdministrationService()
-                .getGlobalProperty(CFLConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_KEY));
     }
 
     private void performCall(Person person) {

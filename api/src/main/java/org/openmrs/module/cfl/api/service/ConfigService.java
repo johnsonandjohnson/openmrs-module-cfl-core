@@ -10,8 +10,11 @@
 package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.Person;
+import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
+
+import java.util.Map;
 
 /**
  * Provides the module configuration set
@@ -51,4 +54,6 @@ public interface ConfigService {
     boolean isVaccinationInfoIsEnabled();
 
     String getDefaultUserTimeZone();
+
+    Map<String, CountrySetting> getCountrySettingMap(String globalPropertyName);
 }
