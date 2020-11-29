@@ -73,6 +73,10 @@
     <bean id="cfl.welcomeService"
           class="org.openmrs.module.cfl.api.service.impl.WelcomeServiceImpl"/>
 
+    <bean id="cfl.conceptService" class="org.openmrs.module.cfl.api.service.impl.CFLConceptServiceImpl">
+        <property name="conceptService" ref="conceptService" />
+    </bean>
+
     <bean id="cfl.registeringPeopleListener"
           class="org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener"
           init-method="init"
