@@ -1307,7 +1307,7 @@
     </changeSet>
 
     <changeSet id="cfl-20201123-17:45" author="Dawid Ruchniewicz">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM global_property WHERE property='cfl.sendSmsOnPatientRegistration'
@@ -1322,7 +1322,7 @@
     </changeSet>
 
     <changeSet id="cfl-20201123-17:50" author="Dawid Ruchniewicz">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM global_property WHERE property='cfl.performCallOnPatientRegistration'
@@ -1337,7 +1337,7 @@
     </changeSet>
 
     <changeSet id="cfl-20201123-17:55" author="Dawid Ruchniewicz">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM global_property WHERE property='cfl.shouldSendReminderViaSms'
@@ -1352,7 +1352,7 @@
     </changeSet>
 
     <changeSet id="cfl-20201123-18:00" author="Dawid Ruchniewicz">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <sqlCheck expectedResult="1">
                 SELECT COUNT(*) FROM global_property WHERE property='cfl.shouldSendReminderViaCall'
