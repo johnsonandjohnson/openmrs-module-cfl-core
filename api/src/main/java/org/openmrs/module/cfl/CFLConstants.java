@@ -108,8 +108,8 @@ public final class CFLConstants {
         "in call after patient registration.";
 
     public static final String SMS_MESSAGE_AFTER_REGISTRATION_KEY = "cfl.smsMessageAfterRegistration";
-    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE = "Hello, you have just registered in " +
-            "our system";
+    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE = "{ message: \"Hello, "
+            + "you have just registered in our system\" }";
     public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
             "be sent immediately after registration";
 

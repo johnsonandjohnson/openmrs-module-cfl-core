@@ -16,6 +16,7 @@ import org.openmrs.module.messages.api.event.MessagesEvent;
 import org.openmrs.module.messages.api.event.SmsEventParamConstants;
 import org.openmrs.module.messages.api.service.MessagesEventService;
 import org.openmrs.module.messages.api.service.impl.VelocityNotificationTemplateServiceImpl;
+import org.openmrs.module.messages.api.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,13 +56,26 @@ public class WelcomeServiceImpl implements WelcomeService {
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
-        properties.put(SmsEventParamConstants.MESSAGE, getWelcomeMessage(param));
+
+        Map<String, String> templateMap = JsonUtil.toMap(getParsedTemplate(param), JsonUtil.STRING_TO_STRING_MAP);
+        String message = templateMap.get(SmsEventParamConstants.MESSAGE);
+
+        Map<String, String> smsServiceParameters = new HashMap<String, String>();
+        for (Map.Entry<String, String> entry : templateMap.entrySet()) {
+            String key = entry.getKey();
+            if (!key.equals(SmsEventParamConstants.MESSAGE)) {
+                smsServiceParameters.put(key, entry.getValue());
+            }
+        }
+
+        properties.put(SmsEventParamConstants.MESSAGE, message);
+        properties.put(SmsEventParamConstants.CUSTOM_PARAMS, smsServiceParameters);
 
         Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
                 .sendEventMessage(new MessagesEvent(SMS_INITIATE_EVENT, properties));
     }
 
-    private String getWelcomeMessage(Map<String, Object> param) {
+    private String getParsedTemplate(Map<String, Object> param) {
         return Context.getRegisteredComponent(VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME,
                 VelocityNotificationTemplateServiceImpl.class)
                 .buildMessageByGlobalProperty(param, CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
