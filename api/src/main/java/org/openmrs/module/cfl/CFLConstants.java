@@ -147,7 +147,18 @@ public final class CFLConstants {
     public static final String COUNTRY_LOCATION_ATTR_TYPE_NAME = "Country decoded";
 
     public static final String COUNTRY_SETTINGS_MAP_KEY = "cfl.countrySettingsMap";
-    public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE = "";
+    public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE = "[\n"
+            + "   {\n"
+            + "      \"default\":{\n"
+            + "         \"SMS\":\"nexmo\",\n"
+            + "         \"CALL\":\"nexmo\",\n"
+            + "         \"performCallOnPatientRegistration\":false,\n"
+            + "         \"sendSmsOnPatientRegistration\":false,\n"
+            + "         \"shouldSendReminderViaCall\":false,\n"
+            + "         \"shouldSendReminderViaSms\":false\n"
+            + "      }\n"
+            + "   }\n"
+            + "]";
     public static final String COUNTRY_SETTINGS_MAP_DESCRIPTION = "Specifies a map with countries as a keys and " +
             "all country settings as a values";
 
