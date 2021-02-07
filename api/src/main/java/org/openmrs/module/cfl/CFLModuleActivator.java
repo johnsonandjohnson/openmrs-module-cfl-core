@@ -268,7 +268,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 "cfl:htmlforms/cfl-check-in.xml",
                 "cfl:htmlforms/cfl-visit-note.xml",
                 "cfl:htmlforms/cfl-medicine-refill.xml",
-                "cfl:htmlforms/cfl-sputum-visit-note.xml"
+                "cfl:htmlforms/cfl-sputum-visit-note.xml",
+                "cfl:htmlforms/encounters-form.xml"
         );
 
         for (String htmlform : htmlforms) {

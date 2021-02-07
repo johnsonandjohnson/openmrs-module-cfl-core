@@ -1365,4 +1365,19 @@
             <where>property='cfl.shouldSendReminderViaCall'</where>
         </delete>
     </changeSet>
+
+    <changeSet id="cfl-20210122-17:00" author="Dawid Ruchniewicz">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(uuid) FROM encounter_type WHERE uuid = '43c3630f-abfe-4fe1-8c92-b73b65199a3d';
+            </sqlCheck>
+        </preConditions>
+        <comment>Added encounter type used by the CFL Symptoms form</comment>
+        <insert tableName="encounter_type">
+            <column name="name">Symptoms</column>
+            <column name="creator">1</column>
+            <column name="date_created">2021-01-22</column>
+            <column name="uuid">43c3630f-abfe-4fe1-8c92-b73b65199a3d</column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
