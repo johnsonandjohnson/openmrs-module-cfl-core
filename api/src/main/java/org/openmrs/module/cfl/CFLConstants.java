@@ -11,7 +11,17 @@ public final class CFLConstants {
     public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
     public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";
 
+    public final static String ADMIN_USER_NAME = "admin";
+
     public static final String SUPER_USER_ROLE_NAME = "Application: Has Super User Privileges";
+
+    /**
+     * The name of Full Privilege Level role.
+     * <p>
+     * This role is managed by Emrapi module (see: EmrApiActivator).
+     * </p>
+     * */
+    public static final String PRIVILEGE_LEVEL_FULL_ROLE_NAME = "Privilege Level: Full";
 
     public static final String ENROLL_IN_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.enrollInProgram";
     public static final String EDIT_PATIENT_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.editPatientProgram";

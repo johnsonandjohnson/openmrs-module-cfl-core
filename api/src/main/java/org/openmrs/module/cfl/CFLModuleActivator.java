@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
@@ -53,6 +54,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         log.info("Started CFL Module");
         try {
             attachProgramsManagingPrivilegesToSuperUser();
+            ensureCorrectRolesAreAssignedToAdmin();
             setupHtmlForms();
             createPersonOverviewConfig();
             createGlobalSettings();
@@ -102,8 +104,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             registeringPeopleListener.setDaemonToken(token);
         }
 
-        List<UpdatingVisitListener> updatingVisitListeners =
-                Context.getRegisteredComponents(UpdatingVisitListener.class);
+        List<UpdatingVisitListener> updatingVisitListeners = Context.getRegisteredComponents(UpdatingVisitListener.class);
         for (UpdatingVisitListener updatingVisitListener : updatingVisitListeners) {
             updatingVisitListener.setDaemonToken(token);
         }
@@ -116,6 +117,14 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             return;
         }
         attachMissingPrivileges(CFLConstants.PROGRAM_MANAGING_PRIVILEGES_NAMES, superUserRole);
+    }
+
+    private void ensureCorrectRolesAreAssignedToAdmin() {
+        final UserService userService = Context.getUserService();
+        final User adminUser = userService.getUserByUsername(CFLConstants.ADMIN_USER_NAME);
+        final Role fullPrivilegeRole = userService.getRole(CFLConstants.PRIVILEGE_LEVEL_FULL_ROLE_NAME);
+
+        adminUser.addRole(fullPrivilegeRole);
     }
 
     private void createPersonAttributeTypes() {
@@ -144,69 +153,45 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void createGlobalSettings() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
-                CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
-                CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+                CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE, CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
                 CFLConstants.LOCATION_ATTRIBUTE_TYPE_UUID);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.DISABLED_CONTROL_KEY,
-                CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE,
-                CFLConstants.DISABLED_CONTROL_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
+                CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SUPPORTED_ACTOR_TYPE,
-                CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
-                CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE, CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
                 CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DEFAULT_VALUE,
                 CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
-                CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE,
-                CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
+                CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE, CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
-                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE,
-                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.CONDITION_LIST_CLASSES_KEY,
-                CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE,
-                CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
+                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE, CFLConstants.PERSON_LOCATION_ATTRIBUTE_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.CONDITION_LIST_CLASSES_KEY,
+                CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE, CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY,
                 CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE,
                 CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.VACCINATION_PROGRAM_KEY,
-                CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE,
-                CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY,
+                CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE, CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
-                CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE,
-                CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
+                CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE, CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {
@@ -217,8 +202,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         AdministrationService administrationService = Context.getService(AdministrationService.class);
         AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
         disableUnusedExtensions(appFrameworkService);
-        if (CFLConstants.TRUE.equalsIgnoreCase(
-                administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
+        if (CFLConstants.TRUE.equalsIgnoreCase(administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
             enableAdditionalConfiguration(appFrameworkService);
         } else {
             enableDefaultConfiguration(appFrameworkService);
@@ -263,14 +247,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         FormService formService = Context.getFormService();
         HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
 
-        List<String> htmlforms = Arrays.asList(
-                "cfl:htmlforms/cfl-HIV.xml",
-                "cfl:htmlforms/cfl-check-in.xml",
-                "cfl:htmlforms/cfl-visit-note.xml",
-                "cfl:htmlforms/cfl-medicine-refill.xml",
-                "cfl:htmlforms/cfl-sputum-visit-note.xml",
-                "cfl:htmlforms/encounters-form.xml"
-        );
+        List<String> htmlforms = Arrays.asList("cfl:htmlforms/cfl-HIV.xml", "cfl:htmlforms/cfl-check-in.xml",
+                "cfl:htmlforms/cfl-visit-note.xml", "cfl:htmlforms/cfl-medicine-refill.xml",
+                "cfl:htmlforms/cfl-sputum-visit-note.xml", "cfl:htmlforms/encounters-form.xml");
 
         for (String htmlform : htmlforms) {
             HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
@@ -286,20 +265,17 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void createPersonOverviewConfig() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DEFAULT_VALUE,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DESCRIPTION);
 
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DESCRIPTION);
     }
 
     private void createHtmlFormProperties() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(
-                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
                 CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
     }
@@ -311,12 +287,11 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         for (String privilegeName : privilegeNames) {
             Privilege privilege = userService.getPrivilege(privilegeName);
             if (privilege == null) {
-                log.warn(String.format("Cannot find the privilege %s, "
-                            + "so it will not be attached to the role %s at the startup",
+                log.warn(String.format(
+                        "Cannot find the privilege %s, " + "so it will not be attached to the role %s at the startup",
                         privilegeName, role.getName()));
             } else if (!privileges.contains(privilege)) {
-                log.info(String.format("Attached the privilege %s to the role %s",
-                        privilege.getName(), role.getName()));
+                log.info(String.format("Attached the privilege %s to the role %s", privilege.getName(), role.getName()));
                 role.addPrivilege(privilege);
                 updated = true;
             }
@@ -327,10 +302,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void deployMetadataPackages() {
-        MetadataDeployService service = Context.getRegisteredComponent("metadataDeployService",
-                MetadataDeployService.class);
-        MetadataBundle rolesAndPrivileges = Context.getRegisteredComponent("cflRolePrivilegeProfiles",
-                MetadataBundle.class);
+        MetadataDeployService service = Context.getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
+        MetadataBundle rolesAndPrivileges = Context.getRegisteredComponent("cflRolePrivilegeProfiles", MetadataBundle.class);
         service.installBundles(Collections.singletonList(rolesAndPrivileges));
     }
 }

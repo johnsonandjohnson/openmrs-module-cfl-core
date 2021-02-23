@@ -59,8 +59,6 @@ public final class AppFrameworkConstants {
 
     public static final String ATTACHMENTS_OVERALL_ACTION_EXT = "attachments.attachments.overallActions.default";
 
-    public static final String CHARTSEARCH_EXT = "chartsearch.chartSearchLink";
-
     public static final String LOCATIONBASEDACCESS_EXT = "org.openmrs.module.locationbasedaccess.editLocation";
 
     public static final String COREAPPS_MARK_PATIENT_DECEASED_EXT = "org.openmrs.module.coreapps.markPatientDead";
@@ -89,7 +87,7 @@ public final class AppFrameworkConstants {
     public static final List<String> EXTENSION_IDS = Arrays.asList(APPOINTMENTSCHEDULINGUI_TAB_EXT,
             PATIENT_DASHBOARD_APPOINTMENTS_EXT, STICKY_NOTE_EXT, ACTIVE_VISIT_STATUS_EXT, COREAPPS_CREATE_VISIT_EXT,
             COREAPPS_CREATE_RETROSPECTIVE_VISIT_EXT, COREAPPS_MERGE_VISITS_EXT, ALLERGYUI_PATIENT_DASHBOARD_EXT,
-            PATIENTFLAGS_EXT, ATTACHMENTS_EXT, ATTACHMENTS_OVERALL_ACTION_EXT, CHARTSEARCH_EXT, LOCATIONBASEDACCESS_EXT,
+            PATIENTFLAGS_EXT, ATTACHMENTS_EXT, ATTACHMENTS_OVERALL_ACTION_EXT, LOCATIONBASEDACCESS_EXT,
             COREAPPS_MARK_PATIENT_DECEASED_EXT);
 
     public static final String REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT = "org.openmrs.module.registrationapp." +

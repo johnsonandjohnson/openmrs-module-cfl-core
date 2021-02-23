@@ -12,14 +12,14 @@ public final class RolePrivilegeConstants {
     public static final String DOCTOR_PRIVILEGE_LEVEL = "Privilege Level: Doctor";
     public static final String DOCTOR_PRIVILEGE_LEVEL_DESCRIPTION = "Permissions related to manging medical resources.";
 
-    public static final String GET_USERS = "Get Users";
-    public static final String MANAGE_REPORT_DEFINITIONS = "Manage Report Definitions";
-    public static final String MANAGE_REPORT_DESIGNS = "Manage Report Designs";
-    public static final String MANAGE_REPORTS = "Manage Reports";
-    public static final String MANAGE_SCHEDULED_REPORT_TASKS = "Manage Scheduled Report Tasks";
-    public static final String RUN_REPORTS = "Run Reports";
-    public static final String VIEW_REPORT_OBJECTS = "View Report Objects";
-    public static final String VIEW_REPORTS = "View Reports";
+    private static final String GET_USERS = "Get Users";
+    private static final String MANAGE_REPORT_DEFINITIONS = "Manage Report Definitions";
+    private static final String MANAGE_REPORT_DESIGNS = "Manage Report Designs";
+    private static final String MANAGE_REPORTS = "Manage Reports";
+    private static final String MANAGE_SCHEDULED_REPORT_TASKS = "Manage Scheduled Report Tasks";
+    private static final String RUN_REPORTS = "Run Reports";
+    private static final String VIEW_REPORT_OBJECTS = "View Report Objects";
+    private static final String VIEW_REPORTS = "View Reports";
 
     public static final Set<String> ANALYST_PRIVILEGES = idSet(
             RolePrivilegeConstants.GET_USERS,
@@ -193,13 +193,9 @@ public final class RolePrivilegeConstants {
             "Manage RESTWS",
             MANAGE_SCHEDULED_REPORT_TASKS,
             "Manage Search Index",
-            "Manage synonym group",
-            "Manage Synonym Groups",
             "Manage Token Registrations",
-            "Manage Tokens",
             "Manage Visit Attribute Types",
             "Manage Visit Types",
-            "Patient Dashboard - View Chart Search Section",
             "Patient Dashboard - View Demographics Section",
             "Patient Dashboard - View Encounters Section",
             "Patient Dashboard - View Forms Section",
@@ -207,28 +203,6 @@ public final class RolePrivilegeConstants {
             "Patient Dashboard - View Overview Section",
             "Patient Dashboard - View Patient Summary",
             "Patient Dashboard - View Regimen Section",
-            "Patient Dashboard - View Visits Section",
-            "Patient Overview - View Allergies",
-            "Patient Overview - View Patient Actions",
-            "Patient Overview - View Problem List",
-            "Patient Overview - View Programs",
-            "Patient Overview - View Relationships",
-            "Manage Search Index",
-            "Manage synonym group",
-            "Manage Synonym Groups",
-            "Manage Token Registrations",
-            "Manage Tokens",
-            "Manage Visit Attribute Types",
-            "Manage Visit Types",
-            "Patient Dashboard - View Chart Search Section",
-            "Patient Dashboard - View Demographics Section",
-            "Patient Dashboard - View Encounters Section",
-            "Patient Dashboard - View Forms Section",
-            "Patient Dashboard - View Graphs Section",
-            "Patient Dashboard - View Overview Section",
-            "Patient Dashboard - View Patient Summary",
-            "Patient Dashboard - View Regimen Section",
-            "Patient Dashboard - View Visits Section",
             "Patient Overview - View Allergies",
             "Patient Overview - View Patient Actions",
             "Patient Overview - View Problem List",
@@ -244,7 +218,6 @@ public final class RolePrivilegeConstants {
             "Remove Allergies",
             "Remove Problems",
             "Request Appointments",
-            "Run Chart Search commands",
             RUN_REPORTS,
             "SMS module Privilege",
             "Task: coreapps.createRetrospectiveVisit",
@@ -274,62 +247,19 @@ public final class RolePrivilegeConstants {
             "Upload Batch of Identifiers",
             "Upload XSN",
             "View Administration Functions",
-            "View Allergies",
             "View Appointments",
             "View Calculations",
-            "View Concept Classes",
-            "View Concept Datatypes",
-            "View Concept Map Types",
-            "View Concept Proposals",
-            "View Concept Reference Terms",
-            "View Concept Sources",
-            "View Concepts",
             "View Data Entry Statistics",
-            "View Database Changes",
-            "View Encounter Roles",
-            "View Encounter Types",
-            "View Encounters",
+            "Get Database Changes",
             "View FHIR Client",
-            "View Field Types",
-            "View Forms",
-            "View Global Properties",
-            "View HL7 Inbound Archive",
-            "View HL7 Inbound Exception",
-            "View HL7 Inbound Queue",
-            "View HL7 Source",
-            "View Identifier Types",
-            "View Location Attribute Types",
-            "View Locations",
             "View Metadata Via Mapping",
             "View Navigation Menu",
-            "View Observations",
-            "View Order Types",
-            "View Orders",
             "View Patient Appointment History",
-            "View Patient Cohorts",
-            "View Patient Identifiers",
-            "View Patient Programs",
-            "View Patients",
-            "View People",
-            "View Person Attribute Types",
-            "View Privileges",
-            "View Problems",
-            "View Programs",
-            "View Provider Schedules",
-            "View Providers",
-            "View Relationship Types",
-            "View Relationships",
             VIEW_REPORT_OBJECTS,
             VIEW_REPORTS,
             "View RESTWS",
-            "View Roles",
-            "View Rule Definitions",
             "View Token Registrations",
             "View Unpublished Forms",
-            "View Users",
-            "View Visit Attribute Types",
-            "View Visit Types",
-            "View Visits",
             "Messages schedule privilege"
     );
 
