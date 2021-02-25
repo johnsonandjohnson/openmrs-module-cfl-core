@@ -10,7 +10,7 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:component-scan base-package="org.openmrs.module.cfl" />
+    <context:component-scan base-package="org.openmrs.module.cfl"/>
 
     <bean id="cfl.findPersonWithCaregiverRoleStrategy"
           class="org.openmrs.module.cfl.api.strategy.impl.FindPersonWithCaregiverRoleFilterStrategyImpl">
@@ -34,28 +34,28 @@
     </bean>
 
     <bean id="cfl.relationshipService" class="org.openmrs.module.cfl.api.service.impl.RelationshipServiceImpl">
-        <property name="personService" ref="personService" />
+        <property name="personService" ref="personService"/>
     </bean>
 
     <bean id="cfl.irisPatientService" class="org.openmrs.module.cfl.api.service.impl.IrisPatientServiceImpl">
-        <property name="patientService" ref="patientService" />
+        <property name="patientService" ref="patientService"/>
     </bean>
 
     <bean id="cfl.irisVisitService" class="org.openmrs.module.cfl.api.service.impl.IrisVisitServiceImpl">
-        <property name="visitService" ref="visitService" />
+        <property name="visitService" ref="visitService"/>
     </bean>
 
     <bean id="cfl.irisAdminService" class="org.openmrs.module.cfl.api.service.impl.IrisAdminServiceImpl">
-        <property name="adminService" ref="adminService" />
+        <property name="adminService" ref="adminService"/>
     </bean>
 
     <bean id="cfl.irisLocationService" class="org.openmrs.module.cfl.api.service.impl.IrisLocationServiceImpl">
-        <property name="locationService" ref="locationService" />
-        <property name="locationDAO" ref="locationDAO" />
+        <property name="locationService" ref="locationService"/>
+        <property name="locationDAO" ref="locationDAO"/>
     </bean>
 
     <bean id="cfl.applicationEventService" class="org.openmrs.module.cfl.api.event.ApplicationEventServiceImpl">
-        <property name="emrapiAppEventService" ref="applicationEventService" />
+        <property name="emrapiAppEventService" ref="applicationEventService"/>
     </bean>
 
     <bean id="cfl.personViewedEventListener"
@@ -74,7 +74,7 @@
           class="org.openmrs.module.cfl.api.service.impl.WelcomeServiceImpl"/>
 
     <bean id="cfl.conceptService" class="org.openmrs.module.cfl.api.service.impl.CFLConceptServiceImpl">
-        <property name="conceptService" ref="conceptService" />
+        <property name="conceptService" ref="conceptService"/>
     </bean>
 
     <bean id="cfl.registeringPeopleListener"
@@ -100,10 +100,22 @@
 
     <bean id="cfl.personIdentifierAction"
           class="org.openmrs.module.cfl.api.registration.person.action.impl.PersonIdentifierActionImpl">
-        <property name="personService" ref="personService" />
-        <property name="administrationService" ref="adminService" />
-        <property name="identifierSourceService" ref="baseIdentifierSourceService" />
+        <property name="personService" ref="personService"/>
+        <property name="administrationService" ref="adminService"/>
+        <property name="identifierSourceService" ref="baseIdentifierSourceService"/>
     </bean>
 
-    <bean id="cflRolePrivilegeProfiles" class="org.openmrs.module.cfl.api.metadata.RolePrivilegeProfilesMetadata" />
+    <bean id="cflRolePrivilegeProfiles" class="org.openmrs.module.cfl.api.metadata.RolePrivilegeProfilesMetadata"/>
+
+    <bean id="cfl.componentStateHandler" class="org.openmrs.module.cfl.handler.metadatasharing.ComponentStateHandler">
+        <property name="sessionFactory">
+            <ref bean="dbSessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="cfl.userAppHandler" class="org.openmrs.module.cfl.handler.metadatasharing.UserAppHandler">
+        <property name="sessionFactory">
+            <ref bean="dbSessionFactory"/>
+        </property>
+    </bean>
 </beans>
