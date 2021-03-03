@@ -178,5 +178,38 @@ public final class CFLConstants {
 
     public static final String CALL_CHANNEL_TYPE = "Call";
 
+    public static final String COMMA_SEPARATOR = ",";
+
+    public static final String USERS_TO_REMOVE = "clerk,nurse,doctor,sysadmin,scheduler";
+
+    public static final String PATIENT_IDENTIFIER_TYPES_TO_REMOVE = "OpenMRS Identification Number," +
+            "Old Identification Number,OpenEMPI ID";
+
+    public static final String RELATIONSHIP_TYPES_UUIDS_TO_REMOVE = "8d919b58-c2cc-11de-8d13-0010c6dffd0f," +
+            "8d91a01c-c2cc-11de-8d13-0010c6dffd0f,8d91a210-c2cc-11de-8d13-0010c6dffd0f," +
+            "8d91a3dc-c2cc-11de-8d13-0010c6dffd0f,2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc";
+
+    public static final String PERSON_ATTRIBUTE_TYPES_TO_REMOVE = "Race,Birthplace,Citizenship,Mother's Name," +
+            "Civil Status,Health District,Health Center,Test Patient";
+
+    public static final String PROVIDERS_TO_REMOVE = "clerk,nurse,doctor";
+
+    public static final String LOCATION_UUIDS_TO_REMOVE = "7f65d926-57d6-4402-ae10-a5b3bcbf7986," +
+            "7fdfa2cb-bc95-405a-88c6-32b7673c0453,2131aff8-2e2a-480a-b7ab-4ac53250262b," +
+            "6351fcf4-e311-4a19-90f9-35667d99a8af,b1a8b05e-3542-4037-bbd3-998ee9c40574," +
+            "58c57d25-8d39-41ab-8422-108a0c277d98,aff27d58-a15c-49a6-9beb-d30dcfc0c66e";
+
+    public static final String UNKNOWN_LOCATION_UUID = "8d6c993e-c2cc-11de-8d13-0010c6dffd0f";
+
+    public static final String LOCATION_UUID_PROPERTY_NAME = "locationUuid";
+
+    public static final String CFL_CLINIC_LOCATION_NAME = "CFL Clinic";
+
+    public static final String LOGIN_LOCATION_TAG_NAME = "Login Location";
+
+    public static final String VISIT_LOCATION_TAG_NAME = "Visit Location";
+
+    public static final String CFL_DISTRO_BOOTSTRAPPED_KEY = "cfl.distro.bootstrapped";
+
     private CFLConstants() { }
 }

@@ -24,6 +24,7 @@ import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener;
 import org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
+import org.openmrs.module.cfl.api.util.DataCleanup;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
@@ -65,6 +66,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             installMetadataPackages();
             CflEventListenerFactory.registerEventListeners();
             deployMetadataPackages();
+            DataCleanup.cleanUpUnnecessaryData();
         } catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
             ModuleFactory.stopModule(mod);
