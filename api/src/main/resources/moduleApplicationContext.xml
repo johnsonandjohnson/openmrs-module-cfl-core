@@ -118,4 +118,23 @@
             <ref bean="dbSessionFactory"/>
         </property>
     </bean>
+
+    <bean id="cfl.monitoringProvider.Database"
+          class="org.openmrs.module.cfl.api.monitor.impl.DatabaseMonitoringProviderImpl">
+        <property name="sessionFactory">
+            <ref bean="dbSessionFactory"/>
+        </property>
+    </bean>
+    <bean id="cfl.monitoringProvider.Modules"
+          class="org.openmrs.module.cfl.api.monitor.impl.ModulesMonitoringProviderImpl" />
+
+    <bean id="cfl.monitoringService" class="org.openmrs.module.cfl.api.service.impl.MonitoringServiceImpl" />
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfl.api.service.MonitoringService</value>
+                <ref local="cfl.monitoringService"/>
+            </list>
+        </property>
+    </bean>
 </beans>
