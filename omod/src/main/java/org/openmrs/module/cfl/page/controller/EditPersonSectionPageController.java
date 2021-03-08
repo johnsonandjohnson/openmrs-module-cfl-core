@@ -55,32 +55,28 @@ public class EditPersonSectionPageController {
 
     private static final Log LOGGER = LogFactory.getLog(EditPersonSectionPageController.class);
 
-    public void get(UiSessionContext sessionContext, PageModel model,
-            @RequestParam(PERSON_ID_PROP) Person person,
-            @RequestParam(APP_ID_PROP) AppDescriptor app,
-            @RequestParam(value = RETURN_URL_PROP, required = false) String returnUrl,
-            @RequestParam(SECTION_ID) String sectionId) {
+    public void get(UiSessionContext sessionContext, PageModel model, @RequestParam(PERSON_ID_PROP) Person person,
+                    @RequestParam(APP_ID_PROP) AppDescriptor app,
+                    @RequestParam(value = RETURN_URL_PROP, required = false) String returnUrl,
+                    @RequestParam(SECTION_ID) String sectionId) {
         sessionContext.requireAuthentication();
         NavigableFormStructure formStructure = RegisterPersonFormBuilder.buildFormStructure(app);
-        addModelAttributes(model, person, formStructure.getSections().get(sectionId), returnUrl,
-                app);
+        addModelAttributes(model, person, formStructure.getSections().get(sectionId), returnUrl, app);
     }
 
-    @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList",
-            "checkstyle:ParameterAssignment", "PMD.AvoidReassigningParameters"})
+    @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList", "checkstyle:ParameterAssignment",
+            "PMD.AvoidReassigningParameters"})
     public String post(UiSessionContext sessionContext, PageModel model,
-            @RequestParam(PERSON_ID_PROP) @BindParams Person person,
-            @BindParams PersonAddress address,
-            @BindParams PersonName name,
-            @RequestParam(value = BIRTH_DATE_YEARS_PROP, required = false) Integer birthdateYears,
-            @RequestParam(value = BIRTH_DATE_MONTHS_PROP, required = false) Integer birthdateMonths,
-            @RequestParam(APP_ID_PROP) AppDescriptor app,
-            @RequestParam(SECTION_ID) String sectionId,
-            @RequestParam(RETURN_URL_PROP) String returnUrl,
-            @SpringBean(PERSON_SERVICE_PROP) PersonService personService,
-            @SpringBean(MESSAGE_SOURCE_SERVICE_PROP) MessageSourceService messageSourceService, Session session,
-            @SpringBean(PERSON_VALIDATOR_PROP) PersonValidator personValidator,
-            UiUtils ui, HttpServletRequest request) {
+                       @RequestParam(PERSON_ID_PROP) @BindParams Person person, @BindParams PersonAddress address,
+                       @BindParams PersonName name,
+                       @RequestParam(value = BIRTH_DATE_YEARS_PROP, required = false) Integer birthdateYears,
+                       @RequestParam(value = BIRTH_DATE_MONTHS_PROP, required = false) Integer birthdateMonths,
+                       @RequestParam(APP_ID_PROP) AppDescriptor app, @RequestParam(SECTION_ID) String sectionId,
+                       @RequestParam(RETURN_URL_PROP) String returnUrl,
+                       @SpringBean(PERSON_SERVICE_PROP) PersonService personService,
+                       @SpringBean(MESSAGE_SOURCE_SERVICE_PROP) MessageSourceService messageSourceService, Session session,
+                       @SpringBean(PERSON_VALIDATOR_PROP) PersonValidator personValidator, UiUtils ui,
+                       HttpServletRequest request) {
 
         sessionContext.requireAuthentication();
         handlePersonName(person, name);
@@ -91,16 +87,18 @@ public class EditPersonSectionPageController {
         personValidator.validate(person, errors);
         RegisterPersonFormBuilder.resolvePersonAttributeFields(formStructure, person, request.getParameterMap());
         if (errors.hasErrors()) {
-            createErrorMessage(model, messageSourceService, session, errors);
+            createErrorMessage(ui, model, messageSourceService, session, errors);
         } else {
             try {
-                person = personService.savePerson(person);
-                String sectionLabel = ui.message(formStructure.getSections().get(sectionId).getLabel());
-                flashInfoMessage(request.getSession(),
-                        ui.message("registrationapp.editCustomSectionInfoMessage.success",
-                                person.getPersonName() != null ?
-                                        ui.encodeHtml(person.getPersonName().toString()) :
-                                        "", sectionLabel));
+                final Person savedPerson = personService.savePerson(person);
+
+                final String sectionLabel = ui.message(formStructure.getSections().get(sectionId).getLabel());
+                final String flashMessage = ui.message("registrationapp.editCustomSectionInfoMessage.success",
+                        savedPerson.getPersonName() != null ? ui.encodeHtml(savedPerson.getPersonName().toString()) : "",
+                        sectionLabel);
+
+                flashInfoMessage(ui, request.getSession(), flashMessage);
+
                 return "redirect:" + returnUrl;
             } catch (Exception e) {
                 LOGGER.warn("Error occurred while saving patient's contact info", e);
@@ -138,9 +136,7 @@ public class EditPersonSectionPageController {
     private void handleBirthDate(Person person, Integer birthdateYears, Integer birthdateMonths) {
         if (person.getBirthdate() == null && (birthdateYears != null || birthdateMonths != null)) {
             person.setBirthdateEstimated(true);
-            person.setBirthdate(
-                    RegistrationCoreUtil.calculateBirthdateFromAge(
-                            birthdateYears, birthdateMonths, null, null));
+            person.setBirthdate(RegistrationCoreUtil.calculateBirthdateFromAge(birthdateYears, birthdateMonths, null, null));
         }
     }
 
@@ -150,9 +146,8 @@ public class EditPersonSectionPageController {
      * @param person  - person which name should be updated
      * @param address - a new person address
      */
-    private void handlePersonAddress(
-            @BindParams @RequestParam(PERSON_ID_PROP) Person person,
-            @BindParams PersonAddress address) {
+    private void handlePersonAddress(@BindParams @RequestParam(PERSON_ID_PROP) Person person,
+                                     @BindParams PersonAddress address) {
         if (address != null && !address.isBlank()) {
             PersonAddress currentAddress = person.getPersonAddress();
             if (currentAddress != null) {
@@ -168,10 +163,10 @@ public class EditPersonSectionPageController {
 
     private void addModelAttributes(PageModel model, Person person, Section section, String returnUrl, AppDescriptor app) {
 
-        NameSupportCompatibility nameSupport = Context
-                .getRegisteredComponent(NameSupportCompatibility.ID, NameSupportCompatibility.class);
-        AddressSupportCompatibility addressSupport = Context
-                .getRegisteredComponent(AddressSupportCompatibility.ID, AddressSupportCompatibility.class);
+        NameSupportCompatibility nameSupport =
+                Context.getRegisteredComponent(NameSupportCompatibility.ID, NameSupportCompatibility.class);
+        AddressSupportCompatibility addressSupport =
+                Context.getRegisteredComponent(AddressSupportCompatibility.ID, AddressSupportCompatibility.class);
 
         model.addAttribute(APP_PROP, app);
         model.addAttribute(RETURN_URL_PROP, returnUrl);
@@ -184,23 +179,29 @@ public class EditPersonSectionPageController {
                 Context.getAdministrationService().getGlobalProperty(ENABLE_OVERRIDE_PATH, Boolean.FALSE.toString()));
     }
 
-    private void createErrorMessage(PageModel model, MessageSourceService messageSourceService, Session session,
-            BindingResult errors) {
+    private void createErrorMessage(UiUtils ui, PageModel model, MessageSourceService messageSourceService, Session session,
+                                    BindingResult errors) {
         model.addAttribute("errors", errors);
-        StringBuffer errorMessage = new StringBuffer(messageSourceService.getMessage("error.failed.validation"));
+
+        final StringBuilder errorMessage = new StringBuilder();
+        errorMessage.append(ui.encodeHtml(messageSourceService.getMessage("error.failed.validation")));
         errorMessage.append("<ul>");
-        for (ObjectError error : errors.getAllErrors()) {
+
+        for (final ObjectError error : errors.getAllErrors()) {
+            final String message =
+                    messageSourceService.getMessage(error.getCode(), error.getArguments(), error.getDefaultMessage(), null);
             errorMessage.append("<li>");
-            errorMessage.append(messageSourceService.getMessage(error.getCode(), error.getArguments(),
-                    error.getDefaultMessage(), null));
+            errorMessage.append(ui.encodeHtml(message));
             errorMessage.append("</li>");
         }
+
         errorMessage.append("</ul>");
+
         session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage.toString());
     }
 
-    private void flashInfoMessage(HttpSession session, String message) {
-        session.setAttribute("emr.infoMessage", message);
+    private void flashInfoMessage(UiUtils ui, HttpSession session, String message) {
+        session.setAttribute("emr.infoMessage", ui.encodeHtml(message));
         session.setAttribute("emr.toastMessage", "true");
     }
 }

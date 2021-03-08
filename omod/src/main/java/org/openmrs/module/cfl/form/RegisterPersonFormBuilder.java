@@ -42,6 +42,7 @@ import java.util.Map;
 
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.CONFIG;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.FRAGMENT_ID;
+import static org.openmrs.module.cfl.CFLRegisterPersonConstants.JSON_NODES_LIMIT;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PERSON_ATTRIBUTE_PROP;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PROVIDER_NAME;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.SECTIONS;
@@ -54,8 +55,11 @@ import static org.openmrs.module.cfl.CFLRegisterPersonConstants.SECTIONS;
 public final class RegisterPersonFormBuilder {
 
     private static final Log LOGGER = LogFactory.getLog(RegisterPersonFormBuilder.class);
-    private static final String MULTI_VALUES_WARN = "Multiple values for a single person attribute type not supported," +
-            " ignoring extra values";
+    private static final String MULTI_VALUES_WARN =
+            "Multiple values for a single person attribute type not supported, ignoring extra values";
+
+    private RegisterPersonFormBuilder() {
+    }
 
     /**
      * Builds the navigable form structure for the specified app descriptor
@@ -69,11 +73,11 @@ public final class RegisterPersonFormBuilder {
         // Get the ordered list of sections out of the configuration
         Map<String, Section> configuredSections = new LinkedHashMap<String, Section>();
         ArrayNode sections = (ArrayNode) app.getConfig().get(SECTIONS);
-        for (JsonNode i : sections) {
-            ObjectNode config = (ObjectNode) i;
+        for (JsonNode sectionJsonNode : sections) {
+            ObjectNode sectionConfig = (ObjectNode) sectionJsonNode;
 
             ObjectMapper objectMapper = new ObjectMapper();
-            Section section = objectMapper.convertValue(config, Section.class);
+            Section section = objectMapper.convertValue(sectionConfig, Section.class);
 
             if (section.getQuestions() != null) {
                 for (Question question : section.getQuestions()) {
@@ -122,19 +126,33 @@ public final class RegisterPersonFormBuilder {
             } else if (node.isNumber()) {
                 obj = node.getNumberValue();
             } else if (node.isArray()) {
-                List<Object> list = new ArrayList<Object>();
-                Iterator<JsonNode> itemIterator = node.getElements();
-                while (itemIterator.hasNext()) {
+                final List<Object> list = new ArrayList<Object>();
+                final Iterator<JsonNode> itemIterator = node.getElements();
+
+                for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
                     list.add(flatten(itemIterator.next()));
                 }
+
+                if (itemIterator.hasNext()) {
+                    throw new IllegalArgumentException(
+                            "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json array!");
+                }
+
                 obj = list;
             } else if (node.isObject()) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                Iterator<String> fieldNameIterator = node.getFieldNames();
-                while (fieldNameIterator.hasNext()) {
-                    String fName = fieldNameIterator.next();
+                final Map<String, Object> map = new HashMap<String, Object>();
+                final Iterator<String> fieldNameIterator = node.getFieldNames();
+
+                for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {
+                    final String fName = fieldNameIterator.next();
                     map.put(fName, flatten(node.get(fName)));
                 }
+
+                if (fieldNameIterator.hasNext()) {
+                    throw new IllegalArgumentException(
+                            "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json object!");
+                }
+
                 obj = map;
             }
         }
@@ -152,8 +170,8 @@ public final class RegisterPersonFormBuilder {
                     }
                     String parameterValue = parameterValues[0];
                     if (parameterValue != null) {
-                        PersonAttributeType attributeType = Context.getPersonService()
-                                .getPersonAttributeTypeByUuid(field.getUuid());
+                        PersonAttributeType attributeType =
+                                Context.getPersonService().getPersonAttributeTypeByUuid(field.getUuid());
                         if (attributeType != null) {
                             PersonAttribute attribute = new PersonAttribute(attributeType, parameterValue);
                             person.addAttribute(attribute);
@@ -162,8 +180,5 @@ public final class RegisterPersonFormBuilder {
                 }
             }
         }
-    }
-
-    private RegisterPersonFormBuilder() {
     }
 }

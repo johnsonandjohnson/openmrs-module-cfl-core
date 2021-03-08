@@ -53,6 +53,11 @@ public final class CFLRegisterPersonConstants {
     public static final String PERSON_VALIDATOR_PROP = "personValidator";
     public static final String AFTER_CREATED_URL_PROP = "afterCreatedUrl";
 
+    /**
+     * The maximum number of sub-nodes to process. This limit is used to ensure protection from DoS attacks.
+     */
+    public static final int JSON_NODES_LIMIT = 500;
+
     private CFLRegisterPersonConstants() {
     }
 }

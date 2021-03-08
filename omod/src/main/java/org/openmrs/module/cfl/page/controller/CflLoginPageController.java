@@ -229,7 +229,7 @@ public class CflLoginPageController {
                        @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService, PageRequest pageRequest,
                        UiSessionContext sessionContext) {
 
-        String redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
+        String redirectUrl = getRedirectUrl(pageRequest);
         redirectUrl = getRelativeUrl(redirectUrl, pageRequest);
         Location sessionLocation = null;
         if (sessionLocationId != null) {
