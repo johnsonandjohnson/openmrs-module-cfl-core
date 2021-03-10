@@ -15,7 +15,7 @@ public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisi
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = Exception.class)
     public Visit saveVisit(Visit visit) {
         return visitService.saveVisit(visit);
     }
