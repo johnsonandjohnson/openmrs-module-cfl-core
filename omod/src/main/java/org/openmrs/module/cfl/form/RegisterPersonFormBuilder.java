@@ -117,46 +117,60 @@ public final class RegisterPersonFormBuilder {
      * @return the flattened value
      */
     private static Object flatten(JsonNode node) {
-        Object obj = node;
-        if (node != null) {
-            if (node.isTextual()) {
-                obj = node.getTextValue();
-            } else if (node.isBoolean()) {
-                obj = node.getBooleanValue();
-            } else if (node.isNumber()) {
-                obj = node.getNumberValue();
-            } else if (node.isArray()) {
-                final List<Object> list = new ArrayList<Object>();
-                final Iterator<JsonNode> itemIterator = node.getElements();
-
-                for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
-                    list.add(flatten(itemIterator.next()));
-                }
-
-                if (itemIterator.hasNext()) {
-                    throw new IllegalArgumentException(
-                            "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json array!");
-                }
-
-                obj = list;
-            } else if (node.isObject()) {
-                final Map<String, Object> map = new HashMap<String, Object>();
-                final Iterator<String> fieldNameIterator = node.getFieldNames();
-
-                for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {
-                    final String fName = fieldNameIterator.next();
-                    map.put(fName, flatten(node.get(fName)));
-                }
-
-                if (fieldNameIterator.hasNext()) {
-                    throw new IllegalArgumentException(
-                            "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json object!");
-                }
-
-                obj = map;
-            }
+        if (node == null) {
+            return null;
         }
+
+        final Object obj;
+
+        if (node.isTextual()) {
+            obj = node.getTextValue();
+        } else if (node.isBoolean()) {
+            obj = node.getBooleanValue();
+        } else if (node.isNumber()) {
+            obj = node.getNumberValue();
+        } else if (node.isArray()) {
+            obj = flattenArrayNode(node);
+        } else if (node.isObject()) {
+            obj = flattenObjectNode(node);
+        } else {
+            obj = node;
+        }
+
         return obj;
+    }
+
+    private static Object flattenArrayNode(JsonNode node) {
+        final List<Object> list = new ArrayList<Object>();
+        final Iterator<JsonNode> itemIterator = node.getElements();
+
+        for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
+            list.add(flatten(itemIterator.next()));
+        }
+
+        if (itemIterator.hasNext()) {
+            throw new IllegalArgumentException(
+                    "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json array!");
+        }
+
+        return list;
+    }
+
+    private static Object flattenObjectNode(JsonNode node) {
+        final Map<String, Object> map = new HashMap<String, Object>();
+        final Iterator<String> fieldNameIterator = node.getFieldNames();
+
+        for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {
+            final String fName = fieldNameIterator.next();
+            map.put(fName, flatten(node.get(fName)));
+        }
+
+        if (fieldNameIterator.hasNext()) {
+            throw new IllegalArgumentException(
+                    "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json object!");
+        }
+
+        return map;
     }
 
     public static void resolvePersonAttributeFields(NavigableFormStructure form, Person person,
