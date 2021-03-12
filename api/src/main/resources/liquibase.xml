@@ -1408,4 +1408,26 @@
             <column name="uuid">ca26081b-76c3-11eb-8b48-0242ac150002</column>
         </insert>
     </changeSet>
+
+    <changeSet id="cfl-20210311-16:19-Fix-FSN" author="Piotr Wargulak">
+        <comment>
+            Fix Risk factor for HIV Concepts. Makes Concept Names with 'en-GB' locale (if any exist)
+            a Fully Specified Names for Concepts which have no Fully Specified Name defined.
+        </comment>
+        <sql><![CDATA[
+            update
+                concept_name as cn_en
+            inner
+                join concept as c
+                    on c.concept_id = cn_en.concept_id
+            left join
+                concept_name as cn_fsn
+                    on cn_fsn.concept_id = c.concept_id and cn_fsn.concept_name_type = 'FULLY_SPECIFIED'
+            set cn_en.concept_name_type = 'FULLY_SPECIFIED'
+            where
+                cn_en.concept_name_type is null
+                and cn_en.locale = 'en-GB'
+                and cn_fsn.concept_name_id is null
+        ]]></sql>
+    </changeSet>
 </databaseChangeLog>
