@@ -1430,4 +1430,19 @@
                 and cn_fsn.concept_name_id is null
         ]]></sql>
     </changeSet>
+
+    <changeSet id="cfl-20210316-12:00-Set-PersonAttributeType-sortWeight" author="Piotr Wargulak">
+        <comment>
+            Set PersonAttributeType.sortWeight for entities where this not-null field was not set.
+            The sortWeight is set to the ID of an entity to reflect the creation order.
+        </comment>
+        <sql><![CDATA[
+            UPDATE
+                person_attribute_type
+            SET
+                sort_weight = person_attribute_type_id
+            WHERE
+                sort_weight is null
+        ]]></sql>
+    </changeSet>
 </databaseChangeLog>
