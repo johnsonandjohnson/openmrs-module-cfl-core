@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,11 @@ public final class DateUtil {
 
     public static String convertToDateTimeWithZone(Date date) {
         return convertDate(date, DATETIME_WITH_ZONE_FORMAT);
+    }
+
+    public static Date parseStringToDate(String date, String dateFormat) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        return simpleDateFormat.parse(date);
     }
 
     private static String convertDate(Date date, String toFormat) {
