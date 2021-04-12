@@ -56,10 +56,10 @@
                         <a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi", ["patientId" : patientId,"encounterId":encounterId,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}">Edit</a>
                         <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
                         <div class="deactivateButtonDiv">
-                            <button class="deactivateButton" onclick="location.href = '${ ui.pageLink("cfl", "deactivateProgram", [patientId: patientId,"patientProgramId":patientProgramId,"returnUrl":"/coreapps/clinicianfacing/patient.page?patientId="+patientId]) }'">Deactivate</button>
+                            <button class="deactivateButton" onclick="location.href = '${ ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/"+config.deactivationFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId]) }'">Deactivate</button>
                         </div>
                     <% } else { %>
-                        <% if(program.isVoided) { %>
+                        <% if(program.dateCompleted != null) { %>
                             <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
                         <% } else { %>
                             <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/"+config.formName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}">Enroll</a>

@@ -45,31 +45,39 @@ public class ProgramFragmentController {
 
         List<Program> programs = programService.getAllPrograms(false);
         List<PatientProgram> patientPrograms = programService.getPatientPrograms(patient, null, null,
-                null, null, null, true);
+                null, null, null, false);
 
         List<Map<String, Object>> programsList = new ArrayList<Map<String, Object>>();
         for (Program program : programs) {
             Map<String, Object> programMap = new HashMap<String, Object>();
-            boolean existsActiveProgram = false;
+            boolean existsNotActiveProgram = false;
             programMap.put(NAME_ATTR_NAME, program.getName());
             for (PatientProgram patientProgram : patientPrograms) {
                 if (patientProgram.getProgram().equals(program)) {
-                    Map<String, Object> programMap2 = new HashMap<String, Object>(programMap);
-                    programMap2.put(IS_ENROLLED_ATTR_NAME, patientProgram.getActive());
-                    programMap2.put(DATE_ENROLLED_ATTR_NAME, patientProgram.getDateEnrolled());
-                    programMap2.put(DATE_COMPLETED_ATTR_NAME, null != patientProgram.getDateCompleted()
+//                    Map<String, Object> programMap2 = new HashMap<String, Object>(programMap);
+//                    programMap2.put(IS_ENROLLED_ATTR_NAME, patientProgram.getActive());
+//                    programMap2.put(DATE_ENROLLED_ATTR_NAME, patientProgram.getDateEnrolled());
+//                    programMap2.put(DATE_COMPLETED_ATTR_NAME, null != patientProgram.getDateCompleted()
+//                            ? patientProgram.getDateCompleted() : CURRENT_LABEL_TEXT);
+//                    programMap2.put(IS_VOIDED_ATTR_NAME, patientProgram.isVoided());
+//                    model.addAttribute(PATIENT_PROGRAM_ID_ATTR_NAME, patientProgram.getPatientProgramId());
+//                    programsList.add(programMap2);
+                    programMap.put(IS_ENROLLED_ATTR_NAME, patientProgram.getActive());
+                    programMap.put(DATE_ENROLLED_ATTR_NAME, patientProgram.getDateEnrolled());
+                    programMap.put(DATE_COMPLETED_ATTR_NAME, null != patientProgram.getDateCompleted()
                             ? patientProgram.getDateCompleted() : CURRENT_LABEL_TEXT);
-                    programMap2.put(IS_VOIDED_ATTR_NAME, patientProgram.isVoided());
+                    programMap.put(IS_VOIDED_ATTR_NAME, patientProgram.isVoided());
                     model.addAttribute(PATIENT_PROGRAM_ID_ATTR_NAME, patientProgram.getPatientProgramId());
-                    programsList.add(programMap2);
-                    if (patientProgram.getActive() && !patientProgram.getVoided()) {
-                        existsActiveProgram = true;
-                    }
+//                    programsList.add(programMap);
+//                    if (!patientProgram.getActive()) {
+//                        existsNotActiveProgram = true;
+//                    }
                 }
             }
-            if (!existsActiveProgram) {
-                programsList.add(programMap);
-            }
+            programsList.add(programMap);
+//            if (!existsNotActiveProgram) {
+//                programsList.add(programMap);
+//            }
         }
 
         model.addAttribute(PROGRAMS_LIST_ATTR_NAME, programsList);

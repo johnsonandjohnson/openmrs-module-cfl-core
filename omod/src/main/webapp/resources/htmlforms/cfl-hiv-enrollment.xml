@@ -1,672 +1,98 @@
 <htmlform formUuid="k65f120a-04ec-11e3-8780-2b40bef9a44c" formName="CFL HIV Enrollment Form"
           formEncounterType="645ce7ac-3714-4cb4-922a-9d5b4b164fa8" formVersion="1.0">
-    <style type="text/css">
-        .nopadding {
+<style type="text/css">
+    .nopadding {
         padding:0px;
-        }
-        #metadata {
-        display: none;
-        }
-        .date-time-picker input {
-            min-width:0px !important;
-            float:left;
-        }
+    }
 
-        .date-time-picker select {
-            min-width:0px !important;
-            display:inherit;
-            padding:3px;
-            margin-left: 5px;
-            margin-top:7px;
-        }
-        .combined-field, .other-specify {
+    #metadata {
+        display: none;
+    }
+
+    .date-time-picker input {
+        min-width:0px !important;
+        float:left;
+    }
+
+    .date-time-picker select {
+        min-width:0px !important;
+        display:inherit;
+        padding:3px;
+        margin-left: 5px;
+        margin-top:7px;
+    }
+
+    .combined-field, .other-specify {
         float:left;
         margin: 0px;
         padding: 0px;
         line-height: normal;
         height: 45px;
-        }
-        .other-specify label {
+    }
+
+    .other-specify label {
         float:left;
-        }
+    }
 
+    #body-wrapper table.form-table tr:hover {
+        background: #F7FDFF !important;
+    }
 
-        #body-wrapper table.form-table tr:hover { background: #F7FDFF !important; }
-        #body-wrapper table.form-table tr, #body-wrapper table.form-table tr td { border: none !important; }
-        span.obs-field input[type="radio"] {margin-top: 14px}
-        .combined-field input[type="checkbox"] {margin-top: 12px}
-        .combined-field input[type="text"] {min-width: 60%}
-        span.obs-field label {float: left}
+    #body-wrapper table.form-table tr, #body-wrapper table.form-table tr td {
+        border: none !important;
+    }
 
-    </style>
-    <script type="text/javascript">
-        $(document).ready(function(){
-        const correctRadioAlignment = function () {
-        const container = $("&lt;div class='combined-field col-sm-4'/>");
-        $('.radio-obs-div input:radio').each(function() {
-        $(this).nextUntil("input:radio").andSelf().wrapAll(container);
-        })
-        $('.combined-field').each(function(i,e){
-        if(this.nextSibling) {
-        this.parentNode.removeChild(this.nextSibling);
-        }
+    span.obs-field input[type="radio"] {
+        margin-top: 14px
+    }
 
-        });
+    .combined-field input[type="checkbox"] {
+        margin-top: 12px
+    }
 
-        }
-        const correctCheckboxAlignment = function () {
-        const container = $("&lt;div class='combined-field col-sm-4'/>");
-        $('.checkbox-obs-div input:checkbox').each(function() {
-        $(this).nextUntil("br").andSelf().wrapAll(container);
-        })
-        $('.checkbox-obs-div').find('br').remove();
-        }
+    .combined-field input[type="text"] {
+        min-width: 60%
+    }
 
-        const addTogglingInputVisibilityToOtherField = function(selector, label) {
-        const checkboxSelector = selector + ' input[type=radio]';
-        const isCheckedSelector = checkboxSelector + ':checked';
-        const inputSelector = selector + ' input[type=text]';
-        const toggleInputVisibility = function() {
-        if ($( checkboxSelector + ":checked+label" ).contents().text() == label) {
-        $(inputSelector).show();
-        } else {
-        $(inputSelector).hide();
-        }
-        }
-        $(checkboxSelector).click(() => toggleInputVisibility());
-        toggleInputVisibility();
-        }
+    span.obs-field label {
+        float: left
+    }
+</style>
 
-        correctCheckboxAlignment();
-        correctRadioAlignment();
-        addTogglingInputVisibilityToOtherField('#otherField', 'Other');
-        addTogglingInputVisibilityToOtherField('#otherFieldCountry','Other');
-
-        });
-    </script>
     <div>
         <h2>
             <uimessage code="HIV Enrollment"/>
         </h2>
     </div>
-    <div>
-        <table class="form-table" width="100%">
-            <tr>
-                <td>
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <h3 class="col-sm-4 pull-left">Enrollment date:</h3>
-                            <div class="col-sm-7 date-time-picker">
-                                <encounterDate class="col-sm-7" id="encounter-date" default="now" showTime="false"/>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <h3 class="col-sm-4 pull-left">Location:</h3>
-                            <div class="col-sm-7 pull-left">
-                                <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete"/>
-                            </div>
+    <table class="form-table" width="100%">
+        <tr>
+            <td>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h3 class="col-sm-4 pull-left">Enrollment date:</h3>
+                        <div class="col-sm-7 date-time-picker">
+                            <encounterDate class="col-sm-7" id="encounter-date" default="now" showTime="false"/>
                         </div>
                     </div>
-                </td>
-            </tr>
-        </table>
-        <table class="form-table">
-            <tr>
-                <td>
-                    <h3>
-                        <lookup expression="fn.getConcept('166002').name"/>
-                    </h3>
-                    <div class="radio-obs-div col-sm-12">
-                        <obs
-                                id="otherField" conceptId="166002" style="radio"
-                                answerConceptIds="166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002"
-                                commentFieldLabel="" answerLabels=" Mother is infected with HIV,Requirement for insurance
-,Pregnant,Sex partner is infected with HIV,Received blood transfusion,TB Patient
-,Re-check previous HIV test result,Active Hepatitis B/C,Accidental needle prick,Employment- Local/In the Philippines,No Particular Reason,Recommended by physician,Employment- Overseas/Abroad,Other"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">HIV Test</h3>
-                        <obs conceptId="166002" answerConceptIds="166002,166002"
-                             answerLabels="Client-Initiated,Provider-Initiated"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Nadir CD4</h3>
-                        <obs class="col-sm-3 nopadding" conceptId="5090" size="20"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Historical Adherence Rate (0-100)</h3>
-                        <obs class="col-sm-3 nopadding" conceptId="5090" size="20"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">WHO Stage at diagnosis</h3>
-                        <obs conceptId="166002" answerConceptIds="166002,166002,166002,166002"
-                             answerLabels="Stage 1,Stage 2,Stage 3,Stage 4"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Place of initial diagnosis</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="radio-obs-div col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Country</h3>
-                                    <obs
-                                            id="otherFieldCountry" conceptId="166002" style="radio"
-                                            answerConceptIds="166002,166002"
-                                            answerLabels=" Phillipines,Other" commentFieldLabel=""/>
-                                </div>
-
-                                <div class="col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Site/Hospital</h3>
-                                    <obs class="col-sm-3 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Date of initial diagnosis</h3>
-                                    <obs class="col-sm-3 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                                <div class="col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Age of diagnosis</h3>
-                                    <obs class="col-sm-3 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
+                    <div class="col-sm-5">
+                        <h3 class="col-sm-4 pull-left">Location:</h3>
+                        <div class="col-sm-7 pull-left">
+                            <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete"/>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Risk Factors</h3>
-                        <div class="checkbox-obs-div col-sm-12">
-                            <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Unprotected sex'],
-                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Blood transfusion recipients'],['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Child born to HIV + Mother'],
-                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Confirmed HIV + Sexual partner'],['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'HCW with needlestick injury'],
-                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Shared needles'],
-                        ['bc3c1970-38f0-4dc3-8dba-36a1640016e5', 'Other']">
-                                <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}"
-                                     style="checkbox"/>
-                                <br/>
-                            </repeat>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                    <h3 class="col-sm-3">Perceived sexual identity</h3>
-                        <obs class="col-sm-3" conceptId="166002" answerConceptIds="166002,166002,166002,166002"
-                             answerLabels="Homosexual,Heterosexual,Bisexual,Unknown"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Relationship</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-12">
-                                    <h3 class="col-sm-3">Relationship Status</h3>
-                                    <obs conceptId="166002" answerConceptIds="166002,166002,166002,166002"
-                                         answerLabels="Serodiscordant,Seroconcordant,Unknown,No Relationship"/>
-                                </div>
-                                <div class="radio-obs-div col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Disclosure status</h3>
-                                    <obs class="col-sm-6"
-                                            id="country-of-diaganosis" conceptId="166002" style="radio"
-                                            answerConceptIds="166002,166002"
-                                            answerLabels=" Disclosed,Not Disclosed"/>
-                                </div>
-                                <div class="col-sm-12">
-                                    <h3 class="col-sm-3 pull-left">Comment</h3>
-                                    <obs class="col-sm-3 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Age at first sex</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">With Male</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">With Female</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Number of sexual partners</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Male (Last 6 Months)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Female (Last 6 Months)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Male (Last 12 Months)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Female (Last 12 Months)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Male (Last 5 Years)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Female (Last 5 Years)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Male (Last 10 Years)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Female (Last 10 Years)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Male (Lifetime)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Female (Lifetime)</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Use of protection during sex (Past 3 Months)</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">With Partner</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Casual Encounter</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Sexual habits</h3>
-                        <div class="checkbox-obs-div col-sm-12">
-                            <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Oral sex'],
-                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Veginal Sex'],['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Anal Sex'],
-                        ['ac76a287-04d3-49be-ab26-272f49bba6d3', 'Others']">
-                                <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}"
-                                     style="checkbox"/>
-                                <br/>
-                            </repeat>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Alcohol Intake (Past 3 months)</h3>
-                        <obs  class="col-sm-3" conceptId="166002" answerConceptIds="166002,166002,166002,166002"
-                             answerLabels="Homosexual,Heterosexual,Bisexual,Unknown"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Smoking behavior (Past 3 months)</h3>
-                        <obs  class="col-sm-3" conceptId="166002" answerConceptIds="166002,166002,166002,166002"
-                             answerLabels="Homosexual,Heterosexual,Bisexual,Unknown"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-3">Pack years</h3>
-                        <obs class="col-sm-3 nopadding" conceptId="5090" size="20"/>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Drug Use (Past 3 months)</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Heroin</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Cocaine</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Marijuana</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">MAP smoke</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">MAP injected</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">MAP mucosal</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Valium</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Codeine</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Ecstacy</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Ketamine</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Nubain</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">GHB</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Poppers</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <obs class="col-sm-3  pull-left nopadding" conceptId="5090" size="10"/>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="Never,Once a month,2 or 3 times a month,Once or twice a week,3 or 4 times a week,Nearly every day,Daily"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Current ARV Medication</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Drug combination</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="AZT + 3TC + LOP/R,TDF + 3TC + NVP,AZT + 3TC + NVP,AZT + 3TC + EFV,TDF + 3TC + RAL,TDF + 3TC + EFV,TDF + 3TC + LOP/R,TDF + AZT + 3TC + NVP,TDF + AZT + 3TC + EFV,TDF + AZT + 3TC + Lop/R,AZT + 3TC + RAL,ABC + 3TC + EFV,ABC + 3TC + NVP,ABC + 3TC + Lop/R,ABC + 3TC + RAL,AZT + 3TC + RPV,TDF + 3TC + RPV,ABC + 3TC + RPV"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left">Frequency</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-3 pull-left">Date started</h3>
-                                    <obs class="col-sm-9 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Initial ARV Medication (if different than current medication)</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="row">
-                                    <div class="checkbox-obs-div col-sm-12">
-                                        <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Check if still ongoing']">
-                                            <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}"
-                                                 style="checkbox"/>
-                                            <br/>
-                                        </repeat>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Drug combination</h3>
-                                    <obs conceptId="166002"
-                                         answerConceptIds="166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002,166002"
-                                         answerLabels="AZT + 3TC + LOP/R,TDF + 3TC + NVP,AZT + 3TC + NVP,AZT + 3TC + EFV,TDF + 3TC + RAL,TDF + 3TC + EFV,TDF + 3TC + LOP/R,TDF + AZT + 3TC + NVP,TDF + AZT + 3TC + EFV,TDF + AZT + 3TC + Lop/R,AZT + 3TC + RAL,ABC + 3TC + EFV,ABC + 3TC + NVP,ABC + 3TC + Lop/R,ABC + 3TC + RAL,AZT + 3TC + RPV,TDF + 3TC + RPV,ABC + 3TC + RPV"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left">Frequency</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-3 pull-left">Date started</h3>
-                                    <obs class="col-sm-9 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-3 pull-left">Date Ended</h3>
-                                    <obs class="col-sm-9 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3">Reason for discontinuation</h3>
-                                    <obs class="col-sm-9 nopadding" conceptId="5090" size="50"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Opportunistic Infection Drugs</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="row">
-                                    <div class="checkbox-obs-div col-sm-12">
-                                        <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Check if still ongoing']">
-                                            <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}"
-                                                 style="checkbox"/>
-                                            <br/>
-                                        </repeat>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Drug combination</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left">Frequency</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-3 pull-left">Date started</h3>
-                                    <obs class="col-sm-9 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-3 pull-left">Date Ended</h3>
-                                    <obs class="col-sm-9 nopadding pull-left" conceptId="165934"/>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3">Reason for discontinuation</h3>
-                                    <obs class="col-sm-9 nopadding" conceptId="5090" size="50"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Any history of drug allergy(Brand, Duration, Details ...)</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Zidovudine</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Tenofovir</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Lamivudine</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Nevirapine</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Efavirenz</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Rilpivirine</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Lopinavir/Ritonavir</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">Raltegravir</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">other1</h3>
-                                    <obs class="col-sm-3  pull-left nopadding" conceptId="5090" size="10"/>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                                <div class="col-sm-6 pull-left">
-                                    <h3 class="col-sm-4 pull-left">other2</h3>
-                                    <obs class="col-sm-3  pull-left nopadding" conceptId="5090" size="10"/>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="row">
-                        <h3 class="col-sm-12 group-header">Other Data</h3>
-                        <div class="col-sm-12">
-                            <obsgroup groupingConceptId="166002">
-                                <div class="row">
-                                    <div class="checkbox-obs-div col-sm-12">
-                                        <repeat with="['171c838b-7cc4-40ab-a7d9-b89af9bcef80', 'Other Data']">
-                                            <obs conceptId="06d5d483-ed76-4238-8784-783c1860a613" answerConceptId="{0}"
-                                                 style="checkbox"/>
-                                            <br/>
-                                        </repeat>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 pull-left nopadding">
-                                    <h3 class="col-sm-3 pull-left nopadding">Drug combination</h3>
-                                    <obs class="col-sm-6 nopadding pull-left" conceptId="5090" size="20"/>
-                                </div>
-                            </obsgroup>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <enrollInProgram programId="06c596e7-53dd-44c1-9609-f1406fd9e76d"/>
 
-<!--    <div class="ke-form-footer">
-        <submit/>
-    </div>-->
     <ifMode mode="VIEW" include="false">
         <div id="buttons">
             <submit submitClass="confirm right" submitCode="general.save"/>
             <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
         </div>
     </ifMode>
+
+    <div>AAAdsad</div>
 </htmlform>
