@@ -149,6 +149,11 @@
 		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
-	
+
+	<!-- The reportingui module doesn't add it by itself. -->
+	<privilege>
+		<name>App: reportingui.reports</name>
+		<description>Able to access report overview</description>
+	</privilege>
 </module>
 

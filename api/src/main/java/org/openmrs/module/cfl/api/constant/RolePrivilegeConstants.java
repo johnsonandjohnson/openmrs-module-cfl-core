@@ -260,7 +260,8 @@ public final class RolePrivilegeConstants {
             "View RESTWS",
             "View Token Registrations",
             "View Unpublished Forms",
-            "Messages schedule privilege"
+            "Messages schedule privilege",
+            "App: reportingui.reports"
     );
 
     private RolePrivilegeConstants() { }

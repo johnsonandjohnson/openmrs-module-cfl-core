@@ -22,6 +22,7 @@ import org.openmrs.module.ModuleException;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
+import org.openmrs.module.cfl.api.constant.RolePrivilegeConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener;
@@ -35,6 +36,8 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
+import org.openmrs.module.patientflags.Tag;
+import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
@@ -70,6 +73,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             installMetadataPackages();
             CflEventListenerFactory.registerEventListeners();
             deployMetadataPackages();
+            ensureCFLTagRoleConfigurationIncludesDoctorRole();
             DataCleanup.cleanUpUnnecessaryData();
         } catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
@@ -131,6 +135,24 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         final Role fullPrivilegeRole = userService.getRole(CFLConstants.PRIVILEGE_LEVEL_FULL_ROLE_NAME);
 
         adminUser.addRole(fullPrivilegeRole);
+    }
+
+    private void ensureCFLTagRoleConfigurationIncludesDoctorRole() {
+        final FlagService flagService = Context.getService(FlagService.class);
+
+        final Tag cflTag = flagService.getTagByUuid(CFLConstants.CFL_TAG_UUID);
+        final Role doctorRole = Context.getUserService().getRole(RolePrivilegeConstants.DOCTOR_PRIVILEGE_LEVEL);
+
+        for (final Role cflTagRole : cflTag.getRoles()) {
+            if (cflTagRole.equals(doctorRole)) {
+                // The configuration is ok
+                return;
+            }
+        }
+
+        // The configuration is not ok
+        cflTag.getRoles().add(doctorRole);
+        flagService.saveTag(cflTag);
     }
 
     /**
@@ -233,6 +255,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
                 CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE, CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY,
+                CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
     }
 
     private void createVisitNoteUrlProperties() {

@@ -211,5 +211,13 @@ public final class CFLConstants {
 
     public static final String CFL_DISTRO_BOOTSTRAPPED_KEY = "cfl.distro.bootstrapped";
 
+    /**
+     * The UUID of the CFL Tag (the common tag for Patient Flags in CfL module).
+     * <p>
+     * Hardcoded in liquibase.xml.
+     * </p>
+     */
+    public static final String CFL_TAG_UUID = "ef1a1b2d-c7a5-44d7-a518-ef78087abb23";
+
     private CFLConstants() { }
 }

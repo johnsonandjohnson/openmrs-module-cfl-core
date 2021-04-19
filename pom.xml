@@ -82,6 +82,12 @@
             </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
+                <artifactId>patientflags-api</artifactId>
+                <version>${patientFlagVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
                 <artifactId>appframework-api</artifactId>
                 <version>${appframeworkVersion}</version>
                 <scope>provided</scope>
