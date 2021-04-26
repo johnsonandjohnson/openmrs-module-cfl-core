@@ -33,6 +33,18 @@ public class EncountersWidgetFragmentControllerTest {
 
     private static final String ENCOUNTER_TYPE_UUID = "43c3630f-abfe-4fe1-8c92-b73b65199a3d";
 
+    private static final String ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_ATTR_NAME = "encounterClosedStatusConceptUuid";
+
+    private static final String ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID = "a3ac4721-1035-4480-8fc0-f0407a7ff3f1";
+
+    private static final String ANSWER_CONCEPT_UUID_ATTR_NAME = "answerConceptUuid";
+
+    private static final String ANSWER_CONCEPT_UUID = "8a9eefa0-6d4f-4a35-ad00-a999846d8f48";
+
+    private static final String SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUIDS_ATTR_NAME = "symptomsAnswerConceptsClassUuids";
+
+    private static final String SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUID = "8d4918b0-c2cc-11de-8d13-0010c6dffd0f";
+
     private static final String MAX_RECORD_SIZE_ATTR_NAME = "maxRecords";
 
     private static final String MAX_RECORD_SIZE = "20";
@@ -83,6 +95,9 @@ public class EncountersWidgetFragmentControllerTest {
     private FragmentConfiguration createFragmentConfiguration(Object maxRecords) {
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(ENCOUNTER_TYPE_UUID_ATTR_NAME, ENCOUNTER_TYPE_UUID);
+        config.put(ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_ATTR_NAME, ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID);
+        config.put(ANSWER_CONCEPT_UUID_ATTR_NAME, ANSWER_CONCEPT_UUID);
+        config.put(SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUIDS_ATTR_NAME, SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUID);
         config.put(MAX_RECORD_SIZE_ATTR_NAME, maxRecords);
         return new FragmentConfiguration(config);
     }
