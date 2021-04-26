@@ -137,4 +137,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="cfl.encounterService" class="org.openmrs.module.cfl.api.service.impl.CFLEncounterServiceImpl">
+        <property name="encounterService" ref="encounterService"/>
+        <property name="patientService" ref="patientService"/>
+        <property name="conceptService" ref="conceptService"/>
+        <property name="formService" ref="formService"/>
+        <property name="obsService" ref="obsService"/>
+    </bean>
 </beans>
