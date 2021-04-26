@@ -41,9 +41,9 @@ public class EncountersWidgetFragmentControllerTest {
 
     private static final String ANSWER_CONCEPT_UUID = "8a9eefa0-6d4f-4a35-ad00-a999846d8f48";
 
-    private static final String SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUIDS_ATTR_NAME = "symptomsAnswerConceptsClassUuids";
+    private static final String OBS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME_ATTR_NAME = "obsAnswerConceptsClassUuids";
 
-    private static final String SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUID = "8d4918b0-c2cc-11de-8d13-0010c6dffd0f";
+    private static final String OBS_ANSWER_CONCEPTS_CLASS_UUID = "8d4918b0-c2cc-11de-8d13-0010c6dffd0f";
 
     private static final String MAX_RECORD_SIZE_ATTR_NAME = "maxRecords";
 
@@ -97,7 +97,7 @@ public class EncountersWidgetFragmentControllerTest {
         config.put(ENCOUNTER_TYPE_UUID_ATTR_NAME, ENCOUNTER_TYPE_UUID);
         config.put(ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_ATTR_NAME, ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID);
         config.put(ANSWER_CONCEPT_UUID_ATTR_NAME, ANSWER_CONCEPT_UUID);
-        config.put(SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUIDS_ATTR_NAME, SYMPTOMS_ANSWER_CONCEPTS_CLASS_UUID);
+        config.put(OBS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME_ATTR_NAME, OBS_ANSWER_CONCEPTS_CLASS_UUID);
         config.put(MAX_RECORD_SIZE_ATTR_NAME, maxRecords);
         return new FragmentConfiguration(config);
     }

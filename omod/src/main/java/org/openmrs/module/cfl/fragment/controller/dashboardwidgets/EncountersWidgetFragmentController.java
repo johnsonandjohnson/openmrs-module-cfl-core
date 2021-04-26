@@ -31,7 +31,7 @@ public class EncountersWidgetFragmentController {
     public static final String ENCOUNTERS_BOOL_LIST_ATTR_NAME = "encountersBoolList";
     public static final String ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_PARAM_NAME = "encounterClosedStatusConceptUuid";
     public static final String ANSWER_CONCEPT_UUID_PARAM_NAME = "answerConceptUuid";
-    public static final String SYMPTOMS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME = "symptomsAnswerConceptsClassUuids";
+    public static final String OBS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME = "obsAnswerConceptsClassUuids";
 
     public void controller(FragmentConfiguration config, FragmentModel model, @RequestParam(PATIENT_ID) Patient patient,
                            @SpringBean("encounterService") EncounterService encounterService,
@@ -42,9 +42,9 @@ public class EncountersWidgetFragmentController {
                 conceptService.getConceptByUuid(config.get(ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_PARAM_NAME).toString());
         Concept answerConcept = conceptService.getConceptByUuid(config.get(ANSWER_CONCEPT_UUID_PARAM_NAME).toString());
 
-        String symptomsAnswerConceptClassUuids = config.get(SYMPTOMS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME).toString();
-        List<ConceptClass> symptomsClasses = getConceptClassesByUuids(symptomsAnswerConceptClassUuids, conceptService);
-        List<Concept> symptoms = getConceptsByConceptClasses(symptomsClasses, conceptService);
+        String obsAnswerConceptClassUuids = config.get(OBS_ANSWER_CONCEPT_CLASS_UUIDS_PARAM_NAME).toString();
+        List<ConceptClass> obsClasses = getConceptClassesByUuids(obsAnswerConceptClassUuids, conceptService);
+        List<Concept> obsList = getConceptsByConceptClasses(obsClasses, conceptService);
 
         List<Encounter> encounters = encounterService.getEncounters(patient, null, null, null,
                 null, getEncounterTypesByUuids(encounterTypesUuids, encounterService), null,
@@ -57,7 +57,7 @@ public class EncountersWidgetFragmentController {
         model.addAttribute(PATIENT_ID, patient.getUuid());
         model.addAttribute(ENCOUNTERS_ATTR_NAME, encounters);
         model.addAttribute(MAX_RECORDS_ATTR_NAME, maxRecords);
-        model.addAttribute(TEXTS_LIST_ATTR_NAME, getTrimmedSymptomsTextsList(encounters, symptoms, answerConcept));
+        model.addAttribute(TEXTS_LIST_ATTR_NAME, getTrimmedObsTextsList(encounters, obsList, answerConcept));
         model.addAttribute(ENCOUNTERS_BOOL_LIST_ATTR_NAME, getEncounterStatusesBooleanList(encounters,
                 encounterClosedStatusConcept));
     }
@@ -99,26 +99,26 @@ public class EncountersWidgetFragmentController {
         return encounterTypes;
     }
 
-    private List<String> getTrimmedSymptomsTextsList(List<Encounter> encounters, List<Concept> symptoms,
-                                                     Concept answerConcept) {
+    private List<String> getTrimmedObsTextsList(List<Encounter> encounters, List<Concept> obsList,
+                                                Concept answerConcept) {
         List<String> textsList = new ArrayList<String>();
         for (Encounter encounter : encounters) {
-            List<Obs> obsList = new ArrayList<Obs>(encounter.getAllObs(false));
-            String commaSeparatedSymptomsList = getCommaSeparatedSymptomsList(obsList, symptoms, answerConcept);
-            String trimmedText = trimText(commaSeparatedSymptomsList);
+            List<Obs> encounterObsList = new ArrayList<Obs>(encounter.getAllObs(false));
+            String commaSeparatedObsList = getCommaSeparatedObsList(encounterObsList, obsList, answerConcept);
+            String trimmedText = trimText(commaSeparatedObsList);
             textsList.add(trimmedText);
         }
         return textsList;
     }
 
-    private String getCommaSeparatedSymptomsList(List<Obs> obsList, List<Concept> symptoms, Concept answerConcept) {
+    private String getCommaSeparatedObsList(List<Obs> encounterObsList, List<Concept> obsList, Concept answerConcept) {
         StringBuilder stringBuilder = new StringBuilder();
         String text;
-        for (Obs obs : obsList) {
-            if (symptoms.contains(obs.getConcept()) && obs.getValueCoded().equals(answerConcept)) {
+        for (Obs obs : encounterObsList) {
+            if (obsList.contains(obs.getConcept()) && obs.getValueCoded().equals(answerConcept)) {
                 text = obs.getConcept().getName().getName() + ", ";
                 stringBuilder.append(text);
-            } else if (symptoms.contains(obs.getValueCoded())) {
+            } else if (obsList.contains(obs.getValueCoded())) {
                 text = obs.getValueCoded().getName().getName() + ", ";
                 stringBuilder.append(text);
             }
