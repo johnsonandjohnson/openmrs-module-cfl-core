@@ -82,6 +82,7 @@ public class CFLEncounterServiceImpl implements CFLEncounterService {
         if (encounterId != null) {
             encounter = encounterService.getEncounter(encounterId);
             obs.setEncounter(encounter);
+            obs.setLocation(encounter.getLocation());
             obsService.saveObs(obs, comment);
         }
 
