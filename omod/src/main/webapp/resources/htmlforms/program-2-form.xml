@@ -1,5 +1,5 @@
-<htmlform formUuid="k65f120a-04ec-11e3-8780-2b40bef9a44c" formName="CFL HIV Enrollment Form"
-          formEncounterType="645ce7ac-3714-4cb4-922a-9d5b4b164fa8" formVersion="1.0">
+<htmlform formUuid="8ab90f64-ae54-11eb-be39-0242ac120002" formName="Program 2 Form"
+          formEncounterType="d68fc5c7-fc75-474b-8745-53831be7aed4" formVersion="1.0">
 <style type="text/css">
     .nopadding {
         padding:0px;
@@ -61,7 +61,7 @@
 
     <div>
         <h2>
-            <uimessage code="HIV Enrollment"/>
+            <uimessage code="PROGRAM 2 FORM"/>
         </h2>
     </div>
     <table class="form-table" width="100%">
@@ -85,7 +85,7 @@
         </tr>
     </table>
 
-    <enrollInProgram programId="06c596e7-53dd-44c1-9609-f1406fd9e76d"/>
+    <enrollInProgram programId="af8d9560-1c96-4d7f-94d9-6eca891026c0"/>
 
     <ifMode mode="VIEW" include="false">
         <div id="buttons">

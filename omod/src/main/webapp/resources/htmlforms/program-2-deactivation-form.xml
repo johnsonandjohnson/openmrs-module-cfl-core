@@ -1,0 +1,43 @@
+<htmlform formUuid="0a2d7b07-ae55-11eb-be39-0242ac120002" formName="Program 2 Deactivation Form"
+          formEncounterType="48f1eb08-4531-4119-adf8-1c23778f6d29" formVersion="1.0">
+
+<style type="text/css">
+    .date-container {
+    margin-right: 50px;
+    }
+
+    #buttons {
+    margin-left: 10px;
+    }
+
+    .section {
+    margin-left: 10px;
+    }
+</style>
+    <h2>PROGRAM 2 DEACTIVATION FORM</h2>
+    <div class="date-container">
+        <div class="section">
+            <p>
+                <label><uimessage code="Date"/></label>
+                <encounterDate id="encounterDate" default="now" />
+            </p>
+        </div>
+    </div>
+    <div class="subsection-by-indentation">
+        <div class="section">
+            <p>
+                <label><uimessage code="Reason"/></label>
+                <obs conceptId="CIEL:162169" style="textarea" rows="5"/>
+            </p>
+        </div>
+    </div>
+
+    <ifMode mode="VIEW" include="false">
+        <div id="buttons">
+            <submit submitClass="confirm right" submitCode="general.save"/>
+            <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
+        </div>
+    </ifMode>
+
+    <completeProgram programId="af8d9560-1c96-4d7f-94d9-6eca891026c0"/>
+</htmlform>

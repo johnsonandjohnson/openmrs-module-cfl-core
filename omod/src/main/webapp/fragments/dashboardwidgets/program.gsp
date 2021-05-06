@@ -40,6 +40,32 @@
         padding: 5px;
     }
 
+    .cropped-text-span {
+        display: block;
+        white-space: nowrap;
+        width: 45px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+    }
+
+    .not-cropped-text-span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        font-weight: bold;
+      }
+
+    .enrollButton {
+        background-color: #CCCCCC;
+        border: none;
+        color: black;
+        padding: 5px;
+        font-size: 15px;
+        border-radius: 4px;
+        margin: right;
+    }
+
 </style>
 
 <div class="info-section">
@@ -51,18 +77,18 @@
         <ul>
             <% programsList.each { program -> %>
                 <li>
-                    ${ui.format(program.name)}
                     <% if(program.isEnrolled) { %>
-                        <a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi", ["patientId" : patientId,"encounterId":encounterId,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}">Edit</a>
+                        <span class="cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
+                        <span class="not-cropped-text-span"><a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi", ["patientId" : patientId,"encounterId":program.encounterId,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}"><i class="icon-pencil edit-action" title="Edit"></i></a></span>
+                        <span class="not-cropped-text-span"><i class="icon-remove delete-action" title="Discontinue" onclick="location.href = '${ ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/" + program.programConfig.discontinuationFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId]) }'"></i></span>
                         <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
-                        <div class="deactivateButtonDiv">
-                            <button class="deactivateButton" onclick="location.href = '${ ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/"+config.deactivationFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId]) }'">Deactivate</button>
-                        </div>
                     <% } else { %>
                         <% if(program.dateCompleted != null) { %>
+                            <span class="not-cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
                             <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
                         <% } else { %>
-                            <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/"+config.formName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}">Enroll</a>
+                            <span class="not-cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
+                            <span class="not-cropped-text-span"><button class="enrollButton" onClick = "location.href='${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId, "definitionUiResource": "cfl:htmlforms/" + program.programConfig.programFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}'">Enroll</button></span>
                         <% } %>
                     <% } %>
                 </li>
