@@ -5,8 +5,11 @@ import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
 import org.openmrs.VisitType;
+import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.Constant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public final class VisitHelper {
@@ -27,6 +30,7 @@ public final class VisitHelper {
         visit.setPatient(patient);
         visit.setVisitType(createVisitType(visitType));
         visit.addAttribute(createVisitStatusAttribute(visitStatus));
+        visit.setStartDatetime(new Date());
         return visit;
     }
 
@@ -49,6 +53,7 @@ public final class VisitHelper {
         VisitAttributeType visitAttributeType = new VisitAttributeType();
         visitAttributeType.setId(1);
         visitAttributeType.setName("Visit Status");
+        visitAttributeType.setUuid(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID);
         return visitAttributeType;
     }
 
@@ -57,5 +62,38 @@ public final class VisitHelper {
         visitAttributeType.setId(visitAttrTypeId);
         visitAttributeType.setName(attrTypeName);
         return visitAttributeType;
+    }
+
+    public static List<VisitType> getVisitTypes() {
+        List<VisitType> visitTypes = new ArrayList<VisitType>();
+        VisitType visitTypeDosing = new VisitType();
+        VisitType visitTypeOther = new VisitType();
+        visitTypeDosing.setName(Constant.VISIT_TYPE_DOSING);
+        visitTypeOther.setName(Constant.VISIT_TYPE_OTHER);
+        visitTypes.add(visitTypeDosing);
+        return visitTypes;
+    }
+
+    public static List<VisitAttributeType> getVisitAttributeTypes() {
+        List<VisitAttributeType> visitAttributeTypes = new ArrayList<VisitAttributeType>();
+        VisitAttributeType visitAttributeType1 = new VisitAttributeType();
+        VisitAttributeType visitAttributeType2 = new VisitAttributeType();
+        VisitAttributeType visitAttributeType3 = new VisitAttributeType();
+        VisitAttributeType visitAttributeType4 = new VisitAttributeType();
+        visitAttributeType1.setName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
+        visitAttributeType2.setName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME);
+        visitAttributeType3.setName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME);
+        visitAttributeType4.setName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME);
+        visitAttributeTypes.add(visitAttributeType1);
+        visitAttributeTypes.add(visitAttributeType2);
+        visitAttributeTypes.add(visitAttributeType3);
+        visitAttributeTypes.add(visitAttributeType4);
+        return visitAttributeTypes;
+    }
+
+    public static List<Visit> getVisits(Visit visit) {
+        List<Visit> visits = new ArrayList<Visit>();
+        visits.add(visit);
+        return visits;
     }
 }

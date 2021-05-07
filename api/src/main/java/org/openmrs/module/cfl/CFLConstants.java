@@ -165,7 +165,9 @@ public final class CFLConstants {
             + "         \"performCallOnPatientRegistration\":false,\n"
             + "         \"sendSmsOnPatientRegistration\":false,\n"
             + "         \"shouldSendReminderViaCall\":false,\n"
-            + "         \"shouldSendReminderViaSms\":false\n"
+            + "         \"shouldSendReminderViaSms\":false,\n"
+            + "         \"shouldCreateFirstVisit\":false,\n"
+            + "         \"shouldCreateFutureVisit\":false\n"
             + "      }\n"
             + "   }\n"
             + "]";

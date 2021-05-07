@@ -18,6 +18,10 @@ public class CountrySetting {
 
     private boolean shouldSendReminderViaSms;
 
+    private boolean shouldCreateFirstVisit;
+
+    private boolean shouldCreateFutureVisit;
+
     public String getSms() {
         return sms;
     }
@@ -64,5 +68,21 @@ public class CountrySetting {
 
     public void setShouldSendReminderViaSms(boolean shouldSendReminderViaSms) {
         this.shouldSendReminderViaSms = shouldSendReminderViaSms;
+    }
+
+    public boolean isShouldCreateFirstVisit() {
+        return shouldCreateFirstVisit;
+    }
+
+    public void setShouldCreateFirstVisit(boolean shouldCreateFirstVisit) {
+        this.shouldCreateFirstVisit = shouldCreateFirstVisit;
+    }
+
+    public boolean isShouldCreateFutureVisit() {
+        return shouldCreateFutureVisit;
+    }
+
+    public void setShouldCreateFutureVisit(boolean shouldCreateFutureVisit) {
+        this.shouldCreateFutureVisit = shouldCreateFutureVisit;
     }
 }

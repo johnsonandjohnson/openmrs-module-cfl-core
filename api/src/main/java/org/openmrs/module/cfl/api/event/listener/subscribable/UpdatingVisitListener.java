@@ -3,15 +3,18 @@ package org.openmrs.module.cfl.api.event.listener.subscribable;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
 
 import javax.jms.Message;
@@ -58,10 +61,14 @@ public class UpdatingVisitListener extends VisitActionListener {
         if (StringUtils.equalsIgnoreCase(VisitUtil.getVisitStatus(lastDosingVisit),
                 VisitUtil.getOccurredVisitStatus()) && !isLastVisit(numberOfDoses, lastDosingVisit, updatedVisit)) {
             List<VisitInformation> futureVisits = getInformationForFutureVisits(lastDosingVisit, vaccination);
-
-            for (VisitInformation futureVisit : futureVisits) {
-                prepareDataAndSaveVisit(lastDosingVisit, futureVisit);
+            CountrySetting countrySetting = CountrySettingUtil.
+                    getCountrySettingForPatient(updatedVisit.getPatient().getPerson());
+            if (countrySetting.isShouldCreateFutureVisit()) {
+                for (VisitInformation futureVisit : futureVisits) {
+                    prepareDataAndSaveVisit(lastDosingVisit, futureVisit);
+                }
             }
+
         }
     }
 
@@ -75,6 +82,13 @@ public class UpdatingVisitListener extends VisitActionListener {
     private void prepareDataAndSaveVisit(Visit updatedVisit, VisitInformation futureVisit) {
         Visit visit = VisitUtil.createVisitResource(updatedVisit.getPatient(),
                 updatedVisit.getStartDatetime(), futureVisit);
+        PersonAttribute patientLocationAttribute = updatedVisit.getPatient()
+                .getPerson().getAttribute(CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);
+        if (null != patientLocationAttribute) {
+            visit.setLocation(Context.getLocationService().getLocationByUuid(patientLocationAttribute.getValue()));
+        } else {
+            visit.setLocation(updatedVisit.getPatient().getPatientIdentifier().getLocation());
+        }
         Context.getVisitService().saveVisit(visit);
     }
 

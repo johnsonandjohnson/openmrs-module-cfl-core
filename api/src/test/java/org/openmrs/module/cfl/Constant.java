@@ -20,6 +20,24 @@ public final class Constant {
 
     public static final String RELATIONSHIP_UUID = "fc16efca-dbc8-49cc-a2f3-c99d0cf36a2c";
 
+    public static final String PERSON_UUID = "shr05368-pers-4b41-b23f-ki8907f35kk3";
+
+    public static final String LOCATION_UUID = "shr09i87-loct-lo33-996l-o944o96tlmnc";
+
+    public static final String LOCATION_NAME = "CfL Visit Location";
+
+    public static final String PATIENT_UUID = "shr06344-patn-4b41-t46l-l04mk7u3g8l0";
+
+    public static final String VISIT_UUID = "shr05368-vist-4b41-b23f-ki8907f35kk3";
+
+    public static final String VISIT_TYPE_DOSING = "DOSE 1 VISIT";
+
+    public static final String VISIT_TYPE_OTHER = "Other";
+
+    public static final String VISIT_STATUS_OCCURRED = "OCCURRED";
+
+    public static final String COVID_VACCINATION_PROGRAM_JSON_FILE = "COVID.json";
+
     private Constant() {
     }
 }
