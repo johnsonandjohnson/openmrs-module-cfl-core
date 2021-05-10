@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Patient;
@@ -38,6 +40,7 @@ public class ProgramFragmentController {
     private static final String PROGRAM_CONFIG_ATTR_NAME = "programConfig";
     private static final String CURRENT_LABEL_TEXT = "Current";
     private static final String PROGRAM_MAP_LIST = "programMapList";
+    private static final Log LOGGER = LogFactory.getLog(ProgramFragmentController.class);
 
     public void controller(FragmentModel model, FragmentConfiguration configuration,
                            @RequestParam(PATIENT_ID) Patient patient,
@@ -95,6 +98,8 @@ public class ProgramFragmentController {
             List<Encounter> encounters = encounterService.getEncounters(patient, null, null, null,
                     null, Arrays.asList(encounterType), null, null, null, false);
             encounterId = getRelatedEncounterId(encounters);
+        } else {
+            LOGGER.error(String.format("Cannot find program config with name: %s", programName));
         }
         return encounterId;
     }
