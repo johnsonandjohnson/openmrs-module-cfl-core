@@ -22,6 +22,10 @@ public class CountrySetting {
 
     private boolean shouldCreateFutureVisit;
 
+    private String allowOnPatientRegistrationTimeFrom;
+
+    private String allowOnPatientRegistrationTimeTo;
+
     public String getSms() {
         return sms;
     }
@@ -84,5 +88,21 @@ public class CountrySetting {
 
     public void setShouldCreateFutureVisit(boolean shouldCreateFutureVisit) {
         this.shouldCreateFutureVisit = shouldCreateFutureVisit;
+    }
+
+    public String getAllowOnPatientRegistrationTimeFrom() {
+        return allowOnPatientRegistrationTimeFrom;
+    }
+
+    public void setAllowOnPatientRegistrationTimeFrom(String allowOnPatientRegistrationTimeFrom) {
+        this.allowOnPatientRegistrationTimeFrom = allowOnPatientRegistrationTimeFrom;
+    }
+
+    public String getAllowOnPatientRegistrationTimeTo() {
+        return allowOnPatientRegistrationTimeTo;
+    }
+
+    public void setAllowOnPatientRegistrationTimeTo(String allowOnPatientRegistrationTimeTo) {
+        this.allowOnPatientRegistrationTimeTo = allowOnPatientRegistrationTimeTo;
     }
 }

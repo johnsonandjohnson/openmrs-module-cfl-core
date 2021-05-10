@@ -1445,4 +1445,52 @@
                 sort_weight is null
         ]]></sql>
     </changeSet>
+
+
+    <changeSet id="cfl-Add-Welcome-Message-template" author="Piotr Wargulak">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM messages_template WHERE uuid='494c3feb-1935-425c-b42d-eba81a561acd'
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Adds Message Template for Welcome Message.
+        </comment>
+        <insert tableName="messages_template">
+            <column name="uuid" value="494c3feb-1935-425c-b42d-eba81a561acd" />
+            <column name="creator" value="1" />
+            <column name="date_created" valueDate="2021-05-07T00:00:00" />
+            <column name="retired" valueBoolean="false" />
+            <column name="name" value="Welcome Message" />
+            <column name="description" value="The special Template for Welcome Messages." />
+            <column name="should_use_optimized_query" valueBoolean="false" />
+            <column name="service_query_type" value="SQL"/>
+            <column name="service_query" value="SELECT 'empty' FROM dual WHERE false;" />
+            <column name="calendar_service_query" value="SELECT
+  mssg.msg_send_time AS EXECUTION_DATE,
+  1 AS MESSAGE_ID,
+  mssg.channel_type AS CHANNEL_ID,
+  mss.status AS STATUS_ID
+FROM messages_scheduled_service mss
+JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
+JOIN messages_template mt on mt.messages_template_id = mpt.template_id
+JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
+WHERE mt.name = 'Welcome Message'
+  AND mpt.patient_id = :patientId
+  AND mpt.actor_id = :actorId
+  AND mssg.patient_id = :patientId
+  AND mssg.msg_send_time &gt;= :startDateTime
+  AND mssg.msg_send_time &lt;= :endDateTime
+ORDER BY 1 DESC;"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-reset-cfl.countrySettingsMap-gp" author="Piotr Wargulak">
+        <comment>
+            Drops the value of cfl.countrySettingsMap global property to force it to be recreated with default value.
+        </comment>
+        <delete tableName="global_property">
+            <where>property = 'cfl.countrySettingsMap'</where>
+        </delete>
+    </changeSet>
 </databaseChangeLog>

@@ -245,9 +245,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY,
-                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE,
-                CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY,
                 CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE, CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
@@ -257,6 +254,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE, CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY,
                 CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,
+                CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_VALUE,
+                CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

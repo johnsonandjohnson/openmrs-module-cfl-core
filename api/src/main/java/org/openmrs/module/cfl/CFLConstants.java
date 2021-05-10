@@ -112,16 +112,16 @@ public final class CFLConstants {
     public static final String CONDITION_LIST_CLASSES_DESCRIPTION = "List of concept uuid's which limits the answers " +
             "for condition list";
 
+    public static final String NOTIFICATION_TEMPLATE_WELCOME_MESSAGE = "messages.notificationTemplate.welcome-message";
+    public static final String NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_VALUE =
+            "{ message: \"Hello, you have just registered in our system\" }";
+    public static final String NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_DESCRIPTION =
+            "Specifies the SMS message content that will be sent immediately after registration";
+
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
-    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION = "Specifies call flow that will be used " +
-        "in call after patient registration.";
-
-    public static final String SMS_MESSAGE_AFTER_REGISTRATION_KEY = "cfl.smsMessageAfterRegistration";
-    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DEFAULT_VALUE = "{ message: \"Hello, "
-            + "you have just registered in our system\" }";
-    public static final String SMS_MESSAGE_AFTER_REGISTRATION_DESCRIPTION = "Specifies the SMS message content that will " +
-            "be sent immediately after registration";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION =
+            "Specifies call flow that will be used in call after patient registration.";
 
     public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccines";
     public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
@@ -158,21 +158,23 @@ public final class CFLConstants {
 
     public static final String COUNTRY_SETTINGS_MAP_KEY = "cfl.countrySettingsMap";
     public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE = "[\n"
-            + "   {\n"
-            + "      \"default\":{\n"
-            + "         \"SMS\":\"nexmo\",\n"
-            + "         \"CALL\":\"nexmo\",\n"
-            + "         \"performCallOnPatientRegistration\":false,\n"
-            + "         \"sendSmsOnPatientRegistration\":false,\n"
-            + "         \"shouldSendReminderViaCall\":false,\n"
-            + "         \"shouldSendReminderViaSms\":false,\n"
-            + "         \"shouldCreateFirstVisit\":false,\n"
-            + "         \"shouldCreateFutureVisit\":false\n"
-            + "      }\n"
-            + "   }\n"
-            + "]";
-    public static final String COUNTRY_SETTINGS_MAP_DESCRIPTION = "Specifies a map with countries as a keys and " +
-            "all country settings as a values";
+                    + "   {\n"
+                    + "      \"default\":{\n"
+                    + "         \"SMS\":\"nexmo\",\n"
+                    + "         \"CALL\":\"nexmo\",\n"
+                    + "         \"performCallOnPatientRegistration\":false,\n"
+                    + "         \"sendSmsOnPatientRegistration\":false,\n"
+                    + "         \"shouldSendReminderViaCall\":false,\n"
+                    + "         \"shouldSendReminderViaSms\":false,\n"
+                    + "         \"shouldCreateFirstVisit\":false,\n"
+                    + "         \"shouldCreateFutureVisit\":false\n"
+                    + "         \"allowOnPatientRegistrationTimeFrom\":\"10:00\",\n"
+                    + "         \"allowOnPatientRegistrationTimeTo\":\"18:00\""
+                    + "      }\n"
+                    + "   }\n"
+                    + "]";
+    public static final String COUNTRY_SETTINGS_MAP_DESCRIPTION =
+            "Specifies a map with countries as a keys and all country settings as a values";
 
     public static final String DEFAULT_COUNTRY_SETTING_KEY = "default";
 
@@ -221,5 +223,11 @@ public final class CFLConstants {
      */
     public static final String CFL_TAG_UUID = "ef1a1b2d-c7a5-44d7-a518-ef78087abb23";
 
-    private CFLConstants() { }
+    /**
+     * The name of message Template for Welcome Message.
+     */
+    public static final String WELCOME_MESSAGE_TEMPLATE = "Welcome Message";
+
+    private CFLConstants() {
+    }
 }

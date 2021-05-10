@@ -145,4 +145,20 @@
         <property name="formService" ref="formService"/>
         <property name="obsService" ref="obsService"/>
     </bean>
+
+    <bean id="cfl.welcomeMessageSMSSender" class="org.openmrs.module.cfl.handler.impl.WelcomeMessageSMSSenderImpl">
+        <property name="messagesDeliveryService" ref="messages.deliveryService" />
+        <property name="messagingGroupService" ref="messages.messagingGroupService" />
+        <property name="patientTemplateService" ref="messages.patientTemplateService" />
+        <property name="templateService" ref="messages.templateService" />
+        <property name="personService" ref="personService" />
+    </bean>
+
+    <bean id="cfl.welcomeMessageCallSender" class="org.openmrs.module.cfl.handler.impl.WelcomeMessageCallSenderImpl">
+        <property name="messagesDeliveryService" ref="messages.deliveryService" />
+        <property name="messagingGroupService" ref="messages.messagingGroupService" />
+        <property name="patientTemplateService" ref="messages.patientTemplateService" />
+        <property name="templateService" ref="messages.templateService" />
+        <property name="personService" ref="personService" />
+    </bean>
 </beans>
