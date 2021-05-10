@@ -30,16 +30,6 @@
         display: inline-block;
     }
 
-    .deactivateButtonDiv {
-        margin-left: 95px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .deactivateButton {
-        padding: 5px;
-    }
-
     .cropped-text-span {
         display: block;
         white-space: nowrap;
