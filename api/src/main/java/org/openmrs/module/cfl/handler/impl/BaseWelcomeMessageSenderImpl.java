@@ -1,7 +1,5 @@
 package org.openmrs.module.cfl.handler.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
@@ -34,8 +32,6 @@ import java.util.TimeZone;
  * The base class for {@link WelcomeMessageSender}s.
  */
 public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSender {
-    private static final Log LOG = LogFactory.getLog(BaseWelcomeMessageSenderImpl.class);
-
     private final String channelType;
 
     private TemplateService templateService;
@@ -58,7 +54,6 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
     @Override
     public void send(Patient patient, CountrySetting settings) {
         if (!isSendOnPatientRegistrationEnabled(settings)) {
-            LOG.info(this.getClass().getSimpleName() + " is disabled and will not run.");
             return;
         }
 
@@ -116,7 +111,6 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
             welcomeMessagePatientTemplate = patientTemplateService.saveOrUpdate(newPatientTemplate);
         } else {
             welcomeMessagePatientTemplate = existingPatientWelcomeMessageTemplate;
-
         }
 
         return welcomeMessagePatientTemplate;

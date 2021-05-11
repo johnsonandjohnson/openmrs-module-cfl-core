@@ -1,5 +1,7 @@
 package org.openmrs.module.cfl.handler.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
@@ -12,6 +14,8 @@ import org.openmrs.module.messages.api.service.impl.CallFlowServiceResultsHandle
  */
 public class WelcomeMessageCallSenderImpl extends BaseWelcomeMessageSenderImpl {
     public static final String NAME = "cfl.welcomeMessageCallSender";
+
+    private static final Log LOGGER = LogFactory.getLog(WelcomeMessageCallSenderImpl.class);
 
     public WelcomeMessageCallSenderImpl() {
         super(CFLConstants.CALL_CHANNEL_TYPE);
@@ -28,7 +32,14 @@ public class WelcomeMessageCallSenderImpl extends BaseWelcomeMessageSenderImpl {
 
     @Override
     protected boolean isSendOnPatientRegistrationEnabled(CountrySetting settings) {
-        return settings.isPerformCallOnPatientRegistration();
+        final boolean enabled = settings.isPerformCallOnPatientRegistration();
+
+        if (!enabled) {
+            LOGGER.info("Welcome Message via Call has been disabled. It can be enabled in configuration in Global " +
+                    "Property 'cfl.countrySettingsMap', configuration property 'performCallOnPatientRegistration'");
+        }
+
+        return enabled;
     }
 
     private String getCallFlowName() {
