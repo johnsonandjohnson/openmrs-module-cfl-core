@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.openmrs.api.context.Context;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static org.openmrs.module.cfl.CFLConstants.DATETIME_WITH_ZONE_FORMAT;
+import static org.openmrs.module.messages.api.constants.ConfigConstants.DEFAULT_USER_TIMEZONE;
 
 public final class DateUtil {
 
@@ -40,6 +42,11 @@ public final class DateUtil {
         return DEFAULT_SYSTEM_TIME_ZONE;
     }
 
+    public static TimeZone getDefaultUserTimezone() {
+        final String defaultTimezoneName = Context.getAdministrationService().getGlobalProperty(DEFAULT_USER_TIMEZONE);
+        return TimeZone.getTimeZone(defaultTimezoneName);
+    }
+
     public static String convertToDateTimeWithZone(Date date) {
         return convertDate(date, DATETIME_WITH_ZONE_FORMAT);
     }
@@ -55,6 +62,12 @@ public final class DateUtil {
 
     public static Date addDaysToDate(Date date, int days) {
         return DateUtils.addDays(date, days);
+    }
+
+    public static Date getTomorrow(final TimeZone timeZone) {
+        final Calendar calendar = Calendar.getInstance(timeZone);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
     }
 
     /**
