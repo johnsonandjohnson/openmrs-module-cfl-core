@@ -14,7 +14,7 @@ public interface RelationshipService extends OpenmrsService {
      * {@link RelationshipDTO}.
      *
      * @param receivedRelationships - list of {@link RelationshipDTO}
-     * @param person             - related person
+     * @param person                - related person
      * @return - list of person relationships
      */
     List<Relationship> updatedRelationships(List<RelationshipDTO> receivedRelationships, Person person);
@@ -23,8 +23,17 @@ public interface RelationshipService extends OpenmrsService {
      * Creates and saves a new relationships based on types from {@link RelationshipDTO}.
      *
      * @param receivedRelationships - list of {@link RelationshipDTO}
-     * @param person             - related person which already exists in the database
+     * @param person                - related person which already exists in the database
      * @return - list of person relationships
      */
     List<Relationship> createNewRelationships(List<RelationshipDTO> receivedRelationships, Person person);
+
+    /**
+     * Builds {@link RelationshipDTO} based on existing relationship and existing person (required person id).
+     *
+     * @param person       - related person used to determine the relationship direction
+     * @param relationship - related relationship
+     * @return - the DTO representation. Returns null if missing person id
+     */
+    RelationshipDTO buildRelationshipDTO(Person person, Relationship relationship);
 }

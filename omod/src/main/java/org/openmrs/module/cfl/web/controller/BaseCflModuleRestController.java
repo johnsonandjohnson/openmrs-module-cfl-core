@@ -89,32 +89,7 @@ public class BaseCflModuleRestController {
     }
 
     private boolean shouldAddWWWAuthHeader(HttpServletRequest request) {
-        return request.getHeader(DISABLE_WWW_AUTH_HEADER_NAME) == null
-                || !request.getHeader(DISABLE_WWW_AUTH_HEADER_NAME).equals("true");
-    }
-
-    /**
-     * It should be overridden if you want to expose resources under a different URL than /rest/v1.
-     *
-     * @return the namespace
-     */
-    public String getNamespace() {
-        return RestConstants.VERSION_1;
-    }
-
-    public String buildResourceName(String resource) {
-        String namespace = getNamespace();
-
-        if (StringUtils.isBlank(namespace)) {
-            return resource;
-        } else {
-            if (namespace.charAt(0) == '/') {
-                namespace = namespace.substring(1);
-            }
-            if (!namespace.endsWith("/")) {
-                namespace += "/";
-            }
-            return namespace + resource;
-        }
+        return request.getHeader(DISABLE_WWW_AUTH_HEADER_NAME) == null ||
+                !request.getHeader(DISABLE_WWW_AUTH_HEADER_NAME).equals("true");
     }
 }
