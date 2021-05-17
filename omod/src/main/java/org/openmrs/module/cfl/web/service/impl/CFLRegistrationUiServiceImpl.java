@@ -4,6 +4,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.openmrs.Attributable;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
@@ -74,6 +75,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         final Patient patient = getOrCreateActor(registrationProperties, newPatientGetter, existingPatientGetter);
         bindProperties(patient, registrationProperties);
         addPersonName(patient, registrationProperties);
+        addPersonAddress(patient, registrationProperties);
         addPersonAttributes(patient, registrationProperties);
         return patient;
     }
@@ -98,6 +100,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         final Person person = getOrCreateActor(registrationProperties, newPersonGetter, existingPersonGetter);
         bindProperties(person, registrationProperties);
         addPersonName(person, registrationProperties);
+        addPersonAddress(person, registrationProperties);
         addPersonAttributes(person, registrationProperties);
         return person;
     }
@@ -179,6 +182,13 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         final PersonName personName = person.getPersonName() != null ? person.getPersonName() : new PersonName();
         bindProperties(personName, registrationProperties);
         person.addName(personName);
+    }
+
+    private void addPersonAddress(final Person person, final PropertyValues registrationProperties) {
+        final PersonAddress personAddress =
+                person.getPersonAddress() != null ? person.getPersonAddress() : new PersonAddress();
+        bindProperties(personAddress, registrationProperties);
+        person.addAddress(personAddress);
     }
 
     private void addPersonAttributes(final Person person, final PropertyValues registrationProperties) {
