@@ -85,6 +85,7 @@ header .user-options li.change-location:hover, header .user-options li.change-lo
 header #session-location {
     border: 2px solid #10708E;
     top: 40px !important;
+    left: calc(100vw - 853px) !important;
 }
 
 header a:active, a:hover {
