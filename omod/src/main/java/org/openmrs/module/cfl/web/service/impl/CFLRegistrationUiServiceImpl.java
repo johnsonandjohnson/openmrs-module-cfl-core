@@ -3,6 +3,8 @@ package org.openmrs.module.cfl.web.service.impl;
 import org.apache.commons.lang.ObjectUtils;
 import org.openmrs.Attributable;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
@@ -77,6 +79,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         addPersonName(patient, registrationProperties);
         addPersonAddress(patient, registrationProperties);
         addPersonAttributes(patient, registrationProperties);
+        addPatientIdentifiers(patient, registrationProperties);
         return patient;
     }
 
@@ -209,6 +212,27 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
             attribute.setAttributeType(personAttributeType);
             attribute.setValue(attributeValue);
             person.addAttribute(attribute);
+        }
+    }
+
+    private void addPatientIdentifiers(final Patient patient, final PropertyValues registrationProperties) {
+        final List<PatientIdentifierType> patientIdentifierTypes = patientService.getAllPatientIdentifierTypes(false);
+        for (final PatientIdentifierType patientIdentifierType : patientIdentifierTypes) {
+            if (!registrationProperties.contains(patientIdentifierType.getName())) {
+                continue;
+            }
+
+            final PropertyValue identifierPropertyValue =
+                    registrationProperties.getPropertyValue(patientIdentifierType.getName());
+            final Object identifierValueRaw =
+                    identifierPropertyValue.isConverted() ? identifierPropertyValue.getConvertedValue() :
+                            identifierPropertyValue.getValue();
+            final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
+
+            final PatientIdentifier identifier = new PatientIdentifier();
+            identifier.setIdentifier(identifierValue);
+            identifier.setIdentifierType(patientIdentifierType);
+            patient.addIdentifier(identifier);
         }
     }
 
