@@ -1,77 +1,10 @@
-/** Fonts **/
-@font-face {
-    font-family: 'CircularStd';
-    font-style: normal;
-    font-weight: normal;
-    src: url('../fonts/CircularStd-Medium.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'CircularStd';
-    font-style: normal;
-    font-weight: bold;
-    src: url('../fonts/CircularStd-Bold.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'CircularStd-Book';
-    font-style: normal;
-    font-weight: normal;
-    src: url('../fonts/CircularStd-Book.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'CircularStd-Book';
-    font-style: italic;
-    font-weight: normal;
-    src: url('../fonts/CircularStd-BookItalic.otf') format('opentype');
-}
-
-body {
-    background-color: #fafafa;
-    max-width: none;
-    width: auto;
-    margin-top: 0;
-    font-family: 'CircularStd', serif;
-}
-
 header {
     background-color: #00455C;
     color: white;
-    border-radius: 0;
-    padding: 0 1em 0 1em;
-    min-height: auto;
-    width: 100%;
-    display: flex;
 }
 
 header .navbar {
     height: auto;
-}
-
-header nav.navbar {
-    padding: 0 !important;
-    flex: 1;
-}
-
-header .user-options {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    margin-left: auto;
-    align-self: center;
-}
-
-header .user-options i {
-    box-sizing: content-box !important;
-}
-
-header .user-options li {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-  
-header #user-account-menu li a {
-    padding: 0 !important;
 }
 
 header .user-options li.change-location {
@@ -84,8 +17,6 @@ header .user-options li.change-location:hover, header .user-options li.change-lo
 
 header #session-location {
     border: 2px solid #10708E;
-    top: 40px !important;
-    left: calc(100vw - 853px) !important;
 }
 
 header a:active, a:hover {
@@ -104,15 +35,9 @@ header a:active, a:hover {
     padding-top: 8px;
 }
 
-header .logo {
+#app header .logo {
     max-height: initial;
-    margin: 5px 0;
-}
-
-header .logo a {
-    content: url('../images/logo/connect_for_life.png');
-    height: 30px !important;
-    width: auto !important;
+    margin: 4px;
 }
 
 #app header .user-options {
@@ -823,48 +748,4 @@ ul#formBreadcrumb li.doing ul li.focused {
     border-radius: 0;
     outline: none;
     box-shadow: none;
-}
-
-#body-wrapper {
-    width: 100%;;
-}
-
-@media only screen and (min-width: 576px) {
-    header {
-        padding: 0 2em 0 2em !important;
-    }
-    div#body-wrapper,
-    div.body-wrapper {
-        padding: 0 2rem 0;
-    }
-}
-
-@media only screen and (min-width: 768px) {
-    header {
-        padding: 0 4em 0 4em !important;
-    }
-    div#body-wrapper,
-    div.body-wrapper {
-        padding: 0 4rem 0;
-    }
-}
-
-@media only screen and (min-width: 992px) {
-    header {
-        padding: 0 6em 0 6em !important;
-    }
-    div#body-wrapper,
-    div.body-wrapper {
-        padding: 0 6rem 0;
-    }
-}
-
-@media only screen and (min-width: 1280px) {
-    header {
-        padding: 0 8em 0 8em !important;
-    }
-    div#body-wrapper,
-    div.body-wrapper {
-        padding: 0 8rem 0;
-    }
 }
