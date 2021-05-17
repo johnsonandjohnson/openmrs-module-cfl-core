@@ -19,9 +19,9 @@
     <url>https://wiki.openmrs.org/x/FQ4z</url>
 
     <scm>
-        <connection>scm:git:git@bitbucket.org:soldevelo/openmrs-cfl-module.git</connection>
-        <developerConnection>scm:git:git@bitbucket.org:soldevelo/openmrs-cfl-module.git</developerConnection>
-        <url>https://bitbucket.org/soldevelo/openmrs-cfl-module</url>
+        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfl-module.git</connection>
+        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfl-module.git</developerConnection>
+        <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfl-module.git</url>
       <tag>HEAD</tag>
   </scm>
 
