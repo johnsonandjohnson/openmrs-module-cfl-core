@@ -32,6 +32,7 @@ import org.springframework.validation.DataBinder;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -229,10 +230,31 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
                             identifierPropertyValue.getValue();
             final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
 
-            final PatientIdentifier identifier = new PatientIdentifier();
-            identifier.setIdentifier(identifierValue);
-            identifier.setIdentifierType(patientIdentifierType);
-            patient.addIdentifier(identifier);
+            final PatientIdentifier newIdentifier = new PatientIdentifier();
+            newIdentifier.setIdentifier(identifierValue);
+            newIdentifier.setIdentifierType(patientIdentifierType);
+
+            final PatientIdentifier currentPatientIdentifier = patient.getPatientIdentifier(patientIdentifierType);
+
+            if (currentPatientIdentifier != null) {
+                if (!currentPatientIdentifier.equalsContent(newIdentifier)) {
+                    voidPatientIdentifiers(patient, patientIdentifierType);
+                    patient.addIdentifier(newIdentifier);
+                }
+            } else {
+                patient.addIdentifier(newIdentifier);
+            }
+        }
+    }
+
+    private void voidPatientIdentifiers(final Patient patient, final PatientIdentifierType patientIdentifierType) {
+        // Void all identifiers of given type to make sure of DB consistency - only one non-voided identifier per type
+        // should exist
+        for (PatientIdentifier oldIdentifier : patient.getPatientIdentifiers(patientIdentifierType)) {
+            oldIdentifier.setVoided(true);
+            oldIdentifier.setVoidedBy(Context.getAuthenticatedUser());
+            oldIdentifier.setDateVoided(new Date());
+            oldIdentifier.setVoidReason("Value changed");
         }
     }
 
