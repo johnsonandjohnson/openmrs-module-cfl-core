@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculateBirthdateFromAge;
+
 /**
  * The default implementation of {@link CFLRegistrationUiService}.
  */
@@ -43,6 +45,8 @@ import java.util.Map;
 public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     private static final String UUID_PROPERTY = "uuid";
     private static final String RELATIONSHIPS_PROPERTY = "relationships";
+    private static final String BIRTHDATE_YEARS_PROPERTY = "birthdateYears";
+    private static final String BIRTHDATE_MONTHS_PROPERTY = "birthdateMonths";
 
     private PatientService patientService;
     private PersonService personService;
@@ -77,6 +81,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
 
         final Patient patient = getOrCreateActor(registrationProperties, newPatientGetter, existingPatientGetter);
         bindProperties(patient, registrationProperties);
+        handleBirthdateEstimate(patient, registrationProperties);
         addPersonName(patient, registrationProperties);
         addPersonAddress(patient, registrationProperties);
         addPersonAttributes(patient, registrationProperties);
@@ -182,6 +187,23 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         }
     }
 
+    private void handleBirthdateEstimate(final Patient patient, final PropertyValues registrationProperties) {
+        if ((registrationProperties.contains(BIRTHDATE_YEARS_PROPERTY) ||
+                registrationProperties.contains(BIRTHDATE_MONTHS_PROPERTY))) {
+
+            final Integer birthdateYears =
+                    conversionService.convert(valueOf(registrationProperties.getPropertyValue(BIRTHDATE_YEARS_PROPERTY)),
+                            Integer.class);
+
+            final Integer birthdateMonths =
+                    conversionService.convert(valueOf(registrationProperties.getPropertyValue(BIRTHDATE_MONTHS_PROPERTY)),
+                            Integer.class);
+
+            patient.setBirthdateEstimated(true);
+            patient.setBirthdate(calculateBirthdateFromAge(birthdateYears, birthdateMonths, null, null));
+        }
+    }
+
     private void addPersonName(final Person person, final PropertyValues registrationProperties) {
         final PersonName personName = person.getPersonName() != null ? person.getPersonName() : new PersonName();
         bindProperties(personName, registrationProperties);
@@ -204,9 +226,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
 
             final PropertyValue attributePropertyValue =
                     registrationProperties.getPropertyValue(personAttributeType.getName());
-            final Object attributeValueRaw =
-                    attributePropertyValue.isConverted() ? attributePropertyValue.getConvertedValue() :
-                            attributePropertyValue.getValue();
+            final Object attributeValueRaw = valueOf(attributePropertyValue);
             final String attributeValue = getSafeAttributeValue(personAttributeType, attributeValueRaw);
 
             final PersonAttribute attribute = new PersonAttribute();
@@ -225,9 +245,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
 
             final PropertyValue identifierPropertyValue =
                     registrationProperties.getPropertyValue(patientIdentifierType.getName());
-            final Object identifierValueRaw =
-                    identifierPropertyValue.isConverted() ? identifierPropertyValue.getConvertedValue() :
-                            identifierPropertyValue.getValue();
+            final Object identifierValueRaw = valueOf(identifierPropertyValue);
             final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
 
             final PatientIdentifier newIdentifier = new PatientIdentifier();
@@ -348,6 +366,14 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         }
 
         return result;
+    }
+
+    private Object valueOf(PropertyValue propertyValue) {
+        if (propertyValue == null) {
+            return null;
+        }
+
+        return propertyValue.isConverted() ? propertyValue.getConvertedValue() : propertyValue.getValue();
     }
 
     /**
