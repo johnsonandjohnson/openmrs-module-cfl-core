@@ -115,8 +115,8 @@ public class BaseWelcomeMessageSenderImplTest {
         testPatient.setId(1);
 
         final CountrySetting testCountrySetting = new CountrySetting();
-        testCountrySetting.setAllowOnPatientRegistrationTimeFrom("10:00");
-        testCountrySetting.setAllowOnPatientRegistrationTimeTo("18:00");
+        testCountrySetting.setPatientNotificationTimeWindowFrom("10:00");
+        testCountrySetting.setPatientNotificationTimeWindowTo("18:00");
 
         final TestWelcomeMessageSenderImpl testWelcomeMessageSender = prepareTestWelcomeMessageSenderImpl();
 
@@ -144,8 +144,8 @@ public class BaseWelcomeMessageSenderImplTest {
         testPatient.setId(1);
 
         final CountrySetting testCountrySetting = new CountrySetting();
-        testCountrySetting.setAllowOnPatientRegistrationTimeFrom("00:00");
-        testCountrySetting.setAllowOnPatientRegistrationTimeTo("00:00");
+        testCountrySetting.setPatientNotificationTimeWindowFrom("00:00");
+        testCountrySetting.setPatientNotificationTimeWindowTo("00:00");
 
         final TestWelcomeMessageSenderImpl testWelcomeMessageSender = prepareTestWelcomeMessageSenderImpl();
 

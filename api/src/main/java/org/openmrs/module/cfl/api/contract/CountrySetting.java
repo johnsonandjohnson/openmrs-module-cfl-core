@@ -22,9 +22,9 @@ public class CountrySetting {
 
     private boolean shouldCreateFutureVisit;
 
-    private String allowOnPatientRegistrationTimeFrom;
+    private String patientNotificationTimeWindowFrom;
 
-    private String allowOnPatientRegistrationTimeTo;
+    private String patientNotificationTimeWindowTo;
 
     public String getSms() {
         return sms;
@@ -90,19 +90,19 @@ public class CountrySetting {
         this.shouldCreateFutureVisit = shouldCreateFutureVisit;
     }
 
-    public String getAllowOnPatientRegistrationTimeFrom() {
-        return allowOnPatientRegistrationTimeFrom;
+    public String getPatientNotificationTimeWindowFrom() {
+        return patientNotificationTimeWindowFrom;
     }
 
-    public void setAllowOnPatientRegistrationTimeFrom(String allowOnPatientRegistrationTimeFrom) {
-        this.allowOnPatientRegistrationTimeFrom = allowOnPatientRegistrationTimeFrom;
+    public void setPatientNotificationTimeWindowFrom(String patientNotificationTimeWindowFrom) {
+        this.patientNotificationTimeWindowFrom = patientNotificationTimeWindowFrom;
     }
 
-    public String getAllowOnPatientRegistrationTimeTo() {
-        return allowOnPatientRegistrationTimeTo;
+    public String getPatientNotificationTimeWindowTo() {
+        return patientNotificationTimeWindowTo;
     }
 
-    public void setAllowOnPatientRegistrationTimeTo(String allowOnPatientRegistrationTimeTo) {
-        this.allowOnPatientRegistrationTimeTo = allowOnPatientRegistrationTimeTo;
+    public void setPatientNotificationTimeWindowTo(String patientNotificationTimeWindowTo) {
+        this.patientNotificationTimeWindowTo = patientNotificationTimeWindowTo;
     }
 }
