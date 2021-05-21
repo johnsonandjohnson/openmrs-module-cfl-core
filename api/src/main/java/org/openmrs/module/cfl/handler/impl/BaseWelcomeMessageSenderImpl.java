@@ -74,9 +74,9 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
         final TimeZone defaultUserTimezone = DateUtil.getDefaultUserTimezone();
         final Date now = DateUtil.now();
         final Date allowedTimeWindowFrom =
-                DateUtil.getDateWithTimeOfDay(now, settings.getAllowOnPatientRegistrationTimeFrom(), defaultUserTimezone);
+                DateUtil.getDateWithTimeOfDay(now, settings.getPatientNotificationTimeWindowFrom(), defaultUserTimezone);
         final Date allowedTimeWindowTo =
-                DateUtil.getDateWithTimeOfDay(now, settings.getAllowOnPatientRegistrationTimeTo(), defaultUserTimezone);
+                DateUtil.getDateWithTimeOfDay(now, settings.getPatientNotificationTimeWindowTo(), defaultUserTimezone);
 
         final Date welcomeMessageDeliveryDate;
 

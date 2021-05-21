@@ -168,8 +168,8 @@ public final class CFLConstants {
                     + "         \"shouldSendReminderViaSms\":false,\n"
                     + "         \"shouldCreateFirstVisit\":false,\n"
                     + "         \"shouldCreateFutureVisit\":false\n"
-                    + "         \"allowOnPatientRegistrationTimeFrom\":\"10:00\",\n"
-                    + "         \"allowOnPatientRegistrationTimeTo\":\"18:00\""
+                    + "         \"patientNotificationTimeWindowFrom\":\"10:00\",\n"
+                    + "         \"patientNotificationTimeWindowTo\":\"18:00\""
                     + "      }\n"
                     + "   }\n"
                     + "]";
