@@ -51,4 +51,11 @@
         </property>
     </bean>
 
+    <bean class="org.openmrs.module.cfl.web.service.impl.CFLRegistrationUiServiceImpl">
+        <property name="personService" ref="personService" />
+        <property name="conversionService" ref="conversion-service" />
+        <property name="patientService" ref="patientService" />
+        <property name="relationshipService" ref="cfl.relationshipService" />
+    </bean>
+
 </beans>

@@ -47,13 +47,30 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
                 RelationshipType relationshipType = personService.getRelationshipTypeByUuid(relationshipTypeUUID);
                 Person otherPerson = personService.getPersonByUuid(otherPersonUuid);
                 if (relationshipType != null && otherPerson != null) {
-                    Relationship relationship = createNewRelationship(person, relationshipDirection, relationshipType,
-                            otherPerson);
+                    Relationship relationship =
+                            createNewRelationship(person, relationshipDirection, relationshipType, otherPerson);
                     saveRelationship(person, otherPerson, relationship);
                 }
             }
         }
         return personService.getRelationshipsByPerson(person);
+    }
+
+    @Override
+    public RelationshipDTO buildRelationshipDTO(Person person, Relationship relationship) {
+        RelationshipDTO result = null;
+        if (person.getId() != null) {
+            if (relationship.getPersonA().getId().equals(person.getId())) {
+                result = new RelationshipDTO()
+                        .setUuid(relationship.getPersonB().getUuid())
+                        .setType(relationship.getRelationshipType().getUuid() + PERSON_B_SUFFIX);
+            } else {
+                result = new RelationshipDTO()
+                        .setUuid(relationship.getPersonA().getUuid())
+                        .setType(relationship.getRelationshipType().getUuid() + PERSON_A_SUFFIX);
+            }
+        }
+        return result;
     }
 
     public void setPersonService(PersonService personService) {
@@ -63,14 +80,14 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
     /**
      * Creates a new relationship based based on provided direction.
      *
-     * @param person - related person
+     * @param person                - related person
      * @param relationshipDirection - direction of relationship
-     * @param relationshipType - type of the relationship
-     * @param otherPerson - other related person
+     * @param relationshipType      - type of the relationship
+     * @param otherPerson           - other related person
      * @return - a new relationship
      */
     private Relationship createNewRelationship(Person person, char relationshipDirection, RelationshipType relationshipType,
-            Person otherPerson) {
+                                               Person otherPerson) {
         Relationship relationship;
         if (relationshipDirection == 'A') {
             relationship = new Relationship(otherPerson, person, relationshipType);
@@ -107,8 +124,8 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
     /**
      * Verify if valid and saves new relationship in database.
      *
-     * @param person - related person
-     * @param otherPerson - related other person
+     * @param person       - related person
+     * @param otherPerson  - related other person
      * @param relationship - relationship
      */
     private void saveRelationship(Person person, Person otherPerson, Relationship relationship) {
@@ -122,7 +139,7 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
      * Voids relationships which have been removed or changed and returns only those relationship which should be saved.
      *
      * @param receivedRelationships - current relationship
-     * @param person - related person
+     * @param person                - related person
      * @return - relationships which should be saved
      */
     private List<RelationshipDTO> voidOldAndExtractNewRelationship(List<RelationshipDTO> receivedRelationships,
@@ -136,31 +153,6 @@ public class RelationshipServiceImpl extends BaseOpenmrsService implements Relat
                 personService.voidRelationship(relationship, VOIDED_REASON);
             }
         }
-        List<RelationshipDTO> newRelationshipToCreate = (List<RelationshipDTO>) CollectionUtils
-                .subtract(receivedRelationships, alreadyExistingRelationships);
-        return newRelationshipToCreate;
-    }
-
-    /**
-     * Builds {@link RelationshipDTO} based on existing relationship and existing person (required person id).
-     *
-     * @param person - related person used to determine the relationship direction
-     * @param relationship - related relationship
-     * @return - the DTO representation. Returns null if missing person id
-     */
-    private RelationshipDTO buildRelationshipDTO(Person person, Relationship relationship) {
-        RelationshipDTO result = null;
-        if (person.getId() != null) {
-            if (relationship.getPersonA().getId().equals(person.getId())) {
-                result = new RelationshipDTO()
-                        .setUuid(relationship.getPersonB().getUuid())
-                        .setType(relationship.getRelationshipType().getUuid() + PERSON_B_SUFFIX);
-            } else {
-                result = new RelationshipDTO()
-                        .setUuid(relationship.getPersonA().getUuid())
-                        .setType(relationship.getRelationshipType().getUuid() + PERSON_A_SUFFIX);
-            }
-        }
-        return result;
+        return (List<RelationshipDTO>) CollectionUtils.subtract(receivedRelationships, alreadyExistingRelationships);
     }
 }
