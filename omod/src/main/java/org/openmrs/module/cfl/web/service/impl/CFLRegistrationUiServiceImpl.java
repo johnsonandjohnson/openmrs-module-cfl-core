@@ -24,9 +24,8 @@ import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
@@ -40,8 +39,10 @@ import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculate
 
 /**
  * The default implementation of {@link CFLRegistrationUiService}.
+ * <p>
+ * This bean is configured in: resources/webModuleApplicationContext.xml
+ * </p>
  */
-@Component
 public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     private static final String UUID_PROPERTY = "uuid";
     private static final String RELATIONSHIPS_PROPERTY = "relationships";
@@ -53,16 +54,8 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     private ConversionService conversionService;
     private RelationshipService relationshipService;
 
-    @Autowired
-    public void initDependencies(PatientService patientService, PersonService personService,
-                                 ConversionService conversionService, RelationshipService relationshipService) {
-        this.patientService = patientService;
-        this.personService = personService;
-        this.conversionService = conversionService;
-        this.relationshipService = relationshipService;
-    }
-
     @Override
+    @Transactional
     public Patient createOrUpdatePatient(final PropertyValues registrationProperties) {
         final Function<Patient, Void, RuntimeException> newPatientGetter = new Function<Patient, Void, RuntimeException>() {
             @Override
@@ -90,6 +83,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     }
 
     @Override
+    @Transactional
     public Person createOrUpdatePerson(PropertyValues registrationProperties) {
         final Function<Person, Void, RuntimeException> newPersonGetter = new Function<Person, Void, RuntimeException>() {
             @Override
@@ -115,6 +109,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     }
 
     @Override
+    @Transactional
     public List<Relationship> parseRelationships(final PropertyValues registrationProperties) {
         final PropertyValue relationshipsRawValue = registrationProperties.getPropertyValue(RELATIONSHIPS_PROPERTY);
 
@@ -144,12 +139,29 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     }
 
     @Override
+    @Transactional
     public void updateRelationships(final Person person, final List<Relationship> newRelationships) {
         updateRelationshipPerson(person, newRelationships);
 
         final List<RelationshipDTO> newRelationshipDTOs = buildRelationshipDTOs(person, newRelationships);
 
         relationshipService.updatedRelationships(newRelationshipDTOs, person);
+    }
+
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
+    }
+
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
+    }
+
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
+    public void setRelationshipService(RelationshipService relationshipService) {
+        this.relationshipService = relationshipService;
     }
 
     private <Actor extends Person> Actor getOrCreateActor(PropertyValues registrationProperties,
