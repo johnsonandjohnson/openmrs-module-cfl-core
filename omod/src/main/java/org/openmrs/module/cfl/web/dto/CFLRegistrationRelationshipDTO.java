@@ -29,24 +29,26 @@ public class CFLRegistrationRelationshipDTO {
     }
 
     public String getRelationshipTypeUuid() {
-        if (StringUtils.isNotEmpty(relationshipType)) {
+        if (StringUtils.isNotBlank(relationshipType)) {
             return relationshipType.substring(0, relationshipType.length() - 2);
         }
         return null;
     }
 
     public DIRECTION getRelationshipDirection() {
-        if (StringUtils.isEmpty(relationshipType)) {
-            return DIRECTION.UNKNOWN;
+        final DIRECTION result;
+
+        if (StringUtils.isBlank(relationshipType)) {
+            result = DIRECTION.UNKNOWN;
+        } else if (relationshipType.endsWith("A")) {
+            result = DIRECTION.A;
+        } else if (relationshipType.endsWith("B")) {
+            result = DIRECTION.B;
+        } else {
+            result = DIRECTION.UNKNOWN;
         }
 
-        if (relationshipType.endsWith("A")) {
-            return DIRECTION.A;
-        } else if (relationshipType.endsWith("B")) {
-            return DIRECTION.B;
-        } else {
-            return DIRECTION.UNKNOWN;
-        }
+        return result;
     }
 
     /**

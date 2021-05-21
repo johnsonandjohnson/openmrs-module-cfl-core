@@ -28,6 +28,7 @@ import java.util.List;
 @Controller("cfl.patientRegistrationController")
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class PatientRegistrationController extends BaseCflModuleRestController {
+
     @Autowired
     private RegistrationCoreService registrationCoreService;
 
@@ -71,7 +72,7 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
         final Object patientUuidRaw = registrationRequestBody.get("uuid");
 
         if (!(patientUuidRaw instanceof String)) {
-            throw new APIException("Missing Patient UUID.");
+            throw new APIException("Invalid Patient UUID, expected String but got: " + patientUuidRaw);
         }
 
         final PropertyValues registrationProperties = new MutablePropertyValues(registrationRequestBody);
