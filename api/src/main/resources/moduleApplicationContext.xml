@@ -26,7 +26,9 @@
           class="org.openmrs.module.cfl.api.mapper.PersonOverviewMapper"/>
 
     <bean id="cfl.configService"
-          class="org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl"/>
+          class="org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl">
+        <property name="personService" ref="personService" />
+    </bean>
 
     <bean id="cfl.actorService"
           class="org.openmrs.module.cfl.api.copied.messages.service.impl.ActorServiceImpl">
@@ -152,6 +154,7 @@
         <property name="patientTemplateService" ref="messages.patientTemplateService" />
         <property name="templateService" ref="messages.templateService" />
         <property name="personService" ref="personService" />
+        <property name="configService" ref="cfl.configService" />
     </bean>
 
     <bean id="cfl.welcomeMessageCallSender" class="org.openmrs.module.cfl.handler.impl.WelcomeMessageCallSenderImpl">
@@ -160,5 +163,21 @@
         <property name="patientTemplateService" ref="messages.patientTemplateService" />
         <property name="templateService" ref="messages.templateService" />
         <property name="personService" ref="personService" />
+        <property name="configService" ref="cfl.configService" />
+    </bean>
+
+    <bean id="cfl.adHocMessageService" class="org.openmrs.module.cfl.api.service.impl.AdHocMessageServiceImpl">
+        <property name="configService" ref="cfl.configService" />
+        <property name="patientTemplateService" ref="messages.patientTemplateService" />
+        <property name="messagesDeliveryService" ref="messages.deliveryService" />
+        <property name="scheduledServiceGroupService" ref="messages.scheduledServiceGroupService" />
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfl.api.service.AdHocMessageService</value>
+                <ref local="cfl.adHocMessageService"/>
+            </list>
+        </property>
     </bean>
 </beans>

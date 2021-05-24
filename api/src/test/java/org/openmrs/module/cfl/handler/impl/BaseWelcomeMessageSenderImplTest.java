@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Patient;
@@ -15,6 +16,8 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl;
+import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.messages.api.model.PatientTemplate;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
@@ -70,6 +73,9 @@ public class BaseWelcomeMessageSenderImplTest {
     @Mock
     private TemplateService templateService;
 
+    @Spy
+    private ConfigServiceImpl configService = new ConfigServiceImpl();
+
     @Before
     public void setupMocks() {
         mockStatic(Context.class);
@@ -78,8 +84,10 @@ public class BaseWelcomeMessageSenderImplTest {
         PowerMockito.stub(PowerMockito.method(DateUtil.class, "now")).toReturn(now);
         PowerMockito.stub(PowerMockito.method(DateUtil.class, "getTomorrow", TimeZone.class)).toReturn(tomorrow);
 
-        PowerMockito.stub(PowerMockito.method(BestContactTimeHelper.class, "getBestContactTime", Person.class,
-                RelationshipType.class)).toReturn(bestContactTime);
+        PowerMockito
+                .stub(PowerMockito.method(BestContactTimeHelper.class, "getBestContactTime", Person.class,
+                        RelationshipType.class))
+                .toReturn(bestContactTime);
 
         when(Context.getAdministrationService()).thenReturn(administrationService);
         when(messagingGroupService.saveGroup(Mockito.any(ScheduledServiceGroup.class))).then(
@@ -106,6 +114,8 @@ public class BaseWelcomeMessageSenderImplTest {
         welcomeMessagePatientTemplate.setTemplate(welcomeMessageTemplate);
         when(patientTemplateService.findOneByCriteria(Mockito.any(BaseCriteria.class))).thenReturn(
                 welcomeMessagePatientTemplate);
+
+        configService.setPersonService(personService);
     }
 
     @Test
@@ -173,6 +183,7 @@ public class BaseWelcomeMessageSenderImplTest {
         testWelcomeMessageSender.setPatientTemplateService(patientTemplateService);
         testWelcomeMessageSender.setPersonService(personService);
         testWelcomeMessageSender.setTemplateService(templateService);
+        testWelcomeMessageSender.setConfigService(configService);
         return testWelcomeMessageSender;
     }
 }

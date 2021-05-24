@@ -121,7 +121,7 @@ public final class CFLConstants {
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION =
-            "Specifies call flow that will be used in call after patient registration.";
+            "Specifies include flow that will be used in include after patient registration.";
 
     public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccines";
     public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
@@ -167,7 +167,7 @@ public final class CFLConstants {
                     + "         \"shouldSendReminderViaCall\":false,\n"
                     + "         \"shouldSendReminderViaSms\":false,\n"
                     + "         \"shouldCreateFirstVisit\":false,\n"
-                    + "         \"shouldCreateFutureVisit\":false\n"
+                    + "         \"shouldCreateFutureVisit\":false,\n"
                     + "         \"patientNotificationTimeWindowFrom\":\"10:00\",\n"
                     + "         \"patientNotificationTimeWindowTo\":\"18:00\""
                     + "      }\n"
@@ -227,6 +227,80 @@ public final class CFLConstants {
      * The name of message Template for Welcome Message.
      */
     public static final String WELCOME_MESSAGE_TEMPLATE = "Welcome Message";
+
+    /**
+     * The name of Message Template for general-purpose Ad hoc messages.
+     */
+    public static final String AD_HOC_MESSAGE_TEMPLATE_NAME = "Ad hoc Message";
+
+    public static final String AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY = "cfl.adHocMessage.ui.configuration";
+    public static final String AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DESCRIPTION =
+            "The Global Property with JSON configuration of the Patient filters available to be used to specify message " +
+                    "recipients.";
+    public static final String AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DEFAULT_VALUE = "[\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.patientAddress.country\",\n" +
+            "    \"inputType\": \"STRING\",\n" +
+            "    \"converter\": \"PatientFilterAddressFieldStringConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"fieldPath\": \"country\",\n" +
+            "      \"operator\": \"=\"\n" +
+            "    }\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.patientAttribute.LocationAttribute\",\n" +
+            "    \"inputType\": \"SELECT_ENTITY_UUID\",\n" +
+            "    \"converter\": \"PatientFilterAttributeStringConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"fieldPath\": \"LocationAttribute\",\n" +
+            "      \"operator\": \"=\",\n" +
+            "      \"options\": \n" +
+            "      [ \n" +
+            "        { \"label\": \"CFL Clinic\", \"value\": \"8d6c993e-c2cc-11de-8d13-0010c6dffd0f\" } \n" +
+            "      ]\n" +
+            "    }\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.patientAttribute.Vaccination_program\",\n" +
+            "    \"inputType\": \"STRING\",\n" +
+            "    \"converter\": \"PatientFilterAttributeStringConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"fieldPath\": \"Vaccination program\",\n" +
+            "      \"operator\": \"=\"\n" +
+            "    }\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.custom.ReceivedDosages\",\n" +
+            "    \"inputType\": \"INTEGER\",\n" +
+            "    \"converter\": \"PatientFilterReceivedDosagesConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"options\": [ \"=\", \">\", \"<\", \">=\", \"<=\" ]\n" +
+            "    }\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.patient.gender\",\n" +
+            "    \"inputType\": \"MULTI_SELECT_STRING\",\n" +
+            "    \"converter\": \"PatientFilterStringListConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"fieldPath\": \"gender\",\n" +
+            "      \"options\": [ \"M\", \"F\", \"O\" ]\n" +
+            "    }\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"label\": \"cfl.adHocMessage.patient.age\",\n" +
+            "    \"inputType\": \"AGE_RANGE\",\n" +
+            "    \"converter\": \"PatientFilterAgeToDateConverter\",\n" +
+            "    \"config\": \n" +
+            "    {\n" +
+            "      \"fieldPath\": \"birthdate\"\n" +
+            "    }\n" +
+            "  }\n" +
+            "]\n";
 
     private CFLConstants() {
     }
