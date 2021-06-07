@@ -1,4 +1,5 @@
 <htmlform formUuid="9819ecd1-bf3e-4258-80c7-881feb1cb638" formName="CFL Medicine Refill Visit Note" formEncounterType="d7151f82-c1f3-4152-a605-2f9ea7414a79" formVersion="1.0">
+    <uiInclude provider="cfl" css="htmlForm.css"/>
     <style type="text/css">
         #metadata {
             display: none;
