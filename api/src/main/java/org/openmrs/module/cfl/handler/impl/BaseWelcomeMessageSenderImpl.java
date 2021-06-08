@@ -1,10 +1,10 @@
 package org.openmrs.module.cfl.handler.impl;
 
 import org.openmrs.Patient;
-import org.openmrs.RelationshipType;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.handler.WelcomeMessageSender;
 import org.openmrs.module.messages.api.builder.PatientTemplateBuilder;
@@ -20,13 +20,11 @@ import org.openmrs.module.messages.api.service.MessagesDeliveryService;
 import org.openmrs.module.messages.api.service.MessagingGroupService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.messages.api.service.TemplateService;
-import org.openmrs.module.messages.api.util.BestContactTimeHelper;
 import org.openmrs.module.messages.domain.criteria.PatientTemplateCriteria;
 import org.openmrs.module.messages.domain.criteria.TemplateCriteria;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * The base class for {@link WelcomeMessageSender}s.
@@ -39,6 +37,7 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
     private MessagesDeliveryService messagesDeliveryService;
     private MessagingGroupService messagingGroupService;
     private PersonService personService;
+    private ConfigService configService;
 
     public BaseWelcomeMessageSenderImpl(final String channelType) {
         this.channelType = channelType;
@@ -57,7 +56,7 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
             return;
         }
 
-        final Date welcomeMessageDeliveryTime = getWelcomeMessageDeliveryDate(patient, settings);
+        final Date welcomeMessageDeliveryTime = configService.getSafeMessageDeliveryDate(patient, DateUtil.now(), settings);
         final PatientTemplate welcomeMessagePatientTemplate = getOrCreateWelcomeMessagePatientTemplate(patient);
 
         final ScheduledServiceGroup scheduledServiceGroup =
@@ -68,33 +67,6 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
                         welcomeMessageDeliveryTime, patient, patient.getId(), MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
                         scheduledServiceGroup.getId());
         messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext));
-    }
-
-    private Date getWelcomeMessageDeliveryDate(final Patient patient, final CountrySetting settings) {
-        final TimeZone defaultUserTimezone = DateUtil.getDefaultUserTimezone();
-        final Date now = DateUtil.now();
-        final Date allowedTimeWindowFrom =
-                DateUtil.getDateWithTimeOfDay(now, settings.getPatientNotificationTimeWindowFrom(), defaultUserTimezone);
-        final Date allowedTimeWindowTo =
-                DateUtil.getDateWithTimeOfDay(now, settings.getPatientNotificationTimeWindowTo(), defaultUserTimezone);
-
-        final Date welcomeMessageDeliveryDate;
-
-        if (now.before(allowedTimeWindowFrom) || now.after(allowedTimeWindowTo)) {
-            welcomeMessageDeliveryDate = getNextDayBestContactTime(patient, defaultUserTimezone);
-        } else {
-            welcomeMessageDeliveryDate = now;
-        }
-
-        return welcomeMessageDeliveryDate;
-    }
-
-    private Date getNextDayBestContactTime(final Patient patient, final TimeZone timeZone) {
-        final RelationshipType caregiverType =
-                personService.getRelationshipTypeByUuid(CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
-        final String bestContactTime = BestContactTimeHelper.getBestContactTime(patient, caregiverType);
-
-        return DateUtil.getDateWithTimeOfDay(DateUtil.getTomorrow(timeZone), bestContactTime, timeZone);
     }
 
     private PatientTemplate getOrCreateWelcomeMessagePatientTemplate(final Patient patient) {
@@ -188,5 +160,13 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
+    }
+
+    public ConfigService getConfigService() {
+        return configService;
+    }
+
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
     }
 }

@@ -30,7 +30,9 @@ public class PersonDTOBuilder implements Serializable {
                 .withFamilyName(person.getFamilyName())
                 .withIdentifier(getPersonOrPatientIdentifier(person))
                 .withRelationshipName(relationshipName)
-                .withLocation(getPersonLocation(person.getPersonId()));
+                .withLocation(getPersonLocation(person.getPersonId()))
+                .withAge(person.getAge())
+                .withGender(person.getGender());
     }
 
     public Person getPerson() {
@@ -56,8 +58,8 @@ public class PersonDTOBuilder implements Serializable {
         if (relatedPerson == null) {
             return "";
         } else {
-            PersonAttribute location = relatedPerson.getAttribute(Context.getAdministrationService()
-                    .getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY));
+            PersonAttribute location = relatedPerson.getAttribute(
+                    Context.getAdministrationService().getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY));
             return location == null ? "" : location.getValue();
         }
     }
@@ -83,23 +85,22 @@ public class PersonDTOBuilder implements Serializable {
     private String getPersonOrPatientIdentifier(Person person) {
         if (person.isPatient()) {
             Patient patient = Context.getPatientService().getPatient(person.getId());
-            if (patient == null) {
+            if (patient == null || patient.getPatientIdentifier() == null) {
                 return "";
             } else {
-                return StringUtils.isNotBlank(patient.getPatientIdentifier().getIdentifier())
-                        ? patient.getPatientIdentifier().getIdentifier() + " -" : "";
+                return StringUtils.isNotBlank(patient.getPatientIdentifier().getIdentifier()) ?
+                        patient.getPatientIdentifier().getIdentifier() + " -" : "";
             }
         } else {
-            return StringUtils.isNotBlank(getPersonIdentifier(person))
-                    ? getPersonIdentifier(person) + " -" : "";
+            return StringUtils.isNotBlank(getPersonIdentifier(person)) ? getPersonIdentifier(person) + " -" : "";
         }
     }
 
     private PersonAttributeType getPersonIdentifierAttributeType() {
-        String attributeTypeUUID = Context.getAdministrationService()
-                .getGlobalProperty(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY);
-        return StringUtils.isBlank(attributeTypeUUID) ? null
-                : Context.getPersonService().getPersonAttributeTypeByUuid(attributeTypeUUID);
+        String attributeTypeUUID =
+                Context.getAdministrationService().getGlobalProperty(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY);
+        return StringUtils.isBlank(attributeTypeUUID) ? null :
+                Context.getPersonService().getPersonAttributeTypeByUuid(attributeTypeUUID);
     }
 
     private String getPersonIdentifier(Person person) {

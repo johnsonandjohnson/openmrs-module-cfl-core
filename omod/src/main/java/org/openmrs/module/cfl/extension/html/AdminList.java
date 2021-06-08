@@ -30,12 +30,8 @@ public class AdminList extends AdministrationSectionExt {
      * @see org.openmrs.module.web.extension.AdministrationSectionExt#getLinks()
      */
     public Map<String, String> getLinks() {
-
-        Map<String, String> map = new HashMap<String, String>();
-
-        map.put("module/cfl/cfl.form", "cfl.title");
-        map.put("cfl/cfl.page", "cfl.refapp.title");
-
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("module/cfl/adHocMessage.form", "cfl.adHocMessage.title");
         return map;
     }
 

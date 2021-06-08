@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <messages_template
+            messages_template_id="701"
+            service_query="SELECT 'empty' FROM dual WHERE false;"
+            calendar_service_query="SELECT 'empty' FROM dual WHERE false;"
+            service_query_type="SQL"
+            name="Ad hoc Message"
+            should_use_optimized_query="false"
+            uuid="901f8de3-c87b-49d0-b19e-2de4e8f0da8f"
+            creator="1"
+            retired="false"
+            date_created="2021-05-25 00:00:00.0"/>
+
+    <location location_id="801"
+              name="AdHocMessageServiceImplTest Location"
+              date_created="2021-05-19 15:00:00.0"
+              creator="1"
+              retired="false"/>
+
+    <patient_identifier_type patient_identifier_type_id="901"
+                             name="Test Identifier"
+                             required="false"
+                             date_created="2021-05-19 15:00:00.0"
+                             creator="1"
+                             retired="false"/>
+
+    <person person_id="1001"
+            gender="M"
+            birthdate="2000-05-01 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001001"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1001"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1001"
+                        patient_id="1001"
+                        identifier="P1001"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <person person_id="1002"
+            gender="F"
+            birthdate="2000-05-02 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001002"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1002"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1002"
+                        patient_id="1002"
+                        identifier="P1002"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <person person_id="1003"
+            gender="O"
+            birthdate="2000-05-03 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001003"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1003"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1003"
+                        patient_id="1003"
+                        identifier="P1003"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <person_attribute_type
+            person_attribute_type_id="2001"
+            name="MyAttribute1"
+            description="MyAttribute1 for QueryCriteria"
+            format="java.lang.String"
+            creator="1"
+            sort_weight="1"
+            searchable="0"
+            retired="false"
+            date_created="2021-05-19 15:00:00.0"
+            uuid="0b114f1ca-1000-0000-0000-000000002001"/>
+
+    <person_attribute_type
+            person_attribute_type_id="2002"
+            name="MyAttribute2"
+            description="MyAttribute2 for QueryCriteria"
+            format="java.lang.String"
+            creator="1"
+            sort_weight="2"
+            searchable="0"
+            retired="false"
+            date_created="2021-05-19 15:00:00.0"
+            uuid="0b114f1ca-1000-0000-0000-000000002002"/>
+
+    <person_attribute
+            person_attribute_id="3001"
+            person_id="1001"
+            value="First"
+            person_attribute_type_id="2001"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003001"/>
+
+    <person_attribute
+            person_attribute_id="3002"
+            person_id="1002"
+            value="Second"
+            person_attribute_type_id="2001"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003002"/>
+
+    <person_attribute
+            person_attribute_id="3003"
+            person_id="1003"
+            value="Third"
+            person_attribute_type_id="2001"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003003"/>
+
+    <person_attribute
+            person_attribute_id="3004"
+            person_id="1001"
+            value="First again"
+            person_attribute_type_id="2002"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003004"/>
+
+    <person_attribute
+            person_attribute_id="3005"
+            person_id="1002"
+            value="Second again"
+            person_attribute_type_id="2002"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003005"/>
+
+    <person_attribute
+            person_attribute_id="3006"
+            person_id="1003"
+            value="Third again"
+            person_attribute_type_id="2002"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"
+            uuid="0b114f1ca-1000-0000-0000-000000003006"/>
+</dataset>

@@ -10,20 +10,15 @@ public class PersonDTO implements Serializable {
     private static final long serialVersionUID = 7631834537816381640L;
 
     private String uuid;
-
     private boolean isPatient;
-
     private String givenName;
-
     private String middleName;
-
     private String familyName;
-
     private String identifier;
-
     private String relationshipName;
-
     private String location;
+    private Integer age;
+    private String gender;
 
     public String getUuid() {
         return uuid;
@@ -94,6 +89,24 @@ public class PersonDTO implements Serializable {
 
     public PersonDTO withLocation(String location) {
         this.location = location;
+        return this;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public PersonDTO withAge(Integer age) {
+        this.age = age;
+        return this;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public PersonDTO withGender(String gender) {
+        this.gender = gender;
         return this;
     }
 
