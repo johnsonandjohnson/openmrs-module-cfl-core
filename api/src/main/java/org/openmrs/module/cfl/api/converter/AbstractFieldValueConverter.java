@@ -14,7 +14,12 @@ public abstract class AbstractFieldValueConverter implements PatientFilterConver
 
     @Override
     public void initFilter(Map<String, Object> properties) {
-        fieldPath = (String) properties.get(FIELD_PATH_PROP);
+        try {
+            fieldPath = (String) properties.get(FIELD_PATH_PROP);
+        } catch (ClassCastException cce) {
+            throw new IllegalArgumentException("The 'fieldPath' property must be a String, but was: " +
+                    properties.get(FIELD_PATH_PROP).getClass().getSimpleName(), cce);
+        }
 
         if (fieldPath == null) {
             throw new IllegalArgumentException("The 'fieldPath' property must not be empty!");

@@ -112,10 +112,14 @@ public class ConfigServiceImpl implements ConfigService {
         final Date safeDeliveryDate;
 
         if (requestedDeliveryTime.before(allowedTimeWindowFrom)) {
-            safeDeliveryDate = getThisDayBestContactTime(requestedDeliveryTime, patient, defaultUserTimezone);
+            // Get best contact time for the same day
+            safeDeliveryDate = getBestContactTimeAt(requestedDeliveryTime, patient, defaultUserTimezone);
         } else if (requestedDeliveryTime.after(allowedTimeWindowTo)) {
-            safeDeliveryDate = getNextDayBestContactTime(requestedDeliveryTime, patient, defaultUserTimezone);
+            // Get best contact time for the next day
+            safeDeliveryDate =
+                    getBestContactTimeAt(DateUtil.addDaysToDate(requestedDeliveryTime, 1), patient, defaultUserTimezone);
         } else {
+            // delivery date fits allowed time window
             safeDeliveryDate = requestedDeliveryTime;
         }
 
@@ -140,14 +144,9 @@ public class ConfigServiceImpl implements ConfigService {
         this.personService = personService;
     }
 
-    private Date getThisDayBestContactTime(final Date originalDate, final Patient patient, final TimeZone timeZone) {
+    private Date getBestContactTimeAt(final Date date, final Patient patient, final TimeZone timeZone) {
         final String bestContactTime = getBestContactTime(patient);
-        return DateUtil.getDateWithTimeOfDay(originalDate, bestContactTime, timeZone);
-    }
-
-    private Date getNextDayBestContactTime(final Date originalDate, final Patient patient, final TimeZone timeZone) {
-        final String bestContactTime = getBestContactTime(patient);
-        return DateUtil.getDateWithTimeOfDay(DateUtil.addDaysToDate(originalDate, 1), bestContactTime, timeZone);
+        return DateUtil.getDateWithTimeOfDay(date, bestContactTime, timeZone);
     }
 
     private String getBestContactTime(final Patient patient) {

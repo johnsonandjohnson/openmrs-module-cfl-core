@@ -121,7 +121,7 @@ public final class CFLConstants {
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION =
-            "Specifies include flow that will be used in include after patient registration.";
+            "Specifies call flow that will be used in call after patient registration.";
 
     public static final String VACCINATION_PROGRAM_KEY = "cfl.vaccines";
     public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";

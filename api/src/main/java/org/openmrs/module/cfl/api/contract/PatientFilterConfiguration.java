@@ -9,7 +9,7 @@ public class PatientFilterConfiguration {
     private static final String CONVERTER_PACKAGE_PREFIX = "org.openmrs.module.cfl.api.converter.";
 
     private String label;
-    private INPUTTYPE inputType;
+    private InputType inputType;
     private PatientFilterConverter filterConverter;
     private Map<String, Object> config;
 
@@ -17,7 +17,7 @@ public class PatientFilterConfiguration {
 
     }
 
-    public PatientFilterConfiguration(String label, INPUTTYPE inputType, PatientFilterConverter filterConverter,
+    public PatientFilterConfiguration(String label, InputType inputType, PatientFilterConverter filterConverter,
                                       Map<String, Object> config) {
         this.label = label;
         this.inputType = inputType;
@@ -29,7 +29,7 @@ public class PatientFilterConfiguration {
         return label;
     }
 
-    public INPUTTYPE getInputType() {
+    public InputType getInputType() {
         return inputType;
     }
 
@@ -48,7 +48,7 @@ public class PatientFilterConfiguration {
                 (PatientFilterConverter) Class.forName(CONVERTER_PACKAGE_PREFIX + converterName).newInstance();
     }
 
-    public enum INPUTTYPE {
+    public enum InputType {
         /**
          * Filter by String. (=)
          */

@@ -28,6 +28,7 @@ public class PatientFilterStringListConverter extends AbstractFieldValueConverte
                 new EntityFieldCondition(getFieldPath(), "IN", dto.getManyValues()));
     }
 
+    @Override
     protected boolean isConfigurationInvalid() {
         return options == null;
     }

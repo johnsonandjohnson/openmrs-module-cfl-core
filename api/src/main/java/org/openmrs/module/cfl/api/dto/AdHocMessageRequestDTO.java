@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.dto;
 
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.messages.api.service.impl.CallFlowServiceResultsHandlerServiceImpl;
 import org.openmrs.module.messages.api.service.impl.SmsServiceResultsHandlerServiceImpl;
 import org.springframework.util.AutoPopulatingList;
@@ -41,10 +42,10 @@ public class AdHocMessageRequestDTO {
     public Set<String> getChannels() {
         final Set<String> result = new HashSet<String>();
         if (Boolean.TRUE.equals(callChannel)) {
-            result.add("Call");
+            result.add(CFLConstants.CALL_CHANNEL_TYPE);
         }
         if (Boolean.TRUE.equals(smsChannel)) {
-            result.add("SMS");
+            result.add(CFLConstants.SMS_CHANNEL_TYPE);
         }
         return result;
     }
