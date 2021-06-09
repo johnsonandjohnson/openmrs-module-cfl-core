@@ -302,6 +302,29 @@ public final class CFLConstants {
             "  }\n" +
             "]\n";
 
+    public static final String VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY =
+            "cfl.vaccination.visit.encounterType.uuid.list";
+
+    public static final String VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION =
+            "The comma-separated list of Encounter Type UUIDs of the Encounters created when Vaccination visit occurs. " +
+                    "This creation of these Encounter triggers the next vaccination visit scheduling. Default value is " +
+                    "an UUID of Visit Note encounter type.";
+
+    public static final String VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE =
+            "d7151f82-c1f3-4152-a605-2f9ea7414a79";
+
+    public static final String VACCINATION_LISTENER_KEY = "cfl.vaccination.listener";
+
+    public static final String VACCINATION_LISTENER_DESCRIPTION = "The name of listener which has to be responsible for " +
+            "the scheduling of visits according to the program defined in parameter cfl.vaccines. Use " +
+            "VaccinationEncounterListener to have visits scheduled after an Encounter for occurred visit is created, the " +
+            "date-time of the encounter is used to calculate time (usually this is actual date of the visit) of the future" +
+            " visits, see cfl.vaccination.visit.encounterType.uuid.list. Use UpdatingVisitListener to have visits " +
+            "scheduled when there are no encounters created, the visit start date is going to be used to calculate the " +
+            "times of the following visits.";
+
+    public static final String VACCINATION_LISTENER_DEFAULT_VALUE = "VaccinationEncounterListener";
+
     private CFLConstants() {
     }
 }

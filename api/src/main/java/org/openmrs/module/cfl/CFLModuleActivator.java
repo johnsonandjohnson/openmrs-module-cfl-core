@@ -25,8 +25,7 @@ import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.constant.RolePrivilegeConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
-import org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener;
-import org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener;
+import org.openmrs.module.cfl.api.event.listener.subscribable.BaseActionListener;
 import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
 import org.openmrs.module.cfl.api.util.DataCleanup;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
@@ -108,15 +107,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             eventListener.setDaemonToken(token);
         }
 
-        List<RegisteringPeopleListener> registeringPeopleListeners =
-                Context.getRegisteredComponents(RegisteringPeopleListener.class);
-        for (RegisteringPeopleListener registeringPeopleListener : registeringPeopleListeners) {
-            registeringPeopleListener.setDaemonToken(token);
-        }
-
-        List<UpdatingVisitListener> updatingVisitListeners = Context.getRegisteredComponents(UpdatingVisitListener.class);
-        for (UpdatingVisitListener updatingVisitListener : updatingVisitListeners) {
-            updatingVisitListener.setDaemonToken(token);
+        List<BaseActionListener> actionListeners = Context.getRegisteredComponents(
+                BaseActionListener.class);
+        for (BaseActionListener actionListener : actionListeners) {
+            actionListener.setDaemonToken(token);
         }
     }
 
@@ -260,6 +254,12 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY,
                 CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DEFAULT_VALUE,
                 CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY,
+                CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE,
+                CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION);
+        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_LISTENER_KEY,
+                CFLConstants.VACCINATION_LISTENER_DEFAULT_VALUE,
+                CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {

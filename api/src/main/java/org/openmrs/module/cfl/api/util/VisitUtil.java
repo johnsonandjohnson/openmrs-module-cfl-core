@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -12,6 +13,7 @@ import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public final class VisitUtil {
@@ -37,21 +39,20 @@ public final class VisitUtil {
         Visit visit = new Visit();
 
         visit.setPatient(patient);
-        visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime,
-                visitInformation.getMidPointWindow()));
+        visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime, visitInformation.getMidPointWindow()));
         visit.setVisitType(getProperVisitType(visitInformation));
 
-        visit.setAttribute(createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME,
-                CFLConstants.SCHEDULED_VISIT_STATUS));
+        visit.setAttribute(
+                createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
 
-        visit.setAttribute(createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getUpWindow())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getUpWindow())));
 
-        visit.setAttribute(createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getLowWindow())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getLowWindow())));
 
-        visit.setAttribute(createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getDoseNumber())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME, String.valueOf(visitInformation.getDoseNumber())));
 
         return visit;
     }
@@ -66,8 +67,8 @@ public final class VisitUtil {
                 followUpTypeName = vi.getNameOfDose();
             }
             for (Visit visit : allPatientVisits) {
-                if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName())
-                        && !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
+                if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName()) &&
+                        !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
                     lastVisit = visit;
                     break;
                 }
@@ -77,8 +78,7 @@ public final class VisitUtil {
     }
 
     public static String getVisitStatus(Visit visit) {
-        VisitAttributeType visitStatusAttrType =
-                getVisitAttributeTypeByName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
+        VisitAttributeType visitStatusAttrType = getVisitAttributeTypeByName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
         for (VisitAttribute visitAttribute : visit.getActiveAttributes()) {
             if (visitStatusAttrType != null && StringUtils.equalsIgnoreCase(visitAttribute.getAttributeType().getName(),
                     visitStatusAttrType.getName())) {
@@ -105,6 +105,30 @@ public final class VisitUtil {
         return Context.getAdministrationService().getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     }
 
+    /**
+     * Gets the actual visit date.
+     * <p>
+     * The {@code visit} must have occurred.
+     * The actual visit date is the 'encounter date time' of the Encounter entity related to the {@code visit}. The first
+     * Encounter is used, which should be the only Encounter related to the {@code visit}.
+     * </p>
+     *
+     * @param visit the visit to get the actual date time, not null
+     * @return the actual visit date, never null
+     * @throws IllegalStateException if there is no non-voided Encounter related to the {@code visit}
+     */
+    public static Date getActualVisitDate(Visit visit) {
+        final Iterator<Encounter> visitEncounters = visit.getNonVoidedEncounters().iterator();
+
+        if (!visitEncounters.hasNext()) {
+            throw new IllegalStateException(
+                    "Visit UUID: " + visit.getUuid() + " is missing Encounter entity, most likely it has not " +
+                            "occurred yet!");
+        }
+
+        return visitEncounters.next().getEncounterDatetime();
+    }
+
     private static boolean isFollowUpVisit(VisitInformation visitInformation) {
         return visitInformation.getNumberOfFutureVisit() == 0;
     }
@@ -120,8 +144,7 @@ public final class VisitUtil {
 
     private static VisitAttribute createAttribute(String attributeType, String value) {
         VisitAttribute visitAttribute = new VisitAttribute();
-        visitAttribute.setAttributeType(
-                VisitUtil.getVisitAttributeTypeByName(attributeType));
+        visitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(attributeType));
         visitAttribute.setValueReferenceInternal(value);
 
         return visitAttribute;

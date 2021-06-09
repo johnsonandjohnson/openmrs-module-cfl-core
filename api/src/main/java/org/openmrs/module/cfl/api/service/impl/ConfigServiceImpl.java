@@ -26,11 +26,15 @@ import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.messages.api.util.BestContactTimeHelper;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_KEY;
 
@@ -78,6 +82,28 @@ public class ConfigServiceImpl implements ConfigService {
     public boolean isVaccinationInfoIsEnabled() {
         return Boolean.parseBoolean(
                 Context.getAdministrationService().getGlobalProperty(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY));
+    }
+
+    @Override
+    public Set<String> getVaccinationEncounterTypeUUIDs() {
+        final String rawValue = Context
+                .getAdministrationService()
+                .getGlobalProperty(CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY);
+
+        if (rawValue == null) {
+            return Collections.emptySet();
+        }
+
+        return Stream.of(rawValue.split(CFLConstants.COMMA_SEPARATOR)).map(String::trim).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isVaccinationListenerEnabled(String listenerName) {
+        final String rawValue = Context
+                .getAdministrationService()
+                .getGlobalProperty(CFLConstants.VACCINATION_LISTENER_KEY);
+
+        return listenerName.equalsIgnoreCase(rawValue.trim());
     }
 
     @Override
