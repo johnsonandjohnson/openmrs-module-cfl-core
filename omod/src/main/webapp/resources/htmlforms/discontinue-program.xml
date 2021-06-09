@@ -1,20 +1,20 @@
 
 <htmlform formUuid="39258edb-92c5-11eb-bf66-0242ac120002" formName="Discontinue program form"
-          formEncounterType="29d283d3-83ab-4b57-a17c-fe80db2146b1" formVersion="1.0">
+          formEncounterType="f1c23f25-20e1-4503-b09e-116aba0a6063" formVersion="1.0">
+    <uiInclude provider="cfl" css="htmlForm.css"/>
+    <style type="text/css">
+        .date-container {
+            margin-right: 50px;
+        }
 
-<style type="text/css">
-    .date-container {
-        margin-right: 50px;
-    }
+        #buttons {
+            margin-left: 10px;
+        }
 
-    #buttons {
-        margin-left: 10px;
-    }
-
-    .section {
-        margin-left: 10px;
-    }
-</style>
+        .section {
+            margin-left: 10px;
+        }
+    </style>
     <h2>Discontinuation form</h2>
     <div class="date-container">
         <div class="section">
@@ -40,5 +40,6 @@
         </div>
     </ifMode>
 
-    <completeProgram programId="06c596e7-53dd-44c1-9609-f1406fd9e76d"/>
+    <!--<completeProgram programId="06c596e7-53dd-44c1-9609-f1406fd9e76d"/>-->
+    <completeProgram programId="a191f580-db48-4af4-a8ee-eba249c8e706"/>
 </htmlform>
