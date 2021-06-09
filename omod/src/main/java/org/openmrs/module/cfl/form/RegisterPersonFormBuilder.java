@@ -71,7 +71,7 @@ public final class RegisterPersonFormBuilder {
         NavigableFormStructure formStructure = new NavigableFormStructure();
 
         // Get the ordered list of sections out of the configuration
-        Map<String, Section> configuredSections = new LinkedHashMap<String, Section>();
+        Map<String, Section> configuredSections = new LinkedHashMap<>();
         ArrayNode sections = (ArrayNode) app.getConfig().get(SECTIONS);
         for (JsonNode sectionJsonNode : sections) {
             ObjectNode sectionConfig = (ObjectNode) sectionJsonNode;
@@ -141,7 +141,7 @@ public final class RegisterPersonFormBuilder {
     }
 
     private static Object flattenArrayNode(JsonNode node) {
-        final List<Object> list = new ArrayList<Object>();
+        final List<Object> list = new ArrayList<>();
         final Iterator<JsonNode> itemIterator = node.getElements();
 
         for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
@@ -157,7 +157,7 @@ public final class RegisterPersonFormBuilder {
     }
 
     private static Object flattenObjectNode(JsonNode node) {
-        final Map<String, Object> map = new HashMap<String, Object>();
+        final Map<String, Object> map = new HashMap<>();
         final Iterator<String> fieldNameIterator = node.getFieldNames();
 
         for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {

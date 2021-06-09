@@ -85,7 +85,7 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         Collections.sort(secondLineFragments);
         model.addAttribute("secondLineFragments", secondLineFragments);
 
-        List<ExtraPatientIdentifierType> extraPatientIdentifierTypes = new ArrayList<ExtraPatientIdentifierType>();
+        List<ExtraPatientIdentifierType> extraPatientIdentifierTypes = new ArrayList<>();
 
         for (PatientIdentifierType type : emrApiProperties.getExtraPatientIdentifierTypes()) {
             List<AutoGenerationOption> options = identifierSourceService.getAutoGenerationOptions(type);

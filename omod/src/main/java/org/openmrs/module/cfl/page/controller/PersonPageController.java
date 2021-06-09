@@ -210,7 +210,7 @@ public class PersonPageController {
         contextModel.put(PATIENT, new PatientContextModel(patient));
         contextModel.put("visit", activeVisit == null ? null : new VisitContextModel(activeVisit));
 
-        List<Program> programs = new ArrayList<Program>();
+        List<Program> programs = new ArrayList<>();
         List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient,
                 null, null, null, null, null, false);
         for (PatientProgram patientProgram : patientPrograms) {

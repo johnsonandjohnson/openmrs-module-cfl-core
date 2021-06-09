@@ -18,7 +18,7 @@ public abstract class HeaderFragment {
         NameSupportCompatibility nameSupport = Context
                 .getRegisteredComponent("coreapps.NameSupportCompatibility", NameSupportCompatibility.class);
 
-        Map<String, String> nameFields = new LinkedHashMap<String, String>();
+        Map<String, String> nameFields = new LinkedHashMap<>();
         List<List<Map<String, String>>> lines = nameSupport.getLines();
         String layoutToken = nameSupport.getLayoutToken();
 

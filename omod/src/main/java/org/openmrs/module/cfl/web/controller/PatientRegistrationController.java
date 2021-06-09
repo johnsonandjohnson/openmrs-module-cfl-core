@@ -54,7 +54,7 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
 
         flashInfoMessage(registrationRequest, patient);
 
-        return new ResponseEntity<String>(registeredPatient.getUuid(), HttpStatus.OK);
+        return new ResponseEntity<>(registeredPatient.getUuid(), HttpStatus.OK);
     }
 
     private void flashInfoMessage(final ServletRequest registrationRequest, final Patient patient) {
@@ -79,7 +79,7 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
         final List<Relationship> patientRelationships = cflRegistrationUiService.parseRelationships(registrationProperties);
         cflRegistrationUiService.updateRelationships(patientToUpdate, patientRelationships);
 
-        return new ResponseEntity<String>(patientToUpdate.getUuid(), HttpStatus.OK);
+        return new ResponseEntity<>(patientToUpdate.getUuid(), HttpStatus.OK);
     }
 
 }

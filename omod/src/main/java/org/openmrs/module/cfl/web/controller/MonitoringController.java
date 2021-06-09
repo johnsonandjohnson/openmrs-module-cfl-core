@@ -53,7 +53,7 @@ public class MonitoringController extends BaseCflModuleRestController {
             response = SystemStatusResponseBodyBuilder.withAll(statusData);
         }
 
-        return new ResponseEntity<SystemStatusResponseBody>(response, httpStatus);
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     private HttpStatus toHttpStatus(final AllMonitoredStatusData statusData) {
