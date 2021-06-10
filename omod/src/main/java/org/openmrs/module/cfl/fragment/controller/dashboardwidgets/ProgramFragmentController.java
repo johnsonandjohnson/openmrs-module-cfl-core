@@ -53,9 +53,9 @@ public class ProgramFragmentController {
 
         List<ProgramConfig> programConfigs = getProgramConfigs(configuration);
 
-        List<Map<String, Object>> programsList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> programsList = new ArrayList<>();
         for (Program program : programs) {
-            Map<String, Object> programMap = new HashMap<String, Object>();
+            Map<String, Object> programMap = new HashMap<>();
             programMap.put(NAME_ATTR_NAME, program.getName());
             for (PatientProgram patientProgram : patientPrograms) {
                 if (patientProgram.getProgram().equals(program)) {

@@ -93,7 +93,7 @@ public class EncountersWidgetFragmentControllerTest {
     }
 
     private FragmentConfiguration createFragmentConfiguration(Object maxRecords) {
-        Map<String, Object> config = new HashMap<String, Object>();
+        Map<String, Object> config = new HashMap<>();
         config.put(ENCOUNTER_TYPE_UUID_ATTR_NAME, ENCOUNTER_TYPE_UUID);
         config.put(ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID_ATTR_NAME, ENCOUNTER_CLOSED_STATUS_CONCEPT_UUID);
         config.put(ANSWER_CONCEPT_UUID_ATTR_NAME, ANSWER_CONCEPT_UUID);

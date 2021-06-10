@@ -77,7 +77,7 @@ public class PersonSearchWidgetFragmentController {
 
         String listingAttributeTypesStr = administrationService.getGlobalProperty(
                 OpenmrsConstants.GLOBAL_PROPERTY_PATIENT_LISTING_ATTRIBUTES, "");
-        List<String> listingAttributeTypeNames = new ArrayList<String>();
+        List<String> listingAttributeTypeNames = new ArrayList<>();
         if (StringUtils.isNotBlank(listingAttributeTypesStr)) {
             String[] attTypeNames = StringUtils.split(listingAttributeTypesStr.trim(), ",");
             for (String name : attTypeNames) {

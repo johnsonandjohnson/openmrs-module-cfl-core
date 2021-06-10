@@ -63,7 +63,7 @@ public class EncountersWidgetFragmentController {
     }
 
     private List<Concept> getConceptsByConceptClasses(List<ConceptClass> conceptClasses, ConceptService conceptService) {
-        List<Concept> conceptsByConceptClasses = new ArrayList<Concept>();
+        List<Concept> conceptsByConceptClasses = new ArrayList<>();
         for (ConceptClass conceptClass : conceptClasses) {
             conceptsByConceptClasses.addAll(conceptService.getConceptsByClass(conceptClass));
         }
@@ -72,11 +72,11 @@ public class EncountersWidgetFragmentController {
     }
 
     private List<ConceptClass> getConceptClassesByUuids(String conceptClassUuid, ConceptService conceptService) {
-        List<String> splittedUuids = new ArrayList<String>();
+        List<String> splittedUuids = new ArrayList<>();
         if (StringUtils.isNotBlank(conceptClassUuid)) {
             splittedUuids = Arrays.asList(conceptClassUuid.split(","));
         }
-        List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
+        List<ConceptClass> conceptClasses = new ArrayList<>();
         for (String uuid : splittedUuids) {
             conceptClasses.add(conceptService.getConceptClassByUuid(uuid));
         }
@@ -85,12 +85,12 @@ public class EncountersWidgetFragmentController {
     }
 
     private List<EncounterType> getEncounterTypesByUuids(String encounterTypesUuids, EncounterService encounterService) {
-        List<String> splittedUuids = new ArrayList<String>();
+        List<String> splittedUuids = new ArrayList<>();
         if (StringUtils.isNotBlank(encounterTypesUuids)) {
             splittedUuids = Arrays.asList(encounterTypesUuids.split(","));
         }
 
-        List<EncounterType> encounterTypes = new ArrayList<EncounterType>();
+        List<EncounterType> encounterTypes = new ArrayList<>();
         for (String uuid : splittedUuids) {
             if (StringUtils.isNotBlank(uuid)) {
                 encounterTypes.add(encounterService.getEncounterTypeByUuid(uuid));
@@ -101,9 +101,9 @@ public class EncountersWidgetFragmentController {
 
     private List<String> getTrimmedObsTextsList(List<Encounter> encounters, List<Concept> obsList,
                                                 Concept answerConcept) {
-        List<String> textsList = new ArrayList<String>();
+        List<String> textsList = new ArrayList<>();
         for (Encounter encounter : encounters) {
-            List<Obs> encounterObsList = new ArrayList<Obs>(encounter.getAllObs(false));
+            List<Obs> encounterObsList = new ArrayList<>(encounter.getAllObs(false));
             String commaSeparatedObsList = getCommaSeparatedObsList(encounterObsList, obsList, answerConcept);
             String trimmedText = trimText(commaSeparatedObsList);
             textsList.add(trimmedText);
@@ -135,7 +135,7 @@ public class EncountersWidgetFragmentController {
     }
 
     private List<Boolean> getEncounterStatusesBooleanList(List<Encounter> encounters, Concept encounterClosedStatusConcept) {
-        List<Boolean> encountersStatusesBoolList = new ArrayList<Boolean>();
+        List<Boolean> encountersStatusesBoolList = new ArrayList<>();
         for (Encounter encounter : encounters) {
             encountersStatusesBoolList.add(checkIfEncounterStatusClosed(encounter, encounterClosedStatusConcept));
         }
@@ -143,7 +143,7 @@ public class EncountersWidgetFragmentController {
     }
 
     private boolean checkIfEncounterStatusClosed(Encounter encounter, Concept encounterClosedStatusConcept) {
-        List<Obs> obsList = new ArrayList<Obs>(encounter.getAllObs(false));
+        List<Obs> obsList = new ArrayList<>(encounter.getAllObs(false));
         for (Obs obs : obsList) {
             Concept obsValueCoded = obs.getValueCoded();
             if (obsValueCoded != null && obsValueCoded.equals(encounterClosedStatusConcept)) {
