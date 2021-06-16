@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 public class VaccinationServiceImpl implements VaccinationService {
+
     @Transactional
     @Override
     public void createFutureVisits(Visit occurredVisit, Date occurrenceDateTime) {

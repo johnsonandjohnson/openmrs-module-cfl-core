@@ -57,7 +57,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         when(configService.getRandomizationGlobalProperty()).thenReturn(createRandomization());
         when(configService.getVaccinationProgram(visit.getPatient())).thenReturn(vaccinations[0].getName());
         when(configService.getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY)).thenReturn(countrySettingMap);
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(true);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(true);
 
         when(visitService.getVisitByUuid(visit.getUuid())).thenReturn(visit);
         when(visitService.getVisitsByPatient(patient)).thenReturn(VisitHelper.getVisits(visit));
@@ -91,7 +91,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     @Test
     public void performAction_shouldNotCreateFutureVisitsIfVaccinationInfoIsDisabled() {
         //Given
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(true);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(true);
 
         when(configService.isVaccinationInfoIsEnabled()).thenReturn(false);
         //When
@@ -107,13 +107,13 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     @Test
     public void performAction_shouldNotCreateFutureVisitsIfListenerIsDisabled() {
         //Given
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(false);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(false);
 
         when(configService.isVaccinationInfoIsEnabled()).thenReturn(true);
         //When
         updatingVisitListener.performAction(message);
         //Then
-        verify(configService, times(1)).isVaccinationListenerEnabled(UpdatingVisitListener.NAME);
+        verify(configService, times(1)).isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME);
         verifyZeroInteractions(visitService);
         verifyZeroInteractions(administrationService);
         verifyZeroInteractions(patientService);
@@ -126,7 +126,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         visit = new Visit();
 
         when(configService.isVaccinationInfoIsEnabled()).thenReturn(true);
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(true);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(true);
 
         when(visitService.getVisitByUuid(visit.getUuid())).thenReturn(visit);
 
@@ -148,7 +148,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     public void performAction_shouldThrowCflRuntimeExceptionIfEncounterNotFoundForGivenVisitUuid() throws JMSException {
         //Given
         when(configService.isVaccinationInfoIsEnabled()).thenReturn(true);
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(true);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(true);
         when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.VISIT_UUID);
         when(visitService.getVisitByUuid(anyString())).thenReturn(null);
         //When
@@ -181,7 +181,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         when(configService.getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY)).thenReturn(countrySettingMap);
         when(configService.getRandomizationGlobalProperty()).thenReturn(createRandomization());
         when(configService.getVaccinationProgram(visit.getPatient())).thenReturn(vaccinations[0].getName());
-        when(configService.isVaccinationListenerEnabled(UpdatingVisitListener.NAME)).thenReturn(true);
+        when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)).thenReturn(true);
 
         when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY)).thenReturn(
                 Constant.VISIT_STATUS_OCCURRED);

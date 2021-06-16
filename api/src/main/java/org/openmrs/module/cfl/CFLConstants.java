@@ -1,5 +1,8 @@
 package org.openmrs.module.cfl;
 
+import org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener;
+import org.openmrs.module.cfl.api.event.listener.subscribable.VaccinationEncounterListener;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -323,7 +326,17 @@ public final class CFLConstants {
             "scheduled when there are no encounters created, the visit start date is going to be used to calculate the " +
             "times of the following visits.";
 
-    public static final String VACCINATION_LISTENER_DEFAULT_VALUE = "VaccinationEncounterListener";
+    /**
+     * One of possible values for {@link #VACCINATION_LISTENER_KEY}.
+     * The name of {@link VaccinationEncounterListener} listener.
+     */
+    public static final String VACCINATION_ENCOUNTER_LISTENER_NAME = "VaccinationEncounterListener";
+
+    /**
+     * One of possible values for {@link #VACCINATION_LISTENER_KEY}.
+     * The name of {@link UpdatingVisitListener} listener.
+     */
+    public static final String VACCINATION_VISIT_LISTENER_NAME = "UpdatingVisitListener";
 
     private CFLConstants() {
     }

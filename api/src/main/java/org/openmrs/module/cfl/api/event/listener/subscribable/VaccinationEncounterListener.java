@@ -8,6 +8,8 @@ import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.jms.Message;
 import java.util.Collections;
@@ -40,7 +42,8 @@ import java.util.List;
  * @see UpdatingVisitListener
  */
 public class VaccinationEncounterListener extends EncounterActionListener {
-    public static final String NAME = "VaccinationEncounterListener";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VaccinationEncounterListener.class);
 
     @Override
     public List<String> subscribeToActions() {
@@ -50,7 +53,11 @@ public class VaccinationEncounterListener extends EncounterActionListener {
     @Override
     public void performAction(Message message) {
         // is listener not enabled or is vaccination info not enabled
-        if (!getConfigService().isVaccinationListenerEnabled(NAME) || !getConfigService().isVaccinationInfoIsEnabled()) {
+        if (!getConfigService().isVaccinationListenerEnabled(CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME) ||
+                !getConfigService().isVaccinationInfoIsEnabled()) {
+            LOGGER.info(
+                    "Creation of future vaccination visits on encounter create by VaccinationEncounterListener has been " +
+                            "disabled (global parameters: cfl.vaccination.listener or cfl.vaccinationInformationEnabled).");
             return;
         }
 
