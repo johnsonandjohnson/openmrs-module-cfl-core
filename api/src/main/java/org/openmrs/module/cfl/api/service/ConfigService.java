@@ -19,6 +19,7 @@ import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides the module configuration set
@@ -60,6 +61,10 @@ public interface ConfigService {
     String getVaccinationProgram(Person person);
 
     boolean isVaccinationInfoIsEnabled();
+
+    Set<String> getVaccinationEncounterTypeUUIDs();
+
+    boolean isVaccinationListenerEnabled(String listenerName);
 
     String getDefaultUserTimeZone();
 

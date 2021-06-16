@@ -172,5 +172,5 @@
             <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
         </div>
     </ifMode>
-    <visitNoteMetaTag />
+    <postSubmissionAction class="org.openmrs.module.visits.api.htmlformentry.action.VisitStatusUpdateAction"/>
 </htmlform>
