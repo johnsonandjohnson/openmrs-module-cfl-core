@@ -26,256 +26,256 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserAppHandlerTest extends BaseContextMockTest {
-  @Mock
-  private DbSessionFactory dbSessionFactory;
+    @Mock
+    private DbSessionFactory dbSessionFactory;
 
-  @Mock
-  private DbSession dbSession;
+    @Mock
+    private DbSession dbSession;
 
-  @Mock
-  private AppFrameworkActivator appFrameworkActivator;
+    @Mock
+    private AppFrameworkActivator appFrameworkActivator;
 
-  @Before
-  public void setupMock() {
-    when(dbSessionFactory.getCurrentSession()).thenReturn(dbSession);
-  }
+    @Before
+    public void setupMock() {
+        when(dbSessionFactory.getCurrentSession()).thenReturn(dbSession);
+    }
 
-  @Test
-  public void shouldReturnCorrectUserAppId() {
-    // given
-    final String userAppName = "userAppName";
-    final Integer expectedUserAppId = userAppName.hashCode();
-    final UserApp userAppWithId = new UserApp();
-    userAppWithId.setAppId(userAppName);
+    @Test
+    public void shouldReturnCorrectUserAppId() {
+        // given
+        final String userAppName = "userAppName";
+        final Integer expectedUserAppId = userAppName.hashCode();
+        final UserApp userAppWithId = new UserApp();
+        userAppWithId.setAppId(userAppName);
 
-    final UserAppHandler handler = new UserAppHandler();
+        final UserAppHandler handler = new UserAppHandler();
 
-    // when
-    final Integer userAppId = handler.getId(userAppWithId);
+        // when
+        final Integer userAppId = handler.getId(userAppWithId);
 
-    // then
-    assertEquals(expectedUserAppId, userAppId);
-  }
+        // then
+        assertEquals(expectedUserAppId, userAppId);
+    }
 
-  @Test
-  public void shouldReturnCorrectUserAppUUID() {
-    // given
-    final String userAppName = "userAppName";
-    final UserApp userAppWithName = new UserApp();
-    userAppWithName.setAppId(userAppName);
+    @Test
+    public void shouldReturnCorrectUserAppUUID() {
+        // given
+        final String userAppName = "userAppName";
+        final UserApp userAppWithName = new UserApp();
+        userAppWithName.setAppId(userAppName);
 
-    final UserAppHandler handler = new UserAppHandler();
+        final UserAppHandler handler = new UserAppHandler();
 
-    // when
-    final String userAppUuid = handler.getUuid(userAppWithName);
+        // when
+        final String userAppUuid = handler.getUuid(userAppWithName);
 
-    // then
-    assertEquals(userAppName, userAppUuid);
-  }
+        // then
+        assertEquals("UserApp:" + userAppName, userAppUuid);
+    }
 
-  @Test
-  public void shouldReturnCorrectName() {
-    // given
-    final String userAppName = "userAppName";
-    final UserApp userAppWithName = new UserApp();
-    userAppWithName.setAppId(userAppName);
+    @Test
+    public void shouldReturnCorrectName() {
+        // given
+        final String userAppName = "userAppName";
+        final UserApp userAppWithName = new UserApp();
+        userAppWithName.setAppId(userAppName);
 
-    final UserAppHandler handler = new UserAppHandler();
+        final UserAppHandler handler = new UserAppHandler();
 
-    // when
-    final String actualName = handler.getName(userAppWithName);
+        // when
+        final String actualName = handler.getName(userAppWithName);
 
-    // then
-    assertEquals(userAppName, actualName);
-  }
+        // then
+        assertEquals(userAppName, actualName);
+    }
 
-  @Test
-  public void shouldSaveNewUserAppWithFlushAndContextRefresh() {
-    // given
-    final UserApp newUserApp = new UserApp();
-    newUserApp.setAppId("newUserApp");
-    newUserApp.setJson("{}");
+    @Test
+    public void shouldSaveNewUserAppWithFlushAndContextRefresh() {
+        // given
+        final UserApp newUserApp = new UserApp();
+        newUserApp.setAppId("newUserApp");
+        newUserApp.setJson("{}");
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
-    when(criteriaMock.uniqueResult()).thenReturn(null);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
+        when(criteriaMock.uniqueResult()).thenReturn(null);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler(appFrameworkActivator);
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler(appFrameworkActivator);
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    handler.saveItem(newUserApp);
+        // when
+        handler.saveItem(newUserApp);
 
-    // then
-    final ArgumentCaptor<UserApp> argumentCaptor = ArgumentCaptor.forClass(UserApp.class);
-    verify(dbSession).saveOrUpdate(argumentCaptor.capture());
-    verify(dbSession, times(1)).flush();
-    verify(appFrameworkActivator, times(1)).contextRefreshed();
+        // then
+        final ArgumentCaptor<UserApp> argumentCaptor = ArgumentCaptor.forClass(UserApp.class);
+        verify(dbSession).saveOrUpdate(argumentCaptor.capture());
+        verify(dbSession, times(1)).flush();
+        verify(appFrameworkActivator, times(1)).contextRefreshed();
 
-    final UserApp actualNewUserApp = argumentCaptor.getValue();
-    assertEquals(newUserApp.getAppId(), actualNewUserApp.getAppId());
-    assertEquals(newUserApp.getJson(), actualNewUserApp.getJson());
-  }
+        final UserApp actualNewUserApp = argumentCaptor.getValue();
+        assertEquals(newUserApp.getAppId(), actualNewUserApp.getAppId());
+        assertEquals(newUserApp.getJson(), actualNewUserApp.getJson());
+    }
 
-  @Test
-  public void shouldUpdateExistingUserApp() {
-    // given
-    final UserApp existingUserApp = new UserApp();
-    existingUserApp.setAppId("myUserApp");
-    existingUserApp.setJson("{\"a\": 0}");
-    final UserApp newUserApp = new UserApp();
-    newUserApp.setAppId(existingUserApp.getAppId());
-    newUserApp.setJson("{}");
+    @Test
+    public void shouldUpdateExistingUserApp() {
+        // given
+        final UserApp existingUserApp = new UserApp();
+        existingUserApp.setAppId("myUserApp");
+        existingUserApp.setJson("{\"a\": 0}");
+        final UserApp newUserApp = new UserApp();
+        newUserApp.setAppId(existingUserApp.getAppId());
+        newUserApp.setJson("{}");
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
-    when(criteriaMock.uniqueResult()).thenReturn(existingUserApp);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
+        when(criteriaMock.uniqueResult()).thenReturn(existingUserApp);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler(appFrameworkActivator);
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler(appFrameworkActivator);
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    handler.saveItem(newUserApp);
+        // when
+        handler.saveItem(newUserApp);
 
-    // then
-    final ArgumentCaptor<UserApp> argumentCaptor = ArgumentCaptor.forClass(UserApp.class);
-    verify(dbSession).saveOrUpdate(argumentCaptor.capture());
-    verify(dbSession, times(1)).flush();
-    verify(appFrameworkActivator, times(1)).contextRefreshed();
+        // then
+        final ArgumentCaptor<UserApp> argumentCaptor = ArgumentCaptor.forClass(UserApp.class);
+        verify(dbSession).saveOrUpdate(argumentCaptor.capture());
+        verify(dbSession, times(1)).flush();
+        verify(appFrameworkActivator, times(1)).contextRefreshed();
 
-    final UserApp actualNewUserApp = argumentCaptor.getValue();
-    assertEquals(existingUserApp.getAppId(), actualNewUserApp.getAppId());
-    assertEquals(newUserApp.getJson(), actualNewUserApp.getJson());
-  }
+        final UserApp actualNewUserApp = argumentCaptor.getValue();
+        assertEquals(existingUserApp.getAppId(), actualNewUserApp.getAppId());
+        assertEquals(newUserApp.getJson(), actualNewUserApp.getJson());
+    }
 
-  @Test
-  public void shouldReturnCorrectCountOfUserApps() {
-    // given
-    final int expectedCount = 12;
+    @Test
+    public void shouldReturnCorrectCountOfUserApps() {
+        // given
+        final int expectedCount = 12;
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.setProjection(any(Projection.class))).thenReturn(criteriaMock);
-    when(criteriaMock.uniqueResult()).thenReturn(expectedCount);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.setProjection(any(Projection.class))).thenReturn(criteriaMock);
+        when(criteriaMock.uniqueResult()).thenReturn(expectedCount);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler();
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler();
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    final int actualCount = handler.getItemsCount(UserApp.class, false, null);
+        // when
+        final int actualCount = handler.getItemsCount(UserApp.class, false, null);
 
-    // then
-    assertEquals(expectedCount, actualCount);
-  }
+        // then
+        assertEquals(expectedCount, actualCount);
+    }
 
-  @Test
-  public void shouldReturnAllUserApps() {
-    // given
-    final UserApp userAppA = new UserApp();
-    userAppA.setAppId("A");
-    final UserApp userAppB = new UserApp();
-    userAppB.setAppId("B");
-    final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
+    @Test
+    public void shouldReturnAllUserApps() {
+        // given
+        final UserApp userAppA = new UserApp();
+        userAppA.setAppId("A");
+        final UserApp userAppB = new UserApp();
+        userAppB.setAppId("B");
+        final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.list()).thenReturn(allUserApps);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.list()).thenReturn(allUserApps);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler();
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler();
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    final List<UserApp> actualAllItems = handler.getItems(UserApp.class, false, null, null, null);
+        // when
+        final List<UserApp> actualAllItems = handler.getItems(UserApp.class, false, null, null, null);
 
-    // then
-    assertEquals(allUserApps.size(), actualAllItems.size());
-    assertThat(actualAllItems, CoreMatchers.hasItems(allUserApps.toArray(new UserApp[0])));
-  }
+        // then
+        assertEquals(allUserApps.size(), actualAllItems.size());
+        assertThat(actualAllItems, CoreMatchers.hasItems(allUserApps.toArray(new UserApp[0])));
+    }
 
-  @Test
-  public void shouldReturnPaginatedUserApps() {
-    // given
-    final UserApp userAppA = new UserApp();
-    userAppA.setAppId("A");
-    final UserApp userAppB = new UserApp();
-    userAppB.setAppId("B");
-    final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
+    @Test
+    public void shouldReturnPaginatedUserApps() {
+        // given
+        final UserApp userAppA = new UserApp();
+        userAppA.setAppId("A");
+        final UserApp userAppB = new UserApp();
+        userAppB.setAppId("B");
+        final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.list()).thenReturn(allUserApps);
-    when(criteriaMock.setFirstResult(any(Integer.class))).thenReturn(criteriaMock);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.list()).thenReturn(allUserApps);
+        when(criteriaMock.setFirstResult(any(Integer.class))).thenReturn(criteriaMock);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler();
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler();
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    final List<UserApp> paginatedItems = handler.getItems(UserApp.class, false, null, 1, 20);
+        // when
+        final List<UserApp> paginatedItems = handler.getItems(UserApp.class, false, null, 1, 20);
 
-    // then
-    assertEquals(2, paginatedItems.size());
-    verify(criteriaMock, times(1)).setFirstResult(1);
-    verify(criteriaMock, times(1)).setMaxResults(20);
-  }
+        // then
+        assertEquals(2, paginatedItems.size());
+        verify(criteriaMock, times(1)).setFirstResult(1);
+        verify(criteriaMock, times(1)).setMaxResults(20);
+    }
 
-  @Test
-  public void shouldReturnUserAppById() {
-    // given
-    final UserApp userAppA = new UserApp();
-    userAppA.setAppId("A");
-    final UserApp userAppB = new UserApp();
-    userAppB.setAppId("B");
-    final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
+    @Test
+    public void shouldReturnUserAppById() {
+        // given
+        final UserApp userAppA = new UserApp();
+        userAppA.setAppId("A");
+        final UserApp userAppB = new UserApp();
+        userAppB.setAppId("B");
+        final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.list()).thenReturn(allUserApps);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.list()).thenReturn(allUserApps);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler();
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler();
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    final UserApp actualById = handler.getItemById(UserApp.class, userAppA.getAppId().hashCode());
+        // when
+        final UserApp actualById = handler.getItemById(UserApp.class, userAppA.getAppId().hashCode());
 
-    // then
-    assertEquals(userAppA, actualById);
-  }
+        // then
+        assertEquals(userAppA, actualById);
+    }
 
-  @Test
-  public void shouldReturnUserAppByUUID() {
-    // given
-    final UserApp userAppA = new UserApp();
-    userAppA.setAppId("A");
-    final UserApp userAppB = new UserApp();
-    userAppB.setAppId("B");
-    final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
+    @Test
+    public void shouldReturnUserAppByUUID() {
+        // given
+        final UserApp userAppA = new UserApp();
+        userAppA.setAppId("A");
+        final UserApp userAppB = new UserApp();
+        userAppB.setAppId("B");
+        final List<UserApp> allUserApps = Arrays.asList(userAppA, userAppB);
 
-    final Criteria criteriaMock = mock(Criteria.class);
-    when(criteriaMock.list()).thenReturn(allUserApps);
-    when(criteriaMock.uniqueResult()).thenReturn(userAppA);
-    when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
+        final Criteria criteriaMock = mock(Criteria.class);
+        when(criteriaMock.list()).thenReturn(allUserApps);
+        when(criteriaMock.uniqueResult()).thenReturn(userAppA);
+        when(criteriaMock.add(any(Criterion.class))).thenReturn(criteriaMock);
 
-    when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
+        when(dbSession.createCriteria(UserApp.class)).thenReturn(criteriaMock);
 
-    final UserAppHandler handler = new UserAppHandler();
-    handler.setSessionFactory(dbSessionFactory);
+        final UserAppHandler handler = new UserAppHandler();
+        handler.setSessionFactory(dbSessionFactory);
 
-    // when
-    final UserApp actualById = handler.getItemByUuid(UserApp.class, userAppA.getAppId());
+        // when
+        final UserApp actualById = handler.getItemByUuid(UserApp.class, "UserApp:" + userAppA.getAppId());
 
-    // then
-    assertEquals(userAppA, actualById);
-    final ArgumentCaptor<Criterion> argumentCaptor = ArgumentCaptor.forClass(Criterion.class);
-    verify(criteriaMock).add(argumentCaptor.capture());
-    final Criterion actualCriterion = argumentCaptor.getValue();
-    assertEquals("appId=A", actualCriterion.toString());
-  }
+        // then
+        assertEquals(userAppA, actualById);
+        final ArgumentCaptor<Criterion> argumentCaptor = ArgumentCaptor.forClass(Criterion.class);
+        verify(criteriaMock).add(argumentCaptor.capture());
+        final Criterion actualCriterion = argumentCaptor.getValue();
+        assertEquals("appId=A", actualCriterion.toString());
+    }
 }
