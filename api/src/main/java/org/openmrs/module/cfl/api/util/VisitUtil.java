@@ -1,7 +1,6 @@
 package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -13,7 +12,6 @@ import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public final class VisitUtil {
@@ -103,30 +101,6 @@ public final class VisitUtil {
 
     public static String getOccurredVisitStatus() {
         return Context.getAdministrationService().getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
-    }
-
-    /**
-     * Gets the actual visit date.
-     * <p>
-     * The {@code visit} must have occurred.
-     * The actual visit date is the 'encounter date time' of the Encounter entity related to the {@code visit}. The first
-     * Encounter is used, which should be the only Encounter related to the {@code visit}.
-     * </p>
-     *
-     * @param visit the visit to get the actual date time, not null
-     * @return the actual visit date, never null
-     * @throws IllegalStateException if there is no non-voided Encounter related to the {@code visit}
-     */
-    public static Date getActualVisitDate(Visit visit) {
-        final Iterator<Encounter> visitEncounters = visit.getNonVoidedEncounters().iterator();
-
-        if (!visitEncounters.hasNext()) {
-            throw new IllegalStateException(
-                    "Visit UUID: " + visit.getUuid() + " is missing Encounter entity, most likely it has not " +
-                            "occurred yet!");
-        }
-
-        return visitEncounters.next().getEncounterDatetime();
     }
 
     private static boolean isFollowUpVisit(VisitInformation visitInformation) {
