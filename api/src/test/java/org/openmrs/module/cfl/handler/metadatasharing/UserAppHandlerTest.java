@@ -6,15 +6,21 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projection;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.appframework.AppFrameworkActivator;
 import org.openmrs.module.appframework.domain.UserApp;
+import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.test.BaseContextMockTest;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -24,7 +30,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ Context.class})
 public class UserAppHandlerTest extends BaseContextMockTest {
     @Mock
     private DbSessionFactory dbSessionFactory;
@@ -35,9 +44,16 @@ public class UserAppHandlerTest extends BaseContextMockTest {
     @Mock
     private AppFrameworkActivator appFrameworkActivator;
 
+    @Mock
+    private AppFrameworkService appFrameworkService;
+
     @Before
     public void setupMock() {
         when(dbSessionFactory.getCurrentSession()).thenReturn(dbSession);
+        mockStatic(Context.class);
+        when(Context.getService(AppFrameworkService.class)).thenReturn(appFrameworkService);
+        when(appFrameworkService.getAllApps()).thenReturn(Collections.emptyList());
+        when(appFrameworkService.getUserApps()).thenReturn(Collections.emptyList());
     }
 
     @Test
