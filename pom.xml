@@ -28,7 +28,7 @@
     <modules>
         <module>api</module>
         <module>omod</module>
-        <module>ui-tests</module>
+       <!-- <module>ui-tests</module> -->
     </modules>
 
     <properties>

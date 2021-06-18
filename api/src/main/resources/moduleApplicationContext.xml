@@ -88,6 +88,13 @@
         <property name="visitReminderService" ref="cfl.visitReminderService"/>
     </bean>
 
+    <bean id="cfl.regimenUpdateListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegimenUpdateListener"
+          init-method="init"
+          destroy-method="close"
+          parent="cfl.peopleActionListener">
+    </bean>
+
     <bean id="cfl.visitActionListener"
           class="org.openmrs.module.cfl.api.event.listener.subscribable.VisitActionListener"
           abstract="true">
