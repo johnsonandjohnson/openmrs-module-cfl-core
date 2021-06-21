@@ -7,7 +7,8 @@ import org.openmrs.event.Event;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.IrisVisitService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.jms.Message;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,8 +16,7 @@ import java.util.List;
 
 public class UpdatingVisitListener extends VisitActionListener {
 
-    @Autowired
-    private IrisVisitService irisVisitService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdatingVisitListener.class);
 
     @Override
     public List<String> subscribeToActions() {
@@ -25,6 +25,7 @@ public class UpdatingVisitListener extends VisitActionListener {
 
     @Override
     public void performAction(Message message) {
+        LOGGER.info("UpdatingVisitListener triggered");
         if (getConfigService().isVaccinationInfoIsEnabled()) {
             Visit updatedVisit = extractVisit(message);
 
@@ -38,12 +39,16 @@ public class UpdatingVisitListener extends VisitActionListener {
 
             if (visitStatus.equals(Context.getAdministrationService()
                                           .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))) {
-                irisVisitService.createFutureVisits(updatedVisit);
+                getIrisService().createFutureVisits(updatedVisit);
             }
         }
     }
 
     private ConfigService getConfigService() {
         return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+    }
+
+    private IrisVisitService getIrisService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_IRIS_VISIT_SERVICE_BEAN_NAME, IrisVisitService.class);
     }
 }

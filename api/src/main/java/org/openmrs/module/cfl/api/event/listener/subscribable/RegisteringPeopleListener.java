@@ -17,12 +17,16 @@ import org.openmrs.module.cfl.api.service.WelcomeService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.jms.Message;
 import java.util.Collections;
 import java.util.List;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegisteringPeopleListener.class);
 
     private WelcomeService welcomeService;
     private VisitReminderService visitReminderService;
@@ -34,6 +38,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
     @Override
     public void performAction(Message message) {
+        LOGGER.info("RegisteringPeopleListener triggered");
         Person person = extractPerson(message);
         if (person != null) {
             welcomeService.sendWelcomeMessages(person);
