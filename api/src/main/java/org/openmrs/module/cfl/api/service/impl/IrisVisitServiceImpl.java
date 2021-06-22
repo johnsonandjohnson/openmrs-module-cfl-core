@@ -34,6 +34,7 @@ import java.util.List;
 
 public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisitService {
 
+    private static final String REGIMEN_CHANGE = "REGIMEN CHANGE";
     private VisitService visitService;
 
     public void setVisitService(VisitService visitService) {
@@ -47,17 +48,19 @@ public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisi
     }
 
     @Override
+    @Transactional
     public void voidFutureVisits(Patient patient) {
         List<Visit> visits = visitService.getActiveVisitsByPatient(patient);
 
         for (Visit visit : visits) {
-            if (VisitUtil.getVisitStatus(visit).equals("SCHEDULED")) {
-                visitService.voidVisit(visit, "Changing regimen");
+            if (CFLConstants.SCHEDULED_VISIT_STATUS.equals(VisitUtil.getVisitStatus(visit))){
+                visitService.voidVisit(visit, REGIMEN_CHANGE);
             }
         }
     }
 
     @Override
+    @Transactional
     public void createFutureVisits(Visit updatedVisit) {
         //cfl.vaccines json
         Randomization randomization = getConfigService().getRandomizationGlobalProperty();
@@ -84,6 +87,13 @@ public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisi
             }
 
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateVisitsForRegimenChange(Visit latestDosingVisit, Patient patient) {
+        voidFutureVisits(patient);
+        createFutureVisits(latestDosingVisit);
     }
 
     private boolean isLastVisit(int numberOfDoses, Visit lastDosingVisit, Visit updatedVisit) {
