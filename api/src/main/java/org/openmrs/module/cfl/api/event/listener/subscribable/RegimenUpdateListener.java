@@ -1,3 +1,13 @@
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
 package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.openmrs.Patient;
@@ -40,10 +50,11 @@ public class RegimenUpdateListener extends PeopleActionListener {
         if (person != null) {
             String newRegimen = getConfigService().getVaccinationProgram(person);
             String oldRegimen = getPreviousRegimen(person.getAttributes());
-            LOGGER.info("Regime updated for participant : {} to : {} ", person.getPersonId(), oldRegimen + "::" + newRegimen);
+            LOGGER.info("Regime updated for participant : {} to : {} ", person.getPersonId(),
+                    oldRegimen + "::" + newRegimen);
             Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
             List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
-            if(null != visits && !visits.isEmpty()) {
+            if (null != visits && !visits.isEmpty()) {
                Visit visit =  getLastOccurredDosingVisit(visits);
                irisVisitService.voidFutureVisits(patient);
                irisVisitService.createFutureVisits(visit);
@@ -57,6 +68,11 @@ public class RegimenUpdateListener extends PeopleActionListener {
         }
         }
 
+    /**
+     * Retrieve the previous regimen of the patient
+     * @param attributes - set of patient attributes
+     * @return - the pervious regimen of the patient if present else null
+     */
     private String getPreviousRegimen(Set<PersonAttribute> attributes) {
         Optional<PersonAttribute> attribute = attributes.stream().filter(p -> p.getVoided() &&
                 p.getAttributeType().getName().equals("Vaccination program"))
@@ -66,6 +82,12 @@ public class RegimenUpdateListener extends PeopleActionListener {
         return attribute.map(PersonAttribute::getValue).orElse(null);
     }
 
+    /**
+     * retrieve the last visit of the patient with occurred status
+     * @param visits - list of patient visit
+     * @return - the last occurred visit
+     */
+
     private Visit getLastOccurredDosingVisit(List<Visit> visits) {
 
         Optional<Visit> lastDosingVisit = visits.stream().filter(p -> p.getVisitType().getName().equals("Dosing"))
@@ -74,7 +96,6 @@ public class RegimenUpdateListener extends PeopleActionListener {
                                                 .findFirst();
         return lastDosingVisit.orElse(null);
     }
-
 
     private ConfigService getConfigService() {
         return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);

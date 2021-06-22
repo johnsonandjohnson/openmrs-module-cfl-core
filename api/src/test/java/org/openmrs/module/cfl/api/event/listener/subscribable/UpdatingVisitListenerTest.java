@@ -29,6 +29,7 @@ import org.openmrs.module.cfl.api.helper.PatientHelper;
 import org.openmrs.module.cfl.api.helper.PersonHelper;
 import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.api.service.IrisVisitService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -68,6 +69,9 @@ public class UpdatingVisitListenerTest {
 
     @Mock
     private LocationService locationService;
+
+    @Mock
+    private IrisVisitService irisVisitService;
 
     @InjectMocks
     private UpdatingVisitListener updatingVisitListener;
@@ -119,8 +123,8 @@ public class UpdatingVisitListenerTest {
         updatingVisitListener.performAction(message);
         //Then
         verifyInteractions();
-        verify(visitService, times(10)).getAllVisitAttributeTypes();
-        verify(visitService, times(2)).saveVisit(any(Visit.class));
+        verify(visitService, times(0)).getAllVisitAttributeTypes();
+        verify(visitService, times(0)).saveVisit(any(Visit.class));
     }
 
     @Test
@@ -217,20 +221,20 @@ public class UpdatingVisitListenerTest {
         updatingVisitListener.performAction(message);
         //Then
         verifyInteractions();
-        verify(visitService, times(2)).getAllVisitAttributeTypes();
+        verify(visitService, times(0)).getAllVisitAttributeTypes();
     }
 
     private void verifyInteractions() throws JMSException {
         verify(configService, times(1)).isVaccinationInfoIsEnabled();
         verify(message, times(1)).getString(CFLConstants.UUID_KEY);
         verify(visitService, times(1)).getVisitByUuid(Constant.VISIT_UUID);
-        verify(administrationService, times(2)).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
-        verify(configService, times(1)).getRandomizationGlobalProperty();
-        verify(configService, times(1)).getVaccinationProgram(visit.getPatient());
-        verify(visitService, times(1)).getVisitsByPatient(patient);
-        verify(configService, times(1)).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
-        verify(patientService, times(1)).getPatient(person.getPersonId());
-        verify(locationService, times(1)).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
+        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+        verify(configService, times(0)).getRandomizationGlobalProperty();
+        verify(configService, times(0)).getVaccinationProgram(visit.getPatient());
+        verify(visitService, times(0)).getVisitsByPatient(patient);
+        verify(configService, times(0)).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
+        verify(patientService, times(0)).getPatient(person.getPersonId());
+        verify(locationService, times(0)).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
     }
 
     private Randomization createRandomization() {

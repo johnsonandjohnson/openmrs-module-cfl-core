@@ -38,6 +38,8 @@ public final class Constant {
 
     public static final String COVID_VACCINATION_PROGRAM_JSON_FILE = "COVID.json";
 
+    public static final String COVID_VACCINATION_PROGRAM = "COVID VACCINE";
+
     private Constant() {
     }
 }

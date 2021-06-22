@@ -1,3 +1,13 @@
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
 package org.openmrs.module.cfl.api.helper;
 
 import org.openmrs.Patient;
@@ -21,6 +31,9 @@ public final class VisitHelper {
         List<VisitAttributeType> attributeTypeList = new ArrayList<VisitAttributeType>();
         attributeTypeList.add(createVisitAttrType(1, "Visit Status"));
         attributeTypeList.add(createVisitAttrType(2, "Visit Time"));
+        attributeTypeList.add(createVisitAttrType(3, "Up Window"));
+        attributeTypeList.add(createVisitAttrType(4, "Low Window"));
+        attributeTypeList.add(createVisitAttrType(5, "Dose Number"));
         return attributeTypeList;
     }
 
@@ -55,6 +68,14 @@ public final class VisitHelper {
         visitAttributeType.setName("Visit Status");
         visitAttributeType.setUuid(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_UUID);
         return visitAttributeType;
+    }
+
+    public static VisitAttribute createVisitAttribute(int id, String valueReference, String attrTypeName) {
+        VisitAttribute visitAttribute = new VisitAttribute();
+        visitAttribute.setId(id);
+        visitAttribute.setAttributeType(createVisitAttrType(id, attrTypeName));
+        visitAttribute.setValueReferenceInternal(valueReference);
+        return visitAttribute;
     }
 
     private static VisitAttributeType createVisitAttrType(int visitAttrTypeId, String attrTypeName) {

@@ -1,0 +1,54 @@
+{
+  "numberOfDose": 3,
+  "visits": [
+    {
+      "doseNumber": 1,
+      "nameOfDose": "DOSE 1 VISIT",
+      "lowWindow": 0,
+      "numberOfFutureVisit": 2,
+      "midPointWindow": 0,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 1,
+      "nameOfDose": "FOLLOW UP",
+      "lowWindow": 0,
+      "numberOfFutureVisit": 0,
+      "midPointWindow": 7,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 2,
+      "nameOfDose": "DOSE 1 VISIT",
+      "lowWindow": 3,
+      "numberOfFutureVisit": 1,
+      "midPointWindow": 7,
+      "upWindow": 3
+    },
+    {
+      "doseNumber": 2,
+      "nameOfDose": "DOSE 1 & 2 VISIT",
+      "lowWindow": 2,
+      "numberOfFutureVisit": 2,
+      "midPointWindow": 3,
+      "upWindow": 5
+    },
+    {
+      "doseNumber": 2,
+      "nameOfDose": "FOLLOW UP",
+      "lowWindow": 2,
+      "numberOfFutureVisit": 0,
+      "midPointWindow": 7,
+      "upWindow": 5
+    },
+    {
+      "doseNumber": 3,
+      "nameOfDose": "DOSE 1, 2 & 3 VISIT",
+      "lowWindow": 3,
+      "numberOfFutureVisit": 1,
+      "midPointWindow": 20,
+      "upWindow": 3
+    }
+  ],
+  "name": "Vac_3 (three doses)"
+}
