@@ -63,6 +63,16 @@
         <calculationVersion>1.1</calculationVersion>
         <serializationXstream>0.2.12</serializationXstream>
         <providermanagementVersion>2.10.0</providermanagementVersion>
+        <jacocoVersion>0.8.2</jacocoVersion>
+        <surefireVersion>2.17</surefireVersion>
+        <sonar.coverage.exclusions>
+            **/test/**/*.*
+            **/filter/**/*.*
+            **/constants/**/*.*
+            **/types/**/*.*
+            **/extensions/**/*.*
+            **/CFLModuleActivator.*
+        </sonar.coverage.exclusions>
     </properties>
 
     <dependencyManagement>
@@ -441,6 +451,80 @@
 
     <profiles>
         <profile>
+            <id>code-coverage</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>org.jacoco.agent</artifactId>
+                    <classifier>runtime</classifier>
+                    <version>${jacocoVersion}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacocoVersion}</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>org.openmrs.module.biometric.filter/**/*</exclude>
+                                <exclude>org.openmrs.module.biometric.extension.html/**/*</exclude>
+                                <exclude>**/*BiometricModuleActivator.*</exclude>
+                                <!-- The following classes uses third party SDKs which uses native libraries hence excluded from coverage -->
+                                <exclude>org/openmrs/module/biometric/api/service/impl/BiometricServiceImpl.*</exclude>
+                                <exclude>org/openmrs/module/biometric/api/contract/BiometricMatchingResult.*</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <!-- Off line instrumentation is needed to compute coverage for Power Mock tests -->
+                            <execution>
+                                <id>default-instrument</id>
+                                <goals>
+                                    <goal>instrument</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-restore-instrumented-classes</id>
+                                <goals>
+                                    <goal>restore-instrumented-classes</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefireVersion}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>${surefireVersion}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <!-- Workaround to https://code.google.com/p/powermock/issues/detail?id=504 -->
+                            <argLine>-XX:-UseSplitVerifier
+                                -Dlog4j.configuration=file:src/test/resources/log4j.properties
+                            </argLine>
+                            <systemPropertyVariables>
+                                <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                            </systemPropertyVariables>
+                            <reuseForks>false</reuseForks>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>dev</id>
             <build>
                 <plugins>
@@ -478,13 +562,13 @@
         <repository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
         </repository>
         <repository>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
             <id>cfl-openmrs-repo</id>
@@ -496,7 +580,7 @@
         <pluginRepository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
