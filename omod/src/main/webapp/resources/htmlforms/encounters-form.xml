@@ -1,4 +1,5 @@
 <htmlform formUuid="f50851fb-eb81-4c2a-8c07-f3df954229de" formName="Encounters form" formEncounterType="43c3630f-abfe-4fe1-8c92-b73b65199a3d" formVersion="1.0">
+    <uiInclude provider="cfl" css="htmlForm.css"/>
     <style type="text/css">
         #metadata {
             display: none;

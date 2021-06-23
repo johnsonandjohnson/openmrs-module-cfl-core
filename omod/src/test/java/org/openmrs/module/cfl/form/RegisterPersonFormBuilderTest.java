@@ -159,7 +159,7 @@ public class RegisterPersonFormBuilderTest {
         assertEquals(size, objectMap.size());
 
         if (size > 0) {
-            final List<Integer> allValues = new LinkedList<Integer>((Collection<? extends Integer>) objectMap.values());
+            final List<Integer> allValues = new LinkedList<>((Collection<? extends Integer>) objectMap.values());
             Collections.sort(allValues);
 
             assertEquals(min, allValues.get(0).intValue());

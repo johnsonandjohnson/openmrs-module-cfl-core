@@ -10,6 +10,8 @@
 
 package org.openmrs.module.cfl.api.helper;
 
+import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -17,6 +19,7 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.VisitType;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.Constant;
+import org.openmrs.module.cfl.api.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,12 +41,16 @@ public final class VisitHelper {
     }
 
     public static Visit createVisit(int visitId, Patient patient, String visitType, String visitStatus) {
+        return createVisit(visitId, patient, visitType, visitStatus, DateUtil.now());
+    }
+
+    public static Visit createVisit(int visitId, Patient patient, String visitType, String visitStatus, Date startDatetime) {
         Visit visit = new Visit();
         visit.setId(visitId);
         visit.setPatient(patient);
         visit.setVisitType(createVisitType(visitType));
         visit.addAttribute(createVisitStatusAttribute(visitStatus));
-        visit.setStartDatetime(new Date());
+        visit.setStartDatetime(startDatetime);
         return visit;
     }
 
@@ -83,6 +90,15 @@ public final class VisitHelper {
         visitAttributeType.setId(visitAttrTypeId);
         visitAttributeType.setName(attrTypeName);
         return visitAttributeType;
+    }
+
+    public static Encounter createEncounter(int encounterId, Date encounterDateTime, Visit visit) {
+        final Encounter encounter = new Encounter();
+        encounter.setId(encounterId);
+        encounter.setEncounterDatetime(encounterDateTime);
+        encounter.setVisit(visit);
+        encounter.setEncounterType(new EncounterType());
+        return encounter;
     }
 
     public static List<VisitType> getVisitTypes() {

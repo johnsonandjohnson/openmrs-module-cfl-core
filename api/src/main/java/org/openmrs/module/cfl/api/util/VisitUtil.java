@@ -1,13 +1,3 @@
-/**
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
- * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- * <p>
- * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
- * graphic logo is a trademark of OpenMRS Inc.
- */
-
 package org.openmrs.module.cfl.api.util;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,21 +37,20 @@ public final class VisitUtil {
         Visit visit = new Visit();
 
         visit.setPatient(patient);
-        visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime,
-                visitInformation.getMidPointWindow()));
+        visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime, visitInformation.getMidPointWindow()));
         visit.setVisitType(getProperVisitType(visitInformation));
 
-        visit.setAttribute(createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME,
-                CFLConstants.SCHEDULED_VISIT_STATUS));
+        visit.setAttribute(
+                createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
 
-        visit.setAttribute(createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getUpWindow())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getUpWindow())));
 
-        visit.setAttribute(createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getLowWindow())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getLowWindow())));
 
-        visit.setAttribute(createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME,
-                String.valueOf(visitInformation.getDoseNumber())));
+        visit.setAttribute(
+                createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME, String.valueOf(visitInformation.getDoseNumber())));
 
         return visit;
     }
@@ -76,8 +65,8 @@ public final class VisitUtil {
                 followUpTypeName = vi.getNameOfDose();
             }
             for (Visit visit : allPatientVisits) {
-                if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName())
-                        && !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
+                if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName()) &&
+                        !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
                     lastVisit = visit;
                     break;
                 }
@@ -87,8 +76,7 @@ public final class VisitUtil {
     }
 
     public static String getVisitStatus(Visit visit) {
-        VisitAttributeType visitStatusAttrType =
-                getVisitAttributeTypeByName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
+        VisitAttributeType visitStatusAttrType = getVisitAttributeTypeByName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
         for (VisitAttribute visitAttribute : visit.getActiveAttributes()) {
             if (visitStatusAttrType != null && StringUtils.equalsIgnoreCase(visitAttribute.getAttributeType().getName(),
                     visitStatusAttrType.getName())) {
@@ -130,8 +118,7 @@ public final class VisitUtil {
 
     private static VisitAttribute createAttribute(String attributeType, String value) {
         VisitAttribute visitAttribute = new VisitAttribute();
-        visitAttribute.setAttributeType(
-                VisitUtil.getVisitAttributeTypeByName(attributeType));
+        visitAttribute.setAttributeType(VisitUtil.getVisitAttributeTypeByName(attributeType));
         visitAttribute.setValueReferenceInternal(value);
 
         return visitAttribute;

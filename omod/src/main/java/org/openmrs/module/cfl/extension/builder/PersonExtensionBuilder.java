@@ -38,7 +38,7 @@ public class PersonExtensionBuilder extends ExtensionBuilder {
     }
 
     public List<Extension> buildVisitActions() {
-        return getContextModel().get(VISIT) == null ? new ArrayList<Extension>()
+        return getContextModel().get(VISIT) == null ? new ArrayList<>()
                 : sortedExtensions(VISIT_ACTIONS);
     }
 

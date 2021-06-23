@@ -47,7 +47,7 @@ public final class SystemStatusResponseBodyBuilder {
         }
 
         final List<SystemStatusResponseBodyWithMessages.Message> messages =
-                new ArrayList<SystemStatusResponseBodyWithMessages.Message>();
+                new ArrayList<>();
 
         for (final Map.Entry<String, MonitoredComponentStatusData> componentsStatusEntry : allMonitoredStatusData
                 .getComponentsStatus().entrySet()) {

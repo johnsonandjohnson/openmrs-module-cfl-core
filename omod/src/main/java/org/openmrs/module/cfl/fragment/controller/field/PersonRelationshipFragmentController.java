@@ -144,7 +144,7 @@ public class PersonRelationshipFragmentController {
      * @return - list of types
      */
     private List<RelationshipType> getRelationshipTypes() {
-        List<RelationshipType> result = new ArrayList<RelationshipType>();
+        List<RelationshipType> result = new ArrayList<>();
         String config = getPossibleRelationshipTypesGP();
         if (StringUtils.isNotBlank(config)) {
             for (String type : config.split(COMMA)) {
@@ -162,7 +162,7 @@ public class PersonRelationshipFragmentController {
      * @return - map of relationship types names and uuids
      */
     private Map<String, String> sortRelationshipNamesAlphabetically(List<RelationshipType> relationshipTypes) {
-        TreeMap<String, String> relationshipTypesMap = new TreeMap<String, String>();
+        TreeMap<String, String> relationshipTypesMap = new TreeMap<>();
         for (RelationshipType relationshipType : relationshipTypes) {
             relationshipTypesMap.put(relationshipType.getaIsToB(), relationshipType.getUuid() + PERSON_A_SUFFIX);
             if (!relationshipType.getbIsToA().equals(relationshipType.getaIsToB())) {

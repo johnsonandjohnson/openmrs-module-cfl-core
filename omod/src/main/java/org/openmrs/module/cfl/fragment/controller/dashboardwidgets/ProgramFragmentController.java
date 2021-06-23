@@ -53,9 +53,9 @@ public class ProgramFragmentController {
 
         List<ProgramConfig> programConfigs = getProgramConfigs(configuration);
 
-        List<Map<String, Object>> programsList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> programsList = new ArrayList<>();
         for (Program program : programs) {
-            Map<String, Object> programMap = new HashMap<String, Object>();
+            Map<String, Object> programMap = new HashMap<>();
             programMap.put(NAME_ATTR_NAME, program.getName());
             for (PatientProgram patientProgram : patientPrograms) {
                 if (patientProgram.getProgram().equals(program)) {
@@ -80,7 +80,7 @@ public class ProgramFragmentController {
     private List<ProgramConfig> getProgramConfigs(FragmentConfiguration configuration) {
         List<ProgramConfig> programConfigs = new ArrayList<ProgramConfig>();
         Gson gson = new Gson();
-        String jsonArrayString = configuration.get(PROGRAM_MAP_LIST).toString();
+        String jsonArrayString = configuration.get(PROGRAM_MAP_LIST).toString().replaceAll("\\s", "");
         JsonArray jsonArray = new JsonParser().parse(jsonArrayString).getAsJsonArray();
         for (JsonElement jsonElement : jsonArray) {
             programConfigs.add(gson.fromJson(jsonElement.getAsJsonObject().toString(), ProgramConfig.class));
@@ -107,7 +107,7 @@ public class ProgramFragmentController {
     private ProgramConfig findProgramConfigByName(List<ProgramConfig> configs, String configName) {
         ProgramConfig programConfig = null;
         for (ProgramConfig config : configs) {
-            if (StringUtils.equalsIgnoreCase(config.getName(), configName)) {
+            if (StringUtils.equalsIgnoreCase(config.getName(), configName.replaceAll("\\s", ""))) {
                 programConfig = config;
                 break;
             }

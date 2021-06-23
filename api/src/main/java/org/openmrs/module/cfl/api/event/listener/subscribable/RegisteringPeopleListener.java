@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class RegisteringPeopleListener extends PeopleActionListener {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisteringPeopleListener.class);
 
     private WelcomeService welcomeService;
@@ -38,40 +37,14 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
     @Override
     public void performAction(Message message) {
-        LOGGER.info("RegisteringPeopleListener triggered");
-        Person person = extractPerson(message);
-        if (person != null) {
-            welcomeService.sendWelcomeMessages(person);
-            if (getConfigService().isVaccinationInfoIsEnabled()) {
-                createFirstVisit(person, getConfigService().getVaccinationProgram(person));
-                visitReminderService.create(person);
-            }
+        final Person person = extractPerson(message);
+
+        safeSendWelcomeMessages(person);
+
+        if (getConfigService().isVaccinationInfoIsEnabled()) {
+            createFirstVisit(person, getConfigService().getVaccinationProgram(person));
+            visitReminderService.create(person);
         }
-    }
-
-    private void createFirstVisit(Person person, String vaccinationProgram) {
-        CountrySetting countrySetting = CountrySettingUtil.getCountrySettingForPatient(person);
-        if (countrySetting.isShouldCreateFirstVisit()) {
-            Randomization randomization = getConfigService().getRandomizationGlobalProperty();
-            Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
-            Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
-            VisitInformation visitInformation = vaccination.getVisits().get(0);
-            Visit visit = VisitUtil.createVisitResource(patient, DateUtil.now(), visitInformation);
-            PersonAttribute locationAttribute = patient.getPerson()
-                    .getAttribute(CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);
-            if (null != locationAttribute) {
-                visit.setLocation(Context.getLocationService().getLocationByUuid(locationAttribute.getValue()));
-            } else {
-                visit.setLocation(patient.getPatientIdentifier().getLocation());
-            }
-
-            Context.getVisitService().saveVisit(visit);
-        }
-
-    }
-
-    private ConfigService getConfigService() {
-        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 
     public void setWelcomeService(WelcomeService welcomeService) {
@@ -80,5 +53,45 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
     public void setVisitReminderService(VisitReminderService visitReminderService) {
         this.visitReminderService = visitReminderService;
+    }
+
+    private void safeSendWelcomeMessages(Person person) {
+        try {
+            welcomeService.sendWelcomeMessages(person);
+        } catch (Exception e) {
+            LOGGER.error("Failed to send Welcome Message after creation of the Person with UUID: " + person.getUuid(), e);
+        }
+    }
+
+    private void createFirstVisit(Person person, String vaccinationProgram) {
+        final CountrySetting countrySetting = CountrySettingUtil.getCountrySettingForPatient(person);
+
+        if (countrySetting.isShouldCreateFirstVisit()) {
+            final VisitInformation firstVisitInfo = getFirstVisitInfo(vaccinationProgram);
+
+            final Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
+            final PersonAttribute locationAttribute =
+                    patient.getAttribute(CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);
+
+            final Visit firstVisit = VisitUtil.createVisitResource(patient, DateUtil.now(), firstVisitInfo);
+
+            if (locationAttribute != null) {
+                firstVisit.setLocation(Context.getLocationService().getLocationByUuid(locationAttribute.getValue()));
+            } else {
+                firstVisit.setLocation(patient.getPatientIdentifier().getLocation());
+            }
+
+            Context.getVisitService().saveVisit(firstVisit);
+        }
+    }
+
+    private VisitInformation getFirstVisitInfo(String vaccinationProgram) {
+        Randomization randomization = getConfigService().getRandomizationGlobalProperty();
+        Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
+        return vaccination.getVisits().get(0);
+    }
+
+    private ConfigService getConfigService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 }

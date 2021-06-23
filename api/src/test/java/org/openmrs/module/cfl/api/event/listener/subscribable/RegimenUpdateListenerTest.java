@@ -34,6 +34,7 @@ import org.openmrs.module.cfl.api.helper.PersonHelper;
 import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.IrisVisitService;
+import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.anyString;
@@ -52,13 +54,14 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Context.class })
 public class RegimenUpdateListenerTest {
 
     @Mock
-    private IrisVisitService irisVisitService;
+    private VaccinationService vaccinationService;
 
     @Mock
     private PersonService personService;
@@ -102,7 +105,7 @@ public class RegimenUpdateListenerTest {
             fail("should throw CflRuntimeException: Event message has to be MapMessage");
         } catch (CflRuntimeException e) {
             //Then
-            verifyZeroInteractions(irisVisitService);
+            verifyZeroInteractions(vaccinationService);
         }
     }
 
@@ -134,8 +137,10 @@ public class RegimenUpdateListenerTest {
         when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(Collections.emptyList());
         regimenUpdateListener.performAction(message);
         verify(personService, times(1)).getPersonByUuid(anyString());
-        verify(patientService, times(1)).getPatientByUuid(anyString());
-        verify(visitService,times(1)).getActiveVisitsByPatient(any(Patient.class));
+        verifyStatic(times(1));
+        Context.getPatientService();
+        verifyStatic(times(1));
+        Context.getVisitService();
     }
 
     @Test
@@ -174,6 +179,7 @@ public class RegimenUpdateListenerTest {
         when(configService.getVaccinationProgram(any(Person.class))).thenReturn("COVID VACCINE");
         List<VisitAttributeType> visitAttributeTypeList = VisitHelper.createVisitAttrTypes();
         when(visitService.getAllVisitAttributeTypes()).thenReturn(visitAttributeTypeList);
+        when(Context.getService(VaccinationService.class)).thenReturn(vaccinationService);
         regimenUpdateListener.performAction(message);
         verify(personService, times(1)).getPersonByUuid(anyString());
         verify(patientService, times(1)).getPatientByUuid(anyString());
@@ -204,6 +210,7 @@ public class RegimenUpdateListenerTest {
         when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY)).thenReturn("OCCURRED");
         List<VisitAttributeType> visitAttributeTypeList = VisitHelper.createVisitAttrTypes();
         when(visitService.getAllVisitAttributeTypes()).thenReturn(visitAttributeTypeList);
+        when(Context.getService(VaccinationService.class)).thenReturn(vaccinationService);
         regimenUpdateListener.performAction(message);
         verify(personService, times(1)).getPersonByUuid(anyString());
         verify(patientService, times(1)).getPatientByUuid(anyString());

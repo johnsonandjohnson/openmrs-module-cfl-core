@@ -122,7 +122,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
                     RELATIONSHIPS_PROPERTY);
         }
 
-        final List<Relationship> patientRelationships = new ArrayList<Relationship>();
+        final List<Relationship> patientRelationships = new ArrayList<>();
 
         for (final Object relationshipRaw : (Iterable) relationshipsRawValue.getValue()) {
             if (!(relationshipRaw instanceof Map)) {

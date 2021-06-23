@@ -54,8 +54,8 @@ public class DiagnosesWidgetFragmentController {
         recent.set(Calendar.DATE, -days);
 
         List<Diagnosis> recentDiagnoses = patientWrapper.getUniqueDiagnosesSince(recent.getTime());
-        List<Diagnosis> primaryDiagnosis = new ArrayList<Diagnosis>();
-        List<Diagnosis> secondaryDiagnosis = new ArrayList<Diagnosis>();
+        List<Diagnosis> primaryDiagnosis = new ArrayList<>();
+        List<Diagnosis> secondaryDiagnosis = new ArrayList<>();
 
         for (Diagnosis diagnosis : recentDiagnoses) {
             if (diagnosis.getOrder().name().equalsIgnoreCase(PRIMARY)) {
