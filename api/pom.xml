@@ -3,10 +3,11 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>cfl</artifactId>
-		<version>1.1.2-1</version>
+		<version>1.1.2-2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>cfl-api</artifactId>
+  <version>1.1.2</version>
 	<packaging>jar</packaging>
 	<name>CFL Module API</name>
 	<description>API project for CFL Module</description>
@@ -57,8 +58,4 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
-
-  <scm>
-    <tag>1.1.2-1</tag>
-  </scm>
 </project>
