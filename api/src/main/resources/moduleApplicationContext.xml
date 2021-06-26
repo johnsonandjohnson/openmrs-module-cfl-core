@@ -89,10 +89,9 @@
     </bean>
 
     <bean id="cfl.regimenUpdateListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegimenUpdateListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegimenAttributeListener"
           init-method="init"
-          destroy-method="close"
-          parent="cfl.peopleActionListener">
+          destroy-method="close">
     </bean>
 
     <bean id="cfl.visitActionListener"

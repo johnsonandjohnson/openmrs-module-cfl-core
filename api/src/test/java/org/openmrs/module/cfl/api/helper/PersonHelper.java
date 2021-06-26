@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public final class PersonHelper {
 
@@ -39,6 +40,14 @@ public final class PersonHelper {
         Person person = new Person();
         person.setUuid(Constant.PERSON_UUID);
         person.setDateChanged(new Date());
+        PersonAttributeType personAttributeType = new PersonAttributeType();
+        personAttributeType.setUuid(UUID.randomUUID().toString());
+        personAttributeType.setName("Vaccination program");
+        PersonAttribute attribute = new PersonAttribute();
+        attribute.setValue("Covid 1D vaccine");
+        attribute.setPerson(person);
+        attribute.setAttributeType(personAttributeType);
+        person.addAttribute(attribute);
         return person;
     }
 

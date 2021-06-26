@@ -24,9 +24,16 @@ public interface VaccinationService {
 
     /**
      * voids all the pending scheduled visits of the patient
+     *
      * @param patient - the patient whose visits are to be voided
      */
     void voidFutureVisits(Patient patient);
 
+    /**
+     * void the scheduled visits and create future visits
+     *
+     * @param latestDosingVisit the latest occurred dosing visit
+     * @param patient the patient whose visits are to be rescheduled for regimen change
+     */
     void rescheduleVisits(Visit latestDosingVisit, Patient patient);
 }

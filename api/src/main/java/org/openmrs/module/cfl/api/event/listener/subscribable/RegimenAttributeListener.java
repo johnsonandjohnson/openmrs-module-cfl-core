@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
@@ -17,13 +18,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.openmrs.module.cfl.CFLConstants.DOSING_VISIT_TYPE_NAME;
+import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME;
 
 /**
- * Listener class for Regimen update. This class listens to the patient update event
+ * Listener class for Regimen update
  */
-public class RegimenUpdateListener extends PeopleActionListener {
+public class RegimenAttributeListener extends PersonAttributeActionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegimenUpdateListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegimenAttributeListener.class);
 
     @Override
     public List<String> subscribeToActions() {
@@ -32,16 +34,17 @@ public class RegimenUpdateListener extends PeopleActionListener {
 
     @Override
     public void performAction(Message message) {
-        Person person = extractPerson(message);
-        if (null != person && null != person.getDateChanged()) {
+        LOGGER.debug("Regimen Attribute Action listener triggered");
+        PersonAttribute personAttribute = extractPersonAttribute(message);
+        if (VACCINATION_PROGRAM_ATTRIBUTE_NAME.equals(personAttribute.getAttributeType().getName())) {
+            Person person = personAttribute.getPerson();
             String newRegimen = getConfigService().getVaccinationProgram(person);
             LOGGER.info("Regime updated for participant : {} to : {} ", person.getPersonId(), newRegimen);
             Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
             List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
             if (null != visits && !visits.isEmpty()) {
                 Visit visit = getLastOccurredDosingVisit(visits);
-                Context
-                        .getService(VaccinationService.class).rescheduleVisits(visit, patient);
+                Context.getService(VaccinationService.class).rescheduleVisits(visit, patient);
             }
         }
     }

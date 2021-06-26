@@ -18,6 +18,7 @@ import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +34,7 @@ public class VaccinationServiceImpl implements VaccinationService {
         final int totalNumberOfDoses = vaccination.getNumberOfDose();
 
         final CountrySetting countrySetting = CountrySettingUtil.
-                                                                        getCountrySettingForPatient(
-                                                                                occurredVisit.getPatient().getPerson());
+                getCountrySettingForPatient(occurredVisit.getPatient().getPerson());
 
         final Visit lastDosingVisit = VisitUtil.getLastDosingVisit(occurredVisit.getPatient(), vaccination);
 
@@ -51,8 +51,8 @@ public class VaccinationServiceImpl implements VaccinationService {
         }
     }
 
-    @Override
     @Transactional
+    @Override
     public void voidFutureVisits(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
 
@@ -63,8 +63,8 @@ public class VaccinationServiceImpl implements VaccinationService {
         }
     }
 
-    @Override
     @Transactional
+    @Override
     public void rescheduleVisits(Visit latestDosingVisit, Patient patient) {
         voidFutureVisits(patient);
         createFutureVisits(latestDosingVisit, latestDosingVisit.getStartDatetime());
@@ -85,8 +85,8 @@ public class VaccinationServiceImpl implements VaccinationService {
     private void prepareDataAndSaveVisit(Patient patient, Date occurrenceDateTime, VisitInformation futureVisit) {
         final Visit visit = VisitUtil.createVisitResource(patient, occurrenceDateTime, futureVisit);
 
-        final PersonAttribute patientLocationAttribute = patient.getPerson().getAttribute(
-                CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);
+        final PersonAttribute patientLocationAttribute =
+                patient.getPerson().getAttribute(CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);
 
         if (patientLocationAttribute != null) {
             visit.setLocation(Context.getLocationService().getLocationByUuid(patientLocationAttribute.getValue()));
@@ -110,14 +110,19 @@ public class VaccinationServiceImpl implements VaccinationService {
             return vaccination.findFutureVisits(lastDosingVisitType, 1);
         } else {
             return vaccination.findFutureVisits(lastDosingVisitType,
-                                                getNumberOfVisits(lastDosingVisit.getPatient(), lastDosingVisitType));
+                    getNumberOfVisits(lastDosingVisit.getPatient(), lastDosingVisitType));
         }
     }
 
     private int getNumberOfVisits(Patient patient, String visitType) {
-        return (int) Context.getVisitService().getVisitsByPatient(patient).stream().map(Visit::getVisitType)
-                            .map(BaseOpenmrsMetadata::getName)
-                            .filter(visitTypeName -> StringUtils.equalsIgnoreCase(visitTypeName, visitType)).count();
+        return (int) Context
+                .getVisitService()
+                .getVisitsByPatient(patient)
+                .stream()
+                .map(Visit::getVisitType)
+                .map(BaseOpenmrsMetadata::getName)
+                .filter(visitTypeName -> StringUtils.equalsIgnoreCase(visitTypeName, visitType))
+                .count();
     }
 
     private ConfigService getConfigService() {
