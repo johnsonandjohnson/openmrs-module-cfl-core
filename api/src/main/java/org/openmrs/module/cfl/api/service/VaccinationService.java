@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service;
 
+import org.openmrs.Patient;
 import org.openmrs.Visit;
 
 import java.util.Date;
@@ -20,4 +21,19 @@ public interface VaccinationService {
      * @param occurrenceDateTime the date time when the {@code visit} has occurred, not null
      */
     void createFutureVisits(Visit updatedVisit, Date occurrenceDateTime);
+
+    /**
+     * voids all the pending scheduled visits of the patient
+     *
+     * @param patient - the patient whose visits are to be voided
+     */
+    void voidFutureVisits(Patient patient);
+
+    /**
+     * void the scheduled visits and create future visits
+     *
+     * @param latestDosingVisit the latest occurred dosing visit
+     * @param patient the patient whose visits are to be rescheduled for regimen change
+     */
+    void rescheduleVisits(Visit latestDosingVisit, Patient patient);
 }

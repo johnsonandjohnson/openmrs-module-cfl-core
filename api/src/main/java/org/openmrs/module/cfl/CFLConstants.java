@@ -131,6 +131,7 @@ public final class CFLConstants {
     public static final String VACCINATION_PROGRAM_DESCRIPTION = "Stores information about vaccination programs";
 
     public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
+    public static final String DOSING_VISIT_TYPE_NAME = "Dosing";
 
     public static final String VISIT_STATUS_ATTRIBUTE_TYPE_UUID = "70ca70ac-53fd-49e4-9abe-663d4785fe62";
     public static final String VISIT_STATUS_ATTRIBUTE_TYPE_NAME = "Visit Status";

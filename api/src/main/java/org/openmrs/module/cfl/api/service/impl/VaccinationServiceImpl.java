@@ -25,6 +25,8 @@ import java.util.List;
 
 public class VaccinationServiceImpl implements VaccinationService {
 
+    private static final String REGIMEN_CHANGE = "REGIMEN CHANGE";
+
     @Transactional
     @Override
     public void createFutureVisits(Visit occurredVisit, Date occurrenceDateTime) {
@@ -47,6 +49,25 @@ public class VaccinationServiceImpl implements VaccinationService {
                 prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public void voidFutureVisits(Patient patient) {
+        List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
+
+        for (Visit visit : visits) {
+            if (CFLConstants.SCHEDULED_VISIT_STATUS.equals(VisitUtil.getVisitStatus(visit))) {
+                Context.getVisitService().voidVisit(visit, REGIMEN_CHANGE);
+            }
+        }
+    }
+
+    @Transactional
+    @Override
+    public void rescheduleVisits(Visit latestDosingVisit, Patient patient) {
+        voidFutureVisits(patient);
+        createFutureVisits(latestDosingVisit, latestDosingVisit.getStartDatetime());
     }
 
     private Vaccination getVaccinationForPatient(Patient patient) {
