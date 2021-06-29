@@ -295,6 +295,7 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gsonVersion}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
