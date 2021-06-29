@@ -2,14 +2,10 @@ package org.openmrs.module.cfl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.ConceptAnswer;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.User;
-import org.openmrs.api.AdministrationService;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
@@ -17,26 +13,17 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
-import org.openmrs.module.Module;
 import org.openmrs.module.ModuleException;
-import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
-import org.openmrs.module.cfl.api.constant.RolePrivilegeConstants;
 import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
 import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseActionListener;
-import org.openmrs.module.cfl.api.util.AppFrameworkConstants;
-import org.openmrs.module.cfl.api.util.DataCleanup;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
-import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
-import org.openmrs.module.patientflags.Tag;
-import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
@@ -44,6 +31,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static org.openmrs.api.context.Context.getRegisteredComponent;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -61,32 +50,24 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         try {
             attachProgramsManagingPrivilegesToSuperUser();
             ensureCorrectRolesAreAssignedToAdmin();
-            fixRiskFactorForHIVConcepts();
-            setupHtmlForms();
+
+            // These 3 are Global Properties
             createPersonOverviewConfig();
             createGlobalSettings();
-            createPersonAttributeTypes();
             createHtmlFormProperties();
-            createVisitNoteUrlProperties();
-            configureDistribution();
-            installMetadataPackages();
+
             CflEventListenerFactory.registerEventListeners();
-            deployMetadataPackages();
-            ensureCFLTagRoleConfigurationIncludesDoctorRole();
-            DataCleanup.cleanUpUnnecessaryData();
+
+            createVisitNoteUrlProperties();
+
+            createPersonAttributeTypes();
+
+            setupHtmlForms();
+
+            installMetadataBundles();
         } catch (Exception e) {
-            Module mod = ModuleFactory.getModuleById(CFLConstants.MODULE_ID);
-            ModuleFactory.stopModule(mod);
             throw new ModuleException("failed to setup the required modules", e);
         }
-    }
-
-    /**
-     * @see #shutdown()
-     */
-    public void shutdown() {
-        log.info("Shutdown CFL Module");
-        CflEventListenerFactory.unRegisterEventListeners();
     }
 
     /**
@@ -107,8 +88,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             eventListener.setDaemonToken(token);
         }
 
-        List<BaseActionListener> actionListeners = Context.getRegisteredComponents(
-                BaseActionListener.class);
+        List<BaseActionListener> actionListeners = Context.getRegisteredComponents(BaseActionListener.class);
         for (BaseActionListener actionListener : actionListeners) {
             actionListener.setDaemonToken(token);
         }
@@ -131,59 +111,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         adminUser.addRole(fullPrivilegeRole);
     }
 
-    private void ensureCFLTagRoleConfigurationIncludesDoctorRole() {
-        final FlagService flagService = Context.getService(FlagService.class);
-
-        final Tag cflTag = flagService.getTagByUuid(CFLConstants.CFL_TAG_UUID);
-        final Role doctorRole = Context.getUserService().getRole(RolePrivilegeConstants.DOCTOR_PRIVILEGE_LEVEL);
-
-        for (final Role cflTagRole : cflTag.getRoles()) {
-            if (cflTagRole.equals(doctorRole)) {
-                // The configuration is ok
-                return;
-            }
-        }
-
-        // The configuration is not ok
-        cflTag.getRoles().add(doctorRole);
-        flagService.saveTag(cflTag);
-    }
-
-    /**
-     * Fix 'Unknown' and 'Other' Answers which are added by liquibase migration before the relevant Concepts are present in
-     * the system.
-     */
-    private void fixRiskFactorForHIVConcepts() {
-        final String riskFactorConceptUuid = "f7c6f4f7-89d2-48f9-8844-c1a6564231c0";
-        fixMissingConceptAnswer("Risk factor for HIV", riskFactorConceptUuid, "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-        final String highRiskGroupsConceptUuid = "9994a4aa-981b-4605-8f4f-23e02e64106e";
-        fixMissingConceptAnswer("High Risk Groups", highRiskGroupsConceptUuid, "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    }
-
-    private void fixMissingConceptAnswer(final String conceptName, final String conceptUuid,
-                                         final String missingAnswerUuid) {
-        final ConceptService conceptService = Context.getConceptService();
-        final Concept concept = conceptService.getConceptByUuid(conceptUuid);
-
-        if (concept == null) {
-            log.error(new StringBuilder("Concept '")
-                    .append(conceptName)
-                    .append("' for which to fix an Answer was not found by UUID: ")
-                    .append(conceptUuid)
-                    .append(". System may be unstable!")
-                    .toString());
-        } else {
-            // We expect only one Answer to be missing
-            for (final ConceptAnswer conceptAnswer : concept.getAnswers()) {
-                if (conceptAnswer.getAnswerConcept() == null) {
-                    conceptAnswer.setAnswerConcept(conceptService.getConceptByUuid(missingAnswerUuid));
-                    return;
-                }
-            }
-        }
-    }
-
     private void createPersonAttributeTypes() {
         createPersonIdentifierAttributeType();
     }
@@ -202,9 +129,19 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void createPersonAttributeTypeIfNotExists(PersonAttributeType attributeType) {
-        PersonService personService = Context.getPersonService();
+        final PersonService personService = Context.getPersonService();
+
         PersonAttributeType actual = personService.getPersonAttributeTypeByUuid(attributeType.getUuid());
-        if (actual == null) {
+        if (actual != null) {
+            return;
+        }
+
+        actual = personService.getPersonAttributeTypeByName(attributeType.getName());
+
+        if (actual != null) {
+            log.warn("The Person Attribute Type '" + attributeType.getName() + "' already exists, but have different " +
+                    "UUID then expected by CFL (has: " + actual.getUuid() + ", expected: " + attributeType.getUuid() + ")!");
+        } else {
             personService.savePersonAttributeType(attributeType);
         }
     }
@@ -212,10 +149,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     private void createGlobalSettings() {
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
                 CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE, CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
-                CFLConstants.LOCATION_ATTRIBUTE_TYPE_UUID);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.DISABLED_CONTROL_KEY,
-                CFLConstants.DISABLED_CONTROL_DEFAULT_VALUE, CFLConstants.DISABLED_CONTROL_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
@@ -258,56 +191,11 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
                 CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION);
         GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_LISTENER_KEY,
-                CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME,
-                CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
+                CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME, CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
     }
 
     private void createVisitNoteUrlProperties() {
         GlobalPropertyUtils.createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
-    }
-
-    private void configureDistribution() {
-        AdministrationService administrationService = Context.getService(AdministrationService.class);
-        AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
-        disableUnusedExtensions(appFrameworkService);
-        if (CFLConstants.TRUE.equalsIgnoreCase(administrationService.getGlobalProperty(CFLConstants.DISABLED_CONTROL_KEY))) {
-            enableAdditionalConfiguration(appFrameworkService);
-        } else {
-            enableDefaultConfiguration(appFrameworkService);
-        }
-    }
-
-    private void disableUnusedExtensions(AppFrameworkService appFrameworkService) {
-        disableExtensions(appFrameworkService,
-                Collections.singletonList(AppFrameworkConstants.REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT));
-    }
-
-    private void enableAdditionalConfiguration(AppFrameworkService appFrameworkService) {
-        enableApps(appFrameworkService, AppFrameworkConstants.CFL_ADDITIONAL_MODIFICATION_APP_IDS);
-        disableApps(appFrameworkService, AppFrameworkConstants.APP_IDS);
-        disableExtensions(appFrameworkService, AppFrameworkConstants.EXTENSION_IDS);
-    }
-
-    private void enableDefaultConfiguration(AppFrameworkService appFrameworkService) {
-        disableApps(appFrameworkService, AppFrameworkConstants.CFL_ADDITIONAL_MODIFICATION_APP_IDS);
-    }
-
-    private void enableApps(AppFrameworkService service, List<String> appIds) {
-        for (String app : appIds) {
-            service.enableApp(app);
-        }
-    }
-
-    private void disableApps(AppFrameworkService service, List<String> appIds) {
-        for (String app : appIds) {
-            service.disableApp(app);
-        }
-    }
-
-    private void disableExtensions(AppFrameworkService service, List<String> extensions) {
-        for (String ext : extensions) {
-            service.disableExtension(ext);
-        }
     }
 
     private void setupHtmlForms() throws IOException {
@@ -322,14 +210,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
         for (String htmlform : htmlforms) {
             HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
-        }
-    }
-
-    private void installMetadataPackages() {
-        try {
-            MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
-        } catch (Exception e) {
-            throw new ModuleException("Failed to load Metadata sharing packages", e);
         }
     }
 
@@ -357,7 +237,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             Privilege privilege = userService.getPrivilege(privilegeName);
             if (privilege == null) {
                 log.warn(String.format(
-                        "Cannot find the privilege %s, " + "so it will not be attached to the role %s at the startup",
+                        "Cannot find the privilege %s, so it will not be attached to the role %s at the startup",
                         privilegeName, role.getName()));
             } else if (!privileges.contains(privilege)) {
                 log.info(String.format("Attached the privilege %s to the role %s", privilege.getName(), role.getName()));
@@ -370,9 +250,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         }
     }
 
-    private void deployMetadataPackages() {
-        MetadataDeployService service = Context.getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        MetadataBundle rolesAndPrivileges = Context.getRegisteredComponent("cflRolePrivilegeProfiles", MetadataBundle.class);
-        service.installBundles(Collections.singletonList(rolesAndPrivileges));
+    private void installMetadataBundles() {
+        final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
+        final MetadataBundle disableCFLAppsBundle = getRegisteredComponent("cfl.DisableCFLAppsBundle", MetadataBundle.class);
+        service.installBundles(Collections.singletonList(disableCFLAppsBundle));
     }
 }

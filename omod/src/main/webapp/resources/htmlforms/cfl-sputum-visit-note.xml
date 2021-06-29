@@ -259,5 +259,5 @@
             <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
         </div>
     </ifMode>
-    <postSubmissionAction class="org.openmrs.module.visits.api.htmlformentry.action.VisitStatusUpdateAction"/>
+    <postSubmissionAction class="org.openmrs.module.cfl.api.htmlformentry.action.VisitStatusUpdateActionAdapter"/>
 </htmlform>

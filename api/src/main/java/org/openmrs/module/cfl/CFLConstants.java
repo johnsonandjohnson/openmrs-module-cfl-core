@@ -26,7 +26,7 @@ public final class CFLConstants {
      * */
     public static final String PRIVILEGE_LEVEL_FULL_ROLE_NAME = "Privilege Level: Full";
 
-    public static final String ENROLL_IN_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.enrollInProgram";
+    public static final String ENROLL_IN_PROGRAM_PRIVILEGE_NAME = "Task: core`app`s.enrollInProgram";
     public static final String EDIT_PATIENT_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.editPatientProgram";
     public static final String DELETE_PATIENT_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.deletePatientProgram";
     public static final List<String> PROGRAM_MANAGING_PRIVILEGES_NAMES = Collections.unmodifiableList(Arrays.asList(
@@ -35,27 +35,18 @@ public final class CFLConstants {
     public static final String ACTOR_TYPES_KEY = "messages.actor.types";
 
     public static final String PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME = "cfl.redirectToPersonDashboard";
-    public static final String PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE = "true";
+    public static final String PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE = "false";
     public static final String PATIENT_DASHBOARD_REDIRECT_DESCRIPTION = "true/false flag that decides if CFL module can" +
-            " override the patient's coreapps dashboard by redirecting to CFLm person dashboard. Default value: true";
+            " override the patient's coreapps dashboard by redirecting to CFLm person dashboard. Default value: false " +
+            "(true in CfL-only distribution)";
 
     public static final String LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME = "locationbasedaccess.locationAttributeUuid";
-    public static final String LOCATION_ATTRIBUTE_TYPE_UUID = "bfdf8ed0-87e3-437e-897d-81434393a233";
 
     public static final String TELEPHONE_ATTRIBUTE_NAME = "Telephone Number";
 
     public static final String UUID_KEY = "uuid";
 
-    public static final String DISABLED_CONTROL_KEY = "cfl.shouldDisableAppsAndExtensions";
-    public static final String DISABLED_CONTROL_DEFAULT_VALUE = "true";
-    public static final String DISABLED_CONTROL_DESCRIPTION = "Used to determine if the module should disable "
-            + "specified apps and extensions on module startup. Possible values: true/false. Note: the server need to "
-            + "be restart after change this GP and in order to revert those changes you need to manually clean the "
-            + "appframework_component_state table";
-
     public static final String CAREGIVER_RELATIONSHIP_UUID = "acec590b-825e-45d2-876a-0028f174903d";
-
-    public static final String TRUE = "true";
 
     public static final String DATETIME_WITH_ZONE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
@@ -187,37 +178,6 @@ public final class CFLConstants {
     public static final String CALL_CHANNEL_TYPE = "Call";
 
     public static final String COMMA_SEPARATOR = ",";
-
-    public static final String USERS_TO_REMOVE = "clerk,nurse,doctor,sysadmin,scheduler";
-
-    public static final String PATIENT_IDENTIFIER_TYPES_TO_REMOVE = "OpenMRS Identification Number," +
-            "Old Identification Number,OpenEMPI ID";
-
-    public static final String RELATIONSHIP_TYPES_UUIDS_TO_REMOVE = "8d919b58-c2cc-11de-8d13-0010c6dffd0f," +
-            "8d91a01c-c2cc-11de-8d13-0010c6dffd0f,8d91a210-c2cc-11de-8d13-0010c6dffd0f," +
-            "8d91a3dc-c2cc-11de-8d13-0010c6dffd0f,2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc";
-
-    public static final String PERSON_ATTRIBUTE_TYPES_TO_REMOVE = "Race,Birthplace,Citizenship,Mother's Name," +
-            "Civil Status,Health District,Health Center,Test Patient";
-
-    public static final String PROVIDERS_TO_REMOVE = "clerk,nurse,doctor";
-
-    public static final String LOCATION_UUIDS_TO_REMOVE = "7f65d926-57d6-4402-ae10-a5b3bcbf7986," +
-            "7fdfa2cb-bc95-405a-88c6-32b7673c0453,2131aff8-2e2a-480a-b7ab-4ac53250262b," +
-            "6351fcf4-e311-4a19-90f9-35667d99a8af,b1a8b05e-3542-4037-bbd3-998ee9c40574," +
-            "58c57d25-8d39-41ab-8422-108a0c277d98,aff27d58-a15c-49a6-9beb-d30dcfc0c66e";
-
-    public static final String UNKNOWN_LOCATION_UUID = "8d6c993e-c2cc-11de-8d13-0010c6dffd0f";
-
-    public static final String LOCATION_UUID_PROPERTY_NAME = "locationUuid";
-
-    public static final String CFL_CLINIC_LOCATION_NAME = "CFL Clinic";
-
-    public static final String LOGIN_LOCATION_TAG_NAME = "Login Location";
-
-    public static final String VISIT_LOCATION_TAG_NAME = "Visit Location";
-
-    public static final String CFL_DISTRO_BOOTSTRAPPED_KEY = "cfl.distro.bootstrapped";
 
     /**
      * The UUID of the CFL Tag (the common tag for Patient Flags in CfL module).

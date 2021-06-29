@@ -59,4 +59,4 @@ initCall.goToReturnUrl = function() {
 
 initCall.enableConfirmButton = function() {
     jq('#init-call-dialog' + ' .icon-spin').css('display', 'inline-block').parent().addClass('enabled');
-}
+};
