@@ -6,7 +6,7 @@
     <id>${project.parent.artifactId}</id>
     <name>${project.parent.name}</name>
     <version>${project.parent.version}</version>
-    <package>${MODULE_PACKAGE}</package>
+    <package>org.openmrs.module.cfldistribution</package>
     <author>Soldevelo</author>
     <description>
         ${project.parent.description}
@@ -18,6 +18,16 @@
     <!-- /Base Module Properties -->
 
     <require_version>${openmrs.platform.version}</require_version>
+
+    <require_modules>
+        <require_module version="${cflVersion}">
+            org.openmrs.module.cfl
+        </require_module>
+    </require_modules>
+
+    <aware_of_modules>
+        <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+    </aware_of_modules>
 
     <!-- Extensions -->
     <!--    <extension>-->

@@ -1,0 +1,54 @@
+package org.openmrs.module.cfldistribution.api.activator.impl;
+
+import org.apache.commons.logging.Log;
+import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
+
+/**
+ * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with annotated beans.
+ */
+public class FixRiskFactorForHIVConceptsActivatorStep implements ModuleActivatorStep {
+    private Log log;
+
+    @Override
+    public int getOrder() {
+        return 10;
+    }
+
+    @Override
+    public void startup(Log log) {
+        this.log = log;
+
+        final String riskFactorConceptUuid = "f7c6f4f7-89d2-48f9-8844-c1a6564231c0";
+        fixMissingConceptAnswer("Risk factor for HIV", riskFactorConceptUuid, "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        final String highRiskGroupsConceptUuid = "9994a4aa-981b-4605-8f4f-23e02e64106e";
+        fixMissingConceptAnswer("High Risk Groups", highRiskGroupsConceptUuid, "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    }
+
+    private void fixMissingConceptAnswer(final String conceptName, final String conceptUuid,
+                                         final String missingAnswerUuid) {
+        final ConceptService conceptService = Context.getConceptService();
+        final Concept concept = conceptService.getConceptByUuid(conceptUuid);
+
+        if (concept == null) {
+            log.error(new StringBuilder("Concept '")
+                    .append(conceptName)
+                    .append("' for which to fix an Answer was not found by UUID: ")
+                    .append(conceptUuid)
+                    .append(". System may be unstable!")
+                    .toString());
+        } else {
+            // We expect only one Answer to be missing
+            for (final ConceptAnswer conceptAnswer : concept.getAnswers()) {
+                if (conceptAnswer.getAnswerConcept() == null) {
+                    conceptAnswer.setAnswerConcept(conceptService.getConceptByUuid(missingAnswerUuid));
+                    return;
+                }
+            }
+        }
+    }
+}
