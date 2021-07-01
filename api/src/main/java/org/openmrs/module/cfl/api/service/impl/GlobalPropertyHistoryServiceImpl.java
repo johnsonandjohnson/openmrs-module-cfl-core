@@ -21,14 +21,12 @@ public class GlobalPropertyHistoryServiceImpl implements GlobalPropertyHistorySe
 
     @Transactional(readOnly = true)
     @Override
-    public String getLastValueOfGlobalProperty(String gpName) {
+    public GlobalPropertyHistory getLastValueOfGlobalProperty(String gpName) {
         Criteria criteria = getSession().createCriteria(GlobalPropertyHistory.class);
         criteria.add(Restrictions.eq(PROPERTY_COLUMN_NAME, gpName));
         criteria.addOrder(Order.desc(ID_COLUMN_NAME));
         criteria.setMaxResults(ONE);
-        GlobalPropertyHistory globalPropertyHistory = (GlobalPropertyHistory) criteria.uniqueResult();
-
-        return globalPropertyHistory.getPropertyValue();
+        return (GlobalPropertyHistory) criteria.uniqueResult();
     }
 
     public void setSessionFactory(DbSessionFactory sessionFactory) {

@@ -339,6 +339,16 @@ public final class CFLConstants {
      */
     public static final String VACCINATION_VISIT_LISTENER_NAME = "UpdatingVisitListener";
 
+    public static final String CFL_PERSON_SERVICE_BEAN_NAME = "cflPersonService";
+
+    public static final String VACCINATION_SERVICE_BEAN_NAME = "cfl.vaccinationService";
+
+    public static final String GLOBAL_PROPERTY_HISTORY_SERVICE_BEAN_NAME = "cfl.globalPropertyHistoryService";
+
+    public static final String MESSAGES_SCHEDULER_SERVICE_BEAN_NAME = "messages.schedulerService";
+
+    public static final String UPDATE_REGIMEN_TASK_NAME_PREFIX = "UpdateRegimen:";
+
     private CFLConstants() {
     }
 }

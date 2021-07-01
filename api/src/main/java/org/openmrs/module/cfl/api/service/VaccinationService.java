@@ -23,17 +23,26 @@ public interface VaccinationService {
     void createFutureVisits(Visit updatedVisit, Date occurrenceDateTime);
 
     /**
-     * voids all the pending scheduled visits of the patient
+     * Voids all the pending scheduled visits of the patient
      *
      * @param patient - the patient whose visits are to be voided
      */
     void voidFutureVisits(Patient patient);
 
     /**
-     * void the scheduled visits and create future visits
+     * Voids the scheduled visits and creates future visits
      *
      * @param latestDosingVisit the latest occurred dosing visit
      * @param patient the patient whose visits are to be rescheduled for regimen change
      */
     void rescheduleVisits(Visit latestDosingVisit, Patient patient);
+
+    /**
+     * Finds vaccination programs which have been changed and related patients.
+     * Then voids the scheduled visits and recreates future visits based on those regimens changes.
+     *
+     * @param previousVaccineGPValue
+     * @param currentVaccineGPValue
+     */
+    void rescheduleVisitsBasedOnRegimenChanges(String previousVaccineGPValue, String currentVaccineGPValue);
 }
