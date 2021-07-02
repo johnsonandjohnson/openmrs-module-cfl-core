@@ -115,28 +115,33 @@ public class VaccinationServiceImpl implements VaccinationService {
 
         Map<String, Boolean> resultMap = new HashMap<>();
         for (Map.Entry<String, Map<String, Object>> entry : newValuesMap.entrySet()) {
-            if (previousValuesMap.containsKey(entry.getKey())) {
-                Map<String, Object> previousVaccinationMap = previousValuesMap.get(entry.getKey());
-                List<VisitInformation> previousVisits =
-                        (List<VisitInformation>) previousVaccinationMap.get(VISITS_FIELD_NAME);
-
+            String vaccineName = entry.getKey();
+            if (previousValuesMap.containsKey(vaccineName)) {
+                Map<String, Object> previousVaccinationMap = previousValuesMap.get(vaccineName);
                 Map<String, Object> newVaccinationMap = entry.getValue();
-                List<VisitInformation> newVisits = (List<VisitInformation>) newVaccinationMap.get(VISITS_FIELD_NAME);
-
-                resultMap.put(entry.getKey(), false);
-                boolean isNumberOfDoseChanged = isNumberOfDoseChanged(previousVaccinationMap, newVaccinationMap);
-                if (previousVisits.size() != newVisits.size() || isNumberOfDoseChanged) {
-                    resultMap.put(entry.getKey(), true);
-                }
-
-                for (int i = 0; i < newVisits.size(); i++) {
-                    if (!newVisits.get(i).equals(previousVisits.get(i))) {
-                        resultMap.put(entry.getKey(), true);
-                    }
-                }
+                resultMap.put(vaccineName, isVaccinesConfigChanged(previousVaccinationMap, newVaccinationMap));
             }
         }
         return resultMap;
+    }
+
+    private boolean isVaccinesConfigChanged(Map<String, Object> previousVaccinationMap,
+                                            Map<String, Object> newVaccinationMap) {
+        List<VisitInformation> previousVisits = (List<VisitInformation>) previousVaccinationMap.get(VISITS_FIELD_NAME);
+        List<VisitInformation> newVisits = (List<VisitInformation>) newVaccinationMap.get(VISITS_FIELD_NAME);
+        boolean isNumberOfDoseChanged = isNumberOfDoseChanged(previousVaccinationMap, newVaccinationMap);
+
+        if (previousVisits.size() != newVisits.size() || isNumberOfDoseChanged) {
+            return true;
+        }
+
+        for (int i = 0; i < newVisits.size(); i++) {
+            if (!newVisits.get(i).equals(previousVisits.get(i))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Map<String, Map<String, Object>> createVaccinationMap(String gpName) {

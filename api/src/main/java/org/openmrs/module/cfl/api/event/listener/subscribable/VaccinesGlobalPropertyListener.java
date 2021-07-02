@@ -56,7 +56,7 @@ public class VaccinesGlobalPropertyListener extends GlobalPropertyActionListener
         Date previousGPUpdateDate = getGlobalPropertyHistoryService()
                 .getLastValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY).getActionDate();
         return DateUtil.getDateWithTimeOfDay(DateUtil.addDaysToDate(previousGPUpdateDate, 1),
-                DateUtil.MIDNIGHT_TIME, DateUtil.getDefaultSystemTimeZone());
+                DateUtil.MIDNIGHT_TIME, DateUtil.getSystemTimeZone());
     }
 
     private GlobalPropertyHistoryService getGlobalPropertyHistoryService() {
