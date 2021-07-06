@@ -26,7 +26,7 @@ public final class CFLConstants {
      * */
     public static final String PRIVILEGE_LEVEL_FULL_ROLE_NAME = "Privilege Level: Full";
 
-    public static final String ENROLL_IN_PROGRAM_PRIVILEGE_NAME = "Task: core`app`s.enrollInProgram";
+    public static final String ENROLL_IN_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.enrollInProgram";
     public static final String EDIT_PATIENT_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.editPatientProgram";
     public static final String DELETE_PATIENT_PROGRAM_PRIVILEGE_NAME = "Task: coreapps.deletePatientProgram";
     public static final List<String> PROGRAM_MANAGING_PRIVILEGES_NAMES = Collections.unmodifiableList(Arrays.asList(
