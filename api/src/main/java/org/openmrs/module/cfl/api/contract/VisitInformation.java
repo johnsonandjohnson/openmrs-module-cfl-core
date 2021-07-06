@@ -62,10 +62,6 @@ public class VisitInformation {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof VisitInformation)) {
-            return false;
-        }
-
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
