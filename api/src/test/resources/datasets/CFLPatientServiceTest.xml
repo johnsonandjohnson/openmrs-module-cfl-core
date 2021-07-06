@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <person_attribute_type
+            person_attribute_type_id="1"
+            name="Vaccination program"
+            description="Vaccination status attribute"
+            format="java.lang.String"
+            creator="1"
+            sort_weight="1"
+            searchable="0"
+            retired="false"
+            date_created="2021-07-04"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130002"/>
+
+    <!-- Patient 1 resources -->
+    <person
+            person_id="1"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130003"/>
+
+    <person_name
+            person_name_id="1"
+            preferred="true"
+            person_id="1"
+            given_name="John"
+            middle_name=""
+            family_name="Test1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130004"/>
+
+    <person_attribute
+            person_id="1"
+            person_attribute_id="1"
+            value="Vaccination_1"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130005"/>
+
+    <patient
+            patient_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+
+    <!-- Patient 2 resources -->
+    <person
+            person_id="2"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130006"/>
+
+    <person_name
+            person_name_id="2"
+            preferred="true"
+            person_id="1"
+            given_name="John"
+            middle_name=""
+            family_name="Test2"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130007"/>
+
+    <person_attribute
+            person_id="2"
+            person_attribute_id="2"
+            value="Vaccination_1"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130008"/>
+
+    <patient
+            patient_id="2"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+
+    <!-- Patient 3 resources -->
+    <person
+            person_id="3"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130009"/>
+
+    <person_name
+            person_name_id="3"
+            preferred="true"
+            person_id="3"
+            given_name="John"
+            middle_name=""
+            family_name="Test3"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130010"/>
+
+    <person_attribute
+            person_id="3"
+            person_attribute_id="3"
+            value="Vaccination_1"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130011"/>
+
+    <patient
+            patient_id="3"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+
+    <!-- Patient 4 resources -->
+    <person
+            person_id="4"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130012"/>
+
+    <person_name
+            person_name_id="4"
+            preferred="true"
+            person_id="4"
+            given_name="John"
+            middle_name=""
+            family_name="Test4"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130013"/>
+
+    <person_attribute
+            person_id="4"
+            person_attribute_id="4"
+            value="Vaccination_2"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130014"/>
+
+    <patient
+            patient_id="4"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+
+    <!-- Patient 5 resources -->
+    <person
+            person_id="5"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130015"/>
+
+    <person_name
+            person_name_id="5"
+            preferred="true"
+            person_id="1"
+            given_name="John"
+            middle_name=""
+            family_name="Test5"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130016"/>
+
+    <person_attribute
+            person_id="5"
+            person_attribute_id="5"
+            value="Vaccination_2"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130017"/>
+
+    <patient
+            patient_id="5"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+
+    <!-- Patient 6 resources -->
+    <person
+            person_id="6"
+            gender="M"
+            dead="false"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130018"/>
+
+    <person_name
+            person_name_id="6"
+            preferred="true"
+            person_id="1"
+            given_name="John"
+            middle_name=""
+            family_name="Test6"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            void_reason=""
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130019"/>
+
+    <person_attribute
+            person_id="6"
+            person_attribute_id="6"
+            value="Vaccination_3"
+            person_attribute_type_id="1"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"
+            uuid="9ecd7406-dcf1-11eb-8eef-0242ac130020"/>
+
+    <patient
+            patient_id="6"
+            creator="1"
+            date_created="2021-07-04"
+            voided="false"/>
+</dataset>

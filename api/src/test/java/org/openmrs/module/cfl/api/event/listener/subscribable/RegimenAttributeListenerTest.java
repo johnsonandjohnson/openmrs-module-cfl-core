@@ -18,9 +18,6 @@ import org.mockito.Mock;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Person;
-import org.openmrs.Visit;
-import org.openmrs.VisitAttributeType;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.VisitService;
@@ -31,17 +28,14 @@ import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 import org.openmrs.module.cfl.api.helper.LocationHelper;
 import org.openmrs.module.cfl.api.helper.PatientHelper;
 import org.openmrs.module.cfl.api.helper.PersonHelper;
-import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.any;
@@ -56,9 +50,8 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Context.class })
-public class RegimenAtttributeListenerTest {
+public class RegimenAttributeListenerTest {
 
-    private static final String VACCINATION_PROGRAM = "Vaccination program";
     @Mock
     private VaccinationService vaccinationService;
 
@@ -72,9 +65,6 @@ public class RegimenAtttributeListenerTest {
     private PatientService patientService;
 
     @Mock
-    private AdministrationService administrationService;
-
-    @Mock
     private MapMessage message;
 
     @Mock
@@ -86,7 +76,7 @@ public class RegimenAtttributeListenerTest {
     private Patient patient;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         mockStatic(Context.class);
 
         Person person = PersonHelper.createPerson();
@@ -160,5 +150,4 @@ public class RegimenAtttributeListenerTest {
         verify(patientService, times(1)).getPatientByUuid(anyString());
         verify(visitService, times(1)).getActiveVisitsByPatient(any(Patient.class));
     }
-
 }

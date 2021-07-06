@@ -12,12 +12,11 @@ import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.VisitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.jms.Message;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import static org.openmrs.module.cfl.CFLConstants.DOSING_VISIT_TYPE_NAME;
 import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME;
 
 /**
@@ -43,19 +42,10 @@ public class RegimenAttributeListener extends PersonAttributeActionListener {
             Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
             List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
             if (null != visits && !visits.isEmpty()) {
-                Visit visit = getLastOccurredDosingVisit(visits);
+                Visit visit = VisitUtil.getLastOccurredDosingVisit(visits);
                 Context.getService(VaccinationService.class).rescheduleVisits(visit, patient);
             }
         }
-    }
-
-    private Visit getLastOccurredDosingVisit(List<Visit> visits) {
-        Optional<Visit> lastDosingVisit = visits.stream()
-                                                .filter(p -> p.getVisitType().getName().equals(DOSING_VISIT_TYPE_NAME))
-                                                .filter(p -> VisitUtil.getVisitStatus(p)
-                                                                      .equals(VisitUtil.getOccurredVisitStatus()))
-                                                .findFirst();
-        return lastDosingVisit.orElse(null);
     }
 
     private ConfigService getConfigService() {

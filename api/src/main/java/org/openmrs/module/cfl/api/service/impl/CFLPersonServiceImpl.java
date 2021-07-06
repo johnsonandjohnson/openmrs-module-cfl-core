@@ -29,6 +29,10 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
 
     private static final String CAREGIVER_RELATIONSHIP_UUID = "acec590b-825e-45d2-876a-0028f174903d";
 
+    private static final String VALUE_COLUMN_NAME = "value";
+
+    private static final String VOIDED_COLUMN_NAME = "voided";
+
     @Autowired
     private DbSessionFactory sessionFactory;
 
@@ -42,8 +46,8 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
     @Override
     public List<CFLPerson> findByPhone(String phone, boolean dead) {
         Criteria crit = getSession().createCriteria(this.mappedClass);
-        crit.add(Restrictions.like("value", phone, MatchMode.EXACT));
-        crit.add(Restrictions.eq("voided", false));
+        crit.add(Restrictions.like(VALUE_COLUMN_NAME, phone, MatchMode.EXACT));
+        crit.add(Restrictions.eq(VOIDED_COLUMN_NAME, false));
 
         List<PersonAttribute> personAttributes = crit.list();
 

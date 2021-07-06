@@ -5,6 +5,7 @@ import org.openmrs.api.context.Context;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -20,6 +21,10 @@ public final class DateUtil {
      * The date-time pattern which contains only hour of day and minute of hour fields.
      */
     public static final String HOUR_AND_MINUTE_PATTERN = "HH:mm";
+
+    public static final String MIDNIGHT_TIME = "00:00";
+
+    public static final String DATE_AND_TIME_AND_TIME_ZONE_PATTERN = "yyyyMMddHHmmz";
 
     private DateUtil() {
     }
@@ -38,6 +43,12 @@ public final class DateUtil {
         return calendar.getTime();
     }
 
+    //Returns server time zone
+    public static TimeZone getSystemTimeZone() {
+        return TimeZone.getTimeZone(ZoneId.systemDefault());
+    }
+
+    //Returns always UTC time zone
     public static TimeZone getDefaultSystemTimeZone() {
         return DEFAULT_SYSTEM_TIME_ZONE;
     }
@@ -56,7 +67,7 @@ public final class DateUtil {
         return simpleDateFormat.parse(date);
     }
 
-    private static String convertDate(Date date, String toFormat) {
+    public static String convertDate(Date date, String toFormat) {
         return new SimpleDateFormat(toFormat).format(date);
     }
 

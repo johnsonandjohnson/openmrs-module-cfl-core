@@ -1531,4 +1531,32 @@ WHERE mt.name = 'Ad hoc Message'
 ORDER BY 1 DESC;"/>
         </insert>
     </changeSet>
+
+    <changeSet id="cfl-global-property-history-resources" author="Dawid Ruchniewicz">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="global_property"/>
+            <not><tableExists tableName="global_property_history"/></not>
+        </preConditions>
+        <comment>
+            Adds the table used to store the history of global properties resources and
+            database triggers for updating global properties entities.
+        </comment>
+        <sql>
+            CREATE TABLE global_property_history LIKE global_property;
+
+            ALTER TABLE global_property_history
+            DROP PRIMARY KEY, DROP KEY global_property_uuid_index, DROP KEY global_property_property_index,
+            ENGINE = MyISAM,
+            ADD global_property_history_id INT AUTO_INCREMENT FIRST,
+            ADD action VARCHAR(8) AFTER global_property_history_id,
+            ADD action_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER action,
+            ADD PRIMARY KEY (global_property_history_id);
+
+            CREATE TRIGGER global_property_update_history
+            BEFORE UPDATE ON global_property FOR EACH ROW
+            INSERT INTO global_property_history
+            SELECT NULL, 'UPDATE', NOW(), d.* from global_property AS d WHERE d.property = NEW.property;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

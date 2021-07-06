@@ -1,5 +1,9 @@
 package org.openmrs.module.cfl.api.contract;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+import java.util.Objects;
+
 public class VisitInformation {
     private int doseNumber;
     private String nameOfDose;
@@ -54,5 +58,15 @@ public class VisitInformation {
 
     public void setNumberOfFutureVisit(int numberOfFutureVisit) {
         this.numberOfFutureVisit = numberOfFutureVisit;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(doseNumber, nameOfDose, midPointWindow, lowWindow, upWindow, numberOfFutureVisit);
     }
 }

@@ -13,6 +13,9 @@ import org.openmrs.module.cfl.api.contract.VisitInformation;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static org.openmrs.module.cfl.CFLConstants.DOSING_VISIT_TYPE_NAME;
 
 public final class VisitUtil {
 
@@ -73,6 +76,15 @@ public final class VisitUtil {
             }
         }
         return lastVisit;
+    }
+
+    public static Visit getLastOccurredDosingVisit(List<Visit> visits) {
+        Optional<Visit> lastDosingVisit = visits.stream()
+                .filter(p -> p.getVisitType().getName().equals(DOSING_VISIT_TYPE_NAME))
+                .filter(p -> VisitUtil.getVisitStatus(p)
+                                      .equals(VisitUtil.getOccurredVisitStatus()))
+                .findFirst();
+        return lastDosingVisit.orElse(null);
     }
 
     public static String getVisitStatus(Visit visit) {
