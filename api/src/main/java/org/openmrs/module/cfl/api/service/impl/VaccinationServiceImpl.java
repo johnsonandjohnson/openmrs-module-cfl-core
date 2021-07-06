@@ -6,7 +6,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.Patient;
-import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
@@ -16,7 +15,7 @@ import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
-import org.openmrs.module.cfl.api.service.CFLPersonService;
+import org.openmrs.module.cfl.api.service.CFLPatientService;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
@@ -90,16 +89,15 @@ public class VaccinationServiceImpl implements VaccinationService {
     private void processRegimensChanges(Map<String, Boolean> regimensDiffsMap) {
         for (Map.Entry<String, Boolean> entry : regimensDiffsMap.entrySet()) {
             if (Boolean.TRUE.equals(entry.getValue())) {
-                List<Person> people = getCFLPersonService().findByVaccinationName(entry.getKey());
-                for (Person person : people) {
-                    rescheduleVisitsByPerson(person);
+                List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
+                for (Patient patient : patients) {
+                    rescheduleVisitsByPerson(patient);
                 }
             }
         }
     }
 
-    private void rescheduleVisitsByPerson(Person person) {
-        Patient patient = new Patient(person);
+    private void rescheduleVisitsByPerson(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
         if (CollectionUtils.isNotEmpty(visits)) {
             Visit lastOccurredDosingVisit = VisitUtil.getLastOccurredDosingVisit(visits);
@@ -135,8 +133,8 @@ public class VaccinationServiceImpl implements VaccinationService {
             return true;
         }
 
-        for (int i = 0; i < newVisits.size(); i++) {
-            if (!newVisits.get(i).equals(previousVisits.get(i))) {
+        for (VisitInformation newVisit : newVisits) {
+            if (!previousVisits.contains(newVisit)) {
                 return true;
             }
         }
@@ -144,22 +142,25 @@ public class VaccinationServiceImpl implements VaccinationService {
         return false;
     }
 
-    private Map<String, Map<String, Object>> createVaccinationMap(String gpName) {
-        Randomization randomization = new Randomization(getGson().fromJson(gpName, Vaccination[].class));
+    private Map<String, Map<String, Object>> createVaccinationMap(String gpValue) {
         Map<String, Map<String, Object>> vaccinationValueMap = new HashMap<>();
-        for (Vaccination vaccination : randomization.getVaccinations()) {
-            Map<String, Object> innerMap = new HashMap<>();
-            innerMap.put(VISITS_FIELD_NAME, vaccination.getVisits());
-            innerMap.put(NUMBER_OF_DOSE_FIELD_NAME, vaccination.getNumberOfDose());
-            vaccinationValueMap.put(vaccination.getName(), innerMap);
+        if (StringUtils.isNotBlank(gpValue)) {
+            Randomization randomization = new Randomization(getGson().fromJson(gpValue, Vaccination[].class));
+            for (Vaccination vaccination : randomization.getVaccinations()) {
+                Map<String, Object> innerMap = new HashMap<>();
+                innerMap.put(VISITS_FIELD_NAME, vaccination.getVisits());
+                innerMap.put(NUMBER_OF_DOSE_FIELD_NAME, vaccination.getNumberOfDose());
+                vaccinationValueMap.put(vaccination.getName(), innerMap);
+            }
         }
+
         return vaccinationValueMap;
     }
 
     private boolean isNumberOfDoseChanged(Map<String, Object> previousVaccinationMap,
                                           Map<String, Object> newVaccinationMap) {
-        String numberOfDoseFieldName = NUMBER_OF_DOSE_FIELD_NAME;
-        return !previousVaccinationMap.get(numberOfDoseFieldName).equals(newVaccinationMap.get(numberOfDoseFieldName));
+        return !previousVaccinationMap.get(NUMBER_OF_DOSE_FIELD_NAME)
+                .equals(newVaccinationMap.get(NUMBER_OF_DOSE_FIELD_NAME));
     }
 
     private Vaccination getVaccinationForPatient(Patient patient) {
@@ -221,8 +222,8 @@ public class VaccinationServiceImpl implements VaccinationService {
         return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 
-    private CFLPersonService getCFLPersonService() {
-        return Context.getRegisteredComponent(CFLConstants.CFL_PERSON_SERVICE_BEAN_NAME, CFLPersonService.class);
+    private CFLPatientService getCFLPatientService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_PATIENT_SERVICE_BEAN_NAME, CFLPatientService.class);
     }
 
     private Gson getGson() {

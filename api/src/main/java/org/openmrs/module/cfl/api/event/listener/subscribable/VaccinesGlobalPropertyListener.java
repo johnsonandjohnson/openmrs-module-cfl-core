@@ -5,6 +5,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.event.Event;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.model.GlobalPropertyHistory;
 import org.openmrs.module.cfl.api.scheduler.job.RegimenVisitsChangeJobDefinition;
 import org.openmrs.module.cfl.api.service.GlobalPropertyHistoryService;
 import org.openmrs.module.cfl.api.util.DateUtil;
@@ -17,7 +18,18 @@ import javax.jms.Message;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * The VaccinesGlobalPropertyListener class.
+ *
+ * This listener is responsible for creating scheduled task if global property
+ * {@link CFLConstants#VACCINATION_PROGRAM_KEY} is updated and the task does not exist yet.
+ *
+ * The task is scheduled for midnight server time and executes logic for rescheduling patient visits based on changes
+ * in mentioned vaccines global property.
+ *
+ */
 public class VaccinesGlobalPropertyListener extends GlobalPropertyActionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VaccinesGlobalPropertyListener.class);
@@ -49,14 +61,19 @@ public class VaccinesGlobalPropertyListener extends GlobalPropertyActionListener
     }
 
     private String getUpdateRegimenTaskExecutionDateToString() {
-        return DateUtil.convertDate(getUpdateRegimenTaskExecutionDate(), DateUtil.DATE_AND_TIME_AND_TIME_ZONE_PATTERN);
+        Date updateRegimenTaskDate = getUpdateRegimenTaskExecutionDate();
+        return updateRegimenTaskDate != null ?
+                DateUtil.convertDate(updateRegimenTaskDate, DateUtil.DATE_AND_TIME_AND_TIME_ZONE_PATTERN) : "";
     }
 
     private Date getUpdateRegimenTaskExecutionDate() {
-        Date previousGPUpdateDate = getGlobalPropertyHistoryService()
-                .getLastValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY).getActionDate();
-        return DateUtil.getDateWithTimeOfDay(DateUtil.addDaysToDate(previousGPUpdateDate, 1),
-                DateUtil.MIDNIGHT_TIME, DateUtil.getSystemTimeZone());
+        Optional<GlobalPropertyHistory> previousGP = getGlobalPropertyHistoryService()
+                .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+
+        return previousGP.map(globalPropertyHistory ->
+                DateUtil.getDateWithTimeOfDay(DateUtil.addDaysToDate(globalPropertyHistory.getActionDate(), 1),
+                        DateUtil.MIDNIGHT_TIME, DateUtil.getSystemTimeZone()))
+                .orElse(null);
     }
 
     private GlobalPropertyHistoryService getGlobalPropertyHistoryService() {

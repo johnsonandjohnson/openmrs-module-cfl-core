@@ -339,7 +339,7 @@ public final class CFLConstants {
      */
     public static final String VACCINATION_VISIT_LISTENER_NAME = "UpdatingVisitListener";
 
-    public static final String CFL_PERSON_SERVICE_BEAN_NAME = "cflPersonService";
+    public static final String CFL_PATIENT_SERVICE_BEAN_NAME = "cfl.patientService";
 
     public static final String VACCINATION_SERVICE_BEAN_NAME = "cfl.vaccinationService";
 

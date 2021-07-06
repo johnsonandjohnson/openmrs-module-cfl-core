@@ -213,4 +213,10 @@
             <ref bean="dbSessionFactory"/>
         </property>
     </bean>
+
+    <bean id="cfl.patientService" class="org.openmrs.module.cfl.api.service.impl.CFLPatientServiceImpl">
+        <property name="sessionFactory">
+            <ref bean="dbSessionFactory"/>
+        </property>
+    </bean>
 </beans>

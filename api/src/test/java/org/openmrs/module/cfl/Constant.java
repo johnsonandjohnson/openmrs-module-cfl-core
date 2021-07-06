@@ -40,6 +40,16 @@ public final class Constant {
 
     public static final String COVID_VACCINATION_PROGRAM = "COVID VACCINE";
 
+    public static final String TEST_GP_VALUE = "Test value";
+
+    public static final String TEST_GP_VALUE_2 = "Test value 2";
+
+    public static final String TEST_GP_DESCRIPTION = "Test description";
+
+    public static final String UPDATE_ACTION_NAME = "UPDATE";
+
+    public static final String TEST_GP_UUID = "2096bec8-99f3-480c-86e3-2df08f375b93";
+
     private Constant() {
     }
 }

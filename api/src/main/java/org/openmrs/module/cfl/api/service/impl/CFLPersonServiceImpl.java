@@ -80,24 +80,6 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
         }
     }
 
-    @Override
-    public List<Person> findByVaccinationName(String vaccinationName) {
-        Criteria criteria = getSession().createCriteria(this.mappedClass);
-        criteria.add(Restrictions.eq(VALUE_COLUMN_NAME, vaccinationName));
-        criteria.add(Restrictions.eq(VOIDED_COLUMN_NAME, false));
-
-        List<PersonAttribute> personAttributes = criteria.list();
-
-        List<Person> peopleList = new ArrayList<>();
-        for (PersonAttribute personAttribute : personAttributes) {
-            if (!personAttribute.getPerson().getVoided() && !personAttribute.getPerson().getDead()) {
-                peopleList.add(personAttribute.getPerson());
-            }
-        }
-
-        return peopleList;
-    }
-
     private DbSession getSession() {
         return sessionFactory.getCurrentSession();
     }

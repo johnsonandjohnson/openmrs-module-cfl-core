@@ -9,11 +9,9 @@ import org.openmrs.module.cfl.api.model.GlobalPropertyHistory;
 import org.openmrs.module.cfl.api.service.GlobalPropertyHistoryService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public class GlobalPropertyHistoryServiceImpl implements GlobalPropertyHistoryService {
-
-    private static final String PROPERTY_COLUMN_NAME = "property";
-
-    private static final String ID_COLUMN_NAME = "id";
 
     private static final Integer ONE = 1;
 
@@ -21,12 +19,12 @@ public class GlobalPropertyHistoryServiceImpl implements GlobalPropertyHistorySe
 
     @Transactional(readOnly = true)
     @Override
-    public GlobalPropertyHistory getLastValueOfGlobalProperty(String gpName) {
+    public Optional<GlobalPropertyHistory> getPreviousValueOfGlobalProperty(String gpName) {
         Criteria criteria = getSession().createCriteria(GlobalPropertyHistory.class);
-        criteria.add(Restrictions.eq(PROPERTY_COLUMN_NAME, gpName));
-        criteria.addOrder(Order.desc(ID_COLUMN_NAME));
+        criteria.add(Restrictions.eq(GlobalPropertyHistory.PROPERTY_FIELD_NAME, gpName));
+        criteria.addOrder(Order.desc(GlobalPropertyHistory.ID_FIELD_NAME));
         criteria.setMaxResults(ONE);
-        return (GlobalPropertyHistory) criteria.uniqueResult();
+        return Optional.ofNullable((GlobalPropertyHistory) criteria.uniqueResult());
     }
 
     public void setSessionFactory(DbSessionFactory sessionFactory) {

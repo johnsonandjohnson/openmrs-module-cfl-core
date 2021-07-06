@@ -9,10 +9,13 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.Constant;
 import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 import org.openmrs.module.cfl.api.model.GlobalPropertyHistory;
 import org.openmrs.module.cfl.api.service.GlobalPropertyHistoryService;
 import org.openmrs.module.cfl.api.util.DateUtil;
+import org.openmrs.module.cfl.builder.GlobalPropertyBuilder;
+import org.openmrs.module.cfl.builder.GlobalPropertyHistoryBuilder;
 import org.openmrs.module.messages.api.service.MessagesSchedulerService;
 import org.openmrs.scheduler.SchedulerService;
 import org.openmrs.scheduler.TaskDefinition;
@@ -21,7 +24,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
-import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -36,16 +39,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest( {Context.class} )
 public class VaccinesGlobalPropertyListenerTest {
-
-    private static final String TEST_GP_UUID = "2096bec8-99f3-480c-86e3-2df08f375b93";
-
-    private static final String TEST_GP_VALUE = "Test value";
-
-    private static final String TEST_GP_DESCRIPTION = "Test description";
-
-    private static final String UPDATE_ACTION_NAME = "UPDATE";
-
-    private final Date date = DateUtil.now();
 
     @Mock
     private AdministrationService administrationService;
@@ -67,7 +60,7 @@ public class VaccinesGlobalPropertyListenerTest {
 
     private GlobalProperty globalProperty;
 
-    private GlobalPropertyHistory globalPropertyHistory;
+    private Optional<GlobalPropertyHistory> globalPropertyHistory;
 
     @Before
     public void setUp() {
@@ -96,30 +89,28 @@ public class VaccinesGlobalPropertyListenerTest {
 
     @Test
     public void performAction_whenGlobalPropertyIsNotNull() throws JMSException {
-        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(TEST_GP_UUID);
-        when(administrationService.getGlobalPropertyByUuid(TEST_GP_UUID))
-                .thenReturn(globalProperty);
+        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.TEST_GP_UUID);
+        when(administrationService.getGlobalPropertyByUuid(Constant.TEST_GP_UUID)).thenReturn(globalProperty);
         assertEquals(CFLConstants.VACCINATION_PROGRAM_KEY, globalProperty.getProperty());
 
         doReturn(globalPropertyHistory).when(globalPropertyHistoryService)
-                .getLastValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+                .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
 
         vaccinesGlobalPropertyListener.performAction(message);
-        verify(administrationService, times(1)).getGlobalPropertyByUuid(TEST_GP_UUID);
+        verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
         verify(schedulerService, times(1)).getTaskByName(anyString());
-        verify(globalPropertyHistoryService, times(2)).getLastValueOfGlobalProperty(anyString());
+        verify(globalPropertyHistoryService, times(2)).getPreviousValueOfGlobalProperty(anyString());
         verify(messagesSchedulerService, times(1)).createNewTask(any(), any(), any());
     }
 
     @Test
     public void performAction_whenRelatedTaskAlreadyExists() throws JMSException {
-        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(TEST_GP_UUID);
-        when(administrationService.getGlobalPropertyByUuid(TEST_GP_UUID))
-                .thenReturn(globalProperty);
+        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.TEST_GP_UUID);
+        when(administrationService.getGlobalPropertyByUuid(Constant.TEST_GP_UUID)).thenReturn(globalProperty);
         assertEquals(CFLConstants.VACCINATION_PROGRAM_KEY, globalProperty.getProperty());
 
         doReturn(globalPropertyHistory).when(globalPropertyHistoryService)
-                .getLastValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+                .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
 
         when(schedulerService.getTaskByName(anyString())).thenReturn(new TaskDefinition());
 
@@ -128,22 +119,23 @@ public class VaccinesGlobalPropertyListenerTest {
     }
 
     private GlobalProperty createTestGlobalProperty() {
-        GlobalProperty globalProperty = new GlobalProperty();
-        globalProperty.setProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        globalProperty.setPropertyValue(TEST_GP_VALUE);
-        globalProperty.setDescription(TEST_GP_DESCRIPTION);
-        globalProperty.setUuid(TEST_GP_UUID);
-        return globalProperty;
+        return new GlobalPropertyBuilder()
+                .withProperty(CFLConstants.VACCINATION_PROGRAM_KEY)
+                .withValue(Constant.TEST_GP_VALUE)
+                .withDescription(Constant.TEST_GP_DESCRIPTION)
+                .withUuid(Constant.TEST_GP_UUID)
+                .build();
     }
 
-    private GlobalPropertyHistory createGlobalPropertyHistory() {
-        GlobalPropertyHistory globalPropertyHistory = new GlobalPropertyHistory();
-        globalPropertyHistory.setId(1);
-        globalPropertyHistory.setAction(UPDATE_ACTION_NAME);
-        globalPropertyHistory.setActionDate(date);
-        globalPropertyHistory.setProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        globalPropertyHistory.setPropertyValue(TEST_GP_VALUE);
-        globalPropertyHistory.setDescription(TEST_GP_DESCRIPTION);
-        return globalPropertyHistory;
+    private Optional<GlobalPropertyHistory> createGlobalPropertyHistory() {
+        return Optional.of(
+                new GlobalPropertyHistoryBuilder()
+                    .withId(1)
+                    .withAction(Constant.UPDATE_ACTION_NAME)
+                    .withActionDate(DateUtil.now())
+                    .withProperty(CFLConstants.VACCINATION_PROGRAM_KEY)
+                    .withValue(Constant.TEST_GP_VALUE)
+                    .withDescription(Constant.TEST_GP_DESCRIPTION)
+                    .build());
     }
 }

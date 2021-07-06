@@ -1,6 +1,6 @@
 package org.openmrs.module.cfl.api.contract;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.util.Objects;
 
@@ -70,14 +70,7 @@ public class VisitInformation {
             return false;
         }
 
-        VisitInformation vi = (VisitInformation) obj;
-
-        return doseNumber == vi.doseNumber &&
-                StringUtils.equals(nameOfDose, vi.nameOfDose) &&
-                midPointWindow == vi.midPointWindow &&
-                lowWindow == vi.lowWindow &&
-                upWindow == vi.upWindow &&
-                numberOfFutureVisit == vi.numberOfFutureVisit;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override

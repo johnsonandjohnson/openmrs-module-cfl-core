@@ -41,8 +41,8 @@ public interface VaccinationService {
      * Finds vaccination programs which have been changed and related patients.
      * Then voids the scheduled visits and recreates future visits based on those regimens changes.
      *
-     * @param previousVaccineGPValue
-     * @param currentVaccineGPValue
+     * @param previousVaccineGPValue previous version of vaccines value
+     * @param currentVaccineGPValue current version of vaccines value
      */
     void rescheduleVisitsBasedOnRegimenChanges(String previousVaccineGPValue, String currentVaccineGPValue);
 }

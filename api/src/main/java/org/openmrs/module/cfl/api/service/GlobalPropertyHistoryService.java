@@ -2,6 +2,8 @@ package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.module.cfl.api.model.GlobalPropertyHistory;
 
+import java.util.Optional;
+
 /**
  * Provides methods for management of {@link org.openmrs.module.cfl.api.model.GlobalPropertyHistory} entity.
  */
@@ -13,5 +15,5 @@ public interface GlobalPropertyHistoryService {
      * @param gpName - the name of global property (property column)
      * @return - the last string value of given global property
      */
-    GlobalPropertyHistory getLastValueOfGlobalProperty(String gpName);
+    Optional<GlobalPropertyHistory> getPreviousValueOfGlobalProperty(String gpName);
 }

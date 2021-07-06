@@ -6,9 +6,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * Entity class responsible for keeping history of global property values.
+ * This table is not created from Java but from SQL level.
+ * It is a copy of a global_property table with a few additional columns.
+ */
 @Entity(name = "cfl.GlobalPropertyHistory")
 @Table(name = "global_property_history")
 public class GlobalPropertyHistory {
+
+    public static final String ID_FIELD_NAME = "id";
+
+    public static final String PROPERTY_FIELD_NAME = "property";
 
     @Id
     @Column(name = "global_property_history_id")
