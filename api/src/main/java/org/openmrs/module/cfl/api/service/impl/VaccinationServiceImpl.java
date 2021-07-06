@@ -91,13 +91,13 @@ public class VaccinationServiceImpl implements VaccinationService {
             if (Boolean.TRUE.equals(entry.getValue())) {
                 List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
                 for (Patient patient : patients) {
-                    rescheduleVisitsByPerson(patient);
+                    rescheduleVisitsByPatient(patient);
                 }
             }
         }
     }
 
-    private void rescheduleVisitsByPerson(Patient patient) {
+    private void rescheduleVisitsByPatient(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
         if (CollectionUtils.isNotEmpty(visits)) {
             Visit lastOccurredDosingVisit = VisitUtil.getLastOccurredDosingVisit(visits);
