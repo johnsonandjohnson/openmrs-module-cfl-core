@@ -124,8 +124,6 @@
         <property name="identifierSourceService" ref="baseIdentifierSourceService"/>
     </bean>
 
-    <bean id="cflRolePrivilegeProfiles" class="org.openmrs.module.cfl.api.metadata.RolePrivilegeProfilesMetadata"/>
-
     <bean id="cfl.componentStateHandler" class="org.openmrs.module.cfl.handler.metadatasharing.ComponentStateHandler">
         <property name="sessionFactory">
             <ref bean="dbSessionFactory"/>
@@ -219,4 +217,6 @@
             <ref bean="dbSessionFactory"/>
         </property>
     </bean>
+
+    <bean id="cfl.DisableCFLAppsBundle" class="org.openmrs.module.cfl.api.metadata.DisableCFLAppsBundle" />
 </beans>

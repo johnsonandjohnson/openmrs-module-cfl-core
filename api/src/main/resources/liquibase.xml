@@ -12,27 +12,6 @@
         See http://www.liquibase.org/manual/home#available_database_refactorings
         for a list of supported elements and attributes
     -->
-    
-    <changeSet id="cfl-20190808-11:50" author="Arkadiusz Lalo">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="person_attribute_type" />
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "bfdf8ed0-87e3-437e-897d-81434393a233";
-            </sqlCheck>
-        </preConditions>
-        <comment>
-            Added the Location personAttribute.
-        </comment>
-        <insert tableName="person_attribute_type">
-            <column name="name">LocationAttribute</column>
-            <column name="description">Attribute used to store information about patient localization</column>
-            <column name="format">java.lang.String</column>
-            <column name="searchable">0</column>
-            <column name="uuid">bfdf8ed0-87e3-437e-897d-81434393a233</column>
-            <column name="date_created">2019-08-08</column>
-            <column name="creator">1</column>
-        </insert>
-    </changeSet>
 
     <changeSet id="cfl-20190808-11:51" author="Arkadiusz Lalo">
         <preConditions onFail="MARK_RAN">
@@ -590,27 +569,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="cfl-20190826-11:50" author="Arkadiusz Lalo">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="person_attribute_type" />
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM person_attribute_type WHERE uuid = "58cb9e76-75a1-4f49-956f-4ff6d0e02312";
-            </sqlCheck>
-        </preConditions>
-        <comment>
-            Added the email personAttribute.
-        </comment>
-        <insert tableName="person_attribute_type">
-            <column name="name">EmailAttribute</column>
-            <column name="description">Attribute used to store information about patient email</column>
-            <column name="format">java.lang.String</column>
-            <column name="searchable">0</column>
-            <column name="uuid">58cb9e76-75a1-4f49-956f-4ff6d0e02312</column>
-            <column name="date_created">2019-08-08</column>
-            <column name="creator">1</column>
-        </insert>
-    </changeSet>
-
     <changeSet id="cfl-20190827-15:50" author="Arkadiusz Lalo">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="relationship_type" />
@@ -955,21 +913,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="cfl-20200323-10:07" author="Arkadiusz Lalo">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="user_property" />
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(user_id) FROM user_property WHERE user_id = 1 AND property = "locationUuid";
-            </sqlCheck>
-        </preConditions>
-        <comment>Assign the default location to the default admin user</comment>
-        <insert tableName="user_property">
-            <column name="user_id">1</column>
-            <column name="property">locationUuid</column>
-            <column name="property_value">b1a8b05e-3542-4037-bbd3-998ee9c40574</column>
-        </insert>
-    </changeSet>
-
     <changeSet id="cfl-20200401-17:53" author="Arkadiusz Lalo">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="patient_identifier_type" />
@@ -987,21 +930,6 @@
             <column name="format_description">Aadhar number should be 12 digits</column>
             <where>uuid = "4aa897a3-0b05-4ec9-8d70-a93a336be548"</where>
         </update>
-    </changeSet>
-
-    <changeSet id="cfl-20200415-12:53" author="Arkadiusz Lalo">
-        <preConditions>
-            <tableExists tableName="global_property"/>
-        </preConditions>
-
-        <comment>Resets cfl.findPerson.filter.strategy to the default value (the property structure and its description
-            have been changed). It is in order to apply the new changes to all already existing environments. The
-            migration can be removed if the liquibase refactor will be conducted (eg. replacing all changes by one
-            changeSet).</comment>
-
-        <delete tableName="global_property">
-            <where>property='cfl.findPerson.filter.strategy'</where>
-        </delete>
     </changeSet>
 
     <changeSet id="cfl-20200416-10:00" author="Arkadiusz Lalo">
@@ -1224,59 +1152,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="cfl-20200624-13:00" author="Dawid Ruchniewicz">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="relationship_type"/>
-            <sqlCheck expectedResult="1">
-                SELECT COUNT(*) FROM relationship_type WHERE uuid = 'acec590b-825e-45d2-876a-0028f174903d';
-            </sqlCheck>
-        </preConditions>
-
-        <comment>Retired all unnecessary relationship types</comment>
-
-        <update tableName="relationship_type">
-            <column name="retired" value="1"/>
-            <where>uuid != 'acec590b-825e-45d2-876a-0028f174903d'</where>
-        </update>
-    </changeSet>
-
-    <changeSet id="cfl-2020-07-09-23:00" author="Dawid Ruchniewicz">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="global_property"/>
-            <sqlCheck expectedResult="1">
-                SELECT COUNT(*) FROM global_property WHERE property='coreapps.conditionListClasses'
-            </sqlCheck>
-        </preConditions>
-
-        <comment>
-            Removed coreapps.conditionListClasses property in order to update default value via activator.
-            The migration can be removed if the liquibase refactor will be conducted
-            (eg. replacing all changes by one changeSet).
-        </comment>
-
-        <delete tableName="global_property">
-            <where>property='coreapps.conditionListClasses'</where>
-        </delete>
-    </changeSet>
-
-    <changeSet id="cfl-2020-07-14-16:00" author="Arkadiusz Lalo">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="global_property"/>
-            <sqlCheck expectedResult="1">
-                SELECT COUNT(*) FROM global_property WHERE property='emrapi.useLegacyDiagnosisService'
-            </sqlCheck>
-        </preConditions>
-
-        <comment>
-            Updates emrapi.useLegacyDiagnosisService property in order to change the default value.
-        </comment>
-
-        <update tableName="global_property">
-            <column name="property_value">true</column>
-            <where>property='emrapi.useLegacyDiagnosisService'</where>
-        </update>
-    </changeSet>
-
     <changeSet id="cfl-20201123-17:45" author="Dawid Ruchniewicz">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
@@ -1351,85 +1226,6 @@
             <column name="uuid">43c3630f-abfe-4fe1-8c92-b73b65199a3d</column>
         </insert>
     </changeSet>
-    
-    <changeSet id="cfl-2021-02-19-16:22-clean-autogenerated-true-false-concepts" author="Piotr Wargulak">
-        <comment>Delete all auto-generated Concepts Yes/No Concept Names for True/False Concept.
-            These Yes/No Concepts are reliably generated with IDs 1 and 2 and random UUID.
-            The random UUID prevents them from being useful, referenced from Concept packages.</comment>
-        <delete tableName="concept_name">
-            <where>concept_id = 1 and name = 'Sim' and locale = 'pt'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 1 and name = 'Yes' and locale = 'en'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 1 and name = 'Sì' and locale = 'it'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 1 and name = 'Oui' and locale = 'fr'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 1 and name = 'Sí' and locale = 'es'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 2 and name = 'Não' and locale = 'pt'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 2 and name = 'No' and locale = 'en'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 2 and name = 'No' and locale = 'it'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 2 and name = 'Non' and locale = 'fr'</where>
-        </delete>
-        <delete tableName="concept_name">
-            <where>concept_id = 2 and name = 'No' and locale = 'es'</where>
-        </delete>
-    </changeSet>
-
-    <changeSet id="cfl-20210225-14:00" author="Dawid Ruchniewicz">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="global_property"/>
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM global_property WHERE property = 'cfl.distro.bootstrapped';
-            </sqlCheck>
-        </preConditions>
-        <comment>
-            Added cfl.distro.bootstrapped global property to determine if initial data cleanup has already been performed.
-        </comment>
-        <insert tableName="global_property">
-            <column name="property">cfl.distro.bootstrapped</column>
-            <column name="property_value">false</column>
-            <column name="description">
-                Used to determine if initial data cleanup has already been performed.
-                If value is set to false then at the next CfL module reloading initial data cleanup will be performed.
-            </column>
-            <column name="uuid">ca26081b-76c3-11eb-8b48-0242ac150002</column>
-        </insert>
-    </changeSet>
-
-    <changeSet id="cfl-20210311-16:19-Fix-FSN" author="Piotr Wargulak">
-        <comment>
-            Fix Risk factor for HIV Concepts. Makes Concept Names with 'en-GB' locale (if any exist)
-            a Fully Specified Names for Concepts which have no Fully Specified Name defined.
-        </comment>
-        <sql><![CDATA[
-            update
-                concept_name as cn_en
-            inner
-                join concept as c
-                    on c.concept_id = cn_en.concept_id
-            left join
-                concept_name as cn_fsn
-                    on cn_fsn.concept_id = c.concept_id and cn_fsn.concept_name_type = 'FULLY_SPECIFIED'
-            set cn_en.concept_name_type = 'FULLY_SPECIFIED'
-            where
-                cn_en.concept_name_type is null
-                and cn_en.locale = 'en-GB'
-                and cn_fsn.concept_name_id is null
-        ]]></sql>
-    </changeSet>
 
     <changeSet id="cfl-20210316-12:00-Set-PersonAttributeType-sortWeight" author="Piotr Wargulak">
         <comment>
@@ -1445,7 +1241,6 @@
                 sort_weight is null
         ]]></sql>
     </changeSet>
-
 
     <changeSet id="cfl-Add-Welcome-Message-template" author="Piotr Wargulak">
         <preConditions onFail="MARK_RAN">

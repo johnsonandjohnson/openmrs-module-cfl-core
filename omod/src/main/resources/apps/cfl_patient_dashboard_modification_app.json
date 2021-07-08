@@ -99,6 +99,14 @@
         "label": "cfl.initcall.button",
         "icon":"icon-phone-sign",
         "script": "initCall.showInitCallCreationDialog(&#x27;{{person.uuid}}&#x27;,&#x27;Caregiver&#x27;,&#x27;voxeo-mobile&#x27;)"
+      },
+      {
+        "id": "cfl.patientDashboard.initCallDialog",
+        "extensionPointId": "patientDashboard.includeFragments",
+        "extensionParams": {
+          "provider": "cfl",
+          "fragment": "includeFragments/initCallDialog"
+        }
       }
     ]
   },
