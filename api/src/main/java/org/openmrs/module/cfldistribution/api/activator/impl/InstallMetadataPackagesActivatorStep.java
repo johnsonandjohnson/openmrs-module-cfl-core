@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.INSTALL_METADATA_PACKAGES_ACTIVATOR_STEP;
+
 /**
  * The Metadata Package are ZIP files in the classpath, the import mode defined by packages.xml
  * <p>
@@ -13,7 +15,7 @@ import org.openmrs.module.emrapi.utils.MetadataUtil;
 public class InstallMetadataPackagesActivatorStep implements ModuleActivatorStep {
     @Override
     public int getOrder() {
-        return 20;
+        return INSTALL_METADATA_PACKAGES_ACTIVATOR_STEP.ordinal();
     }
 
     @Override

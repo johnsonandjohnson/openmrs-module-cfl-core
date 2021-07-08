@@ -12,11 +12,11 @@ import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.role;
  */
 public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
 
-    public static final String ANALYST_PRIVILEGE_LEVEL = "Privilege Level: Analyst";
-    public static final String ANALYST_PRIVILEGE_LEVEL_DESCRIPTION = "Permissions related to manging report resources.";
+    private static final String ANALYST_PRIVILEGE_LEVEL = "Privilege Level: Analyst";
+    private static final String ANALYST_PRIVILEGE_LEVEL_DESCRIPTION = "Permissions related to manging report resources.";
 
     public static final String DOCTOR_PRIVILEGE_LEVEL = "Privilege Level: Doctor";
-    public static final String DOCTOR_PRIVILEGE_LEVEL_DESCRIPTION = "Permissions related to manging medical resources.";
+    private static final String DOCTOR_PRIVILEGE_LEVEL_DESCRIPTION = "Permissions related to manging medical resources.";
 
     private static final String GET_USERS = "Get Users";
     private static final String MANAGE_REPORT_DEFINITIONS = "Manage Report Definitions";
@@ -27,7 +27,7 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
     private static final String VIEW_REPORT_OBJECTS = "View Report Objects";
     private static final String VIEW_REPORTS = "View Reports";
 
-    public static final Set<String> ANALYST_PRIVILEGES = idSet(
+    private static final Set<String> ANALYST_PRIVILEGES = idSet(
             GET_USERS,
             MANAGE_REPORT_DEFINITIONS,
             MANAGE_REPORT_DESIGNS,
@@ -37,7 +37,7 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
             VIEW_REPORT_OBJECTS,
             VIEW_REPORTS);
 
-    public static final Set<String> DOCTOR_PRIVILEGES = idSet(
+    private static final Set<String> DOCTOR_PRIVILEGES = idSet(
             "Add Allergies",
             "Add Cohorts",
             "Add Concept Proposals",
@@ -276,12 +276,12 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
     }
 
     @Override
-    protected void installEveryTime() throws Exception {
+    protected void installEveryTime() {
         // do nothing
     }
 
     @Override
-    protected void installNewVersion() throws Exception {
+    protected void installNewVersion() {
         installAnalystRole();
         installDoctorRole();
     }

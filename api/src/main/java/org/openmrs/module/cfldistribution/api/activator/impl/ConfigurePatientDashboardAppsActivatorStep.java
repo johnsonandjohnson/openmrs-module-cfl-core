@@ -12,6 +12,7 @@ import java.util.List;
 
 import static java.lang.Boolean.parseBoolean;
 import static org.openmrs.module.cfldistribution.CfldistributionGlobalParameterConstants.SHOULD_DISABLE_APPS_AND_EXTENSIONS_KEY;
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.CONFIGURE_PATIENT_DASHBOARD_APPS_ACTIVATOR_STEP;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.ACTIVE_VISIT_STATUS_EXT;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.ALLERGYUI_PATIENT_DASHBOARD_EXT;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.APPOINTMENTSCHEDULINGUI_HOME_APP;
@@ -75,7 +76,7 @@ public class ConfigurePatientDashboardAppsActivatorStep implements ModuleActivat
 
     @Override
     public int getOrder() {
-        return 30;
+        return CONFIGURE_PATIENT_DASHBOARD_APPS_ACTIVATOR_STEP.ordinal();
     }
 
     @Override

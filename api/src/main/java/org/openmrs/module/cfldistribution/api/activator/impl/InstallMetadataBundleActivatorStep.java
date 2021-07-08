@@ -8,6 +8,7 @@ import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 import java.util.Collections;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP;
 
 /**
  * The Metadata Bundles are Java classes (beans) which add metadata to the system.
@@ -18,7 +19,7 @@ import static org.openmrs.api.context.Context.getRegisteredComponent;
 public class InstallMetadataBundleActivatorStep implements ModuleActivatorStep {
     @Override
     public int getOrder() {
-        return 40;
+        return INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP.ordinal();
     }
 
     @Override

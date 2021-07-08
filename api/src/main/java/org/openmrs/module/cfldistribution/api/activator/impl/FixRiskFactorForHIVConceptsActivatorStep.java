@@ -7,6 +7,8 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.FIX_RISK_FACTOR_FOR_HIV_CONCEPTS_ACTIVATOR_STEP;
+
 /**
  * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with annotated beans.
  */
@@ -15,7 +17,7 @@ public class FixRiskFactorForHIVConceptsActivatorStep implements ModuleActivator
 
     @Override
     public int getOrder() {
-        return 10;
+        return FIX_RISK_FACTOR_FOR_HIV_CONCEPTS_ACTIVATOR_STEP.ordinal();
     }
 
     @Override

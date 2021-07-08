@@ -6,13 +6,15 @@ import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cfl.CFLAppsConstants;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.ENABLE_CFL_APPS_ACTIVATOR_STEP;
+
 /**
  * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with annotated beans.
  */
 public class EnableCFLAppsActivatorStep implements ModuleActivatorStep {
     @Override
     public int getOrder() {
-        return 25;
+        return ENABLE_CFL_APPS_ACTIVATOR_STEP.ordinal();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.openmrs.module.cfldistribution.api.activator.impl;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptReferenceTerm;
@@ -25,8 +24,10 @@ import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.DATA_CLEANUP_ACTIVATOR_STEP;
+
 /**
- * Cleans
+ * Cleans database from OpenMRS reference data which are not used by CfL.
  * <p>
  * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with annotated beans.
  * </p>
@@ -52,15 +53,17 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
             "6351fcf4-e311-4a19-90f9-35667d99a8af,b1a8b05e-3542-4037-bbd3-998ee9c40574," +
             "58c57d25-8d39-41ab-8422-108a0c277d98,aff27d58-a15c-49a6-9beb-d30dcfc0c66e";
 
-    private final Log LOGGER = LogFactory.getLog(DataCleanupActivatorStep.class);
+    private Log log;
 
     @Override
     public int getOrder() {
-        return 50;
+        return DATA_CLEANUP_ACTIVATOR_STEP.ordinal();
     }
 
     @Override
     public void startup(Log log) {
+        this.log = log;
+
         if (!Boolean.parseBoolean(Context
                 .getAdministrationService()
                 .getGlobalProperty(CfldistributionGlobalParameterConstants.CFL_DISTRO_BOOTSTRAPPED_KEY))) {
@@ -68,7 +71,7 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
             createAndUpdateNecessaryData();
             markInitialDataCleanupAsDone();
         } else {
-            LOGGER.info("Initial data cleanup has already been performed");
+            log.info("Initial data cleanup has already been performed");
         }
     }
 
@@ -92,7 +95,8 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
     private void markInitialDataCleanupAsDone() {
         Context
                 .getAdministrationService()
-                .setGlobalProperty(CfldistributionGlobalParameterConstants.CFL_DISTRO_BOOTSTRAPPED_KEY, Boolean.TRUE.toString());
+                .setGlobalProperty(CfldistributionGlobalParameterConstants.CFL_DISTRO_BOOTSTRAPPED_KEY,
+                        Boolean.TRUE.toString());
     }
 
     private void removeUnnecessaryUsers() {
@@ -161,7 +165,7 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
         if (user != null) {
             user.setUserProperty(property, value);
         } else {
-            LOGGER.warn(String.format("User with username: %s not found", username));
+            log.warn(String.format("User with username: %s not found", username));
         }
 
     }
@@ -171,7 +175,7 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
         if (location != null) {
             location.setName(newName);
         } else {
-            LOGGER.warn(String.format("Location with uuid: %s not found", locationUuid));
+            log.warn(String.format("Location with uuid: %s not found", locationUuid));
         }
 
     }
@@ -182,7 +186,7 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
         if (location != null) {
             location.addTag(locationService.getLocationTagByName(locationTagName));
         } else {
-            LOGGER.warn(String.format("Location with uuid: %s not found", locationUuid));
+            log.warn(String.format("Location with uuid: %s not found", locationUuid));
         }
     }
 
@@ -206,14 +210,14 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
         final ConceptReferenceTerm validTerm = conceptService.getConceptReferenceTermByUuid(validConfirmedConceptTermUuid);
 
         if (invalidTerm == null || conceptWithInvalidTerm == null) {
-            LOGGER.info(new StringBuilder("Invalid Concept data [term: ")
+            log.info(new StringBuilder("Invalid Concept data [term: ")
                     .append(invalidConfirmedConceptTermUuid)
                     .append(", concept:")
                     .append(invalidConceptFromCovidRefMetadataUuid)
                     .append(")] from openmrs-module-referencemetadata/Covid-19_Concepts-1.xml ware not found.")
                     .toString());
         } else if (validTerm == null) {
-            LOGGER.error(new StringBuilder("Concept [")
+            log.error(new StringBuilder("Concept [")
                     .append(validConfirmedConceptTermUuid)
                     .append("] used to fix openmrs-module-referencemetadata/Covid-19_Concepts-1.xml was NOT found! ")
                     .append("The system may be unstable!")
