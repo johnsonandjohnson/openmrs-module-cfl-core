@@ -96,9 +96,5 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>providermanagement-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>visits-api</artifactId>
-        </dependency>
     </dependencies>
 </project>

@@ -65,7 +65,6 @@
         <calculationVersion>1.1</calculationVersion>
         <serializationXstream>0.2.12</serializationXstream>
         <providermanagementVersion>2.10.0</providermanagementVersion>
-        <visitsVersion>1.1.0</visitsVersion>
     </properties>
 
     <dependencyManagement>
@@ -326,12 +325,6 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>providermanagement-api</artifactId>
                 <version>${providermanagementVersion}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>visits-api</artifactId>
-                <version>${visitsVersion}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

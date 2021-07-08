@@ -12,6 +12,7 @@ import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
  * </p>
  */
 public class DisableCFLAppsBundle extends VersionedMetadataBundle {
+
     @Override
     public int getVersion() {
         return 1;
@@ -19,7 +20,7 @@ public class DisableCFLAppsBundle extends VersionedMetadataBundle {
 
     @Override
     protected void installEveryTime() {
-
+        // nothing to do
     }
 
     @Override
