@@ -23,4 +23,26 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+    <!-- START ModuleActivatorStep -->
+    <bean id="cfl-CreateGlobalParametersActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.CreateGlobalParametersActivatorStep" />
+    <bean id="cfl-UpdateGlobalParametersActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.UpdateGlobalParametersActivatorStep" />
+    <bean id="cfl-FixRiskFactorForHIVConceptsActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.FixRiskFactorForHIVConceptsActivatorStep" />
+    <bean id="cfl-InstallMetadataPackagesActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.InstallMetadataPackagesActivatorStep" />
+    <bean id="cfl-EnableCFLAppsActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.EnableCFLAppsActivatorStep" />
+    <bean id="cfl-ConfigurePatientDashboardAppsActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.ConfigurePatientDashboardAppsActivatorStep" />
+    <bean id="cfl-InstallMetadataBundleActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.InstallMetadataBundleActivatorStep" />
+    <bean id="cfl-DataCleanupActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.DataCleanupActivatorStep" />
+    <bean id="cfl-EnsureCFLTagRoleConfigurationIncludesDoctorRoleActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.activator.impl.EnsureCFLTagRoleConfigurationIncludesDoctorRoleActivatorStep" />
+    <!-- END ModuleActivatorStep -->
+
+    <bean id="cflRolePrivilegeProfiles" class="org.openmrs.module.cfldistribution.api.metadata.RolePrivilegeProfilesMetadata"/>
 </beans>

@@ -15,7 +15,14 @@ package org.openmrs.module.cfldistribution;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.ModuleException;
+import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -24,11 +31,26 @@ public class CfldistributionModuleActivator extends BaseModuleActivator {
 
     private Log log = LogFactory.getLog(this.getClass());
 
-    public void startup() {
+    @Override
+    public void started() {
         log.info("Starting Cfl Distribution Module");
+        try {
+            final List<ModuleActivatorStep> sortedSteps = Context
+                    .getRegisteredComponents(ModuleActivatorStep.class)
+                    .stream()
+                    .sorted(Comparator.comparing(ModuleActivatorStep::getOrder))
+                    .collect(Collectors.toList());
+
+            for (ModuleActivatorStep step : sortedSteps) {
+                step.startup(log);
+            }
+        } catch (Exception e) {
+            throw new ModuleException("Failed to start cfldistribution module.", e);
+        }
     }
 
-    public void shutdown() {
+    @Override
+    public void stopped() {
         log.info("Shutting down Cfl Distribution Module");
     }
 }
