@@ -7,7 +7,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openmrs.Patient;
 import org.openmrs.Person;
@@ -17,7 +16,6 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl;
-import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.messages.api.model.PatientTemplate;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
@@ -91,19 +89,16 @@ public class BaseWelcomeMessageSenderImplTest {
 
         when(Context.getAdministrationService()).thenReturn(administrationService);
         when(messagingGroupService.saveGroup(Mockito.any(ScheduledServiceGroup.class))).then(
-                new Answer<ScheduledServiceGroup>() {
-                    @Override
-                    public ScheduledServiceGroup answer(InvocationOnMock invocation) {
-                        final ScheduledServiceGroup scheduledServiceGroup =
-                                (ScheduledServiceGroup) invocation.getArguments()[0];
-                        scheduledServiceGroup.setId(idGenerator.incrementAndGet());
+                (Answer<ScheduledServiceGroup>) invocation -> {
+                    final ScheduledServiceGroup scheduledServiceGroup =
+                            (ScheduledServiceGroup) invocation.getArguments()[0];
+                    scheduledServiceGroup.setId(idGenerator.incrementAndGet());
 
-                        for (final ScheduledService scheduledService : scheduledServiceGroup.getScheduledServices()) {
-                            scheduledService.setId(idGenerator.incrementAndGet());
-                        }
-
-                        return scheduledServiceGroup;
+                    for (final ScheduledService scheduledService : scheduledServiceGroup.getScheduledServices()) {
+                        scheduledService.setId(idGenerator.incrementAndGet());
                     }
+
+                    return scheduledServiceGroup;
                 });
 
         final Template welcomeMessageTemplate = new Template();
@@ -144,7 +139,7 @@ public class BaseWelcomeMessageSenderImplTest {
         assertThat(resultScheduledExecutionContext.getPatientId(), is(testPatient.getId()));
         assertNotNull(resultScheduledExecutionContext.getServiceIdsToExecute());
         assertThat(resultScheduledExecutionContext.getServiceIdsToExecute().size(), is(1));
-        assertThat(resultScheduledExecutionContext.getExecutionDate(), is(now));
+        assertThat(Date.from(resultScheduledExecutionContext.getExecutionDate()), is(now));
     }
 
     @Test
@@ -173,7 +168,7 @@ public class BaseWelcomeMessageSenderImplTest {
         assertThat(resultScheduledExecutionContext.getPatientId(), is(testPatient.getId()));
         assertNotNull(resultScheduledExecutionContext.getServiceIdsToExecute());
         assertThat(resultScheduledExecutionContext.getServiceIdsToExecute().size(), is(1));
-        assertThat(resultScheduledExecutionContext.getExecutionDate(), is(tomorrowBestContactTime));
+        assertThat(Date.from(resultScheduledExecutionContext.getExecutionDate()), is(tomorrowBestContactTime));
     }
 
     private TestWelcomeMessageSenderImpl prepareTestWelcomeMessageSenderImpl() {

@@ -24,6 +24,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -100,7 +101,7 @@ public class VaccinesGlobalPropertyListenerTest {
         verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
         verify(schedulerService, times(1)).getTaskByName(anyString());
         verify(globalPropertyHistoryService, times(2)).getPreviousValueOfGlobalProperty(anyString());
-        verify(messagesSchedulerService, times(1)).createNewTask(any(), any(), any());
+        verify(messagesSchedulerService, times(1)).createNewTask(any(), any(Date.class), any());
     }
 
     @Test

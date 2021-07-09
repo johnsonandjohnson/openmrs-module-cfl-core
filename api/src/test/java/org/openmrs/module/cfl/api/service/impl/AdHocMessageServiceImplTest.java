@@ -18,6 +18,7 @@ import org.openmrs.module.messages.api.service.MessagingService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.messages.api.service.ScheduledServiceGroupService;
 import org.openmrs.module.messages.api.util.JsonUtil;
+import org.openmrs.module.messages.api.util.ScheduledExecutionContextUtil;
 import org.openmrs.module.messages.domain.criteria.QueryCriteria;
 import org.openmrs.module.messages.domain.criteria.ScheduledServiceCriteria;
 import org.openmrs.scheduler.SchedulerService;
@@ -43,7 +44,6 @@ import static org.mockito.Mockito.verify;
 public class AdHocMessageServiceImplTest extends BaseModuleContextSensitiveTest {
     private static final String CALL_CHANNEL_CALL_FLOW = "callFlow";
     private final Date now = new Date(1620743880000L); // 2021-05-11T14:38:00UTC
-    private final Gson gson = JsonUtil.getGson();
 
     @Autowired
     private PatientAdvancedDao patientAdvancedDao;
@@ -121,14 +121,14 @@ public class AdHocMessageServiceImplTest extends BaseModuleContextSensitiveTest 
             assertNotNull(executionContextJson);
 
             final ScheduledExecutionContext executionContext =
-                    gson.fromJson(executionContextJson, ScheduledExecutionContext.class);
+                    ScheduledExecutionContextUtil.fromJson(executionContextJson);
 
             final List<ScheduledService> scheduledServices = messagingService.findAllByCriteria(
                     ScheduledServiceCriteria.forIds(executionContext.getServiceIdsToExecute()));
 
             assertThat(scheduledServices.size(), is(1));
-            assertThat(executionContext.getExecutionDate(), is(now));
-            assertThat(executionContext.getExecutionDate(), is(taskDefinition.getNextExecutionTime()));
+            assertThat(Date.from(executionContext.getExecutionDate()), is(now));
+            assertThat(Date.from(executionContext.getExecutionDate()), is(taskDefinition.getNextExecutionTime()));
             assertThat(executionContext.getChannelType(), is(channelType));
             assertNotNull(executionContext.getChannelConfiguration());
             assertThat(executionContext.getChannelConfiguration().get(CALL_CHANNEL_CALL_FLOW), is(callFlowName));
