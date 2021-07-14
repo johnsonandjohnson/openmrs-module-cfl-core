@@ -2,20 +2,17 @@ package org.openmrs.module.cfl.web.model;
 
 import org.openmrs.module.messages.domain.PagingInfo;
 
-public class PageableParams {
+public final class PageableParams {
 
     private Integer rows;
 
     private Integer page;
 
     public PagingInfo getPagingInfo() {
-        Integer pageNumber = getPage();
-        validatePageIndex(pageNumber);
+        validatePageIndex(page);
+        validatePageSize(rows);
 
-        Integer pageSize = getRows();
-        validatePageSize(pageSize);
-
-        return new PagingInfo(pageNumber, pageSize);
+        return new PagingInfo(page, rows);
     }
 
     public Integer getRows() {
@@ -29,6 +26,10 @@ public class PageableParams {
 
     public Integer getPage() {
         return page;
+    }
+
+    public boolean hasPageInfo() {
+        return getPage() != null || getRows() != null;
     }
 
     public PageableParams setPage(Integer page) {

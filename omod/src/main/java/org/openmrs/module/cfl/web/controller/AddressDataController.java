@@ -8,6 +8,8 @@ import org.openmrs.module.addresshierarchy.util.AddressHierarchyImportUtil;
 import org.openmrs.module.cfl.web.dto.AddressDataDTO;
 import org.openmrs.module.cfl.web.model.PageableParams;
 import org.openmrs.module.messages.domain.PagingInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,15 +29,12 @@ import java.util.List;
 @RequestMapping("/cfl/address-data")
 public class AddressDataController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddressDataController.class);
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<AddressDataDTO> getAddressList(PageableParams pageableParams) {
-        AddressHierarchyService addressService = Context.getService(AddressHierarchyService.class);
-        List<List<String>> resultList = new ArrayList<>();
-        List<AddressHierarchyEntry> rootEntries = addressService.getAddressHierarchyEntriesAtTopLevel();
-        for (AddressHierarchyEntry entry : rootEntries) {
-            processData(addressService, entry, new ArrayList<>(), new ArrayList<>(), resultList);
-        }
+        List<List<String>> resultList = getAddressDataResults();
 
         PagingInfo pagingInfo = getPagingInfo(pageableParams, resultList.size());
 
@@ -65,15 +64,27 @@ public class AddressDataController {
                     userGeneratedIdDelimiter);
             return new ResponseEntity<>(file.getName() + " uploaded successfully", HttpStatus.OK);
         } catch (Exception e) {
+            LOGGER.error("Unable to import file. " + e.getMessage());
             return new ResponseEntity<>("Sorry, your file couldn't be uploaded", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    private List<List<String>> getAddressDataResults() {
+        AddressHierarchyService addressService = Context.getService(AddressHierarchyService.class);
+        List<List<String>> resultList = new ArrayList<>();
+        List<AddressHierarchyEntry> rootEntries = addressService.getAddressHierarchyEntriesAtTopLevel();
+        for (AddressHierarchyEntry entry : rootEntries) {
+            processData(addressService, entry, new ArrayList<>(), resultList);
+        }
+
+        return resultList;
+    }
+
     private void processData(AddressHierarchyService addressService, AddressHierarchyEntry entry,
-                             List<String> stack, List<String> singleElem, List<List<String>> resultList) {
+                             List<String> stack, List<List<String>> resultList) {
         List<AddressHierarchyEntry> entryChildren = addressService.getChildAddressHierarchyEntries(entry);
         if (CollectionUtils.isEmpty(entryChildren)) {
-            singleElem.addAll(stack);
+            List<String> singleElem = new ArrayList<>(stack);
             singleElem.add(entry.getName());
             List<String> singleElemCopy = new ArrayList<>(singleElem);
             resultList.add(singleElemCopy);
@@ -81,9 +92,9 @@ public class AddressDataController {
         } else {
             stack.add(entry.getName());
             for (AddressHierarchyEntry child : entryChildren) {
-                processData(addressService, child, stack, singleElem, resultList);
+                processData(addressService, child, stack, resultList);
             }
-            stack.remove(stack.size() - 1);
+            removeLastElementFromStack(stack);
         }
     }
 
@@ -96,12 +107,17 @@ public class AddressDataController {
 
     private PagingInfo getPagingInfo(PageableParams pageableParams, int allRecordsPageSize) {
         PagingInfo pagingInfo;
-        if (pageableParams.getPage() == null && pageableParams.getRows() == null) {
-            pagingInfo = new PagingInfo(1, allRecordsPageSize);
-        } else {
+        if (pageableParams.hasPageInfo()) {
             pagingInfo = pageableParams.getPagingInfo();
+        } else {
+            pagingInfo = new PagingInfo(1, allRecordsPageSize);
         }
 
         return pagingInfo;
     }
+
+    private void removeLastElementFromStack(List<String> stack) {
+        stack.remove(stack.size() - 1);
+    }
+
 }
