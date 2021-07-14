@@ -112,6 +112,10 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>messages-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>addresshierarchy-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
