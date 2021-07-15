@@ -24,7 +24,7 @@
   {
     "Phippipines":{
       "SMS":"nexmo",
-      "CALL":"nexmo",
+      "CALL":"voxeo",
       "Whatsapp":"plivo",
       "performCallOnPatientRegistration":true,
       "sendSmsOnPatientRegistration":false,
@@ -34,12 +34,12 @@
   },
   {
     "Columbia":{
-      "SMS":"turnIO",
-      "CALL":"voxeo",
+      "SMS":"columbiaTurnIO",
+      "CALL":"nexmo",
       "Whatsapp":"plivo",
       "performCallOnPatientRegistration":false,
-      "sendSmsOnPatientRegistration":false,
-      "shouldSendReminderViaCall":true,
+      "sendSmsOnPatientRegistration":true,
+      "shouldSendReminderViaCall":false,
       "shouldSendReminderViaSms":true
     }
   },
