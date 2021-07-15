@@ -1,9 +1,5 @@
 package org.openmrs.module.cfl.api.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +15,7 @@ import org.openmrs.api.context.Daemon;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.builder.CountrySettingBuilder;
 import org.openmrs.module.cfl.builder.LocationAttributeBuilder;
 import org.openmrs.module.cfl.builder.LocationAttributeTypeBuilder;
 import org.openmrs.module.cfl.builder.LocationBuilder;
@@ -27,8 +24,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -59,8 +54,6 @@ public class CountrySettingUtilTest {
 
     private Map<String, CountrySetting> countrySettingMap;
 
-    private static final String COUNTRY_SETTING = "CountrySetting.json";
-
     private static final String COUNTRY_DECODED_ATTR_TYPE_NAME = "Country decoded";
 
     @Before
@@ -70,7 +63,7 @@ public class CountrySettingUtilTest {
         when(Context.getLocationService()).thenReturn(locationService);
         when(Context.getAdministrationService()).thenReturn(administrationService);
         when(Context.getRegisteredComponent(anyString(), eq(ConfigService.class))).thenReturn(configService);
-        countrySettingMap = createCountrySettingMap();
+        countrySettingMap = CountrySettingBuilder.createCountrySettingMap();
         when(configService.getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY)).thenReturn(countrySettingMap);
         when(locationService.getLocationAttributeTypeByName(COUNTRY_DECODED_ATTR_TYPE_NAME))
                 .thenReturn(new LocationAttributeTypeBuilder().build());
@@ -170,23 +163,5 @@ public class CountrySettingUtilTest {
         patientIdentifiers.add(patientIdentifier);
         patient.setIdentifiers(patientIdentifiers);
         return patient;
-    }
-
-    private Map<String, CountrySetting> createCountrySettingMap() throws IOException {
-        Gson gson = new Gson();
-        String countrySettings = jsonToString(COUNTRY_SETTING);
-        JsonArray jsonArray = gson.fromJson(countrySettings, JsonArray.class);
-        Map<String, CountrySetting> countrySettingMap = new HashMap<String, CountrySetting>();
-        for (JsonElement jsonElement : jsonArray) {
-            for (Map.Entry<String, JsonElement> en : jsonElement.getAsJsonObject().entrySet()) {
-                countrySettingMap.put(en.getKey(), gson.fromJson(en.getValue().toString(), CountrySetting.class));
-            }
-        }
-        return countrySettingMap;
-    }
-
-    private String jsonToString(String jsonFile) throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsonFile);
-        return IOUtils.toString(in);
     }
 }
