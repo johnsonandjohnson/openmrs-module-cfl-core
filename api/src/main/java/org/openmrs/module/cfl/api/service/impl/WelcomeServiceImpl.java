@@ -9,7 +9,6 @@ import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.WelcomeService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PersonUtil;
-import org.openmrs.module.messages.api.constants.ConfigConstants;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
 import org.openmrs.module.messages.api.event.CallFlowParamConstants;
 import org.openmrs.module.messages.api.event.MessagesEvent;
@@ -35,21 +34,22 @@ public class WelcomeServiceImpl implements WelcomeService {
     private static final String SMS_INITIATE_EVENT = "send_sms";
     private static final String PATIENT_ACTOR_TYPE = "patient";
     private static final String PATIENT_PARAM = "patient";
+    private static final String SMS_CONFIG_KEY = "config";
 
     @Override
     public void sendWelcomeMessages(Person person) {
         CountrySetting countrySetting = CountrySettingUtil.getCountrySettingForPatient(person);
         if (StringUtils.isNotBlank(PersonUtil.getPhoneNumber(person))) {
             if (countrySetting.isSendSmsOnPatientRegistration()) {
-                sendSms(person);
+                sendSms(person, countrySetting.getSms());
             }
             if (countrySetting.isPerformCallOnPatientRegistration()) {
-                performCall(person);
+                performCall(person, countrySetting.getCall());
             }
         }
     }
 
-    private void sendSms(Person person) {
+    private void sendSms(Person person, String configName) {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(SmsEventParamConstants.RECIPIENTS,
                 new ArrayList<String>(Collections.singletonList(PersonUtil.getPhoneNumber(person))));
@@ -70,6 +70,7 @@ public class WelcomeServiceImpl implements WelcomeService {
 
         properties.put(SmsEventParamConstants.MESSAGE, message);
         properties.put(SmsEventParamConstants.CUSTOM_PARAMS, smsServiceParameters);
+        properties.put(SMS_CONFIG_KEY, configName);
 
         Context.getRegisteredComponent(MESSAGES_EVENT_SERVICE_BEAN_NAME, MessagesEventService.class)
                 .sendEventMessage(new MessagesEvent(SMS_INITIATE_EVENT, properties));
@@ -81,9 +82,9 @@ public class WelcomeServiceImpl implements WelcomeService {
                 .buildMessageByGlobalProperty(param, CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
     }
 
-    private void performCall(Person person) {
+    private void performCall(Person person, String configName) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(CONFIG, getCallConfig());
+        params.put(CONFIG, configName);
         params.put(FLOW_NAME, getCallFlowName());
 
         Map<String, Object> additionalParams = new HashMap<String, Object>();
@@ -100,11 +101,6 @@ public class WelcomeServiceImpl implements WelcomeService {
 
     private String getCallFlowName() {
         return getAdministrationService().getGlobalProperty(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY);
-    }
-
-    private String getCallConfig() {
-        return getAdministrationService().getGlobalProperty(ConfigConstants.CALL_CONFIG,
-                ConfigConstants.CALL_CONFIG_DEFAULT_VALUE);
     }
 
     private AdministrationService getAdministrationService() {
