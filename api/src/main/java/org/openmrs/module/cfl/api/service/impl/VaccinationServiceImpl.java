@@ -15,6 +15,7 @@ import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
+import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
@@ -84,6 +85,31 @@ public class VaccinationServiceImpl implements VaccinationService {
     public void rescheduleVisitsBasedOnRegimenChanges(String previousVaccineGPValue, String currentVaccineGPValue) {
         Map<String, Boolean> regimensDiffsMap = getRegimensDiffsMap(previousVaccineGPValue, currentVaccineGPValue);
         processRegimensChanges(regimensDiffsMap);
+    }
+
+    @Transactional
+    @Override
+    public List<RegimensPatientsDataDTO> getResultsList(String regimenGP) {
+        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        if (StringUtils.isNotBlank(regimenGP)) {
+            Randomization randomization = new Randomization(getGson().fromJson(regimenGP, Vaccination[].class));
+            for (Vaccination vaccination : randomization.getVaccinations()) {
+                List<Patient> patients = getCFLPatientService().findByVaccinationName(vaccination.getName());
+                List<String> patientsUuids = getPatientsUuids(patients);
+                resultList.add(new RegimensPatientsDataDTO(vaccination.getName(), patientsUuids, patients.size(),
+                        CollectionUtils.isNotEmpty(patients))
+                );
+            }
+        }
+        return resultList;
+    }
+
+    private List<String> getPatientsUuids(List<Patient> patients) {
+        List<String> patientUuids = new ArrayList<>();
+        for (Patient patient : patients) {
+            patientUuids.add(patient.getUuid());
+        }
+        return patientUuids;
     }
 
     private void processRegimensChanges(Map<String, Boolean> regimensDiffsMap) {
