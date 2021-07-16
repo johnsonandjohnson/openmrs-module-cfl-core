@@ -32,7 +32,7 @@ public class AddressDataController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AddressDataController.class);
 
-    private static final String COMMA_DELIMITER = ",";
+    private static final String DEFAULT_DELIMITER = ",";
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -52,7 +52,7 @@ public class AddressDataController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file,
-                                     @RequestParam(value = "delimiter", defaultValue = COMMA_DELIMITER) String delimiter,
+                                     @RequestParam(value = "delimiter", defaultValue = DEFAULT_DELIMITER) String delimiter,
                                      @RequestParam(value = "userGeneratedIdDelimiter", required = false)
                                        String userGeneratedIdDelimiter,
                                      @RequestParam(value = "overwrite", required = false) Boolean overwrite) {
@@ -67,7 +67,7 @@ public class AddressDataController {
             return new ResponseEntity<>(file.getName() + " uploaded successfully", HttpStatus.OK);
         } catch (IOException e) {
             LOGGER.error("Unable to import file. " + e.getMessage());
-            return new ResponseEntity<>("Sorry, your file couldn't be uploaded", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Sorry, your file couldn't be uploaded", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
