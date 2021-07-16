@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.web.dto;
+package org.openmrs.module.cfl.api.dto;
 
 import java.util.List;
 

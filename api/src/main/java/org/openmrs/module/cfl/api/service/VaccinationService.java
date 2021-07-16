@@ -2,8 +2,10 @@ package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.Patient;
 import org.openmrs.Visit;
+import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
 
 import java.util.Date;
+import java.util.List;
 
 public interface VaccinationService {
     /**
@@ -45,4 +47,14 @@ public interface VaccinationService {
      * @param currentVaccineGPValue current version of vaccines value
      */
     void rescheduleVisitsBasedOnRegimenChanges(String previousVaccineGPValue, String currentVaccineGPValue);
+
+    /**
+     * Retrieves information about available regimens and related patients and adapts results
+     * to {@link RegimensPatientsDataDTO} structure
+     *
+     * @param regimenGP - name of regimen global property
+     *
+     * @return - results adapted to {@link RegimensPatientsDataDTO} structure
+     */
+    List<RegimensPatientsDataDTO> getResultsList(String regimenGP);
 }
