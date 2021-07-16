@@ -1,6 +1,7 @@
-package org.openmrs.module.cfl.web.dto;
+package org.openmrs.module.cfl.api.dto;
 
-import java.util.ArrayList;
+import org.openmrs.module.cfl.api.model.AddressDataContent;
+
 import java.util.List;
 
 /**
@@ -16,14 +17,14 @@ public class AddressDataDTO {
 
     private boolean isNextPage;
 
-    private List<List<String>> content = new ArrayList<>();
+    private List<AddressDataContent> content;
 
     public AddressDataDTO() {
 
     }
 
     public AddressDataDTO(int pageNumber, int pageSize, int totalCount, boolean isNextPage,
-                          List<List<String>> content) {
+                          List<AddressDataContent> content) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
         this.totalCount = totalCount;
@@ -44,35 +45,32 @@ public class AddressDataDTO {
         return pageSize;
     }
 
-    public AddressDataDTO setPageSize(int pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-        return this;
     }
 
     public int getTotalCount() {
         return totalCount;
     }
 
-    public AddressDataDTO setTotalCount(int totalCount) {
+    public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
-        return this;
     }
 
     public boolean isNextPage() {
         return isNextPage;
     }
 
-    public AddressDataDTO setIsNextPage(boolean isNextPage) {
+    public void setIsNextPage(boolean isNextPage) {
         this.isNextPage = isNextPage;
-        return this;
     }
 
-    public List<List<String>> getContent() {
+    public List<AddressDataContent> getContent() {
         return content;
     }
 
-    public AddressDataDTO setContent(List<List<String>> content) {
+    public void setContent(List<AddressDataContent> content) {
         this.content = content;
-        return this;
     }
 }
+

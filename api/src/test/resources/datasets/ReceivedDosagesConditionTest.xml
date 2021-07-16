@@ -127,6 +127,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130002"
     />
     <visit_attribute visit_attribute_id="2301"
                      visit_id="2101"
@@ -142,6 +143,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130003"
     />
     <visit_attribute visit_attribute_id="2302"
                      visit_id="2102"
@@ -157,6 +159,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130004"
     />
     <visit_attribute visit_attribute_id="2303"
                      visit_id="2103"
@@ -174,6 +177,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130005"
     />
     <visit_attribute visit_attribute_id="2311"
                      visit_id="2111"
@@ -189,6 +193,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130006"
     />
     <visit_attribute visit_attribute_id="2312"
                      visit_id="2112"
@@ -204,6 +209,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130007"
     />
     <visit_attribute visit_attribute_id="2313"
                      visit_id="2113"
@@ -221,6 +227,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130008"
     />
     <visit_attribute visit_attribute_id="2321"
                      visit_id="2121"
@@ -236,6 +243,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130009"
     />
     <visit_attribute visit_attribute_id="2322"
                      visit_id="2122"
@@ -251,6 +259,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130010"
     />
     <visit_attribute visit_attribute_id="2323"
                      visit_id="2123"
@@ -268,6 +277,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130011"
     />
     <visit_attribute visit_attribute_id="2331"
                      visit_id="2131"
@@ -283,6 +293,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130012"
     />
     <visit_attribute visit_attribute_id="2332"
                      visit_id="2132"
@@ -298,6 +309,7 @@
            creator="1"
            date_created="2021-05-19 15:00:00.0"
            voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130013"
     />
     <visit_attribute visit_attribute_id="2333"
                      visit_id="2133"

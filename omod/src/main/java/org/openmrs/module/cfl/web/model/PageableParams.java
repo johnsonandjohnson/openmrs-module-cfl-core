@@ -8,33 +8,38 @@ public final class PageableParams {
 
     private Integer page;
 
-    public PagingInfo getPagingInfo() {
+    public PagingInfo getPagingInfo(int allRecordsPageSize) {
         validatePageIndex(page);
         validatePageSize(rows);
 
-        return new PagingInfo(page, rows);
+        PagingInfo pagingInfo;
+        if (hasPageInfo()) {
+            pagingInfo = new PagingInfo(page, rows);
+        } else {
+            pagingInfo = new PagingInfo(1, allRecordsPageSize);
+        }
+
+        return pagingInfo;
     }
 
     public Integer getRows() {
         return rows;
     }
 
-    public PageableParams setRows(Integer rows) {
+    public void setRows(Integer rows) {
         this.rows = rows;
-        return this;
     }
 
     public Integer getPage() {
         return page;
     }
 
-    public boolean hasPageInfo() {
-        return getPage() != null || getRows() != null;
+    public void setPage(Integer page) {
+        this.page = page;
     }
 
-    public PageableParams setPage(Integer page) {
-        this.page = page;
-        return this;
+    private boolean hasPageInfo() {
+        return getPage() != null || getRows() != null;
     }
 
     private void validatePageIndex(Integer pageNumber) {

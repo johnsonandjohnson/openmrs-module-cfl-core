@@ -6,24 +6,25 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
-import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.addresshierarchy.util.AddressHierarchyImportUtil;
-import org.openmrs.module.cfl.web.dto.AddressDataDTO;
+import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.dto.AddressDataDTO;
+import org.openmrs.module.cfl.api.model.AddressDataContent;
+import org.openmrs.module.cfl.api.service.AddressDataService;
 import org.openmrs.module.cfl.web.model.PageableParams;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,82 +44,78 @@ public class AddressDataControllerTest {
     @Mock
     private MultipartFile multipartFile;
 
+    @Mock
+    private AddressDataService addressDataService;
+
     @Before
     public void setUp() {
         mockStatic(Context.class);
         mockStatic(AddressHierarchyImportUtil.class);
         when(Context.getService(AddressHierarchyService.class)).thenReturn(addressHierarchyService);
-    }
-
-    @Test
-    public void getAddressList_shouldReturnEmptyResultsWithDefaultPagination() {
-        ResponseEntity<AddressDataDTO> response = addressDataController.getAddressList(new PageableParams());
-
-        verify(addressHierarchyService, times(1)).getAddressHierarchyEntriesAtTopLevel();
-        verify(addressHierarchyService, never()).getChildAddressHierarchyEntries(any(AddressHierarchyEntry.class));
-        assertEquals(200, response.getStatusCode().value());
-        assertEquals(0, response.getBody().getContent().size());
-        assertEquals(0, response.getBody().getTotalCount());
-        assertEquals(1, response.getBody().getPageNumber());
-        assertEquals(0, response.getBody().getPageSize());
+        when(Context.getRegisteredComponent(CFLConstants.CFL_ADDRESS_DATA_SERVICE_BEAN_NAME, AddressDataService.class))
+                .thenReturn(addressDataService);
     }
 
     @Test
     public void getAddressList_shouldReturnAllResultsWithDefaultPagination() {
-        buildTestData();
-
+        when(addressDataService.getAddressDataResults()).thenReturn(buildAddressDataContentList(50));
         ResponseEntity<AddressDataDTO> response = addressDataController.getAddressList(new PageableParams());
 
-        verify(addressHierarchyService, times(1)).getAddressHierarchyEntriesAtTopLevel();
+        verify(addressDataService, times(1)).getAddressDataResults();
+
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(5, response.getBody().getContent().size());
-        assertEquals(5, response.getBody().getTotalCount());
         assertEquals(1, response.getBody().getPageNumber());
-        assertEquals(5, response.getBody().getPageSize());
-        for (List<String> list : response.getBody().getContent()) {
-            assertEquals(5, list.size());
-        }
+        assertEquals(50, response.getBody().getPageSize());
+        assertEquals(50, response.getBody().getTotalCount());
+        assertFalse(response.getBody().isNextPage());
     }
 
     @Test
-    public void getAddressList_shouldReturnThreeResults() {
-        buildTestData();
-        PageableParams pageableParams = buildPaginationParams(1, 3);
-
+    public void getAddressList_shouldReturnAllResultsWithNullPagination() {
+        when(addressDataService.getAddressDataResults()).thenReturn(buildAddressDataContentList(10));
+        PageableParams pageableParams = buildPaginationParams(null, null);
         ResponseEntity<AddressDataDTO> response = addressDataController.getAddressList(pageableParams);
 
-        verify(addressHierarchyService, times(1)).getAddressHierarchyEntriesAtTopLevel();
+        verify(addressDataService, times(1)).getAddressDataResults();
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(10, response.getBody().getContent().size());
+        assertEquals(1, response.getBody().getPageNumber());
+        assertEquals(10, response.getBody().getPageSize());
+        assertEquals(10, response.getBody().getTotalCount());
+        assertFalse(response.getBody().isNextPage());
+    }
+
+    @Test
+    public void getAddressList_shouldReturnThreeResultsWithSetPagination() {
+        when(addressDataService.getAddressDataResults()).thenReturn(buildAddressDataContentList(10));
+        PageableParams pageableParams = buildPaginationParams(1, 3);
+        ResponseEntity<AddressDataDTO> response = addressDataController.getAddressList(pageableParams);
+
+        verify(addressDataService, times(1)).getAddressDataResults();
+
         assertEquals(200, response.getStatusCode().value());
         assertEquals(3, response.getBody().getContent().size());
-        assertEquals(5, response.getBody().getTotalCount());
         assertEquals(1, response.getBody().getPageNumber());
         assertEquals(3, response.getBody().getPageSize());
+        assertEquals(10, response.getBody().getTotalCount());
+        assertTrue(response.getBody().isNextPage());
     }
 
     @Test
     public void getAddressList_shouldReturnAllResultsWhenPageSizeIsGreaterThanResultSize() {
-        buildTestData();
+        when(addressDataService.getAddressDataResults()).thenReturn(buildAddressDataContentList(10));
         PageableParams pageableParams = buildPaginationParams(1, 100);
-
         ResponseEntity<AddressDataDTO> response = addressDataController.getAddressList(pageableParams);
 
-        verify(addressHierarchyService, times(1)).getAddressHierarchyEntriesAtTopLevel();
+        verify(addressDataService, times(1)).getAddressDataResults();
+
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(5, response.getBody().getContent().size());
-        assertEquals(5, response.getBody().getTotalCount());
+        assertEquals(10, response.getBody().getContent().size());
         assertEquals(1, response.getBody().getPageNumber());
         assertEquals(100, response.getBody().getPageSize());
-    }
-
-    @Test
-    public void uploadFile_shouldReturnStatus500WhenFileIsNull() {
-        ResponseEntity<String> response = addressDataController.uploadFile(null, ",",
-                null, false);
-
-        verifyStatic(times(0));
-        AddressHierarchyImportUtil.importAddressHierarchyFile(any(), any(), any());
-        assertEquals(500, response.getStatusCode().value());
-        assertEquals("Sorry, your file couldn't be uploaded", response.getBody());
+        assertEquals(10, response.getBody().getTotalCount());
+        assertFalse(response.getBody().isNextPage());
     }
 
     @Test
@@ -153,59 +150,18 @@ public class AddressDataControllerTest {
         verify(addressHierarchyService, times(1)).deleteAllAddressHierarchyEntries();
     }
 
-    private void buildTestData() {
-        AddressHierarchyLevel rootLevel = buildAddressHierarchyLevel(1, null);
-        AddressHierarchyLevel level2 = buildAddressHierarchyLevel(2, rootLevel);
-        AddressHierarchyLevel level3 = buildAddressHierarchyLevel(3, level2);
-        AddressHierarchyLevel level4 = buildAddressHierarchyLevel(4, level3);
-        AddressHierarchyLevel level5 = buildAddressHierarchyLevel(5, level4);
-
-        AddressHierarchyEntry rootEntry = buildAddressHierarchyEntry(1, "Philipines", rootLevel, null);
-        AddressHierarchyEntry level2Child1 = buildAddressHierarchyEntry(2, "Manila", level2, rootEntry);
-        AddressHierarchyEntry level3Child1 =
-                buildAddressHierarchyEntry(3, "Quezon City", level3, level2Child1);
-        AddressHierarchyEntry level4Child1 =
-                buildAddressHierarchyEntry(4, "Brgy Random", level4, level3Child1);
-        AddressHierarchyEntry level5Child1 = buildAddressHierarchyEntry(5, "1100", level5, level4Child1);
-        AddressHierarchyEntry level5Child2 = buildAddressHierarchyEntry(6, "1101", level5, level4Child1);
-        AddressHierarchyEntry level5Child3 = buildAddressHierarchyEntry(7, "1102", level5, level4Child1);
-        AddressHierarchyEntry level5Child4 = buildAddressHierarchyEntry(8, "1103", level5, level4Child1);
-        AddressHierarchyEntry level5Child5 = buildAddressHierarchyEntry(9, "1104", level5, level4Child1);
-
-        when(addressHierarchyService.getAddressHierarchyEntriesAtTopLevel()).thenReturn(Arrays.asList(rootEntry));
-        when(addressHierarchyService.getChildAddressHierarchyEntries(rootEntry))
-                .thenReturn(Arrays.asList(level2Child1));
-        when(addressHierarchyService.getChildAddressHierarchyEntries(level2Child1))
-                .thenReturn(Arrays.asList(level3Child1));
-        when(addressHierarchyService.getChildAddressHierarchyEntries(level3Child1))
-                .thenReturn(Arrays.asList(level4Child1));
-        when(addressHierarchyService.getChildAddressHierarchyEntries(level4Child1))
-                .thenReturn(Arrays.asList(level5Child1, level5Child2, level5Child3, level5Child4, level5Child5));
-        when(addressHierarchyService.getChildAddressHierarchyEntries(level5Child1)).thenReturn(Collections.emptyList());
+    private List<AddressDataContent> buildAddressDataContentList(int numberOfElements) {
+        List<AddressDataContent> addressDataContentList = new ArrayList<>();
+        for (int i = 0; i < numberOfElements; i++) {
+            addressDataContentList.add(new AddressDataContent(new ArrayList<>()));
+        }
+        return addressDataContentList;
     }
 
-    private PageableParams buildPaginationParams(int pageNumber, int pageSize) {
+    private PageableParams buildPaginationParams(Integer pageNumber, Integer pageSize) {
         PageableParams params = new PageableParams();
         params.setPage(pageNumber);
         params.setRows(pageSize);
         return params;
     }
-
-    private AddressHierarchyEntry buildAddressHierarchyEntry(Integer entryId, String name, AddressHierarchyLevel level,
-                                                             AddressHierarchyEntry parent) {
-        AddressHierarchyEntry addressHierarchyEntry = new AddressHierarchyEntry();
-        addressHierarchyEntry.setAddressHierarchyEntryId(entryId);
-        addressHierarchyEntry.setName(name);
-        addressHierarchyEntry.setLevel(level);
-        addressHierarchyEntry.setParent(parent);
-        return addressHierarchyEntry;
-    }
-
-    private AddressHierarchyLevel buildAddressHierarchyLevel(Integer levelId, AddressHierarchyLevel parentLevel) {
-        AddressHierarchyLevel addressHierarchyLevel = new AddressHierarchyLevel();
-        addressHierarchyLevel.setLevelId(levelId);
-        addressHierarchyLevel.setParent(parentLevel);
-        return addressHierarchyLevel;
-    }
-
 }
