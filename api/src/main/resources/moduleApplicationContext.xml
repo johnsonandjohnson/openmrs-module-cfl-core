@@ -219,4 +219,7 @@
     </bean>
 
     <bean id="cfl.DisableCFLAppsBundle" class="org.openmrs.module.cfl.api.metadata.DisableCFLAppsBundle" />
+
+    <bean id="cfl.addressService" class="org.openmrs.module.cfl.api.service.impl.AddressDataServiceImpl" />
+
 </beans>
