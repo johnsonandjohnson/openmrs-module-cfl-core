@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
+import org.openmrs.module.messages.api.service.impl.SmsServiceResultsHandlerServiceImpl;
 
 /**
  * The bean is configured in moduleApplicationContext.xml.
@@ -15,6 +17,15 @@ public class WelcomeMessageSMSSenderImpl extends BaseWelcomeMessageSenderImpl {
 
     public WelcomeMessageSMSSenderImpl() {
         super(CFLConstants.SMS_CHANNEL_TYPE);
+    }
+
+    @Override
+    protected ScheduledExecutionContext decorateScheduledExecutionContext(
+            ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
+        scheduledExecutionContext.getChannelConfiguration()
+                .put(SmsServiceResultsHandlerServiceImpl.SMS_CHANNEL_CONFIG_NAME, setting.getSms());
+
+        return scheduledExecutionContext;
     }
 
     @Override

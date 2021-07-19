@@ -9,6 +9,8 @@ import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
 import org.openmrs.module.messages.api.service.impl.CallFlowServiceResultsHandlerServiceImpl;
 
+import java.util.Map;
+
 /**
  * The bean is configured in moduleApplicationContext.xml.
  */
@@ -24,9 +26,10 @@ public class WelcomeMessageCallSenderImpl extends BaseWelcomeMessageSenderImpl {
     @Override
     protected ScheduledExecutionContext decorateScheduledExecutionContext(
             ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
-        scheduledExecutionContext
-                .getChannelConfiguration()
-                .put(CallFlowServiceResultsHandlerServiceImpl.CALL_CHANNEL_CONF_FLOW_NAME, getCallFlowName());
+        Map<String, String> channelConfiguration = scheduledExecutionContext.getChannelConfiguration();
+        channelConfiguration.put(CallFlowServiceResultsHandlerServiceImpl.CALL_CHANNEL_CONF_FLOW_NAME, getCallFlowName());
+        channelConfiguration.put(CallFlowServiceResultsHandlerServiceImpl.CALL_CHANNEL_CONFIG_NAME, setting.getCall());
+
         return scheduledExecutionContext;
     }
 
