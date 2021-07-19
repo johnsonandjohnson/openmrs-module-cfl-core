@@ -45,17 +45,16 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
 
     @Override
     public List<CFLPerson> findByPhone(String phone, boolean dead) {
-        Criteria crit = getSession().createCriteria(this.mappedClass);
-        crit.add(Restrictions.like(VALUE_COLUMN_NAME, phone, MatchMode.EXACT));
-        crit.add(Restrictions.eq(VOIDED_COLUMN_NAME, false));
+        Criteria criteria = getSession().createCriteria(this.mappedClass);
+        criteria.add(Restrictions.like(VALUE_COLUMN_NAME, phone, MatchMode.EXACT));
+        criteria.add(Restrictions.eq(VOIDED_COLUMN_NAME, false));
 
-        List<PersonAttribute> personAttributes = crit.list();
+        List<PersonAttribute> personAttributes = criteria.list();
 
-        List<CFLPerson> cflPersonList = new ArrayList<CFLPerson>();
+        List<CFLPerson> cflPersonList = new ArrayList<>();
         for (PersonAttribute personAttribute : personAttributes) {
-            if (!personAttribute.getPerson().getVoided() &&
-                    (dead || !personAttribute.getPerson().getDead())) {
-                Person person = personAttribute.getPerson();
+            Person person = personAttribute.getPerson();
+            if (!person.getVoided() && (dead || !person.getDead())) {
                 cflPersonList.add(new CFLPerson(person, isCaregiver(person)));
             }
         }

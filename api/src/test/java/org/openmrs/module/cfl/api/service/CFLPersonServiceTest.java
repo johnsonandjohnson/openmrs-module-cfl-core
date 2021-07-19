@@ -1,60 +1,87 @@
 package org.openmrs.module.cfl.api.service;
 
+import org.hibernate.Criteria;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.context.Daemon;
 import org.openmrs.api.db.PersonDAO;
+import org.openmrs.api.db.hibernate.DbSession;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfl.Constant;
 import org.openmrs.module.cfl.api.contract.CFLPerson;
 import org.openmrs.module.cfl.api.helper.PersonHelper;
+import org.openmrs.module.cfl.api.service.impl.CFLPersonServiceImpl;
 import org.openmrs.module.cfl.builder.PersonAttributeBuilder;
-import org.openmrs.module.cfl.builder.PersonNameBuilder;
 import org.openmrs.module.cfl.builder.PersonAttributeTypeBuilder;
 import org.openmrs.module.cfl.builder.PersonBuilder;
+import org.openmrs.module.cfl.builder.PersonNameBuilder;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest( {Context.class, Daemon.class} )
 public class CFLPersonServiceTest {
 
-    @Mock
-    private CFLPersonService cflPersonService;
+    @InjectMocks
+    private CFLPersonServiceImpl cflPersonService;
 
     @Mock
     private PersonDAO personDAO;
 
+    @Mock
+    private DbSessionFactory sessionFactory;
+
+    @Mock
+    private DbSession dbSession;
+
+    @Mock
+    private Criteria criteria;
+
     private Person person;
 
-    private PersonAttribute phoneNumberAttr;
+    private PersonAttributeType phoneAttributeType;
 
-    private PersonAttribute personStatusAttr;
-
-    private List<CFLPerson> cflPeople;
+    private PersonAttributeType personStatusType;
 
     @Before
     public void setUp() {
-      person = buildPerson();
-      cflPeople = prepareCflPeople();
-      when(personDAO.getPerson(person.getId())).thenReturn(person);
-      when(cflPersonService.findByPhone(Constant.PHONE_NUMBER, false)).thenReturn(cflPeople);
+        mockStatic(Context.class);
+
+        person = buildPerson(1, "John", "Test");
+
+        phoneAttributeType = buildPersonAttributeType(Constant.PHONE_NUMBER_ATTRIBUTE_NAME);
+        personStatusType = buildPersonAttributeType(Constant.PERSON_STATUS_ATTRIBUTE_NAME);
+        when(personDAO.getPerson(anyInt())).thenReturn(person);
+        when(sessionFactory.getCurrentSession()).thenReturn(dbSession);
+        when(dbSession.createCriteria(PersonAttribute.class)).thenReturn(criteria);
     }
 
     @Test
     public void shouldSavePhoneNumberAttribute() {
-        phoneNumberAttr = buildPhoneNumberAttribute();
-        person.addAttribute(phoneNumberAttr);
+        PersonAttribute phoneAttribute = buildPersonAttribute(person, phoneAttributeType, Constant.PHONE_NUMBER);
+        person.addAttribute(phoneAttribute);
+        when(personDAO.getPersonAttributeTypes(any(), any(), any(), any()))
+                .thenReturn(Arrays.asList(phoneAttributeType));
+
         cflPersonService.savePersonAttribute(person.getId(),
                 Constant.PHONE_NUMBER_ATTRIBUTE_NAME, Constant.PHONE_NUMBER);
 
@@ -62,13 +89,18 @@ public class CFLPersonServiceTest {
                 .getAttribute(Constant.PHONE_NUMBER_ATTRIBUTE_NAME);
 
         assertNotNull(personAttribute);
+        assertEquals(personAttribute.getAttributeType().getName(), Constant.PHONE_NUMBER_ATTRIBUTE_NAME);
         assertEquals(personAttribute.getValue(), Constant.PHONE_NUMBER);
     }
 
     @Test
     public void shouldSavePersonStatusAttribute() {
-        personStatusAttr = buildPersonStatusAttribute();
-        person.addAttribute(personStatusAttr);
+        PersonAttribute statusAttribute = buildPersonAttribute(person, personStatusType,
+                Constant.ACTIVATED_PERSON_STATUS);
+        person.addAttribute(statusAttribute);
+        when(personDAO.getPersonAttributeTypes(any(), any(), any(), any()))
+                .thenReturn(Arrays.asList(personStatusType));
+
         cflPersonService.savePersonAttribute(person.getId(),
                 Constant.PERSON_STATUS_ATTRIBUTE_NAME, Constant.ACTIVATED_PERSON_STATUS);
 
@@ -76,83 +108,57 @@ public class CFLPersonServiceTest {
                 .getAttribute(Constant.PERSON_STATUS_ATTRIBUTE_NAME);
 
         assertNotNull(personAttribute);
+        assertEquals(personAttribute.getAttributeType().getName(), Constant.PERSON_STATUS_ATTRIBUTE_NAME);
         assertEquals(personAttribute.getValue(), Constant.ACTIVATED_PERSON_STATUS);
     }
 
     @Test
     public void shouldFindPeopleByPhone() {
+        buildTestData();
+
         List<CFLPerson> people = cflPersonService.findByPhone(Constant.PHONE_NUMBER, false);
 
         assertNotNull(people);
         assertEquals(2, people.size());
-        assertTrue(PersonHelper.containsPerson(people, PersonHelper.JOHN_GIVEN_NAME + " " + PersonHelper.JOHN_FAMILY_NAME));
-        assertTrue(PersonHelper.containsPerson(people, PersonHelper.ADAM_GIVEN_NAME + " " + PersonHelper.ADAM_FAMILY_NAME));
-        assertFalse(people.get(0).isCaregiver());
-        assertTrue(people.get(1).isCaregiver());
+        assertTrue(PersonHelper.containsPerson(people,
+                PersonHelper.JOHN_GIVEN_NAME + " " + PersonHelper.JOHN_FAMILY_NAME));
+        assertTrue(PersonHelper.containsPerson(people,
+                PersonHelper.ADAM_GIVEN_NAME + " " + PersonHelper.ADAM_FAMILY_NAME));
+        for (CFLPerson person : people)  {
+            assertFalse(person.isCaregiver());
+        }
     }
 
-    private List<CFLPerson> prepareCflPeople() {
-        List<CFLPerson> poeple = new ArrayList<CFLPerson>();
+    private void buildTestData() {
+        Person person1 = buildPerson(Constant.ATTR_ID_1, PersonHelper.JOHN_GIVEN_NAME, PersonHelper.JOHN_FAMILY_NAME);
+        PersonAttribute phoneAttr1 = buildPersonAttribute(person1, phoneAttributeType, Constant.PHONE_NUMBER);
+        person1.addAttribute(buildPersonAttribute(person1, phoneAttributeType, Constant.PHONE_NUMBER));
 
-        Person person1 = new PersonBuilder()
-                .withName(new PersonNameBuilder().withGiven(PersonHelper.JOHN_GIVEN_NAME)
-                        .withFamily(PersonHelper.JOHN_FAMILY_NAME).build())
-                .build();
-        Person person2 = new PersonBuilder()
-                .withName(new PersonNameBuilder().withGiven(PersonHelper.ADAM_GIVEN_NAME)
-                        .withFamily(PersonHelper.ADAM_FAMILY_NAME).build())
-                .build();
+        Person person2 = buildPerson(Constant.ATTR_ID_2, PersonHelper.ADAM_GIVEN_NAME, PersonHelper.ADAM_FAMILY_NAME);
+        PersonAttribute phoneAttr2 = buildPersonAttribute(person2, phoneAttributeType, Constant.PHONE_NUMBER);
+        person2.addAttribute(buildPersonAttribute(person2, phoneAttributeType, Constant.PHONE_NUMBER));
 
-        PersonAttribute person1PhoneNumber = new PersonAttributeBuilder()
-                .withPerson(person1)
-                .withValue(Constant.PHONE_NUMBER)
-                .withPersonAttributeType(new PersonAttributeTypeBuilder().build())
-                .build();
-        person1.addAttribute(person1PhoneNumber);
-        cflPersonService.savePersonAttribute(person.getId(),
-                Constant.PHONE_NUMBER_ATTRIBUTE_NAME, Constant.PHONE_NUMBER);
-
-        PersonAttribute person2PhoneNumber = new PersonAttributeBuilder()
-                .withPerson(person2)
-                .withValue(Constant.PHONE_NUMBER)
-                .withPersonAttributeType(new PersonAttributeTypeBuilder().build())
-                .build();
-        person2.addAttribute(person2PhoneNumber);
-        cflPersonService.savePersonAttribute(person2.getId(),
-                Constant.PHONE_NUMBER_ATTRIBUTE_NAME, Constant.PHONE_NUMBER);
-
-        poeple.add(new CFLPerson(person1, false));
-        poeple.add(new CFLPerson(person2, true));
-
-        return poeple;
+        when(criteria.list()).thenReturn(Arrays.asList(phoneAttr1, phoneAttr2));
     }
 
-    private PersonAttribute buildPhoneNumberAttribute() {
-        return new PersonAttributeBuilder()
-                .withId(Constant.ATTR_ID_1)
-                .withPerson(person)
-                .withValue(Constant.PHONE_NUMBER)
-                .withPersonAttributeType(new PersonAttributeTypeBuilder()
-                        .withName(Constant.PHONE_NUMBER_ATTRIBUTE_NAME).build())
-                .build();
-    }
-
-    private PersonAttribute buildPersonStatusAttribute() {
-        return new PersonAttributeBuilder()
-                .withId(Constant.ATTR_ID_2)
-                .withPerson(person)
-                .withValue(Constant.ACTIVATED_PERSON_STATUS)
-                .withPersonAttributeType(new PersonAttributeTypeBuilder()
-                        .withName(Constant.PERSON_STATUS_ATTRIBUTE_NAME).build())
-                .build();
-    }
-
-    private Person buildPerson() {
+    private Person buildPerson(Integer id, String givenName, String familyName) {
         return new PersonBuilder()
-                .withId(Constant.ATTR_ID_1)
-                .withGender(Constant.MALE_GENDER)
-                .withName(new PersonNameBuilder().build())
+                .withId(id)
+                .withName(new PersonNameBuilder()
+                        .withGiven(givenName)
+                        .withFamily(familyName).build())
                 .build();
     }
 
+    private PersonAttribute buildPersonAttribute(Person person, PersonAttributeType attributeType, String value) {
+        return new PersonAttributeBuilder()
+                .withPerson(person)
+                .withPersonAttributeType(attributeType)
+                .withValue(value)
+                .build();
+    }
+
+    private PersonAttributeType buildPersonAttributeType(String attrTypeName) {
+        return new PersonAttributeTypeBuilder().withName(attrTypeName).build();
+    }
 }
