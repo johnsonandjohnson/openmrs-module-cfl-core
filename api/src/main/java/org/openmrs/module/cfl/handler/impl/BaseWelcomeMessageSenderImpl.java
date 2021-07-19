@@ -44,7 +44,7 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
     }
 
     protected ScheduledExecutionContext decorateScheduledExecutionContext(
-            final ScheduledExecutionContext scheduledExecutionContext) {
+            final ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
         return scheduledExecutionContext;
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
                 new ScheduledExecutionContext(scheduledServiceGroup.getScheduledServices(), channelType,
                         welcomeMessageDeliveryTime, patient, patient.getId(), MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
                         scheduledServiceGroup.getId());
-        messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext));
+        messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext, settings));
     }
 
     private PatientTemplate getOrCreateWelcomeMessagePatientTemplate(final Patient patient) {
