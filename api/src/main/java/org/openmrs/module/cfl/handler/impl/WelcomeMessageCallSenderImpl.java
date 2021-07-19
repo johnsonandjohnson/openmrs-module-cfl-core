@@ -23,7 +23,7 @@ public class WelcomeMessageCallSenderImpl extends BaseWelcomeMessageSenderImpl {
 
     @Override
     protected ScheduledExecutionContext decorateScheduledExecutionContext(
-            ScheduledExecutionContext scheduledExecutionContext) {
+            ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
         scheduledExecutionContext
                 .getChannelConfiguration()
                 .put(CallFlowServiceResultsHandlerServiceImpl.CALL_CHANNEL_CONF_FLOW_NAME, getCallFlowName());
