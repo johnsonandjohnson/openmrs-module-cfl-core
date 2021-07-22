@@ -1,14 +1,21 @@
 package org.openmrs.module.cfldistribution.api.metadata;
 
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.cfldistribution.CfldistributionConstants;
 import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.idSet;
 import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.role;
 
 /**
- * Metadata bundle which is used to install based CFL role profiles
+ * Metadata bundle which is used to install initial CFL role profiles.
+ * <p>
+ * This bundle contains global and mandatory privilege configuration, and also any optional privileges which depend on
+ * whether the optional modules are started.
+ * </p>
  */
 public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
 
@@ -101,7 +108,6 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
             "Edit User Passwords",
             "Edit Users",
             "Edit Visits",
-            "ETL Mappings Privilege",
             "Form Entry",
             "Generate Batch of Identifiers",
             "Get Allergies",
@@ -270,6 +276,11 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
             "App: reportingui.reports"
     );
 
+    /**
+     * Additional Doctor privileges when ETL Lite is stared.
+     */
+    private static final Set<String> DOCTOR_PRIVILEGES_ETL_OPTIONAL = idSet("ETL Mappings Privilege");
+
     @Override
     public int getVersion() {
         return 1;
@@ -291,6 +302,22 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
     }
 
     private void installDoctorRole() {
-        install(role(DOCTOR_PRIVILEGE_LEVEL, DOCTOR_PRIVILEGE_LEVEL_DESCRIPTION, idSet(), DOCTOR_PRIVILEGES));
+        install(role(DOCTOR_PRIVILEGE_LEVEL, DOCTOR_PRIVILEGE_LEVEL_DESCRIPTION, idSet(),
+                appendOptionalPrivilegeIds(DOCTOR_PRIVILEGES)));
     }
+
+    private Set<String> appendOptionalPrivilegeIds(final Set<String> basePrivileges) {
+        final Set<String> allPrivileges = new HashSet<>(basePrivileges);
+
+        if (moduleStarted(CfldistributionConstants.ETL_MODULE_ID)) {
+            allPrivileges.addAll(DOCTOR_PRIVILEGES_ETL_OPTIONAL);
+        }
+
+        return allPrivileges;
+    }
+
+    private boolean moduleStarted(final String moduleId) {
+        return ModuleFactory.getStartedModuleById(moduleId) != null;
+    }
+
 }
