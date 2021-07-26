@@ -3,11 +3,11 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>cfl</artifactId>
-        <version>1.1.2-2</version>
+        <version>1.1.2-3-SNAPSHOT</version>
     </parent>
 
     <artifactId>cfl-omod</artifactId>
-  <version>1.1.2-2</version>
+  <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>CFL Module OMOD</name>
     <description>Omod submodule for CFL Module</description>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>cfl-api</artifactId>
-            <version>1.1.2-2</version>
+            <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.openmrs.web</groupId>
