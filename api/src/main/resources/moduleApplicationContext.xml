@@ -79,6 +79,14 @@
         <property name="conceptService" ref="conceptService"/>
     </bean>
 
+    <bean id="cfl.personAttributeListenerService"
+          class="org.openmrs.module.cfl.api.service.impl.PersonAttributeListenerServiceImpl">
+        <property name="configService" ref="cfl.configService" />
+        <property name="vaccinationService" ref="cfl.vaccinationService" />
+        <property name="patientDAO" ref="patientDAO" />
+        <property name="visitService" ref="visitService" />
+    </bean>
+
     <bean id="cfl.registeringPeopleListener"
           class="org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener"
           init-method="init"
@@ -88,10 +96,11 @@
         <property name="visitReminderService" ref="cfl.visitReminderService"/>
     </bean>
 
-    <bean id="cfl.regimenUpdateListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegimenAttributeListener"
+    <bean id="cfl.PersonAttributeActionListener"
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.PersonAttributeActionListener"
           init-method="init"
           destroy-method="close">
+            <property name="personAttributeListenerService" ref="cfl.personAttributeListenerService" />
     </bean>
 
     <bean id="cfl.visitActionListener"
