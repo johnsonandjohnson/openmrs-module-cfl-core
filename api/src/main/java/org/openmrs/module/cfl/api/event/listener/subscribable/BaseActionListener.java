@@ -6,6 +6,7 @@ import org.openmrs.event.Event;
 import org.openmrs.event.SubscribableEventListener;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,22 @@ public abstract class BaseActionListener implements SubscribableEventListener, D
 
   public void setDaemonToken(DaemonToken daemonToken) {
     this.daemonToken = daemonToken;
+  }
+
+  /**
+   * Extracts an Action which caused the {@code message}.
+   *
+   * @param message the Event message, not null
+   * @return the Action which cause the Event, never null
+   * @throws IllegalArgumentException if {@code message} doesn't contain action or the value is wrong
+   */
+  protected Event.Action extractAction(Message message) {
+    final String actionName = getMessagePropertyValue(message, CFLConstants.ACTION_KEY);
+    try {
+      return Event.Action.valueOf(actionName);
+    } catch (IllegalArgumentException eae) {
+      throw new CflRuntimeException("Unable to retrieve event action for name: " + actionName, eae);
+    }
   }
 
   protected String getMessagePropertyValue(Message message, String propertyName) {

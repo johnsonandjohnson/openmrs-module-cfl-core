@@ -44,6 +44,7 @@ public final class CFLConstants {
 
     public static final String TELEPHONE_ATTRIBUTE_NAME = "Telephone Number";
 
+    public static final String ACTION_KEY = "action";
     public static final String UUID_KEY = "uuid";
 
     public static final String CAREGIVER_RELATIONSHIP_UUID = "acec590b-825e-45d2-876a-0028f174903d";
