@@ -77,9 +77,10 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
         final String patientPhoneNumber = PersonUtil.getPhoneNumber(patient);
         if (StringUtils.isNotBlank(patientPhoneNumber)) {
             messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext, settings));
-        } else if (LOGGER.isErrorEnabled()) {
-            LOGGER.error(String.format("Patient with id %d does not have an assigned phone number. " +
-                    "Welcome message will not be sent.", patient.getId()));
+        } else {
+            LOGGER.error(String.format("Patient %s with id %d does not have an assigned phone number. " +
+                    "Welcome message will not be sent.", patient.getGivenName() + " " + patient.getFamilyName(),
+                    patient.getId()));
         }
     }
 
