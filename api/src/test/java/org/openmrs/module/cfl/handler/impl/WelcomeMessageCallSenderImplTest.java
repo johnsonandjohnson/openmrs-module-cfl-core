@@ -6,7 +6,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.openmrs.Patient;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.ConfigService;
@@ -49,7 +48,7 @@ public class WelcomeMessageCallSenderImplTest extends AbstractBaseWelcomeMessage
         countrySetting.setPerformCallOnPatientRegistration(true);
         countrySetting.setCall(CALL_CONFIG_NAME);
 
-        welcomeMessageCallSender.send(new Patient(1), countrySetting);
+        welcomeMessageCallSender.send(testPatient, countrySetting);
 
         verify(messagesDeliveryService).scheduleDelivery(executionContext.capture());
         Map<String, String> channelConfiguration = executionContext.getValue().getChannelConfiguration();

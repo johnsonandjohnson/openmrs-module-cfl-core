@@ -6,12 +6,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.cfl.Constant;
 import org.openmrs.module.cfl.api.util.DateUtil;
+import org.openmrs.module.cfl.builder.PersonAttributeBuilder;
+import org.openmrs.module.cfl.builder.PersonAttributeTypeBuilder;
 import org.openmrs.module.messages.api.model.PatientTemplate;
 import org.openmrs.module.messages.api.model.ScheduledService;
 import org.openmrs.module.messages.api.model.ScheduledServiceGroup;
@@ -39,6 +45,7 @@ public abstract class AbstractBaseWelcomeMessageSenderImplTest {
 
     protected final Date now = new Date(1620743880000L); // 2021-05-11T14:38:00UTC
     protected final Date tomorrowBestContactTime = new Date(1620806400000L); // 2021-05-12T10:00:00UTC
+    protected Patient testPatient;
 
     private final TimeZone testTimeZone = TimeZone.getTimeZone("Europe/Warsaw");
     private final AtomicInteger idGenerator = new AtomicInteger(1);
@@ -101,5 +108,25 @@ public abstract class AbstractBaseWelcomeMessageSenderImplTest {
         welcomeMessagePatientTemplate.setTemplate(welcomeMessageTemplate);
         when(patientTemplateService.findOneByCriteria(Mockito.any(BaseCriteria.class))).thenReturn(
                 welcomeMessagePatientTemplate);
+
+        testPatient = buildTestPatient();
+    }
+
+    private Patient buildTestPatient() {
+        Patient patient = new Patient(1);
+        patient.addAttribute(buildPersonAttribute(
+                patient,
+                new PersonAttributeTypeBuilder().withName(Constant.PHONE_NUMBER_ATTRIBUTE_NAME).build(),
+                Constant.PHONE_NUMBER));
+
+        return patient;
+    }
+
+    private PersonAttribute buildPersonAttribute(Person person, PersonAttributeType type, String value) {
+        return new PersonAttributeBuilder()
+                .withPerson(person)
+                .withPersonAttributeType(type)
+                .withValue(value)
+                .build();
     }
 }
