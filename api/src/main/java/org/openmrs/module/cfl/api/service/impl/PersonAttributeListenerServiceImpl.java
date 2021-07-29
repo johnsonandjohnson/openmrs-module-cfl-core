@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Patient;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
@@ -10,12 +11,12 @@ import org.openmrs.event.Event;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.PersonAttributeListenerService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
-import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME;
@@ -64,7 +65,7 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
 
     private void updatePatientDateChanged(Patient patient) {
         if (patient != null) {
-            patient.setDateChanged(DateUtil.now());
+            patient.setDateChanged(new Date());
             patient.setChangedBy(Context.getUserContext().getAuthenticatedUser());
             patientDAO.savePatient(patient);
         }
@@ -77,7 +78,7 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
 
         final List<Visit> visits = visitService.getActiveVisitsByPatient(patient);
 
-        if (null != visits && !visits.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(visits)) {
             Visit visit = VisitUtil.getLastOccurredDosingVisit(visits);
             vaccinationService.rescheduleVisits(visit, patient);
         }

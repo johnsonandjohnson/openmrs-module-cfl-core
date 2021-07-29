@@ -96,7 +96,7 @@
         <property name="visitReminderService" ref="cfl.visitReminderService"/>
     </bean>
 
-    <bean id="cfl.PersonAttributeActionListener"
+    <bean id="cfl.personAttributeActionListener"
           class="org.openmrs.module.cfl.api.event.listener.subscribable.PersonAttributeActionListener"
           init-method="init"
           destroy-method="close">
