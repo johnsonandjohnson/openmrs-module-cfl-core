@@ -38,7 +38,7 @@ public class RegimenAttributeListener extends PersonAttributeActionListener {
         if (VACCINATION_PROGRAM_ATTRIBUTE_NAME.equals(personAttribute.getAttributeType().getName())) {
             Person person = personAttribute.getPerson();
             String newRegimen = getConfigService().getVaccinationProgram(person);
-            LOGGER.info("Regime updated for participant : {} to : {} ", person.getPersonId(), newRegimen);
+            LOGGER.info("Regimen updated for participant : {} to : {} ", person.getPersonId(), newRegimen);
             Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
             List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
             if (null != visits && !visits.isEmpty()) {
