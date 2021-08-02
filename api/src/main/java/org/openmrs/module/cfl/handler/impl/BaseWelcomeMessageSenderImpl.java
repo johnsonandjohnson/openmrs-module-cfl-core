@@ -1,11 +1,13 @@
 package org.openmrs.module.cfl.handler.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.util.DateUtil;
+import org.openmrs.module.cfl.api.util.PersonUtil;
 import org.openmrs.module.cfl.handler.WelcomeMessageSender;
 import org.openmrs.module.messages.api.builder.PatientTemplateBuilder;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
@@ -22,6 +24,8 @@ import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.messages.api.service.TemplateService;
 import org.openmrs.module.messages.domain.criteria.PatientTemplateCriteria;
 import org.openmrs.module.messages.domain.criteria.TemplateCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Date;
@@ -30,6 +34,9 @@ import java.util.Date;
  * The base class for {@link WelcomeMessageSender}s.
  */
 public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSender {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseWelcomeMessageSenderImpl.class);
+
     private final String channelType;
 
     private TemplateService templateService;
@@ -66,7 +73,15 @@ public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSend
                 new ScheduledExecutionContext(scheduledServiceGroup.getScheduledServices(), channelType,
                         welcomeMessageDeliveryTime, patient, patient.getId(), MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
                         scheduledServiceGroup.getId());
-        messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext, settings));
+
+        final String patientPhoneNumber = PersonUtil.getPhoneNumber(patient);
+        if (StringUtils.isNotBlank(patientPhoneNumber)) {
+            messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext, settings));
+        } else {
+            LOGGER.error(String.format("Patient %s with id %d does not have an assigned phone number. " +
+                    "Welcome message will not be sent.", patient.getGivenName() + " " + patient.getFamilyName(),
+                    patient.getId()));
+        }
     }
 
     private PatientTemplate getOrCreateWelcomeMessagePatientTemplate(final Patient patient) {

@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Spy;
-import org.openmrs.Patient;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.service.impl.ConfigServiceImpl;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
@@ -28,10 +27,6 @@ public class BaseWelcomeMessageSenderImplTest extends AbstractBaseWelcomeMessage
 
     @Test
     public void send_shouldScheduleSendingForNow() {
-        // Given
-        final Patient testPatient = new Patient();
-        testPatient.setId(1);
-
         final CountrySetting testCountrySetting = new CountrySetting();
         testCountrySetting.setPatientNotificationTimeWindowFrom("10:00");
         testCountrySetting.setPatientNotificationTimeWindowTo("18:00");
@@ -57,10 +52,6 @@ public class BaseWelcomeMessageSenderImplTest extends AbstractBaseWelcomeMessage
 
     @Test
     public void send_shouldScheduleSendingForTomorrowBestContactTime() {
-        // Given
-        final Patient testPatient = new Patient();
-        testPatient.setId(1);
-
         final CountrySetting testCountrySetting = new CountrySetting();
         testCountrySetting.setPatientNotificationTimeWindowFrom("00:00");
         testCountrySetting.setPatientNotificationTimeWindowTo("00:00");
