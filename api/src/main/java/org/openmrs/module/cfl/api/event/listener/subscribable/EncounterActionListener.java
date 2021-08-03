@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class EncounterActionListener extends BaseActionListener {
     @Override
     public List<Class<? extends OpenmrsObject>> subscribeToObjects() {
-        final List<Class<? extends OpenmrsObject>> list = new ArrayList<Class<? extends OpenmrsObject>>();
+        final List<Class<? extends OpenmrsObject>> list = new ArrayList<>();
         list.add(Encounter.class);
         return list;
     }
