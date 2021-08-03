@@ -21,6 +21,8 @@ import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 public class VaccinationServiceImpl implements VaccinationService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VaccinationServiceImpl.class);
 
     private static final String REGIMEN_CHANGE = "REGIMEN CHANGE";
 
@@ -41,23 +45,28 @@ public class VaccinationServiceImpl implements VaccinationService {
     @Override
     public void createFutureVisits(Visit occurredVisit, Date occurrenceDateTime) {
         final Vaccination vaccination = getVaccinationForPatient(occurredVisit.getPatient());
-        final int totalNumberOfDoses = vaccination.getNumberOfDose();
+        if (vaccination != null) {
+            final int totalNumberOfDoses = vaccination.getNumberOfDose();
 
-        final CountrySetting countrySetting = CountrySettingUtil.
-                getCountrySettingForPatient(occurredVisit.getPatient().getPerson());
+            final CountrySetting countrySetting = CountrySettingUtil.
+                    getCountrySettingForPatient(occurredVisit.getPatient().getPerson());
 
-        final Visit lastDosingVisit = VisitUtil.getLastDosingVisit(occurredVisit.getPatient(), vaccination);
+            final Visit lastDosingVisit = VisitUtil.getLastDosingVisit(occurredVisit.getPatient(), vaccination);
 
-        // should it create future visits and is this the last dosage visit that this patient had scheduled and it is not
-        // the last visit in program
-        if (countrySetting.isShouldCreateFutureVisit() && occurredVisit.equals(lastDosingVisit) &&
-                !isLastVisit(totalNumberOfDoses, occurredVisit)) {
+            // should it create future visits and is this the last dosage visit that this patient had scheduled and it is not
+            // the last visit in program
+            if (countrySetting.isShouldCreateFutureVisit() && occurredVisit.equals(lastDosingVisit) &&
+                    !isLastVisit(totalNumberOfDoses, occurredVisit)) {
 
-            final List<VisitInformation> futureVisits = getInformationForFutureVisits(occurredVisit, vaccination);
+                final List<VisitInformation> futureVisits = getInformationForFutureVisits(occurredVisit, vaccination);
 
-            for (VisitInformation futureVisit : futureVisits) {
-                prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
+                for (VisitInformation futureVisit : futureVisits) {
+                    prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
+                }
             }
+        } else {
+            LOGGER.warn(String.format("Vaccination program for patient with id: %d not found",
+                    occurredVisit.getPatient().getId()));
         }
     }
 
@@ -117,7 +126,13 @@ public class VaccinationServiceImpl implements VaccinationService {
             if (Boolean.TRUE.equals(entry.getValue())) {
                 List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
                 for (Patient patient : patients) {
-                    rescheduleVisitsByPatient(patient);
+                    try {
+                        rescheduleVisitsByPatient(patient);
+                    } catch (Exception ex) {
+                        LOGGER.error(String.format("Error occurred during rescheduling visits for patient " +
+                                        "with id: %d", patient.getId()), ex);
+                    }
+
                 }
             }
         }
