@@ -30,9 +30,6 @@ public class VisitEncounterListener extends EncounterActionListener {
             encounterVisit.setDateChanged(new Date());
             encounterVisit.setChangedBy(Context.getAuthenticatedUser());
             Context.getVisitService().saveVisit(encounterVisit);
-        } else {
-            LOGGER.info(String.format("Encounter with id: %d does not have an assigned visit",
-                    encounter.getEncounterId()));
         }
     }
 }
