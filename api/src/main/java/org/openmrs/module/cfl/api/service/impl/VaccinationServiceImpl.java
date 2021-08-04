@@ -20,7 +20,10 @@ import org.openmrs.module.cfl.api.service.CFLPatientService;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
+import org.openmrs.module.cfl.api.util.PatientUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -31,6 +34,8 @@ import java.util.Map;
 
 public class VaccinationServiceImpl implements VaccinationService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(VaccinationServiceImpl.class);
+
     private static final String REGIMEN_CHANGE = "REGIMEN CHANGE";
 
     private static final String VISITS_FIELD_NAME = "visits";
@@ -40,24 +45,13 @@ public class VaccinationServiceImpl implements VaccinationService {
     @Transactional
     @Override
     public void createFutureVisits(Visit occurredVisit, Date occurrenceDateTime) {
-        final Vaccination vaccination = getVaccinationForPatient(occurredVisit.getPatient());
-        final int totalNumberOfDoses = vaccination.getNumberOfDose();
-
-        final CountrySetting countrySetting = CountrySettingUtil.
-                getCountrySettingForPatient(occurredVisit.getPatient().getPerson());
-
-        final Visit lastDosingVisit = VisitUtil.getLastDosingVisit(occurredVisit.getPatient(), vaccination);
-
-        // should it create future visits and is this the last dosage visit that this patient had scheduled and it is not
-        // the last visit in program
-        if (countrySetting.isShouldCreateFutureVisit() && occurredVisit.equals(lastDosingVisit) &&
-                !isLastVisit(totalNumberOfDoses, occurredVisit)) {
-
-            final List<VisitInformation> futureVisits = getInformationForFutureVisits(occurredVisit, vaccination);
-
-            for (VisitInformation futureVisit : futureVisits) {
-                prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
-            }
+        final Patient patient = occurredVisit.getPatient();
+        final Vaccination vaccination = getVaccinationForPatient(patient);
+        if (vaccination != null) {
+            rescheduleVisits(occurredVisit, occurrenceDateTime, vaccination);
+        } else {
+            LOGGER.warn(String.format("Vaccination program for patient with name: %s and id: %d not found",
+                    PatientUtil.getPatientFullName(patient), patient.getId()));
         }
     }
 
@@ -104,6 +98,27 @@ public class VaccinationServiceImpl implements VaccinationService {
         return resultList;
     }
 
+    private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {
+        final int totalNumberOfDoses = vaccination.getNumberOfDose();
+
+        final CountrySetting countrySetting = CountrySettingUtil.
+                getCountrySettingForPatient(occurredVisit.getPatient().getPerson());
+
+        final Visit lastDosingVisit = VisitUtil.getLastDosingVisit(occurredVisit.getPatient(), vaccination);
+
+        // should it create future visits and is this the last dosage visit that this patient had scheduled and it is not
+        // the last visit in program
+        if (countrySetting.isShouldCreateFutureVisit() && occurredVisit.equals(lastDosingVisit) &&
+                !isLastVisit(totalNumberOfDoses, occurredVisit)) {
+
+            final List<VisitInformation> futureVisits = getInformationForFutureVisits(occurredVisit, vaccination);
+
+            for (VisitInformation futureVisit : futureVisits) {
+                prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
+            }
+        }
+    }
+
     private List<String> getPatientsUuids(List<Patient> patients) {
         List<String> patientUuids = new ArrayList<>();
         for (Patient patient : patients) {
@@ -117,7 +132,13 @@ public class VaccinationServiceImpl implements VaccinationService {
             if (Boolean.TRUE.equals(entry.getValue())) {
                 List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
                 for (Patient patient : patients) {
-                    rescheduleVisitsByPatient(patient);
+                    try {
+                        rescheduleVisitsByPatient(patient);
+                    } catch (Exception ex) {
+                        LOGGER.error(String.format("Error occurred during rescheduling visits for patient with name: " +
+                                "%s and id: %d", PatientUtil.getPatientFullName(patient), patient.getId()), ex);
+                    }
+
                 }
             }
         }
