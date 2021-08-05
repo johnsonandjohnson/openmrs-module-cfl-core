@@ -42,6 +42,8 @@ public final class VisitUtil {
         visit.setPatient(patient);
         visit.setStartDatetime(DateUtil.addDaysToDate(startDateTime, visitInformation.getMidPointWindow()));
         visit.setVisitType(getProperVisitType(visitInformation));
+        visit.setDateChanged(new Date());
+        visit.setChangedBy(Context.getAuthenticatedUser());
 
         visit.setAttribute(
                 createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
