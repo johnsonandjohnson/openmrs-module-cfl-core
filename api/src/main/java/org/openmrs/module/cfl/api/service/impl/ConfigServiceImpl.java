@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
@@ -75,7 +76,10 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public String getVaccinationProgram(Person person) {
-        return person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue();
+        final PersonAttribute vaccinationProgramAttribute =
+                person.getAttribute(CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME);
+
+        return vaccinationProgramAttribute != null ? vaccinationProgramAttribute.getValue() : null;
     }
 
     @Override

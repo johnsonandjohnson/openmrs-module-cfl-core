@@ -58,6 +58,12 @@ public interface ConfigService {
 
     Randomization getRandomizationGlobalProperty();
 
+    /**
+     * Get Vaccination Program set for {@code person} or null if the {@code person} has no vaccination program set.
+     *
+     * @param person the person to get Vaccination Program for, not null
+     * @return name of Vaccination Program, or null if not set
+     */
     String getVaccinationProgram(Person person);
 
     boolean isVaccinationInfoIsEnabled();
