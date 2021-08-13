@@ -50,6 +50,8 @@ public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
 
         when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
         when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(emptyList());
+        when(configService.getVaccinationProgram(patient)).thenReturn(
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue());
 
         personAttributeListenerService.onPersonAttributeEvent(Event.Action.UPDATED,
                 person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
@@ -66,6 +68,8 @@ public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
 
         when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
         when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(null);
+        when(configService.getVaccinationProgram(patient)).thenReturn(
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue());
 
         personAttributeListenerService.onPersonAttributeEvent(Event.Action.UPDATED,
                 person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));

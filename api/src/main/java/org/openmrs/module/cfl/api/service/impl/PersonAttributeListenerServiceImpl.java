@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.api.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
@@ -74,13 +75,19 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
     private void updateVaccination(Patient patient) {
         final String newRegimen = configService.getVaccinationProgram(patient.getPerson());
 
-        LOGGER.info("Regime updated for participant : {} to : {} ", patient.getPerson().getPersonId(), newRegimen);
+        if (StringUtils.isBlank(newRegimen)) {
+            LOGGER.info("Regimen removed for participant : {}", patient.getPerson().getPersonId());
 
-        final List<Visit> visits = visitService.getActiveVisitsByPatient(patient);
+            vaccinationService.voidFutureVisits(patient);
+        } else {
+            LOGGER.info("Regimen updated for participant : {} to : {} ", patient.getPerson().getPersonId(), newRegimen);
 
-        if (CollectionUtils.isNotEmpty(visits)) {
-            Visit visit = VisitUtil.getLastOccurredDosingVisit(visits);
-            vaccinationService.rescheduleVisits(visit, patient);
+            final List<Visit> visits = visitService.getActiveVisitsByPatient(patient);
+
+            if (CollectionUtils.isNotEmpty(visits)) {
+                Visit visit = VisitUtil.getLastOccurredDosingVisit(visits);
+                vaccinationService.rescheduleVisits(visit, patient);
+            }
         }
     }
 }
