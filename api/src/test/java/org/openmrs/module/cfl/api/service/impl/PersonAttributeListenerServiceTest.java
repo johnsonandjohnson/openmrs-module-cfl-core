@@ -62,24 +62,6 @@ public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
     }
 
     @Test
-    public void onPersonAttributeEvent_whenVisitListIsNull() {
-        final Person person = PersonHelper.createPerson();
-        final Patient patient = PatientHelper.createPatient(person, null);
-
-        when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
-        when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(null);
-        when(configService.getVaccinationProgram(patient)).thenReturn(
-                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue());
-
-        personAttributeListenerService.onPersonAttributeEvent(Event.Action.UPDATED,
-                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
-
-        verify(patientDAO, times(1)).getPatientByUuid(person.getUuid());
-        verify(visitService, times(1)).getActiveVisitsByPatient(patient);
-        verifyZeroInteractions(vaccinationService);
-    }
-
-    @Test
     public void onPersonAttributeEvent_shouldSetDateChangedForCreated() {
         internalShouldSetDateChangedFor(Event.Action.CREATED);
     }
