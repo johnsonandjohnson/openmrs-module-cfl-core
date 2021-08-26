@@ -1,0 +1,13 @@
+[
+  {
+    "id": "cfl.configureStandardHeader",
+    "extensionPointId": "org.openmrs.module.appui.header.config",
+    "type": "config",
+    "order": -1,
+    "extensionParams": {
+      "logo-link-url": "/referenceapplication/home.page",
+      "logo-icon-url": "/ms/uiframework/resource/cfldistribution/images/logo/connect_for_life.png",
+      "styles": ["../../ms/uiframework/resource/cfldistribution/styles/cfl.css"]
+    }
+  }
+]
