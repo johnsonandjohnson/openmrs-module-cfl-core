@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
  */
 public final class CFLAppsConstants {
     public static final String CFL_REGISTERCAREGIVER = "cfl.registerCaregiver";
-    public static final String CFL_FINDPERSON = "cfl.findPerson";
+    public static final String CFL_FINDPERSON = "cflui.findCaregiver";
     public static final String CFL_PATIENTDASHBOARD_IMPROVEMENTS = "cfl.patientDashboard.improvements";
     public static final String CFL_PATIENTFLAGS = "cfl.patientflags";
     public static final String CFL_ALLERGIES = "cfl.allergies";
