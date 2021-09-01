@@ -57,4 +57,6 @@ public interface VaccinationService {
      * @return - results adapted to {@link RegimensPatientsDataDTO} structure
      */
     List<RegimensPatientsDataDTO> getResultsList(String regimenGP);
+
+    void rescheduleVisitsByPatient(Patient patient);
 }

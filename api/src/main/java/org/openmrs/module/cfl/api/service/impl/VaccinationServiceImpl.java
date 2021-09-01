@@ -17,6 +17,7 @@ import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
+import org.openmrs.module.cfl.api.service.CFLVisitService;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
@@ -41,6 +42,8 @@ public class VaccinationServiceImpl implements VaccinationService {
     private static final String VISITS_FIELD_NAME = "visits";
 
     private static final String NUMBER_OF_DOSE_FIELD_NAME = "numberOfDose";
+
+    private static final Integer BATCH_SIZE = 100;
 
     @Transactional
     @Override
@@ -98,6 +101,18 @@ public class VaccinationServiceImpl implements VaccinationService {
         return resultList;
     }
 
+    @Transactional
+    @Override
+    public void rescheduleVisitsByPatient(Patient patient) {
+        List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
+        if (CollectionUtils.isNotEmpty(visits)) {
+            Visit lastOccurredDosingVisit = VisitUtil.getLastOccurredDosingVisit(visits);
+            if (lastOccurredDosingVisit != null) {
+                rescheduleVisits(lastOccurredDosingVisit, patient);
+            }
+        }
+    }
+
     private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {
         final int totalNumberOfDoses = vaccination.getNumberOfDose();
 
@@ -131,25 +146,15 @@ public class VaccinationServiceImpl implements VaccinationService {
         for (Map.Entry<String, Boolean> entry : regimensDiffsMap.entrySet()) {
             if (Boolean.TRUE.equals(entry.getValue())) {
                 List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
-                for (Patient patient : patients) {
-                    try {
-                        rescheduleVisitsByPatient(patient);
-                    } catch (Exception ex) {
-                        LOGGER.error(String.format("Error occurred during rescheduling visits for patient with name: " +
-                                "%s and id: %d", PatientUtil.getPatientFullName(patient), patient.getId()), ex);
+                int numberOfIterations = (patients.size() / BATCH_SIZE) + 1;
+                for (int i = 0; i < numberOfIterations; i++) {
+                    int endIndex = (i + 1) * BATCH_SIZE;
+                    if (endIndex > patients.size()) {
+                        endIndex = patients.size();
                     }
-
+                    List<Patient> subList = patients.subList(i * BATCH_SIZE, endIndex);
+                    getCFLVisitService().rescheduleVisitsByPatients(subList);
                 }
-            }
-        }
-    }
-
-    private void rescheduleVisitsByPatient(Patient patient) {
-        List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
-        if (CollectionUtils.isNotEmpty(visits)) {
-            Visit lastOccurredDosingVisit = VisitUtil.getLastOccurredDosingVisit(visits);
-            if (lastOccurredDosingVisit != null) {
-                rescheduleVisits(lastOccurredDosingVisit, patient);
             }
         }
     }
@@ -233,7 +238,6 @@ public class VaccinationServiceImpl implements VaccinationService {
         } else {
             visit.setLocation(patient.getPatientIdentifier().getLocation());
         }
-
         Context.getVisitService().saveVisit(visit);
     }
 
@@ -271,6 +275,10 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     private CFLPatientService getCFLPatientService() {
         return Context.getRegisteredComponent(CFLConstants.CFL_PATIENT_SERVICE_BEAN_NAME, CFLPatientService.class);
+    }
+
+    private CFLVisitService getCFLVisitService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_VISIT_SERVICE_BEAN_NAME, CFLVisitService.class);
     }
 
     private Gson getGson() {
