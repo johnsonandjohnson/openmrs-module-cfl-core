@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 public class CFLVisitServiceImpl implements CFLVisitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CFLVisitServiceImpl.class);
@@ -23,14 +22,14 @@ public class CFLVisitServiceImpl implements CFLVisitService {
     public void rescheduleVisitsByPatients(List<Patient> patients) {
         for (Patient patient : patients) {
             try {
+                //flushing and clearing session cache due performance issues
                 Context.flushSession();
                 Context.clearSession();
-                getVaccinationService().rescheduleVisitsByPatient(patient);
+                getVaccinationService().rescheduleRegimenVisitsByPatient(patient);
             } catch (Exception ex) {
                 LOGGER.error(String.format("Error occurred during rescheduling visits for patient with name: " +
                         "%s and id: %d", PatientUtil.getPatientFullName(patient), patient.getId()), ex);
             }
-
         }
     }
 

@@ -103,7 +103,7 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     @Transactional
     @Override
-    public void rescheduleVisitsByPatient(Patient patient) {
+    public void rescheduleRegimenVisitsByPatient(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
         if (CollectionUtils.isNotEmpty(visits)) {
             Visit lastOccurredDosingVisit = VisitUtil.getLastOccurredDosingVisit(visits);

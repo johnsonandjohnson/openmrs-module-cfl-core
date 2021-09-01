@@ -6,7 +6,9 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
 import org.openmrs.module.cfl.Constant;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class PatientHelper {
@@ -20,6 +22,20 @@ public final class PatientHelper {
         patient.setIdentifiers(identifiers);
         patient.setUuid(Constant.PATIENT_UUID);
         return patient;
+    }
+
+    public static Patient buildPatient(Integer id) {
+        Patient patient = new Patient();
+        patient.setPatientId(id);
+        return patient;
+    }
+
+    public static List<Patient> buildPatientList(Integer numberOfPatients) {
+        List<Patient> patientList = new ArrayList<>();
+        for (int i = 0; i < numberOfPatients; i++) {
+            patientList.add(buildPatient(i + 1));
+        }
+        return patientList;
     }
 
     private PatientHelper() {
