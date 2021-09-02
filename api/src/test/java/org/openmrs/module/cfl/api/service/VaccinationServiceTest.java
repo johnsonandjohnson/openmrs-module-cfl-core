@@ -9,12 +9,19 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
+import org.openmrs.Location;
+import org.openmrs.Visit;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.Constant;
 import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
+import org.openmrs.module.cfl.api.helper.LocationHelper;
+import org.openmrs.module.cfl.api.helper.PatientHelper;
+import org.openmrs.module.cfl.api.helper.PersonHelper;
+import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.impl.VaccinationServiceImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -24,6 +31,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -40,6 +49,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest( {Context.class, Daemon.class} )
 public class VaccinationServiceTest {
+
+    private final Date visitStartDate = new Date(1621528680000L);
 
     private static final String RANDOMIZATION = "Randomization.json";
 
@@ -134,6 +145,25 @@ public class VaccinationServiceTest {
 
         verify(cflPatientService, times(0)).findByVaccinationName(anyString());
         assertEquals(0, results.size());
+    }
+
+    @Test
+    public void rescheduleVisitsBasedOnRegimenChanges_whenVisitsAreNotNull() throws IOException {
+        Person person = PersonHelper.createPerson();
+        Location location = LocationHelper.createLocation();
+        Patient patient = PatientHelper.createPatient(person, location);
+        Visit visit = VisitHelper.createVisit(1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_SCHEDULED,
+                visitStartDate);
+        when(cflPatientService.findByVaccinationName(anyString())).thenReturn(buildTestPatientsList());
+
+        String randomization = jsonToString(RANDOMIZATION);
+        String randomizationUpdated = jsonToString(RANDOMIZATION_UPDATED);
+        when(Context.getVisitService()).thenReturn(visitService);
+        when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(Collections.singletonList(visit));
+        when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.createVisitAttrTypes());
+        vaccinationService.rescheduleVisitsBasedOnRegimenChanges(randomization, randomizationUpdated);
+        verify(cflPatientService, times(1)).findByVaccinationName(anyString());
+        verify(visitService, times(5)).getActiveVisitsByPatient(any(Patient.class));
     }
 
     private List<Patient> preparePatientsWithVac001() {

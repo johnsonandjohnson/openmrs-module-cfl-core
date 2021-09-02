@@ -52,6 +52,8 @@ public final class Constant {
 
     public static final String ADMIN = "admin";
 
+    public static final String VISIT_STATUS_SCHEDULED = "SCHEDULED";
+
     private Constant() {
     }
 }
