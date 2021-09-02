@@ -20,6 +20,7 @@ import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseActionListener;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
+import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
@@ -64,6 +65,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
             setupHtmlForms();
 
+            // Install metadata packages
+            MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
             installMetadataBundles();
         } catch (Exception e) {
             throw new ModuleException("failed to setup the required modules", e);
