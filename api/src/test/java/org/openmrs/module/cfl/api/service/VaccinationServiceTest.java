@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,6 +53,8 @@ public class VaccinationServiceTest {
 
     private static final String VAC_003 = "vac003";
 
+    private final VaccinationService vaccinationService = new VaccinationServiceImpl();
+
     @Mock
     private CFLPatientService cflPatientService;
 
@@ -62,9 +64,8 @@ public class VaccinationServiceTest {
     @Mock
     private AdministrationService administrationService;
 
-    private final VaccinationService vaccinationService = new VaccinationServiceImpl();
-
-    private List<Patient> patients;
+    @Mock
+    private CFLVisitService cflVisitService;
 
     private PersonAttributeType vaccinationProgramAttrType;
 
@@ -76,11 +77,12 @@ public class VaccinationServiceTest {
         when(Context.getAdministrationService()).thenReturn(administrationService);
         when(Context.getRegisteredComponent(CFLConstants.CFL_PATIENT_SERVICE_BEAN_NAME, CFLPatientService.class))
                 .thenReturn(cflPatientService);
+        when(Context.getRegisteredComponent(CFLConstants.CFL_VISIT_SERVICE_BEAN_NAME, CFLVisitService.class))
+                .thenReturn(cflVisitService);
         when(cflPatientService.findByVaccinationName(VAC_001)).thenReturn(preparePatientsWithVac001());
         when(cflPatientService.findByVaccinationName(VAC_002)).thenReturn(preparePatientsWithVac002());
         when(cflPatientService.findByVaccinationName(VAC_003)).thenReturn(preparePatientsWithVac003());
 
-        patients = buildTestPatientsList();
         vaccinationProgramAttrType = buildAttributeType(1, "Vaccination program");
     }
 
@@ -90,14 +92,17 @@ public class VaccinationServiceTest {
 
         String randomization = jsonToString(RANDOMIZATION);
         String randomizationUpdated = jsonToString(RANDOMIZATION_UPDATED);
+
         vaccinationService.rescheduleVisitsBasedOnRegimenChanges(randomization, randomizationUpdated);
+
         verify(cflPatientService, times(1)).findByVaccinationName(anyString());
-        verify(visitService, times(5)).getActiveVisitsByPatient(any(Patient.class));
+        verify(cflVisitService, times(1)).rescheduleVisitsByPatients(anyListOf(Patient.class));
     }
 
     @Test
     public void rescheduleVisitsBasedOnRegimenChanges_whenVaccinesValuesAreNull() {
         vaccinationService.rescheduleVisitsBasedOnRegimenChanges(null, null);
+
         verifyZeroInteractions(cflPatientService);
         verifyZeroInteractions(visitService);
     }

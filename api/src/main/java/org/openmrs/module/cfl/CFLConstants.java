@@ -312,6 +312,8 @@ public final class CFLConstants {
 
     public static final String CFL_ADDRESS_DATA_SERVICE_BEAN_NAME = "cfl.addressService";
 
+    public static final String CFL_VISIT_SERVICE_BEAN_NAME = "cfl.visitService";
+
     private CFLConstants() {
     }
 }
