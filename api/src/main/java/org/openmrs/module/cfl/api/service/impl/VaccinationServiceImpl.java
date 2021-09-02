@@ -146,12 +146,9 @@ public class VaccinationServiceImpl implements VaccinationService {
         for (Map.Entry<String, Boolean> entry : regimensDiffsMap.entrySet()) {
             if (Boolean.TRUE.equals(entry.getValue())) {
                 List<Patient> patients = getCFLPatientService().findByVaccinationName(entry.getKey());
-                int numberOfIterations = (patients.size() / BATCH_SIZE) + 1;
+                int numberOfIterations = (int) Math.ceil((float) patients.size() / BATCH_SIZE);
                 for (int i = 0; i < numberOfIterations; i++) {
-                    int endIndex = (i + 1) * BATCH_SIZE;
-                    if (endIndex > patients.size()) {
-                        endIndex = patients.size();
-                    }
+                    int endIndex = Math.min((i + 1) * BATCH_SIZE, patients.size());
                     List<Patient> subList = patients.subList(i * BATCH_SIZE, endIndex);
                     getCFLVisitService().rescheduleVisitsByPatients(subList);
                 }
