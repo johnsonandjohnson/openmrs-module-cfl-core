@@ -33,6 +33,10 @@ public final class DateUtil {
         return getDateWithDefaultTimeZone(new Date());
     }
 
+    public static Date nowInSystemTimeZone() {
+        return getDateWithTimeZone(new Date(), getSystemTimeZone());
+    }
+
     public static Date getDateWithDefaultTimeZone(Date timestamp) {
         return getDateWithTimeZone(timestamp, getDefaultSystemTimeZone());
     }

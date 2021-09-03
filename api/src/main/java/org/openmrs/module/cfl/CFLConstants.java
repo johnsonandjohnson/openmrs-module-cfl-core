@@ -308,7 +308,7 @@ public final class CFLConstants {
 
     public static final String MESSAGES_SCHEDULER_SERVICE_BEAN_NAME = "messages.schedulerService";
 
-    public static final String UPDATE_REGIMEN_TASK_NAME_PREFIX = "UpdateRegimen:";
+    public static final String UPDATE_REGIMEN_JOB_NAME = "Update Regimen Job";
 
     public static final String CFL_ADDRESS_DATA_SERVICE_BEAN_NAME = "cfl.addressService";
 

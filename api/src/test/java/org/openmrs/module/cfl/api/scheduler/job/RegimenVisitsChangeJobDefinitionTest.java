@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -66,10 +65,12 @@ public class RegimenVisitsChangeJobDefinitionTest {
                 .thenReturn(Constant.TEST_GP_VALUE_2);
         job.execute();
 
-        verify(globalPropertyHistoryService, times(2))
+        verify(globalPropertyHistoryService)
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(vaccinationService, times(1)).rescheduleVisitsBasedOnRegimenChanges(anyString(), anyString());
+        verify(administrationService)
+                .getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+        verify(vaccinationService)
+                .rescheduleVisitsBasedOnRegimenChanges(anyString(), anyString());
     }
 
     @Test
@@ -78,9 +79,10 @@ public class RegimenVisitsChangeJobDefinitionTest {
                 .thenReturn(globalPropertyHistory);
         when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(null);
         job.execute();
-        verify(globalPropertyHistoryService, times(2))
+        verify(globalPropertyHistoryService)
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+        verify(administrationService)
+                .getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
         verifyZeroInteractions(vaccinationService);
 
     }
