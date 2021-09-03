@@ -22,6 +22,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -86,7 +87,7 @@ public class UserAppHandlerTest extends BaseContextMockTest {
         final String userAppUuid = handler.getUuid(userAppWithName);
 
         // then
-        assertEquals("UserApp:" + userAppName, userAppUuid);
+        assertEquals(UUID.nameUUIDFromBytes(userAppName.getBytes()).toString(), userAppUuid);
     }
 
     @Test
@@ -268,6 +269,7 @@ public class UserAppHandlerTest extends BaseContextMockTest {
     @Test
     public void shouldReturnUserAppByUUID() {
         // given
+        final String userAppAUUID = UUID.nameUUIDFromBytes("A".getBytes()).toString();
         final UserApp userAppA = new UserApp();
         userAppA.setAppId("A");
         final UserApp userAppB = new UserApp();
@@ -285,13 +287,9 @@ public class UserAppHandlerTest extends BaseContextMockTest {
         handler.setSessionFactory(dbSessionFactory);
 
         // when
-        final UserApp actualById = handler.getItemByUuid(UserApp.class, "UserApp:" + userAppA.getAppId());
+        final UserApp actualByUuid = handler.getItemByUuid(UserApp.class, userAppAUUID);
 
         // then
-        assertEquals(userAppA, actualById);
-        final ArgumentCaptor<Criterion> argumentCaptor = ArgumentCaptor.forClass(Criterion.class);
-        verify(criteriaMock).add(argumentCaptor.capture());
-        final Criterion actualCriterion = argumentCaptor.getValue();
-        assertEquals("appId=A", actualCriterion.toString());
+        assertEquals(userAppA, actualByUuid);
     }
 }

@@ -2,7 +2,6 @@ package org.openmrs.module.cfl.handler.metadatasharing;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.appframework.AppFrameworkActivator;
@@ -20,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  * This bean is configured in moduleApplicationContext.xml
  * </p>
  * <p>
- * The {@link UserApp} has no ID nor UUID, for both the String `appId` is used: its hashcode for Integer ID and its
- * value for UUID (leveraging the lack of UUID validation).
+ * The {@link UserApp} has no ID nor UUID, for both the String `appId` is used: its hashcode for Integer ID and reliably
+ * generates UUID from the 'appId'.
  * This class saves entities by direct usage of Hibernate Session (from DbSessionFactory), it will perform flush and
  * refresh app context for each save. It's not efficient, but it was not possible to add code which would run after all
  * items.
@@ -39,7 +39,6 @@ public class UserAppHandler
         implements MetadataTypesHandler<UserApp>, MetadataSearchHandler<UserApp>, MetadataSaveHandler<UserApp>,
         MetadataPropertiesHandler<UserApp> {
     private static final int HIGHER_THEN_BUILD_IN = 10;
-    private static final String UUID_PREFIX = "UserApp:";
 
     private final Map<Class<? extends UserApp>, String> types;
 
@@ -71,7 +70,7 @@ public class UserAppHandler
 
     @Override
     public String getUuid(UserApp object) {
-        return UUID_PREFIX + object.getAppId();
+        return UUID.nameUUIDFromBytes(object.getAppId().getBytes()).toString();
     }
 
     @Override
@@ -153,9 +152,15 @@ public class UserAppHandler
 
     @Override
     public UserApp getItemByUuid(Class<? extends UserApp> type, String uuid) {
-        return (UserApp) getCriteriaForAll()
-                .add(Restrictions.eq("appId", uuid.substring(UUID_PREFIX.length())))
-                .uniqueResult();
+        final List<UserApp> allUserApps = getCriteriaForAll().list();
+
+        for (UserApp userApp : allUserApps) {
+            if (getUuid(userApp).equals(uuid)) {
+                return userApp;
+            }
+        }
+
+        return null;
     }
 
     @Override
