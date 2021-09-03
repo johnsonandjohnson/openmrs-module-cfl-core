@@ -32,7 +32,6 @@ import java.util.Optional;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyZeroInteractions;
@@ -99,9 +98,9 @@ public class VaccinesGlobalPropertyListenerTest {
 
         vaccinesGlobalPropertyListener.performAction(message);
 
-        verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
-        verify(schedulerService, times(1)).getTaskByName(anyString());
-        verify(messagesSchedulerService, times(1))
+        verify(administrationService).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
+        verify(schedulerService).getTaskByName(anyString());
+        verify(messagesSchedulerService)
                 .createNewTask(any(JobDefinition.class), any(Instant.class), any(JobRepeatInterval.class));
     }
 
@@ -114,9 +113,9 @@ public class VaccinesGlobalPropertyListenerTest {
 
         vaccinesGlobalPropertyListener.performAction(message);
 
-        verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
-        verify(schedulerService, times(1)).getTaskByName(anyString());
-        verify(schedulerService, times(1)).saveTaskDefinition(any(TaskDefinition.class));
+        verify(administrationService).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
+        verify(schedulerService).getTaskByName(anyString());
+        verify(schedulerService).saveTaskDefinition(any(TaskDefinition.class));
         verifyZeroInteractions(messagesSchedulerService);
     }
 

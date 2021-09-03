@@ -42,24 +42,24 @@ public class VaccinesGlobalPropertyListener extends GlobalPropertyActionListener
         LOGGER.debug("Vaccines global property action listener triggered");
         GlobalProperty updatedGP = extractGlobalProperty(message);
         if (StringUtils.equals(updatedGP.getProperty(), CFLConstants.VACCINATION_PROGRAM_KEY)) {
-            TaskDefinition updateRegimenTask = getTaskByName(CFLConstants.UPDATE_REGIMEN_JOB_NAME);
-            configureOrCreateTask(updateRegimenTask);
+            configureOrCreateTask();
         }
     }
 
-    private TaskDefinition getTaskByName(String taskName) {
-        return Context.getSchedulerService().getTaskByName(taskName);
-    }
-
-    private void configureOrCreateTask(TaskDefinition task) {
-        if (task != null) {
-            setTimeAndEnableTask(task);
+    private void configureOrCreateTask() {
+        TaskDefinition updateRegimenTask = getTaskByName(CFLConstants.UPDATE_REGIMEN_JOB_NAME);
+        if (updateRegimenTask != null) {
+            setTimeAndEnableTask(updateRegimenTask);
         } else {
             getMessagesSchedulerService().createNewTask(new RegimenVisitsChangeJobDefinition(),
                     getTaskStartTime().toInstant(), JobRepeatInterval.NEVER);
         }
         LOGGER.info("Task with name: " + CFLConstants.UPDATE_REGIMEN_JOB_NAME +
                 " has been configured and will be executed at: " + getTaskStartTime());
+    }
+
+    private TaskDefinition getTaskByName(String taskName) {
+        return Context.getSchedulerService().getTaskByName(taskName);
     }
 
     private void setTimeAndEnableTask(TaskDefinition task) {
