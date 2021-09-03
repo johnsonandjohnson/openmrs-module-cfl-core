@@ -16,6 +16,8 @@ import org.openmrs.module.cfl.api.service.GlobalPropertyHistoryService;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.builder.GlobalPropertyBuilder;
 import org.openmrs.module.cfl.builder.GlobalPropertyHistoryBuilder;
+import org.openmrs.module.messages.api.scheduler.job.JobDefinition;
+import org.openmrs.module.messages.api.scheduler.job.JobRepeatInterval;
 import org.openmrs.module.messages.api.service.MessagesSchedulerService;
 import org.openmrs.scheduler.SchedulerService;
 import org.openmrs.scheduler.TaskDefinition;
@@ -24,10 +26,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -41,6 +42,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest( {Context.class} )
 public class VaccinesGlobalPropertyListenerTest {
 
+    @InjectMocks
+    private VaccinesGlobalPropertyListener vaccinesGlobalPropertyListener;
+
     @Mock
     private AdministrationService administrationService;
 
@@ -53,9 +57,6 @@ public class VaccinesGlobalPropertyListenerTest {
     @Mock
     private GlobalPropertyHistoryService globalPropertyHistoryService;
 
-    @InjectMocks
-    private VaccinesGlobalPropertyListener vaccinesGlobalPropertyListener;
-
     @Mock
     private MapMessage message;
 
@@ -64,7 +65,7 @@ public class VaccinesGlobalPropertyListenerTest {
     private Optional<GlobalPropertyHistory> globalPropertyHistory;
 
     @Before
-    public void setUp() {
+    public void setUp() throws JMSException {
         mockStatic(Context.class);
 
         when(Context.getAdministrationService()).thenReturn(administrationService);
@@ -75,6 +76,8 @@ public class VaccinesGlobalPropertyListenerTest {
                 GlobalPropertyHistoryService.class)).thenReturn(globalPropertyHistoryService);
         globalProperty = createTestGlobalProperty();
         globalPropertyHistory = createGlobalPropertyHistory();
+        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.TEST_GP_UUID);
+        when(administrationService.getGlobalPropertyByUuid(Constant.TEST_GP_UUID)).thenReturn(globalProperty);
     }
 
     @Test
@@ -89,33 +92,31 @@ public class VaccinesGlobalPropertyListenerTest {
     }
 
     @Test
-    public void performAction_whenGlobalPropertyIsNotNull() throws JMSException {
-        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.TEST_GP_UUID);
-        when(administrationService.getGlobalPropertyByUuid(Constant.TEST_GP_UUID)).thenReturn(globalProperty);
-        assertEquals(CFLConstants.VACCINATION_PROGRAM_KEY, globalProperty.getProperty());
-
+    public void performAction_whenGlobalPropertyIsNotNullAndUpdateRegimenJobDoesNotExistYet() {
+        when(schedulerService.getTaskByName(anyString())).thenReturn(null);
         doReturn(globalPropertyHistory).when(globalPropertyHistoryService)
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
 
         vaccinesGlobalPropertyListener.performAction(message);
+
         verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
         verify(schedulerService, times(1)).getTaskByName(anyString());
-        verify(globalPropertyHistoryService, times(2)).getPreviousValueOfGlobalProperty(anyString());
-        verify(messagesSchedulerService, times(1)).createNewTask(any(), any(Date.class), any());
+        verify(messagesSchedulerService, times(1))
+                .createNewTask(any(JobDefinition.class), any(Instant.class), any(JobRepeatInterval.class));
     }
 
     @Test
-    public void performAction_whenRelatedTaskAlreadyExists() throws JMSException {
-        when(message.getString(CFLConstants.UUID_KEY)).thenReturn(Constant.TEST_GP_UUID);
-        when(administrationService.getGlobalPropertyByUuid(Constant.TEST_GP_UUID)).thenReturn(globalProperty);
-        assertEquals(CFLConstants.VACCINATION_PROGRAM_KEY, globalProperty.getProperty());
+    public void performAction_whenGlobalPropertyIsNotNullAndUpdateRegimenJobAlreadyExists() {
+        when(schedulerService.getTaskByName(anyString())).thenReturn(new TaskDefinition());
 
         doReturn(globalPropertyHistory).when(globalPropertyHistoryService)
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
 
-        when(schedulerService.getTaskByName(anyString())).thenReturn(new TaskDefinition());
-
         vaccinesGlobalPropertyListener.performAction(message);
+
+        verify(administrationService, times(1)).getGlobalPropertyByUuid(Constant.TEST_GP_UUID);
+        verify(schedulerService, times(1)).getTaskByName(anyString());
+        verify(schedulerService, times(1)).saveTaskDefinition(any(TaskDefinition.class));
         verifyZeroInteractions(messagesSchedulerService);
     }
 

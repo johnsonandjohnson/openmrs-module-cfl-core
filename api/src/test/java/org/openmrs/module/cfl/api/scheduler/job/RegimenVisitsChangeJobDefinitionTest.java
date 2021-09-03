@@ -66,10 +66,12 @@ public class RegimenVisitsChangeJobDefinitionTest {
                 .thenReturn(Constant.TEST_GP_VALUE_2);
         job.execute();
 
-        verify(globalPropertyHistoryService, times(2))
+        verify(globalPropertyHistoryService, times(1))
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(vaccinationService, times(1)).rescheduleVisitsBasedOnRegimenChanges(anyString(), anyString());
+        verify(administrationService, times(1))
+                .getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+        verify(vaccinationService, times(1))
+                .rescheduleVisitsBasedOnRegimenChanges(anyString(), anyString());
     }
 
     @Test
@@ -78,9 +80,10 @@ public class RegimenVisitsChangeJobDefinitionTest {
                 .thenReturn(globalPropertyHistory);
         when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(null);
         job.execute();
-        verify(globalPropertyHistoryService, times(2))
+        verify(globalPropertyHistoryService, times(1))
                 .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
+        verify(administrationService, times(1))
+                .getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
         verifyZeroInteractions(vaccinationService);
 
     }

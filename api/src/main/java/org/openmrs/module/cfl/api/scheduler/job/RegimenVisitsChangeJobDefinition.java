@@ -7,7 +7,6 @@ import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.model.GlobalPropertyHistory;
 import org.openmrs.module.cfl.api.service.GlobalPropertyHistoryService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
-import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.messages.api.scheduler.job.JobDefinition;
 
 import java.util.Optional;
@@ -38,22 +37,12 @@ public class RegimenVisitsChangeJobDefinition extends JobDefinition {
 
     @Override
     public String getTaskName() {
-        return CFLConstants.UPDATE_REGIMEN_TASK_NAME_PREFIX + getTaskExecutionDate();
+        return CFLConstants.UPDATE_REGIMEN_JOB_NAME;
     }
 
     @Override
     public Class getTaskClass() {
         return RegimenVisitsChangeJobDefinition.class;
-    }
-
-    private String getTaskExecutionDate() {
-        Optional<GlobalPropertyHistory> vaccinesGPHistory = getGlobalPropertyHistoryService()
-                .getPreviousValueOfGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        return vaccinesGPHistory.map(globalPropertyHistory ->
-                DateUtil.convertDate(DateUtil.getDateWithTimeOfDay(
-                        DateUtil.addDaysToDate(globalPropertyHistory.getActionDate(), 1), DateUtil.MIDNIGHT_TIME,
-                        DateUtil.getSystemTimeZone()), DateUtil.DATE_AND_TIME_AND_TIME_ZONE_PATTERN))
-                .orElse(null);
     }
 
     private GlobalPropertyHistoryService getGlobalPropertyHistoryService() {
