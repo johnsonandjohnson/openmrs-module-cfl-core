@@ -29,6 +29,7 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
     private WelcomeService welcomeService;
     private VisitReminderService visitReminderService;
+    private ConfigService configService;
 
     @Override
     public List<String> subscribeToActions() {
@@ -41,8 +42,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
         safeSendWelcomeMessages(person);
 
-        if (getConfigService().isVaccinationInfoIsEnabled()) {
-            createFirstVisit(person, getConfigService().getVaccinationProgram(person));
+        if (configService.isVaccinationInfoIsEnabled()) {
+            createFirstVisit(person, configService.getVaccinationProgram(person));
             visitReminderService.create(person);
         }
     }
@@ -53,6 +54,10 @@ public class RegisteringPeopleListener extends PeopleActionListener {
 
     public void setVisitReminderService(VisitReminderService visitReminderService) {
         this.visitReminderService = visitReminderService;
+    }
+
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
     }
 
     private void safeSendWelcomeMessages(Person person) {
@@ -86,12 +91,8 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     }
 
     private VisitInformation getFirstVisitInfo(String vaccinationProgram) {
-        Randomization randomization = getConfigService().getRandomizationGlobalProperty();
+        Randomization randomization = configService.getRandomizationGlobalProperty();
         Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
         return vaccination.getVisits().get(0);
-    }
-
-    private ConfigService getConfigService() {
-        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 }

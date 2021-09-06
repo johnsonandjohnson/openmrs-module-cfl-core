@@ -61,13 +61,7 @@
     </bean>
 
     <bean id="cfl.personViewedEventListener"
-          class="org.openmrs.module.cfl.api.event.PersonViewedEventListener"/>
-
-    <bean id="cfl.peopleActionListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.PeopleActionListener"
-          abstract="true">
-        <property name="personService" ref="personService"/>
-    </bean>
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.PersonViewedEventListener"/>
 
     <bean id="cfl.visitReminderService"
           class="org.openmrs.module.cfl.api.service.impl.VisitReminderServiceImpl"/>
@@ -88,18 +82,15 @@
     </bean>
 
     <bean id="cfl.registeringPeopleListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener"
-          init-method="init"
-          destroy-method="close"
-          parent="cfl.peopleActionListener">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.RegisteringPeopleListener">
+        <property name="personService" ref="personService"/>
         <property name="welcomeService" ref="cfl.welcomeService"/>
         <property name="visitReminderService" ref="cfl.visitReminderService"/>
+        <property name="configService" ref="cfl.configService"/>
     </bean>
 
     <bean id="cfl.personAttributeActionListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.PersonAttributeActionListener"
-          init-method="init"
-          destroy-method="close">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.PersonAttributeActionListener">
             <property name="personAttributeListenerService" ref="cfl.personAttributeListenerService" />
     </bean>
 
@@ -109,27 +100,19 @@
     </bean>
 
     <bean id="cfl.updatingVisitListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener"
-          init-method="init"
-          destroy-method="close">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener">
     </bean>
 
     <bean id="cfl.vaccinationEncounterListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.VaccinationEncounterListener"
-          init-method="init"
-          destroy-method="close">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.VaccinationEncounterListener">
     </bean>
 
     <bean id="cfl.vaccinesGlobalPropertyListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.VaccinesGlobalPropertyListener"
-          init-method="init"
-          destroy-method="close">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.VaccinesGlobalPropertyListener">
     </bean>
 
     <bean id="cfl.visitEncounterListener"
-          class="org.openmrs.module.cfl.api.event.listener.subscribable.VisitEncounterListener"
-          init-method="init"
-          destroy-method="close">
+          class="org.openmrs.module.cfl.api.event.listener.subscribable.VisitEncounterListener">
     </bean>
 
     <bean id="cfl.personIdentifierAction"
