@@ -15,7 +15,7 @@ public final class CfldistributionGlobalParameterConstants {
                     "be restart after change this GP and in order to revert those changes you need to manually clean the " +
                     "appframework_component_state table";
 
-    public static final String CFL_LOCATION_ATTRIBUTE_TYPE_UUID = "bfdf8ed0-87e3-437e-897d-81434393a233";
+    public static final String CFL_LOCATION_ATTRIBUTE_TYPE_UUID = "0a93cbc6-5d65-4886-8091-47a25d3df944";
 
     private CfldistributionGlobalParameterConstants() {
 
