@@ -15,9 +15,10 @@ import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
-import org.openmrs.module.cfl.api.event.AbstractMessagesEventListener;
-import org.openmrs.module.cfl.api.event.CflEventListenerFactory;
+import org.openmrs.module.cfl.api.event.listener.subscribable.AbstractMessagesEventListener;
+import org.openmrs.module.cfl.api.event.CflEventListenerHelper;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseActionListener;
+import org.openmrs.module.cfl.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
@@ -57,7 +58,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             createGlobalSettings();
             createHtmlFormProperties();
 
-            CflEventListenerFactory.registerEventListeners();
+            CflEventListenerHelper.registerEventListeners();
 
             createVisitNoteUrlProperties();
 
@@ -79,21 +80,15 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     @Override
     public void stopped() {
         log.info("Stopped CFL Module");
-        CflEventListenerFactory.unRegisterEventListeners();
+        CflEventListenerHelper.unRegisterEventListeners();
     }
 
     @Override
     public void setDaemonToken(DaemonToken token) {
         log.info("Set daemon token to CFL Module event listeners");
-        List<AbstractMessagesEventListener> eventComponents =
-                Context.getRegisteredComponents(AbstractMessagesEventListener.class);
-        for (AbstractMessagesEventListener eventListener : eventComponents) {
-            eventListener.setDaemonToken(token);
-        }
-
-        List<BaseActionListener> actionListeners = Context.getRegisteredComponents(BaseActionListener.class);
-        for (BaseActionListener actionListener : actionListeners) {
-            actionListener.setDaemonToken(token);
+        final List<BaseListener> listeners = Context.getRegisteredComponents(BaseListener.class);
+        for (BaseListener listener : listeners) {
+            listener.setDaemonToken(token);
         }
     }
 

@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.api.event;
+package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
@@ -31,7 +31,7 @@ public class PersonViewedEventListener extends AbstractMessagesEventListener {
 
     /**
      * Processes the specified jms message
-     *
+     * <p>
      * The method is based on org.openmrs.module.emrapi.event.PatientViewedEventListener.processMessage
      * (emrapi-api:1.26.0)
      *
@@ -46,13 +46,13 @@ public class PersonViewedEventListener extends AbstractMessagesEventListener {
         String userUuid = properties.getString(CFLConstants.EVENT_KEY_USER_UUID);
         Person personToAdd = Context.getPersonService().getPersonByUuid(personUuid);
         if (personToAdd == null || personToAdd.getId() == null) {
-            throw new APIException(String.format(
-                    "Failed to find a person with uuid: %s or the person is not yet saved", personUuid));
+            throw new APIException(
+                    String.format("Failed to find a person with uuid: %s or the person is not yet saved", personUuid));
         }
 
         UserService userService = Context.getUserService();
         User user = userService.getUserByUuid(userUuid);
-        if (user != null && personToAdd != null) {
+        if (user != null) {
             List<Integer> personIds = getNewListWithUniqueIds(personToAdd, user);
 
             String property = StringUtils.join(personIds, ",");
@@ -60,10 +60,8 @@ public class PersonViewedEventListener extends AbstractMessagesEventListener {
                 //exceeded the user property max size and hence needs trimming.
                 //find the last comma before index 255 and cut off from there
                 //RA-200 Wyclif says patients ids at the end of the string are the most recent
-                //so that is why we trim from begining instead of end.
-                property = property.substring(property.indexOf(
-                        ',',
-                        property.length() - MAX_CHARACTERS_IN_PROPERTY) + ONE);
+                //so that is why we trim from beginning instead of end.
+                property = property.substring(property.indexOf(',', property.length() - MAX_CHARACTERS_IN_PROPERTY) + ONE);
             }
 
             userService.setUserProperty(user, CFLConstants.USER_PROPERTY_NAME_LAST_VIEWED_PERSON_IDS, property);

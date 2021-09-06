@@ -1,10 +1,7 @@
-package org.openmrs.module.cfl.api.event;
+package org.openmrs.module.cfl.api.event.listener.subscribable;
 
-import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
-import org.openmrs.event.EventListener;
-import org.openmrs.module.DaemonToken;
-import org.openmrs.module.DaemonTokenAware;
+import org.openmrs.event.Event;
 import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 import org.openmrs.module.cfl.api.util.Properties;
 
@@ -15,37 +12,36 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractMessagesEventListener implements EventListener, DaemonTokenAware {
-
-    private DaemonToken daemonToken;
+public abstract class AbstractMessagesEventListener extends BaseListener {
 
     @Override
     public void onMessage(Message message) {
         try {
             final Properties properties = getProperties(message);
-            Daemon.runInDaemonThread(new Runnable() {
-                @Override
-                public void run() {
-                    handleEvent(properties);
-                }
-            }, daemonToken);
+            Daemon.runInDaemonThread(() -> handleEvent(properties), getDaemonToken());
         } catch (JMSException ex) {
             throw new CflRuntimeException("Error during handling Messages event", ex);
         }
     }
 
     @Override
-    public void setDaemonToken(DaemonToken daemonToken) {
-        this.daemonToken = daemonToken;
+    public void subscribeSelf() {
+        Event.subscribe(getSubject(), this);
+    }
+
+    @Override
+    public void unsubscribeSelf() {
+        Event.unsubscribe(getSubject(), this);
+    }
+
+    @Override
+    public String getSubscriptionDescription() {
+        return "Topic: " + getSubject();
     }
 
     public abstract String getSubject();
 
     protected abstract void handleEvent(Properties properties);
-
-    protected <T> T getComponent(String beanName, Class<T> type) {
-        return Context.getRegisteredComponent(beanName, type);
-    }
 
     private Properties getProperties(Message message) throws JMSException {
         Map<String, Object> properties = new HashMap<String, Object>();
