@@ -173,4 +173,18 @@
             <where>app_id like 'cflui.%'</where>
         </delete>
     </changeSet>
+
+    <changeSet id="cfldistribution-change-LocationAttribute-uuid" author="SolDevelo">
+        <comment>
+            Changed LocationAttribute UUID to be compatible with openmrs-module-locationbasedaccess:0.2.0.
+        </comment>
+        <update tableName="person_attribute_type">
+            <column name="uuid" value="0a93cbc6-5d65-4886-8091-47a25d3df944" />
+            <where>name = 'LocationAttribute' and retired = 0</where>
+        </update>
+        <update tableName="global_property">
+            <column name="property_value" value="0a93cbc6-5d65-4886-8091-47a25d3df944" />
+            <where>property = 'locationbasedaccess.locationAttributeUuid'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>

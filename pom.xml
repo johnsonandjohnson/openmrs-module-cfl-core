@@ -35,6 +35,9 @@
         <cflVersion>1.4.0</cflVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <patientFlagVersion>3.0.1</patientFlagVersion>
+        <!-- Upgraded version compared to referenceapplication -->
+        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +71,18 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>patientflags-api</artifactId>
                 <version>${patientFlagVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>appframework-api</artifactId>
+                <version>${appframeworkVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>locationbasedaccess-api</artifactId>
+                <version>${locationbasedaccessVersion}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
