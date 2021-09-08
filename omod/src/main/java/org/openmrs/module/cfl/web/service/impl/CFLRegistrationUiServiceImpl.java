@@ -363,7 +363,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     }
 
     private List<RelationshipDTO> buildRelationshipDTOs(final Person relatedTo, final Iterable<Relationship> relationships) {
-        final List<RelationshipDTO> result = new ArrayList<RelationshipDTO>();
+        final List<RelationshipDTO> result = new ArrayList<>();
 
         for (final Relationship relationship : relationships) {
             result.add(relationshipService.buildRelationshipDTO(relatedTo, relationship));
@@ -385,10 +385,9 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
                 .stream(registrationProperties.getPropertyValues())
                 .collect(Collectors.toMap(PropertyValue::getName, this::toSubmittedParameterValue));
 
-        final List<AfterPersonCreatedAction> actions = Context.getRegisteredComponents(AfterPersonCreatedAction.class);
-        for (final AfterPersonCreatedAction action : actions) {
-            action.afterCreated(person, submittedParameters);
-        }
+        Context
+                .getRegisteredComponents(AfterPersonCreatedAction.class)
+                .forEach(action -> action.afterCreated(person, submittedParameters));
     }
 
     private String[] toSubmittedParameterValue(PropertyValue propertyValue) {

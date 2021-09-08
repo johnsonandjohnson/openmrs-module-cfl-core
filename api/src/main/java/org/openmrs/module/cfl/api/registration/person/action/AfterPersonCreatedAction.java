@@ -10,10 +10,8 @@ import java.util.Map;
  * <ul>
  * <li>For UI using CfL-solution, all beans which implement the `AfterPersonCreatedAction` are called after Caregiver
  * registration.</li>
- * <li><i>(Deprecated)</i> For UI using core registration app, which use `RegisterPatientFragmentController`, the usage of an
- * action must be
- * directly
- * configured in relevant app JSON.</li>
+ * <li><i>(Deprecated)</i> For UI using core registration app, which use `RegisterPatientFragmentController`, the usage of
+ * an action must be directly configured in relevant app JSON.</li>
  * </ul>
  * </p>
  */
