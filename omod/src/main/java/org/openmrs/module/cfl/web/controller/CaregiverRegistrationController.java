@@ -38,6 +38,8 @@ public class CaregiverRegistrationController extends BaseCflModuleRestController
         final List<Relationship> personRelationships = cflRegistrationUiService.parseRelationships(registrationProperties);
         cflRegistrationUiService.updateRelationships(person, personRelationships);
 
+        // TODO: generate identifier
+
         return new ResponseEntity<>(savedPerson.getUuid(), HttpStatus.OK);
     }
 }

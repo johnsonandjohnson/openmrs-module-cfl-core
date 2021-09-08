@@ -17,6 +17,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.dto.RelationshipDTO;
+import org.openmrs.module.cfl.api.registration.person.action.AfterPersonCreatedAction;
 import org.openmrs.module.cfl.api.service.RelationshipService;
 import org.openmrs.module.cfl.web.dto.CFLRegistrationRelationshipDTO;
 import org.openmrs.module.cfl.web.service.CFLRegistrationUiService;
@@ -30,10 +31,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculateBirthdateFromAge;
 
@@ -41,6 +45,9 @@ import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculate
  * The default implementation of {@link CFLRegistrationUiService}.
  * <p>
  * This bean is configured in: resources/webModuleApplicationContext.xml
+ * </p>
+ * <p>
+ * Located in omod because `org.openmrs.module.webservices.rest.web.ConversionUtil` is in OMOD too.
  * </p>
  */
 public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
@@ -57,22 +64,8 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     @Override
     @Transactional
     public Patient createOrUpdatePatient(final PropertyValues registrationProperties) {
-        final Function<Patient, Void, RuntimeException> newPatientGetter = new Function<Patient, Void, RuntimeException>() {
-            @Override
-            public Patient call(Void ignore) throws RuntimeException {
-                return new Patient();
-            }
-        };
-
-        final Function<Patient, String, RuntimeException> existingPatientGetter =
-                new Function<Patient, String, RuntimeException>() {
-                    @Override
-                    public Patient call(String uuid) throws RuntimeException {
-                        return patientService.getPatientByUuid(uuid);
-                    }
-                };
-
-        final Patient patient = getOrCreateActor(registrationProperties, newPatientGetter, existingPatientGetter);
+        final Patient patient =
+                getOrCreateActor(registrationProperties, Patient::new, uuid -> patientService.getPatientByUuid(uuid));
         bindProperties(patient, registrationProperties);
         handleBirthdateEstimate(patient, registrationProperties);
         addPersonName(patient, registrationProperties);
@@ -85,26 +78,17 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     @Override
     @Transactional
     public Person createOrUpdatePerson(PropertyValues registrationProperties) {
-        final Function<Person, Void, RuntimeException> newPersonGetter = new Function<Person, Void, RuntimeException>() {
-            @Override
-            public Person call(Void ignore) throws RuntimeException {
-                return new Person();
-            }
-        };
-
-        final Function<Person, String, RuntimeException> existingPersonGetter =
-                new Function<Person, String, RuntimeException>() {
-                    @Override
-                    public Person call(String uuid) throws RuntimeException {
-                        return personService.getPersonByUuid(uuid);
-                    }
-                };
-
-        final Person person = getOrCreateActor(registrationProperties, newPersonGetter, existingPersonGetter);
+        final Person person =
+                getOrCreateActor(registrationProperties, Person::new, uuid -> personService.getPersonByUuid(uuid));
         bindProperties(person, registrationProperties);
         addPersonName(person, registrationProperties);
         addPersonAddress(person, registrationProperties);
         addPersonAttributes(person, registrationProperties);
+
+        if (isNewActor(registrationProperties)) {
+            runAllAfterPersonCreatedActions(person, registrationProperties);
+        }
+
         return person;
     }
 
@@ -165,14 +149,13 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     }
 
     private <Actor extends Person> Actor getOrCreateActor(PropertyValues registrationProperties,
-                                                          Function<Actor, Void, RuntimeException> newActorGetter,
+                                                          Supplier<Actor, RuntimeException> newActorGetter,
                                                           Function<Actor, String, RuntimeException> existingActorGetter) {
-        final PropertyValue uuidProperty = registrationProperties.getPropertyValue(UUID_PROPERTY);
-
         final Actor actor;
-        if (uuidProperty == null) {
-            actor = newActorGetter.call(null);
+        if (isNewActor(registrationProperties)) {
+            actor = newActorGetter.get();
         } else {
+            final PropertyValue uuidProperty = registrationProperties.getPropertyValue(UUID_PROPERTY);
             final String uuid = ObjectUtils.toString(
                     uuidProperty.isConverted() ? uuidProperty.getConvertedValue() : uuidProperty.getValue());
 
@@ -184,6 +167,10 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         }
 
         return actor;
+    }
+
+    private boolean isNewActor(PropertyValues registrationProperties) {
+        return !registrationProperties.contains(UUID_PROPERTY);
     }
 
     private void bindProperties(final Object target, final PropertyValues properties) {
@@ -255,25 +242,30 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
                 continue;
             }
 
-            final PropertyValue identifierPropertyValue =
-                    registrationProperties.getPropertyValue(patientIdentifierType.getName());
-            final Object identifierValueRaw = valueOf(identifierPropertyValue);
-            final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
+            addPatientIdentifier(patient, registrationProperties, patientIdentifierType);
+        }
+    }
 
-            final PatientIdentifier newIdentifier = new PatientIdentifier();
-            newIdentifier.setIdentifier(identifierValue);
-            newIdentifier.setIdentifierType(patientIdentifierType);
+    private void addPatientIdentifier(final Patient patient, final PropertyValues registrationProperties,
+                                      final PatientIdentifierType patientIdentifierType) {
+        final PropertyValue identifierPropertyValue =
+                registrationProperties.getPropertyValue(patientIdentifierType.getName());
+        final Object identifierValueRaw = valueOf(identifierPropertyValue);
+        final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
 
-            final PatientIdentifier currentPatientIdentifier = patient.getPatientIdentifier(patientIdentifierType);
+        final PatientIdentifier newIdentifier = new PatientIdentifier();
+        newIdentifier.setIdentifier(identifierValue);
+        newIdentifier.setIdentifierType(patientIdentifierType);
 
-            if (currentPatientIdentifier != null) {
-                if (!currentPatientIdentifier.equalsContent(newIdentifier)) {
-                    voidPatientIdentifiers(patient, patientIdentifierType);
-                    patient.addIdentifier(newIdentifier);
-                }
-            } else {
+        final PatientIdentifier currentPatientIdentifier = patient.getPatientIdentifier(patientIdentifierType);
+
+        if (currentPatientIdentifier != null) {
+            if (!currentPatientIdentifier.equalsContent(newIdentifier)) {
+                voidPatientIdentifiers(patient, patientIdentifierType);
                 patient.addIdentifier(newIdentifier);
             }
+        } else {
+            patient.addIdentifier(newIdentifier);
         }
     }
 
@@ -380,12 +372,40 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         return result;
     }
 
-    private Object valueOf(PropertyValue propertyValue) {
+    private Object valueOf(final PropertyValue propertyValue) {
         if (propertyValue == null) {
             return null;
         }
 
         return propertyValue.isConverted() ? propertyValue.getConvertedValue() : propertyValue.getValue();
+    }
+
+    private void runAllAfterPersonCreatedActions(final Person person, final PropertyValues registrationProperties) {
+        final Map<String, String[]> submittedParameters = Arrays
+                .stream(registrationProperties.getPropertyValues())
+                .collect(Collectors.toMap(PropertyValue::getName, this::toSubmittedParameterValue));
+
+        final List<AfterPersonCreatedAction> actions = Context.getRegisteredComponents(AfterPersonCreatedAction.class);
+        for (final AfterPersonCreatedAction action : actions) {
+            action.afterCreated(person, submittedParameters);
+        }
+    }
+
+    private String[] toSubmittedParameterValue(PropertyValue propertyValue) {
+        final Object value = propertyValue.getValue();
+        final String[] result;
+
+        if (value instanceof Collection) {
+            result = ((Collection<?>) value).stream().map(Object::toString).toArray(String[]::new);
+        } else if (value != null && value.getClass().isArray()) {
+            result = Arrays.stream((Object[]) value).map(Object::toString).toArray(String[]::new);
+        } else if (value != null) {
+            result = new String[] {value.toString()};
+        } else {
+            result = new String[0];
+        }
+
+        return result;
     }
 
     /**
@@ -395,7 +415,19 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
      * @param <A> the type of argument
      * @param <E> the type of exception thrown
      */
+    @FunctionalInterface
     private interface Function<R, A, E extends Throwable> {
         R call(A argument) throws E;
+    }
+
+    /**
+     * Internal utility class.
+     *
+     * @param <R> the type of result
+     * @param <E> the type of exception thrown
+     */
+    @FunctionalInterface
+    private interface Supplier<R, E extends Throwable> {
+        R get() throws E;
     }
 }
