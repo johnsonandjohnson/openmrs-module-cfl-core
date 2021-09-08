@@ -111,7 +111,9 @@
             width: 40%;
             vertical-align: top;
         }
-
+        #display-encounter-diagnoses-container li .diagnosis .actions label {
+            color: #fff;
+        }
         #encounter-diagnoses-app {
             margin-bottom: 20px;
         }
