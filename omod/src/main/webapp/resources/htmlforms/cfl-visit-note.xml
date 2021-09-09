@@ -69,7 +69,6 @@
             flex-grow: 1;
         }
 
-
         .right-vitals {
             flex-grow: 2;
             padding: 0px 25px;
@@ -106,10 +105,15 @@
             width: 58%;
             vertical-align: top;
         }
+
         #encounter-diagnoses-target {
             display: inline-block;
             width: 40%;
             vertical-align: top;
+        }
+
+        #display-encounter-diagnoses-container li .diagnosis .actions label {
+            color: #fff;
         }
 
         #encounter-diagnoses-app {
@@ -135,7 +139,8 @@
             width: 450px;
         }
 
-        form label, .form label {
+        form label,
+        .form label {
             display: inherit;
             text-align: left;
             margin-bottom: 0px;
@@ -190,7 +195,8 @@
             border: none
         }
 
-        #additional-info-subsection-container table th, #additional-info-subsection-container table td {
+        #additional-info-subsection-container table th,
+        #additional-info-subsection-container table td {
             padding: 5px 10px;
             border: none;
             border-top: 1px solid #dddddd;
@@ -200,7 +206,8 @@
             border: none
         }
 
-        table.next-steps th, table.next-steps td {
+        table.next-steps th,
+        table.next-steps td {
             padding: 5px 10px;
             border: none;
         }
