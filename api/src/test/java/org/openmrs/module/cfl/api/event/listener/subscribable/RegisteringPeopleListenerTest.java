@@ -2,13 +2,11 @@ package org.openmrs.module.cfl.api.event.listener.subscribable;
 
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.openmrs.Location;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.Patient;
@@ -85,6 +83,7 @@ public class RegisteringPeopleListenerTest {
     private Patient patient;
     private Location location;
     private Vaccination[] vaccinations;
+    private Randomization randomization;
 
     @Before
     public void setUp() throws IOException {
@@ -94,6 +93,9 @@ public class RegisteringPeopleListenerTest {
         location = LocationHelper.createLocation();
         patient = PatientHelper.createPatient(person, location);
         vaccinations = createVaccination();
+        randomization = new Randomization(vaccinations);
+        when(configService.getRandomizationGlobalProperty()).thenReturn(randomization);
+        when(configService.getVaccinationProgram(patient)).thenReturn("Vac_3 (three doses)");
     }
 
     @Test
@@ -167,7 +169,7 @@ public class RegisteringPeopleListenerTest {
         //When
         registeringPeopleListener.performAction(message);
         //Then
-        verify(locationService, times(1)).getLocationByUuid(Constant.LOCATION_UUID);
+        verify(locationService).getLocationByUuid(Constant.LOCATION_UUID);
         verifyInteractions();
     }
 
@@ -179,7 +181,7 @@ public class RegisteringPeopleListenerTest {
             fail("should throw CflRuntimeException: Unable to retrieve person by uuid");
         } catch (CflRuntimeException e) {
             //Then
-            verify(personService, times(1)).getPersonByUuid(null);
+            verify(personService).getPersonByUuid(null);
             verifyZeroInteractions(welcomeService);
             verifyZeroInteractions(configService);
             verifyZeroInteractions(patientService);
@@ -220,10 +222,10 @@ public class RegisteringPeopleListenerTest {
         //When
         registeringPeopleListener.performAction(message);
         //Then
-        verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-        verify(personService, times(1)).getPersonByUuid(Constant.PERSON_UUID);
-        verify(welcomeService, times(1)).sendWelcomeMessages(person);
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
+        verify(message).getString(CFLConstants.UUID_KEY);
+        verify(personService).getPersonByUuid(Constant.PERSON_UUID);
+        verify(welcomeService).sendWelcomeMessages(person);
+        verify(configService).isVaccinationInfoIsEnabled();
         verifyZeroInteractions(patientService);
         verifyZeroInteractions(locationService);
         verifyZeroInteractions(visitService);
@@ -254,15 +256,15 @@ public class RegisteringPeopleListenerTest {
                 new LocationAttributeType());
         //When
         registeringPeopleListener.performAction(message);
-        verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-        verify(personService, times(1)).getPersonByUuid(Constant.PERSON_UUID);
-        verify(welcomeService, times(1)).sendWelcomeMessages(person);
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
-        verify(configService, times(1)).getVaccinationProgram(person);
-        verify(configService, times(1)).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
-        verify(patientService, times(1)).getPatient(person.getPersonId());
-        verify(locationService, times(1)).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
-        verify(visitReminderService, times(1)).create(person);
+        verify(message).getString(CFLConstants.UUID_KEY);
+        verify(personService).getPersonByUuid(Constant.PERSON_UUID);
+        verify(welcomeService).sendWelcomeMessages(person);
+        verify(configService).isVaccinationInfoIsEnabled();
+        verify(configService).getVaccinationProgram(person);
+        verify(configService).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
+        verify(patientService).getPatient(person.getPersonId());
+        verify(locationService).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
+        verify(visitReminderService).create(person);
         verifyZeroInteractions(visitService);
     }
 
@@ -308,24 +310,24 @@ public class RegisteringPeopleListenerTest {
         }
 
         //Then
-        verify(locationService, times(1)).getLocationByUuid(Constant.LOCATION_UUID);
+        verify(locationService).getLocationByUuid(Constant.LOCATION_UUID);
         verifyInteractions();
     }
 
     private void verifyInteractions() throws JMSException {
-        verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-        verify(personService, times(1)).getPersonByUuid(Constant.PERSON_UUID);
-        verify(welcomeService, times(1)).sendWelcomeMessages(person);
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
-        verify(configService, times(1)).getVaccinationProgram(person);
-        verify(configService, times(1)).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
-        verify(configService, times(1)).getRandomizationGlobalProperty();
-        verify(patientService, times(1)).getPatient(person.getPersonId());
-        verify(patientService, times(1)).getPatientByUuid(Constant.PERSON_UUID);
-        verify(locationService, times(1)).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
-        verify(visitService, times(1)).getAllVisitTypes();
-        verify(visitService, times(4)).getAllVisitAttributeTypes();
-        verify(visitReminderService, times(1)).create(person);
+        verify(message).getString(CFLConstants.UUID_KEY);
+        verify(personService).getPersonByUuid(Constant.PERSON_UUID);
+        verify(welcomeService).sendWelcomeMessages(person);
+        verify(configService).isVaccinationInfoIsEnabled();
+        verify(configService).getVaccinationProgram(person);
+        verify(configService).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
+        verify(configService, times(2)).getRandomizationGlobalProperty();
+        verify(patientService).getPatient(person.getPersonId());
+        verify(patientService).getPatientByUuid(Constant.PERSON_UUID);
+        verify(locationService).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
+        verify(visitService).getAllVisitTypes();
+        verify(visitService, times(5)).getAllVisitAttributeTypes();
+        verify(visitReminderService).create(person);
     }
 
     private Randomization createRandomization() {

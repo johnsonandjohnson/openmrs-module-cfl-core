@@ -8,8 +8,10 @@ import org.openmrs.VisitAttributeType;
 import org.openmrs.VisitType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
+import org.openmrs.module.cfl.api.service.ConfigService;
 
 import java.util.Date;
 import java.util.List;
@@ -45,17 +47,7 @@ public final class VisitUtil {
         visit.setDateChanged(new Date());
         visit.setChangedBy(Context.getAuthenticatedUser());
 
-        visit.setAttribute(
-                createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
-
-        visit.setAttribute(
-                createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getUpWindow())));
-
-        visit.setAttribute(
-                createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getLowWindow())));
-
-        visit.setAttribute(
-                createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME, String.valueOf(visitInformation.getDoseNumber())));
+        setRequiredVisitAttributes(visit, visitInformation);
 
         return visit;
     }
@@ -117,6 +109,19 @@ public final class VisitUtil {
         return Context.getAdministrationService().getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     }
 
+    public static int getNumberOfDosesForPatient(Patient patient) {
+        Randomization randomization = getCFLConfigService().getRandomizationGlobalProperty();
+        Vaccination vaccination = randomization.findByVaccinationProgram(getCFLConfigService()
+                .getVaccinationProgram(patient));
+        return vaccination.getNumberOfDose();
+    }
+
+    public static boolean isLastPatientDosingVisit(Patient patient, VisitInformation visitInformation) {
+        int numberOfDoses = getNumberOfDosesForPatient(patient);
+        return StringUtils.equalsIgnoreCase(visitInformation.getNameOfDose(), DOSING_VISIT_TYPE_NAME) &&
+                numberOfDoses == visitInformation.getDoseNumber();
+    }
+
     private static boolean isFollowUpVisit(VisitInformation visitInformation) {
         return visitInformation.getNumberOfFutureVisit() == 0;
     }
@@ -136,5 +141,26 @@ public final class VisitUtil {
         visitAttribute.setValueReferenceInternal(value);
 
         return visitAttribute;
+    }
+
+    private static void setRequiredVisitAttributes(Visit visit, VisitInformation visitInformation) {
+        visit.setAttribute(
+                createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
+
+        visit.setAttribute(
+                createAttribute(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getUpWindow())));
+
+        visit.setAttribute(
+                createAttribute(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME, String.valueOf(visitInformation.getLowWindow())));
+
+        visit.setAttribute(
+                createAttribute(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME, String.valueOf(visitInformation.getDoseNumber())));
+
+        visit.setAttribute(createAttribute(CFLConstants.IS_LAST_DOSING_VISIT_ATTRIBUTE_NAME,
+                String.valueOf(isLastPatientDosingVisit(visit.getPatient(), visitInformation))));
+    }
+
+    private static ConfigService getCFLConfigService() {
+        return Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
     }
 }
