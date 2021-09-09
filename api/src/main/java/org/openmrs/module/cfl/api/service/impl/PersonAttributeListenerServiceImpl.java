@@ -86,6 +86,8 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
 
             if (lastOccurredDosingVisit != null) {
                 vaccinationService.rescheduleVisits(lastOccurredDosingVisit, patient);
+            } else if (visits.size() > 0) {
+                vaccinationService.voidFutureVisits(patient);
             }
         }
     }
