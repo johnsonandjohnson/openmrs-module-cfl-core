@@ -6,7 +6,7 @@ import org.openmrs.module.cfl.CFLAppsConstants;
 import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 
 /**
- * The Metadata Bundle responsible for disabling CFL-specific Apps. These apps has to be explicitly enabled by system user.
+ * The Metadata Bundle responsible for disabling CFL-specific Apps. These apps have to be explicitly enabled by system user.
  * <p>
  * The DisableCFLAppsBundle disables apps only once, for a first start.
  * </p>

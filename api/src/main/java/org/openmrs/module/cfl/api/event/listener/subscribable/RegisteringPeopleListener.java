@@ -93,6 +93,11 @@ public class RegisteringPeopleListener extends PeopleActionListener {
     private VisitInformation getFirstVisitInfo(String vaccinationProgram) {
         Randomization randomization = configService.getRandomizationGlobalProperty();
         Vaccination vaccination = randomization.findByVaccinationProgram(vaccinationProgram);
-        return vaccination.getVisits().get(0);
+        if (vaccination != null) {
+            return vaccination.getVisits().get(0);
+        } else {
+            throw new IllegalArgumentException(String.format("Vaccination for %s program not found", vaccinationProgram));
+        }
+
     }
 }

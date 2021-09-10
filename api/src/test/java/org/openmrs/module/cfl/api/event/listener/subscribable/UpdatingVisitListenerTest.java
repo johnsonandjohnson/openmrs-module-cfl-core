@@ -77,7 +77,9 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         updatingVisitListener.performAction(message);
         //Then
         verifyInteractions();
-        verify(visitService, times(10)).getAllVisitAttributeTypes();
+        verify(configService, times(3)).getRandomizationGlobalProperty();
+        verify(configService, times(3)).getVaccinationProgram(visit.getPatient());
+        verify(visitService, times(12)).getAllVisitAttributeTypes();
 
         ArgumentCaptor<Visit> saveVisitArgumentCaptor = ArgumentCaptor.forClass(Visit.class);
         verify(visitService, times(2)).saveVisit(saveVisitArgumentCaptor.capture());
@@ -97,7 +99,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         //When
         updatingVisitListener.performAction(message);
         //Then
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
+        verify(configService).isVaccinationInfoIsEnabled();
         verifyZeroInteractions(visitService);
         verifyZeroInteractions(administrationService);
         verifyZeroInteractions(patientService);
@@ -113,7 +115,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         //When
         updatingVisitListener.performAction(message);
         //Then
-        verify(configService, times(1)).isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME);
+        verify(configService).isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME);
         verifyZeroInteractions(visitService);
         verifyZeroInteractions(administrationService);
         verifyZeroInteractions(patientService);
@@ -136,10 +138,10 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         //When
         updatingVisitListener.performAction(message);
         //Then
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
-        verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-        verify(visitService, times(1)).getVisitByUuid(visit.getUuid());
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+        verify(configService).isVaccinationInfoIsEnabled();
+        verify(message).getString(CFLConstants.UUID_KEY);
+        verify(visitService).getVisitByUuid(visit.getUuid());
+        verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
         verifyZeroInteractions(patientService);
         verifyZeroInteractions(locationService);
     }
@@ -157,9 +159,9 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
             Assert.fail("Unable to retrieve visit by uuid: null");
         } catch (CflRuntimeException e) {
             //Then
-            verify(configService, times(1)).isVaccinationInfoIsEnabled();
-            verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-            verify(visitService, times(1)).getVisitByUuid(anyString());
+            verify(configService).isVaccinationInfoIsEnabled();
+            verify(message).getString(CFLConstants.UUID_KEY);
+            verify(visitService).getVisitByUuid(anyString());
             verifyZeroInteractions(administrationService);
             verifyZeroInteractions(patientService);
             verifyZeroInteractions(locationService);
@@ -201,20 +203,20 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         updatingVisitListener.performAction(message);
         //Then
         verifyInteractions();
-        verify(visitService, times(1)).getAllVisitAttributeTypes();
+        verify(configService).getRandomizationGlobalProperty();
+        verify(configService).getVaccinationProgram(visit.getPatient());
+        verify(visitService).getAllVisitAttributeTypes();
     }
 
     private void verifyInteractions() throws JMSException {
-        verify(configService, times(1)).isVaccinationInfoIsEnabled();
-        verify(message, times(1)).getString(CFLConstants.UUID_KEY);
-        verify(visitService, times(1)).getVisitByUuid(visit.getUuid());
-        verify(configService, times(1)).getRandomizationGlobalProperty();
-        verify(configService, times(1)).getVaccinationProgram(visit.getPatient());
-        verify(visitService, times(1)).getVisitsByPatient(patient);
-        verify(configService, times(1)).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
-        verify(patientService, times(1)).getPatient(person.getPersonId());
-        verify(locationService, times(1)).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
-        verify(administrationService, times(1)).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+        verify(configService).isVaccinationInfoIsEnabled();
+        verify(message).getString(CFLConstants.UUID_KEY);
+        verify(visitService).getVisitByUuid(visit.getUuid());
+        verify(visitService).getVisitsByPatient(patient);
+        verify(configService).getCountrySettingMap(CFLConstants.COUNTRY_SETTINGS_MAP_KEY);
+        verify(patientService).getPatient(person.getPersonId());
+        verify(locationService).getLocationAttributeTypeByName(CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME);
+        verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     }
 
     private Randomization createRandomization() {

@@ -28,7 +28,6 @@ import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -248,7 +247,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
     private void installMetadataBundles() {
         final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        final MetadataBundle disableCFLAppsBundle = getRegisteredComponent("cfl.DisableCFLAppsBundle", MetadataBundle.class);
-        service.installBundles(Collections.singletonList(disableCFLAppsBundle));
+        service.installBundles(Context.getRegisteredComponents(MetadataBundle.class));
     }
 }

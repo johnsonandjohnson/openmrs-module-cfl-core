@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl;
 
+import org.openmrs.customdatatype.datatype.FreeTextDatatype;
 import org.openmrs.module.cfl.api.event.listener.subscribable.UpdatingVisitListener;
 import org.openmrs.module.cfl.api.event.listener.subscribable.VaccinationEncounterListener;
 
@@ -313,6 +314,15 @@ public final class CFLConstants {
     public static final String CFL_ADDRESS_DATA_SERVICE_BEAN_NAME = "cfl.addressService";
 
     public static final String CFL_VISIT_SERVICE_BEAN_NAME = "cfl.visitService";
+
+    public static final String IS_LAST_DOSING_VISIT_ATTRIBUTE_NAME = "IsLastDosingVisit";
+
+    public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_DATATYPE = FreeTextDatatype.class.getName();
+
+    public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_DESCRIPTION = "Visit attribute type used to" +
+            " determine if given visit is the last dosing visit. Possible values: true or false.";
+
+    public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID = "1e566e6d-108e-11ec-a36a-0242ac130002";
 
     private CFLConstants() {
     }

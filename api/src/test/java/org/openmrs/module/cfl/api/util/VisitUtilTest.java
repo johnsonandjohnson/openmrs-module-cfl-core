@@ -14,7 +14,9 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.helper.VisitHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -26,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -35,6 +40,16 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest({Context.class, Daemon.class})
 public class VisitUtilTest {
 
+    private static final String EXAMPLE_VACC_PROGRAM_NAME = "Vac_3 (three doses)";
+
+    private static final String COVID = "COVID.json";
+
+    private static final String RANDOMIZATION = "Randomization.json";
+
+    private static final String OCCURRED = "OCCURRED";
+
+    private Patient patient;
+
     @Mock
     private VisitService visitService;
 
@@ -43,18 +58,6 @@ public class VisitUtilTest {
 
     @Mock
     private AdministrationService administrationService;
-
-    private List<Visit> visits;
-
-    private Patient patient;
-
-    private Vaccination vaccination;
-
-    private static final String EXAMPLE_VACC_PROGRAM_NAME = "Vac_3 (three doses)";
-
-    private static final String COVID = "COVID.json";
-
-    private static final String OCCURRED = "OCCURRED";
 
     @Before
     public void setUp() {
@@ -73,12 +76,12 @@ public class VisitUtilTest {
 
     @Test
     public void shouldFindLastDosingVisit() throws IOException {
-        visits = new ArrayList<Visit>();
+        List<Visit> visits = new ArrayList<>();
         visits.add(VisitHelper.createVisit(1, patient, "DOSE 1 VISIT", "OCCURRED"));
         visits.add(VisitHelper.createVisit(2, patient, "FOLLOW UP", "OCCURRED"));
         visits.add(VisitHelper.createVisit(3, patient, "DOSE 1 & 2 VISIT", "OCCURRED"));
         when(visitService.getVisitsByPatient(patient)).thenReturn(visits);
-        vaccination = loadVaccinationFromJSON(COVID);
+        Vaccination vaccination = loadVaccinationFromJSON(COVID);
 
         Visit result = VisitUtil.getLastDosingVisit(patient, vaccination);
 
@@ -89,7 +92,7 @@ public class VisitUtilTest {
 
     @Test
     public void shouldReturnProperVisitStatus() {
-        visits = new ArrayList<Visit>();
+        List<Visit> visits = new ArrayList<>();
         visits.add(VisitHelper.createVisit(1, patient, "DOSE 1 VISIT", "OCCURRED"));
         visits.add(VisitHelper.createVisit(2, patient, "FOLLOW UP", "OCCURRED"));
         visits.add(VisitHelper.createVisit(3, patient, "DOSE 1 & 2 VISIT", "SCHEDULED"));
@@ -102,6 +105,37 @@ public class VisitUtilTest {
         Assert.assertThat(result2, is("SCHEDULED"));
     }
 
+    @Test
+    public void shouldReturnProperNumberOfDosesForPatient() throws IOException {
+        Vaccination[] vaccinations = new Vaccination[] {loadVaccinationFromJSON(COVID)};
+        when(configService.getRandomizationGlobalProperty()).thenReturn(new Randomization(vaccinations));
+        when(configService.getVaccinationProgram(patient)).thenReturn(EXAMPLE_VACC_PROGRAM_NAME);
+
+        int actual = VisitUtil.getNumberOfDosesForPatient(patient);
+
+        assertEquals(actual, 3);
+    }
+
+    @Test
+    public void shouldReturnInformationIfGivenVisitIsLastDosingVisit() throws IOException {
+        Vaccination[] vaccinations = loadVaccinationsFromJSON(RANDOMIZATION);
+        Randomization randomization = new Randomization(vaccinations);
+        when(configService.getRandomizationGlobalProperty()).thenReturn(randomization);
+        when(configService.getVaccinationProgram(patient)).thenReturn("Vaccination_1");
+
+        Vaccination vaccination = vaccinations[0];
+        List<VisitInformation> visits = vaccination.getVisits();
+
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(0)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(1)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(2)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(3)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(4)));
+        assertTrue(VisitUtil.isLastPatientDosingVisit(patient, visits.get(5)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(6)));
+        assertFalse(VisitUtil.isLastPatientDosingVisit(patient, visits.get(7)));
+    }
+
     private Patient createPatient() {
         patient = new Patient();
         patient.setId(1);
@@ -111,5 +145,10 @@ public class VisitUtilTest {
     private Vaccination loadVaccinationFromJSON(String jsonFile) throws IOException  {
         InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsonFile);
         return new Gson().fromJson(IOUtils.toString(in), Vaccination.class);
+    }
+
+    private Vaccination[] loadVaccinationsFromJSON(String jsonFile) throws IOException  {
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsonFile);
+        return new Gson().fromJson(IOUtils.toString(in), Vaccination[].class);
     }
 }
