@@ -109,16 +109,36 @@ public final class VisitUtil {
         return Context.getAdministrationService().getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     }
 
+    /**
+     * Gets number of vaccination doses to which the patient is assigned
+     *
+     * @param patient the patient for whom we get the number of doses
+     * @return the number of doses of vaccine to which the patient is assigned
+     * @throws IllegalArgumentException if patient has no vaccination program assigned
+     */
     public static int getNumberOfDosesForPatient(Patient patient) {
         Randomization randomization = getCFLConfigService().getRandomizationGlobalProperty();
         Vaccination vaccination = randomization.findByVaccinationProgram(getCFLConfigService()
                 .getVaccinationProgram(patient));
-        return vaccination.getNumberOfDose();
+        if (vaccination != null) {
+            return vaccination.getNumberOfDose();
+        } else {
+            throw new IllegalArgumentException(String.format("Patient with name: %s and id: %d has no vaccination " +
+                    "program assigned", PatientUtil.getPatientFullName(patient), patient.getId()));
+        }
+
     }
 
+    /**
+     * Checks if the given patient's visit is the last dosing visit
+     *
+     * @param patient the patient for whom the checking is performed
+     * @param visitInformation the visit details
+     * @return information if the given visit for given patient is the last dosing visit or not
+     */
     public static boolean isLastPatientDosingVisit(Patient patient, VisitInformation visitInformation) {
         int numberOfDoses = getNumberOfDosesForPatient(patient);
-        return StringUtils.equalsIgnoreCase(visitInformation.getNameOfDose(), DOSING_VISIT_TYPE_NAME) &&
+        return StringUtils.equals(visitInformation.getNameOfDose(), DOSING_VISIT_TYPE_NAME) &&
                 numberOfDoses == visitInformation.getDoseNumber();
     }
 

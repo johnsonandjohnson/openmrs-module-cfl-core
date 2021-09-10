@@ -40,6 +40,16 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest({Context.class, Daemon.class})
 public class VisitUtilTest {
 
+    private static final String EXAMPLE_VACC_PROGRAM_NAME = "Vac_3 (three doses)";
+
+    private static final String COVID = "COVID.json";
+
+    private static final String RANDOMIZATION = "Randomization.json";
+
+    private static final String OCCURRED = "OCCURRED";
+
+    private Patient patient;
+
     @Mock
     private VisitService visitService;
 
@@ -48,20 +58,6 @@ public class VisitUtilTest {
 
     @Mock
     private AdministrationService administrationService;
-
-    private List<Visit> visits;
-
-    private Patient patient;
-
-    private Vaccination vaccination;
-
-    private static final String EXAMPLE_VACC_PROGRAM_NAME = "Vac_3 (three doses)";
-
-    private static final String COVID = "COVID.json";
-
-    private static final String RANDOMIZATION = "Randomization.json";
-
-    private static final String OCCURRED = "OCCURRED";
 
     @Before
     public void setUp() {
@@ -80,12 +76,12 @@ public class VisitUtilTest {
 
     @Test
     public void shouldFindLastDosingVisit() throws IOException {
-        visits = new ArrayList<>();
+        List<Visit> visits = new ArrayList<>();
         visits.add(VisitHelper.createVisit(1, patient, "DOSE 1 VISIT", "OCCURRED"));
         visits.add(VisitHelper.createVisit(2, patient, "FOLLOW UP", "OCCURRED"));
         visits.add(VisitHelper.createVisit(3, patient, "DOSE 1 & 2 VISIT", "OCCURRED"));
         when(visitService.getVisitsByPatient(patient)).thenReturn(visits);
-        vaccination = loadVaccinationFromJSON(COVID);
+        Vaccination vaccination = loadVaccinationFromJSON(COVID);
 
         Visit result = VisitUtil.getLastDosingVisit(patient, vaccination);
 
@@ -96,7 +92,7 @@ public class VisitUtilTest {
 
     @Test
     public void shouldReturnProperVisitStatus() {
-        visits = new ArrayList<>();
+        List<Visit> visits = new ArrayList<>();
         visits.add(VisitHelper.createVisit(1, patient, "DOSE 1 VISIT", "OCCURRED"));
         visits.add(VisitHelper.createVisit(2, patient, "FOLLOW UP", "OCCURRED"));
         visits.add(VisitHelper.createVisit(3, patient, "DOSE 1 & 2 VISIT", "SCHEDULED"));

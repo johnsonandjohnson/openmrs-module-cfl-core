@@ -6,11 +6,9 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.User;
-import org.openmrs.VisitAttributeType;
 import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
-import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.DaemonToken;
@@ -30,7 +28,6 @@ import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -69,8 +66,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             // Install metadata packages
             MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
             installMetadataBundles();
-
-            createIsLastDosingVisitAttributeType();
         } catch (Exception e) {
             throw new ModuleException("failed to setup the required modules", e);
         }
@@ -252,24 +247,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
     private void installMetadataBundles() {
         final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        final MetadataBundle disableCFLAppsBundle = getRegisteredComponent("cfl.DisableCFLAppsBundle", MetadataBundle.class);
-        service.installBundles(Collections.singletonList(disableCFLAppsBundle));
-    }
-
-    private void createIsLastDosingVisitAttributeType() {
-        VisitAttributeType type = new VisitAttributeType();
-        type.setName(CFLConstants.IS_LAST_DOSING_VISIT_ATTRIBUTE_NAME);
-        type.setDatatypeClassname(CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DATATYPE);
-        type.setDescription(CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DESCRIPTION);
-        type.setUuid(CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID);
-        createVisitAttributeTypeIfNotExists(CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID, type);
-    }
-
-    private void createVisitAttributeTypeIfNotExists(String uuid, VisitAttributeType attributeType) {
-        VisitService visitService = Context.getVisitService();
-        VisitAttributeType actual = visitService.getVisitAttributeTypeByUuid(uuid);
-        if (actual == null) {
-            visitService.saveVisitAttributeType(attributeType);
-        }
+        service.installBundles(Context.getRegisteredComponents(MetadataBundle.class));
     }
 }
