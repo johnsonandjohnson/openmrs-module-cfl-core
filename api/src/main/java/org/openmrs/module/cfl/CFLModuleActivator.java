@@ -6,7 +6,6 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.Privilege;
 import org.openmrs.Role;
 import org.openmrs.User;
-import org.openmrs.api.FormService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
@@ -18,20 +17,15 @@ import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.event.CflEventListenerHelper;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
-import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
-import org.openmrs.module.htmlformentry.HtmlFormEntryService;
-import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
-import org.openmrs.ui.framework.resource.ResourceFactory;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
+import static org.openmrs.module.cfl.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -53,15 +47,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             // These 3 are Global Properties
             createPersonOverviewConfig();
             createGlobalSettings();
-            createHtmlFormProperties();
 
             CflEventListenerHelper.registerEventListeners();
 
-            createVisitNoteUrlProperties();
-
             createPersonAttributeTypes();
-
-            setupHtmlForms();
 
             // Install metadata packages
             MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
@@ -142,86 +131,65 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
 
     private void createGlobalSettings() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+        createGlobalSettingIfNotExists(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
                 CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE, CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE,
+        createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE, CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
+        createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
                 CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DEFAULT_VALUE,
                 CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
                 CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE, CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
                 CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
                 CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE, CFLConstants.PERSON_LOCATION_ATTRIBUTE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.CONDITION_LIST_CLASSES_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.CONDITION_LIST_CLASSES_KEY,
                 CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE, CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY,
                 CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE, CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
                 CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE, CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY,
                 CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,
+        createGlobalSettingIfNotExists(CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,
                 CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_VALUE,
                 CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY,
                 CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DEFAULT_VALUE,
                 CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY,
                 CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION);
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.VACCINATION_LISTENER_KEY,
+        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_LISTENER_KEY,
                 CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME, CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
-    }
-
-    private void createVisitNoteUrlProperties() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
-    }
-
-    private void setupHtmlForms() throws IOException {
-        ResourceFactory resourceFactory = ResourceFactory.getInstance();
-        FormService formService = Context.getFormService();
-        HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
-
-        List<String> htmlforms = Arrays.asList("cfl:htmlforms/cfl-HIV.xml", "cfl:htmlforms/cfl-check-in.xml",
-                "cfl:htmlforms/cfl-visit-note.xml", "cfl:htmlforms/cfl-medicine-refill.xml",
-                "cfl:htmlforms/cfl-sputum-visit-note.xml", "cfl:htmlforms/encounters-form.xml",
-                "cfl:htmlforms/cfl-hiv-enrollment.xml", "cfl:htmlforms/discontinue-program.xml");
-
-        for (String htmlform : htmlforms) {
-            HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
-        }
+        createGlobalSettingIfNotExists(CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
+                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
+                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
+        createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
     }
 
     private void createPersonOverviewConfig() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
+        createGlobalSettingIfNotExists(ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DEFAULT_VALUE,
                 ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DESCRIPTION);
 
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
+        createGlobalSettingIfNotExists(ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE,
                 ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DESCRIPTION);
-    }
-
-    private void createHtmlFormProperties() {
-        GlobalPropertyUtils.createGlobalSettingIfNotExists(CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
-                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
-                CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
     }
 
     private void attachMissingPrivileges(List<String> privilegeNames, Role role) {

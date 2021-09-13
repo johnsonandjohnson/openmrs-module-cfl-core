@@ -1,160 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <module configVersion="1.2">
-	
-	<!-- Base Module Properties -->
-	<id>${project.parent.artifactId}</id>
-	<name>${project.parent.name}</name>
-	<version>${project.parent.version}</version>
-	<package>org.openmrs.module.cfl</package>
-	<author>SolDevelo</author>
-	<description>
-			${project.parent.description}
-	</description>
 
-	<activator>org.openmrs.module.cfl.CFLModuleActivator</activator>
-	
-	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
-	<!-- /Base Module Properties -->
-	
-	<require_version>${openmrsPlatformVersion}</require_version>
+    <!-- Base Module Properties -->
+    <id>${project.parent.artifactId}</id>
+    <name>${project.parent.name}</name>
+    <version>${project.parent.version}</version>
+    <package>org.openmrs.module.cfl</package>
+    <author>SolDevelo</author>
+    <description>
+        ${project.parent.description}
+    </description>
 
-	<require_modules>
-		<require_module version="${appframeworkVersion}">
-			org.openmrs.module.appframework
-		</require_module>
-		<require_module version="${idgenVersion}">
-			org.openmrs.module.idgen
-		</require_module>
-		<require_module version="${uiframeworkVersion}">
-			org.openmrs.module.uiframework
-		</require_module>
-		<require_module version="${uicommonsVersion}">
-			org.openmrs.module.uicommons
-		</require_module>
-		<require_module version="${appuiVersion}">
-			org.openmrs.module.appui
-		</require_module>
-		<require_module version="${htmlformentryVersion}">
-			org.openmrs.module.htmlformentry
-		</require_module>
-		<require_module version="${htmlformentryuiVersion}">
-			org.openmrs.module.htmlformentryui
-		</require_module>
-		<require_module version="${patientFlagVersion}">
-			org.openmrs.module.patientflags
-		</require_module>
-		<require_module version="${emrapiVersion}">
-			org.openmrs.module.emrapi
-		</require_module>
-		<require_module version="${coreappsVersion}">
-			org.openmrs.module.coreapps
-		</require_module>
-		<require_module version="${registrationappVersion}">
-			org.openmrs.module.registrationapp
-		</require_module>
-		<require_module version="${registrationcoreVersion}">
-			org.openmrs.module.registrationcore
-		</require_module>
-		<require_module version="${eventVersion}">
-			org.openmrs.event
-		</require_module>
-		<require_module version="${metadatadeployVersion}">
-			org.openmrs.module.metadatadeploy
-		</require_module>
-		<require_module version="${messagesVersion}">
-			org.openmrs.module.messages
-		</require_module>
-	</require_modules>
-	
-	<!-- Extensions -->
-	<extension>
-		<point>org.openmrs.admin.list</point>
-		<class>org.openmrs.module.cfl.extension.html.AdminList</class>
-	</extension>
+    <activator>org.openmrs.module.cfl.CFLModuleActivator</activator>
 
-	<aware_of_modules>
-		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
-		<aware_of_module>org.openmrs.module.visits</aware_of_module>
-	</aware_of_modules>
-	
-	
-	<!-- AOP
-	<advice>
-		<point>org.openmrs.api.FormService</point>
-		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
-	</advice>
-	 /AOP -->
-	
-	
-	<!-- Required Privileges 
-	<privilege>
-		<name>Form Entry</name>
-		<description>Allows user to access Form Entry pages/functions</description>
-	</privilege>
-	 /Required Privileges -->
+    <!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
+    <!-- /Base Module Properties -->
 
+    <require_version>${openmrsPlatformVersion}</require_version>
 
-	<!-- Required Global Properties 
-	<globalProperty>
-		<property>@MODULE_ID@.someProperty</property>
-		<defaultValue></defaultValue>
-		<description>
-			A description of the global property goes here.  The description
-			should explain enough for administrators to understand the purpose
-			and possible values for the global property.
-		</description>
-	</globalProperty>
-	/Required Global Properties -->
-	
-	<!--
-	<dwr>
-		<allow>
-			<create creator="new" javascript="DWRFormEntryService">
-				<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/>
-				<include method="enterForm"/>
-			</create>
-		</allow>
+    <require_modules>
+        <require_module version="${appframeworkVersion}">
+            org.openmrs.module.appframework
+        </require_module>
+        <require_module version="${idgenVersion}">
+            org.openmrs.module.idgen
+        </require_module>
+        <require_module version="${uiframeworkVersion}">
+            org.openmrs.module.uiframework
+        </require_module>
+        <require_module version="${uicommonsVersion}">
+            org.openmrs.module.uicommons
+        </require_module>
+        <require_module version="${appuiVersion}">
+            org.openmrs.module.appui
+        </require_module>
+        <require_module version="${htmlformentryVersion}">
+            org.openmrs.module.htmlformentry
+        </require_module>
+        <require_module version="${htmlformentryuiVersion}">
+            org.openmrs.module.htmlformentryui
+        </require_module>
+        <require_module version="${patientFlagVersion}">
+            org.openmrs.module.patientflags
+        </require_module>
+        <require_module version="${emrapiVersion}">
+            org.openmrs.module.emrapi
+        </require_module>
+        <require_module version="${coreappsVersion}">
+            org.openmrs.module.coreapps
+        </require_module>
+        <require_module version="${registrationappVersion}">
+            org.openmrs.module.registrationapp
+        </require_module>
+        <require_module version="${registrationcoreVersion}">
+            org.openmrs.module.registrationcore
+        </require_module>
+        <require_module version="${eventVersion}">
+            org.openmrs.event
+        </require_module>
+        <require_module version="${metadatadeployVersion}">
+            org.openmrs.module.metadatadeploy
+        </require_module>
+        <require_module version="${messagesVersion}">
+            org.openmrs.module.messages
+        </require_module>
+    </require_modules>
 
-		<signatures>
-			<![CDATA[
-			import @MODULE_PACKAGE@.web.DWRFormEntryService;
-			DWRFormEntryService.enterForm(Integer patientId, Integer formId, boolean useEncounter, List<String> fields);
-			]]>
-		</signatures>	
-	</dwr>
-	-->
-	
-	<!-- Servlets -->
-	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 
-	<servlet>
-		<servlet-name>formDownload</servlet-name>
-		<servlet-class>@MODULE_PACKAGE@.web.FormDownloadServlet</servlet-class>
-	</servlet>
-	-->
-	<!-- /Servlets -->
-	
-	
-	<!-- Internationalization -->
-	<!-- All message codes should start with @MODULE_ID@.* -->
-	<messages>
-		<lang>en</lang>
-		<file>messages.properties</file>
-	</messages>
-	<messages>
-		<lang>fr</lang>
-		<file>messages_fr.properties</file>
-	</messages>
-	<messages>
-		<lang>es</lang>
-		<file>messages_es.properties</file>
-	</messages>
-	<!-- /Internationalization -->
+    <!-- Extensions -->
+    <extension>
+        <point>org.openmrs.admin.list</point>
+        <class>org.openmrs.module.cfl.extension.html.AdminList</class>
+    </extension>
 
-	<!-- The reportingui module doesn't add it by itself. -->
-	<privilege>
-		<name>App: reportingui.reports</name>
-		<description>Able to access report overview</description>
-	</privilege>
+    <aware_of_modules>
+        <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+        <aware_of_module>org.openmrs.module.visits</aware_of_module>
+    </aware_of_modules>
+
+    <!-- Internationalization -->
+    <!-- All message codes should start with @MODULE_ID@.* -->
+    <messages>
+        <lang>en</lang>
+        <file>messages.properties</file>
+    </messages>
+    <messages>
+        <lang>fr</lang>
+        <file>messages_fr.properties</file>
+    </messages>
+    <messages>
+        <lang>es</lang>
+        <file>messages_es.properties</file>
+    </messages>
+    <!-- /Internationalization -->
+
+    <!-- The reportingui module doesn't add it by itself. -->
+    <privilege>
+        <name>App: reportingui.reports</name>
+        <description>Able to access report overview</description>
+    </privilege>
 </module>
 

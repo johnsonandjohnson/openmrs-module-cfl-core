@@ -1,22 +1,4 @@
 <org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>
     <packages>
-        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>01_Cfl_core_person_dashboard_actions</filenameBase>
-            <groupUuid>b5586ef9-f0ea-44f0-8c98-e5f24407a01e</groupUuid>
-            <version>2</version>
-            <importMode>PEER_TO_PEER</importMode>
-        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>02_Cfl_core_person_dashboard_header</filenameBase>
-            <groupUuid>5118cfa4-0557-4126-8c37-a1989ed32c22</groupUuid>
-            <version>1</version>
-            <importMode>PEER_TO_PEER</importMode>
-        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>03_Cfl_core_person_dashboard_widgets</filenameBase>
-            <groupUuid>52cd2085-b348-4d3e-9071-4fcc39531b41</groupUuid>
-            <version>1</version>
-            <importMode>PEER_TO_PEER</importMode>
-        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
     </packages>
 </org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>

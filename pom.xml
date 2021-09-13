@@ -58,7 +58,6 @@
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <messagesVersion>1.2.1</messagesVersion>
         <metadatasharingVersion>1.6.0</metadatasharingVersion>
         <gsonVersion>2.8.5</gsonVersion>
         <reportingVersion>1.20.0</reportingVersion>
@@ -66,6 +65,8 @@
         <serializationXstream>0.2.12</serializationXstream>
         <providermanagementVersion>2.10.0</providermanagementVersion>
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
+        <!-- CfL modules -->
+        <messagesVersion>1.2.2-SNAPSHOT</messagesVersion>
     </properties>
 
     <dependencyManagement>

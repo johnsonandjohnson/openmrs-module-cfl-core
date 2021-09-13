@@ -115,7 +115,7 @@ public final class CFLConstants {
             "Specifies the SMS message content that will be sent immediately after registration";
 
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY = "cfl.patientRegistrationCallFlowName";
-    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "WelcomeFlow";
+    public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "";
     public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION =
             "Specifies call flow that will be used in call after patient registration.";
 
@@ -157,8 +157,8 @@ public final class CFLConstants {
     public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE = "[\n"
                     + "   {\n"
                     + "      \"default\":{\n"
-                    + "         \"SMS\":\"nexmo\",\n"
-                    + "         \"CALL\":\"nexmo\",\n"
+                    + "         \"SMS\":\"\",\n"
+                    + "         \"CALL\":\"\",\n"
                     + "         \"performCallOnPatientRegistration\":false,\n"
                     + "         \"sendSmsOnPatientRegistration\":false,\n"
                     + "         \"shouldSendReminderViaCall\":false,\n"
@@ -180,14 +180,6 @@ public final class CFLConstants {
     public static final String CALL_CHANNEL_TYPE = "Call";
 
     public static final String COMMA_SEPARATOR = ",";
-
-    /**
-     * The UUID of the CFL Tag (the common tag for Patient Flags in CfL module).
-     * <p>
-     * Hardcoded in liquibase.xml.
-     * </p>
-     */
-    public static final String CFL_TAG_UUID = "ef1a1b2d-c7a5-44d7-a518-ef78087abb23";
 
     /**
      * The name of message Template for Welcome Message.
@@ -276,8 +268,7 @@ public final class CFLConstants {
                     "This creation of these Encounter triggers the next vaccination visit scheduling. Default value is " +
                     "an UUID of Visit Note encounter type.";
 
-    public static final String VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE =
-            "d7151f82-c1f3-4152-a605-2f9ea7414a79";
+    public static final String VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE = "";
 
     public static final String VACCINATION_LISTENER_KEY = "cfl.vaccination.listener";
 
