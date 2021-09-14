@@ -35,7 +35,7 @@
         <referenceapplication>2.10.0</referenceapplication>
         <patientFlagVersion>3.0.1</patientFlagVersion>
         <!-- Upgraded version compared to referenceapplication -->
-        <appframeworkVersion>2.14.0</appframeworkVersion>
+        <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
         <cflVersion>1.4.1-SNAPSHOT</cflVersion>

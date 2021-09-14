@@ -20,6 +20,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfldistribution.CfldistributionGlobalParameterConstants;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
+import org.openmrs.module.appframework.repository.AllLoginLocations;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +71,7 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
             removeUnnecessaryData();
             createAndUpdateNecessaryData();
             markInitialDataCleanupAsDone();
+            reloadLocations();
         } else {
             log.info("Initial data cleanup has already been performed");
         }
@@ -97,6 +99,11 @@ public class DataCleanupActivatorStep implements ModuleActivatorStep {
                 .getAdministrationService()
                 .setGlobalProperty(CfldistributionGlobalParameterConstants.CFL_DISTRO_BOOTSTRAPPED_KEY,
                         Boolean.TRUE.toString());
+    }
+
+    private void reloadLocations() {
+        final List<AllLoginLocations> allLoginLocations = Context.getRegisteredComponents(AllLoginLocations.class);
+        allLoginLocations.forEach(AllLoginLocations::clear);
     }
 
     private void removeUnnecessaryUsers() {
