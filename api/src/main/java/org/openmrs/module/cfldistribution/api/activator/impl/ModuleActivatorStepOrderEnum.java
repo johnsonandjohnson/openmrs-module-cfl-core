@@ -24,10 +24,6 @@ public enum ModuleActivatorStepOrderEnum {
      */
     INSTALL_METADATA_PACKAGES_ACTIVATOR_STEP,
     /**
-     * @see EnableCFLAppsActivatorStep
-     */
-    ENABLE_CFL_APPS_ACTIVATOR_STEP,
-    /**
      * @see ConfigurePatientDashboardAppsActivatorStep
      */
     CONFIGURE_PATIENT_DASHBOARD_APPS_ACTIVATOR_STEP,
@@ -38,9 +34,5 @@ public enum ModuleActivatorStepOrderEnum {
     /**
      * @see DataCleanupActivatorStep
      */
-    DATA_CLEANUP_ACTIVATOR_STEP,
-    /**
-     * @see EnsureCFLTagRoleConfigurationIncludesDoctorRoleActivatorStep
-     */
-    ENSURE_CFL_TAG_ROLE_CONFIGURATION_INCLUDES_DOCTOR_ROLE_ACTIVATOR_STEP
+    DATA_CLEANUP_ACTIVATOR_STEP
 }

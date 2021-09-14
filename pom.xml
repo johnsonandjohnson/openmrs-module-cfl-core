@@ -32,12 +32,13 @@
         <javaCompilerSource>1.8</javaCompilerSource>
         <javaCompilerTarget>1.8</javaCompilerTarget>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <cflVersion>1.4.0</cflVersion>
         <referenceapplication>2.10.0</referenceapplication>
         <patientFlagVersion>3.0.1</patientFlagVersion>
         <!-- Upgraded version compared to referenceapplication -->
         <appframeworkVersion>2.14.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
+        <!-- CfL modules -->
+        <cflVersion>1.4.1-SNAPSHOT</cflVersion>
     </properties>
 
     <dependencyManagement>
