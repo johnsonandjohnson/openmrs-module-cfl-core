@@ -1,8 +1,11 @@
 package org.openmrs.module.cfldistribution.api.activator.impl;
 
 import org.apache.commons.logging.Log;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.service.ConfigService;
+import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 
 import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.UPDATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP;
@@ -22,9 +25,25 @@ public class UpdateGlobalParametersActivatorStep implements ModuleActivatorStep 
 
     @Override
     public void startup(Log log) throws Exception {
+        final AdministrationService administrationService = Context.getAdministrationService();
         // Enable and keep enabled patient dashboard redirection
-        Context
-                .getAdministrationService()
-                .setGlobalProperty(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME, Boolean.TRUE.toString());
+        administrationService.setGlobalProperty(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+                Boolean.TRUE.toString());
+        administrationService.setGlobalProperty(GlobalPropertiesConstants.VISIT_FORM_URIS.getKey(), "{\n" + //
+                "  \"Medicine refill\": {\n" + //
+                "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}" + //
+                "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-medicine-refill.xml\"\n" + //
+                "  },\n" + //
+                "  \"Sputum collection\": {\n" + //
+                "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}" + //
+                "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-sputum-visit-note.xml\"\n" + //
+                "  },\n" +  //
+                "  \"default\": {\n" + //
+                "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}" + //
+                "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-visit-note.xml\",\n" + //
+                "    \"edit\": \"/htmlformentryui/htmlform/editHtmlFormWithStandardUi.page?patientId={{patientId}}" + //
+                "&encounterId={{encounterId}}\"\n" + //
+                "  }\n" + //
+                "}");
     }
 }
