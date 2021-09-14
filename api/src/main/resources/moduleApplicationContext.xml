@@ -46,4 +46,6 @@
         <property name="appFrameworkService" ref="appFrameworkService"/>
     </bean>
     <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.HtmlFormsMetadata"/>
+    <bean id="cflVisitTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.VisitTypesMetadata"/>
+    <bean id="cflEncounterTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
 </beans>
