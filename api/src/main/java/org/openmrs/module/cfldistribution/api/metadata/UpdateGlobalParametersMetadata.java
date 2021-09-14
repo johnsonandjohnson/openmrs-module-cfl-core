@@ -1,30 +1,30 @@
-package org.openmrs.module.cfldistribution.api.activator.impl;
+package org.openmrs.module.cfldistribution.api.metadata;
 
-import org.apache.commons.logging.Log;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
-import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
-
-import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.UPDATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP;
+import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 
 /**
- * Updates Global Parameter values. The step is responsible for updating Global Properties to CFL distribution defaults,
- * from CFL module defaults.
+ * Updates Global Parameter values, it's responsible for updating Global Properties to CFL distribution defaults.
  * <p>
  * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with annotated beans.
  * </p>
  */
-public class UpdateGlobalParametersActivatorStep implements ModuleActivatorStep {
+public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
     @Override
-    public int getOrder() {
-        return UPDATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP.ordinal();
+    public int getVersion() {
+        return 1;
     }
 
     @Override
-    public void startup(Log log) throws Exception {
+    protected void installEveryTime() throws Exception {
+        // nothing to do
+    }
+
+    @Override
+    protected void installNewVersion() throws Exception {
         final AdministrationService administrationService = Context.getAdministrationService();
         // Enable and keep enabled patient dashboard redirection
         administrationService.setGlobalProperty(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,

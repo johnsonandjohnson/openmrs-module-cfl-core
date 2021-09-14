@@ -26,8 +26,6 @@
     <!-- START ModuleActivatorStep -->
     <bean id="cfl-CreateGlobalParametersActivatorStep"
           class="org.openmrs.module.cfldistribution.api.activator.impl.CreateGlobalParametersActivatorStep"/>
-    <bean id="cfl-UpdateGlobalParametersActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.UpdateGlobalParametersActivatorStep"/>
     <bean id="cfl-FixRiskFactorForHIVConceptsActivatorStep"
           class="org.openmrs.module.cfldistribution.api.activator.impl.FixRiskFactorForHIVConceptsActivatorStep"/>
     <bean id="cfl-InstallMetadataPackagesActivatorStep"
@@ -48,4 +46,6 @@
     <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.HtmlFormsMetadata"/>
     <bean id="cflVisitTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.VisitTypesMetadata"/>
     <bean id="cflEncounterTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
+    <bean id="cflUpdateGlobalParametersActivatorStep"
+          class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
 </beans>

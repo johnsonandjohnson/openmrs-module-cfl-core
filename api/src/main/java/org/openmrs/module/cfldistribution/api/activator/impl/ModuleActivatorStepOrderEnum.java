@@ -12,10 +12,6 @@ public enum ModuleActivatorStepOrderEnum {
      */
     CREATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP,
     /**
-     * @see UpdateGlobalParametersActivatorStep
-     */
-    UPDATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP,
-    /**
      * @see FixRiskFactorForHIVConceptsActivatorStep
      */
     FIX_RISK_FACTOR_FOR_HIV_CONCEPTS_ACTIVATOR_STEP,
