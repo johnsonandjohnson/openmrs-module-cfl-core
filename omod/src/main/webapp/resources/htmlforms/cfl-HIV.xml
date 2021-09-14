@@ -1,0 +1,173 @@
+<htmlform formUuid="beecf52f-614a-44d8-b1c3-2b5a784f0be5" formName="CFL HIV form" formEncounterType="6932803d-f0a3-44e5-90cd-e08d86f98d70" formVersion="1.0">
+    <macros>
+        paperFormId = (Fill this in)
+        headerColor =#009d8e
+        fontOnHeaderColor = white
+    </macros>
+
+    <uiInclude provider="cfl" css="htmlForm.css"/>
+    <style>
+        .section {
+        border: 1px solid $headerColor;
+        padding: 2px;
+        text-align: left;
+        margin-bottom: 1em;
+        }
+        .sectionHeader {
+        background-color: $headerColor;
+        color: $fontOnHeaderColor;
+        display: block;
+        padding: 2px;
+        font-weight: bold;
+        }
+        table.baseline-aligned td {
+        vertical-align: baseline;
+        }
+
+        .cflRadio, .cflRadio input[type="radio"], .cflRadio label {
+        float: none;
+        display: inline-block;
+        }
+    </style>
+
+    <script type="text/javascript">
+        jQuery(function() {
+            getField('otherField.value').change(function() {
+            toggleCommentField('otherField.value')
+            });
+        });
+
+        jQuery(document).ready(function(){
+            toggleCommentField('otherField.value')
+        });
+
+        function toggleCommentField(id) {
+            var checked = getField(id).prop("checked");
+            if (checked == true) {
+                getField(id + '_2').show()
+            } else {
+                getField(id + '_2').hide()
+            }
+        }
+
+    </script>
+
+    <section headerLabel="Patient details">
+        <!-- to display the patient's name -->
+        <span>Patient name: <lookup expression="patient.personName"/></span><br/>
+        <!-- to display the patient's gender -->
+        <span>Patient gender: <lookup expression="patient.gender"/></span><br/>
+        <!-- to display the patient's age -->
+        <span>Patient age: <lookup expression="patient.age"/> </span><br/>
+        <!-- to display the patient's identifier of the type with id=4 -->
+        <span>Aadhar Number: <lookup expression="patient.getPatientIdentifier(4)"/></span><br/>
+        <span>ART Number: <lookup expression="patient.getPatientIdentifier(5)"/></span><br/>
+        <span>OpenMRS ID: <lookup expression="patient.getPatientIdentifier(3)"/></span><br/>
+        <!-- to display the city/village of each of the patient's addresses -->
+        <!-- <lookup complexExpression="#foreach( $addr in $patient.addresses ) $\!addr.cityVillage <br/> #end"/> -->
+
+    </section>
+
+    <section headerLabel="Visit details">
+        <ifMode mode="VIEW" include="false">
+            <h2>HIV form</h2>
+            <div id="who-when-where">
+                <p id="who">
+                    <label><uimessage code="coreapps.patientDashBoard.provider"/></label>
+                    <span><encounterProvider default="currentUser" required="true"  /></span>
+                </p>
+                <p id="when">
+                    <label><uimessage code="coreapps.patientDashBoard.location"/></label>
+                    <span><encounterLocation default="SessionAttribute:emrContext.sessionLocationId"/></span>
+                </p>
+                <p id="where">
+                    <label><uimessage code="coreapps.patientDashBoard.date"/></label>
+                    <span><encounterDate id="encounterDate" default="now" /></span>
+                </p>
+            </div>
+        </ifMode>
+    </section>
+
+    <section headerLabel="Risk factor for HIV">
+        <table>
+            <tr>
+                <td>
+                    <repeat with="['7b52533b-c396-474b-b9df-b8c156f66b5d', 'Heterosexual'],
+                        ['57624032-3bc9-46a7-b0e6-bb7930d80277', 'Blood transfusion'],
+                        ['CIEL:1067', 'Unknown'],
+                        ['fb2045ef-7b1a-4e90-9f47-408aca35c2a8', 'Trucker']">
+                        <obs conceptId="f7c6f4f7-89d2-48f9-8844-c1a6564231c0" answerConceptId="{0}" style="checkbox" /><br/>
+                    </repeat>
+                </td>
+                <td>
+                    <repeat with="['1db7ff2a-5f20-4bdc-890b-3a348e06edc6', 'MSM'],
+                        ['4c5d3452-19b4-4703-88c2-f3d061019527', 'Mother to child'],
+                        ['154c910f-a66b-4517-a541-130931274ca7', 'Commercial sex work']">
+                        <obs conceptId="f7c6f4f7-89d2-48f9-8844-c1a6564231c0" answerConceptId="{0}" style="checkbox" /><br/>
+                    </repeat>
+                </td>
+                <td>
+                    <repeat with="['8c4e1b8a-cc7a-4028-8077-ece704c782f7', 'Injecting drug use (IDU)'],
+                        ['553b9a1d-d117-4460-9c8c-2c0eb5ad0518', 'Probable unsafe injection'],
+                        ['24750e2b-d4b6-437f-a092-d99a319dddab', 'Migrant']">
+                        <obs conceptId="f7c6f4f7-89d2-48f9-8844-c1a6564231c0" answerConceptId="{0}" style="checkbox" /><br/>
+                    </repeat>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <section headerLabel="High Risk Groups">
+        <table>
+            <tr>
+                <td>
+                    <repeat with="['ea15773b-714a-492c-b7f0-c13b9e8b7166', '2nd Line'],
+                        ['52bc8545-88d6-4f12-a6f9-386496b22b76', 'Patient with family issues']">
+                        <obs conceptId="9994a4aa-981b-4605-8f4f-23e02e64106e" answerConceptId="{0}" style="checkbox" /><br/>
+                    </repeat>
+                </td>
+                <td>
+                    <repeat with="['4185ab0d-069d-440f-a4f3-aef07f0f6231', 'Co infected patients (others than TB)'],
+                        ['b0095cdf-8dd6-46f8-8b30-19c451e3b8d5', 'Patient on alternate treatment']">
+                        <obs conceptId="9994a4aa-981b-4605-8f4f-23e02e64106e" answerConceptId="{0}" style="checkbox" /><br/>
+                    </repeat>
+                </td>
+                <td>
+                    <!-- FU and regular defaulters -->
+                    <obs conceptId="9994a4aa-981b-4605-8f4f-23e02e64106e" answerConceptId="9027f618-09b5-41cd-9330-b549d0dd280d" style="checkbox" /><br/>
+                    <!-- Other -->
+                    <obs id="otherField" conceptId="9994a4aa-981b-4605-8f4f-23e02e64106e" answerConceptId="5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                         answerLabel="Other (e.g. alcoholism):" style="checkbox" commentFieldLabel=""/><br/>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <section headerLabel="TB">
+        <table>
+            <tr>
+                <td>
+                    <!-- Patient with previous history of TB -->
+                    <obs conceptId="01f37a87-14a3-496d-88fe-00d3d1fea03c" answerConceptId="3d0460b8-40c7-47df-b5c3-f8d7d31c533f" style="checkbox" /><br/>
+                </td>
+                <td>
+                    <!-- Patient with current diagnosis of TB -->
+                    <obs conceptId="01f37a87-14a3-496d-88fe-00d3d1fea03c" answerConceptId="4503b322-d946-4d0a-8878-eb0650d3976b" style="checkbox" /><br/>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <section headerLabel="Treatment Status">
+        <div class="cflRadio">
+            <obs conceptId="c59d7c13-7037-4a70-9f14-ec8b727d1c12" answerConceptIds="f6c9f4e0-143f-4cb2-9346-35c266f5f803,b4f0332a-ea36-4086-a4e9-e1136c541487,15bd5100-cd85-4bbd-a848-8d3a19b1e738" style="radio"/><br/>
+        </div>
+    </section>
+
+    <ifMode mode="VIEW" include="false">
+        <div id="buttons">
+            <submit submitClass="confirm right" submitCode="general.save"/>
+            <button type="button" class="cancel"><uimessage code="general.cancel"/></button>
+        </div>
+    </ifMode>
+</htmlform>

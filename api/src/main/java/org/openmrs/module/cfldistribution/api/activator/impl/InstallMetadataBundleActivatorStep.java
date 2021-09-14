@@ -8,6 +8,7 @@ import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 import java.util.Collections;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
+import static org.openmrs.api.context.Context.getRegisteredComponents;
 import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP;
 
 /**
@@ -25,7 +26,6 @@ public class InstallMetadataBundleActivatorStep implements ModuleActivatorStep {
     @Override
     public void startup(Log log) {
         final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        final MetadataBundle rolesAndPrivileges = getRegisteredComponent("cflRolePrivilegeProfiles", MetadataBundle.class);
-        service.installBundles(Collections.singletonList(rolesAndPrivileges));
+        service.installBundles(getRegisteredComponents(MetadataBundle.class));
     }
 }

@@ -42,4 +42,8 @@
 
     <bean id="cflRolePrivilegeProfiles"
           class="org.openmrs.module.cfldistribution.api.metadata.RolePrivilegeProfilesMetadata"/>
+    <bean id="cflDisableBuildInApps" class="org.openmrs.module.cfldistribution.api.metadata.DisableBuildInAppsMetadata">
+        <property name="appFrameworkService" ref="appFrameworkService"/>
+    </bean>
+    <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.HtmlFormsMetadata"/>
 </beans>
