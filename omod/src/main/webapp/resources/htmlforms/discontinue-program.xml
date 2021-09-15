@@ -1,7 +1,7 @@
 
 <htmlform formUuid="39258edb-92c5-11eb-bf66-0242ac120002" formName="Discontinue program form"
           formEncounterType="f1c23f25-20e1-4503-b09e-116aba0a6063" formVersion="1.0">
-    <uiInclude provider="cfl" css="htmlForm.css"/>
+    <uiInclude provider="cfldistribution" css="htmlForm.css"/>
     <style type="text/css">
         .date-container {
             margin-right: 50px;

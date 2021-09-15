@@ -1,14 +1,16 @@
 package org.openmrs.module.cfldistribution.api.activator.impl;
 
 import org.apache.commons.logging.Log;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.cfldistribution.CfldistributionConstants;
 import org.openmrs.module.cfldistribution.api.activator.ModuleActivatorStep;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
-import static org.openmrs.api.context.Context.getRegisteredComponents;
 import static org.openmrs.module.cfldistribution.api.activator.impl.ModuleActivatorStepOrderEnum.INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP;
 
 /**
@@ -26,6 +28,12 @@ public class InstallMetadataBundleActivatorStep implements ModuleActivatorStep {
     @Override
     public void startup(Log log) {
         final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        service.installBundles(getRegisteredComponents(MetadataBundle.class));
+        final List<MetadataBundle> cfldistributionBundles = Context
+                .getRegisteredComponents(MetadataBundle.class)
+                .stream()
+                .filter(component -> component.getClass().getName().startsWith(CfldistributionConstants.MODULE_API_PACKAGE))
+                .collect(Collectors.toList());
+
+        service.installBundles(cfldistributionBundles);
     }
 }

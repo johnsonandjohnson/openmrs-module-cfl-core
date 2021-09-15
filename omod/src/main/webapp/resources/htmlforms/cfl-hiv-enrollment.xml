@@ -1,6 +1,6 @@
 <htmlform formUuid="k65f120a-04ec-11e3-8780-2b40bef9a44c" formName="CFL HIV Enrollment Form"
           formEncounterType="645ce7ac-3714-4cb4-922a-9d5b4b164fa8" formVersion="1.0">
-    <uiInclude provider="cfl" css="htmlForm.css"/>
+    <uiInclude provider="cfldistribution" css="htmlForm.css"/>
     <style type="text/css">
         .nopadding {
             padding:0px;

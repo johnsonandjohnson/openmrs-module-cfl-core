@@ -5,7 +5,7 @@
         fontOnHeaderColor = white
     </macros>
 
-    <uiInclude provider="cfl" css="htmlForm.css"/>
+    <uiInclude provider="cfldistribution" css="htmlForm.css"/>
     <style>
         .section {
         border: 1px solid $headerColor;

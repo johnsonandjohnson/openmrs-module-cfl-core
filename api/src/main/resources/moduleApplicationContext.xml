@@ -48,4 +48,5 @@
     <bean id="cflEncounterTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
     <bean id="cflUpdateGlobalParametersActivatorStep"
           class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
+    <bean id="cflProgramsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.ProgramsMetadata"/>
 </beans>

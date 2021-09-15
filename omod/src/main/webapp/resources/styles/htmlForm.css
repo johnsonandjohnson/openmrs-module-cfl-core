@@ -1,0 +1,166 @@
+/** HTML Forms default styles **/
+#htmlform {
+    font-family: CircularStd;
+    display: flex;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+  
+#htmlform htmlform {
+    width: 100%;
+}
+  
+#htmlform htmlform h2 {
+    color: #333333;
+}
+  
+#htmlform htmlform h1, h3, h4, h5, h6 {
+    color: inherit !important;
+}
+  
+#htmlform htmlform input,
+#htmlform htmlform label {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#htmlform htmlform table {
+    margin: 10px 0;
+}
+  
+#htmlform htmlform table tr {
+    padding: 5px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+#htmlform htmlform table td {
+    background-color: white !important;
+    cursor: default;
+    padding: 20px 0;
+}
+  
+#htmlform htmlform table td[style*="display: none;"] {
+    display: table-cell !important;
+}
+  
+#htmlform htmlform table td[style*="display: none;"] * {
+    display: none;
+}
+  
+#htmlform htmlform .section {
+    border: none;
+}
+  
+#htmlform htmlform input,
+#htmlform htmlform select,
+#htmlform htmlform textarea,
+#htmlform htmlform ul.select {
+    background-color: white;
+}
+  
+#htmlform htmlform button,
+#htmlform htmlform input[type='button'] {
+    font-family: CircularStd;
+    font-size: 11px !important;
+    color: white;
+    text-transform: uppercase;
+    border: 1px solid #6c757d !important;
+    padding: 0.5rem 1.25rem !important;
+    margin-right: 0.75rem !important;
+    border-radius: 4px !important;
+    line-height: 1.5;
+}
+  
+#htmlform htmlform button.confirm,
+#htmlform htmlform input.confirm {
+    background: #00455c;
+    border: 1px solid #6c757d !important;
+    font-size: 11px !important;
+    color: white !important;
+}
+  
+#htmlform htmlform button.cancel,
+#htmlform htmlform input.cancel {
+    background: none !important;
+    border: 1px solid #00455c !important;
+    color: #00455c !important;
+}
+  
+ul.ui-autocomplete {
+    border-radius: 0;
+}
+  
+ul.ui-autocomplete li.ui-menu-item a {
+    border-radius: 0;
+    border: none;
+    margin: -1px;
+}
+  
+ul.ui-autocomplete li.ui-menu-item a.ui-state-focus,
+ul.ui-autocomplete li.ui-menu-item a.ui-state-hover {
+    background: #e4e7e7 !important;
+}
+  
+#htmlform htmlform input,
+#htmlform htmlform select {
+    color: inherit !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+}
+  
+#htmlform htmlform input:focus,
+#htmlform htmlform select:focus {
+    outline: none !important;
+    border: 1px solid #AEC2D5 !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+}
+  
+#ui-datepicker-div {
+    color: #2B3640;
+}
+  
+#ui-datepicker-div .ui-datepicker-header {
+    background: none;
+    border: none;
+}
+  
+#ui-datepicker-div .ui-datepicker-header .ui-datepicker-prev,
+#ui-datepicker-div .ui-datepicker-header .ui-datepicker-next {
+    background: none;
+    border: none;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td {
+    background: inherit !important;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td:hover {
+    background: inherit !important;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-default {
+    background: white !important;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-hover {
+    background: #e4e7e7 !important;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-active {
+    background: #00455c !important;
+    color: white;
+}
+  
+#ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-highlight {
+    border-color: #d3d3d3;
+}
+
+#ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-highlight.ui-state-hover {
+    border-color: #999;
+}
+  
+.patient-header .value {
+    color: inherit;
+    font-weight: inherit;
+}
