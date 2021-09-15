@@ -50,6 +50,9 @@
           class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
     <bean id="cflProgramsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.ProgramsMetadata"/>
     <bean id="cflPatientFlagsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PatientFlagsMetadata">
-        <property name="flagService" ref="flagService" />
+        <property name="flagService" ref="flagService"/>
+    </bean>
+    <bean id="cflPersonAttributesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata">
+        <property name="personService" ref="personService"/>
     </bean>
 </beans>
