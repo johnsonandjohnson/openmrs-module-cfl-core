@@ -11,6 +11,7 @@ import java.util.List;
 public final class CFLConstants {
 
     public static final String MODULE_ID = "cfl";
+    public static final String MODULE_API_PACKAGE = "org.openmrs.module.cfl.api";
 
     public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
     public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";

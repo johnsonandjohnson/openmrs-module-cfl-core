@@ -23,6 +23,7 @@ import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
 import static org.openmrs.module.cfl.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
@@ -136,8 +137,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         createGlobalSettingIfNotExists(CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
                 CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
-        createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE,
-                CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE, CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
+        createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE, CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
+                CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
         createGlobalSettingIfNotExists(CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
                 CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
@@ -156,15 +157,14 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         createGlobalSettingIfNotExists(CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
                 CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
-        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY,
-                CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE, CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
+        createGlobalSettingIfNotExists(CFLConstants.VACCINATION_PROGRAM_KEY, CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE,
+                CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
         createGlobalSettingIfNotExists(CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
                 CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
         createGlobalSettingIfNotExists(CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
                 CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE, CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
-        createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY,
-                CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
+        createGlobalSettingIfNotExists(CFLConstants.ACTOR_TYPES_KEY, CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
         createGlobalSettingIfNotExists(CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,
                 CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_VALUE,
                 CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_DESCRIPTION);
@@ -215,6 +215,12 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
     private void installMetadataBundles() {
         final MetadataDeployService service = getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
-        service.installBundles(Context.getRegisteredComponents(MetadataBundle.class));
+        final List<MetadataBundle> cflBundles = Context
+                .getRegisteredComponents(MetadataBundle.class)
+                .stream()
+                .filter(component -> component.getClass().getName().startsWith(CFLConstants.MODULE_API_PACKAGE))
+                .collect(Collectors.toList());
+
+        service.installBundles(cflBundles);
     }
 }
