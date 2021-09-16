@@ -38,8 +38,8 @@
         <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
-        <cflVersion>1.4.1-SNAPSHOT</cflVersion>
-        <messagesVersion>1.2.2-SNAPSHOT</messagesVersion>
+        <cflVersion>1.6.0</cflVersion>
+        <messagesVersion>1.3.0</messagesVersion>
     </properties>
 
     <dependencyManagement>
