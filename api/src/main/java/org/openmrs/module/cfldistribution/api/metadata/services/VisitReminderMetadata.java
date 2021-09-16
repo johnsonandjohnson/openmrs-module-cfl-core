@@ -1,5 +1,8 @@
 package org.openmrs.module.cfldistribution.api.metadata.services;
 
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.GlobalProperty;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -60,5 +63,17 @@ public class VisitReminderMetadata extends AbstractMessageServiceMetadata {
         Template visitReminderTemplate = createAndSaveTemplate();
         createAndSaveTemplateFields(visitReminderTemplate);
         executeQuery(getQuery(SERVICES_BASE_PATH + "VisitReminder/VisitReminderStartDateFunction.sql"));
+        createRelatedGlobalProperty("message.daysToCallBeforeVisit.default", "1,7",
+                "Used to determine the how many days before visit reminder should be scheduled. " +
+                "Note: if the property will store negative values then " +
+                        "the visit reminder will be sent after visit.");
+    }
+
+    private void createRelatedGlobalProperty(String key, String value, String description) {
+        String existSetting = Context.getAdministrationService().getGlobalProperty(key);
+        if (StringUtils.isBlank(existSetting)) {
+            GlobalProperty gp = new GlobalProperty(key, value, description);
+            Context.getAdministrationService().saveGlobalProperty(gp);
+        }
     }
 }

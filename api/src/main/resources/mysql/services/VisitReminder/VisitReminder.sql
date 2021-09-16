@@ -42,7 +42,7 @@ FROM
                         visit_attribute va
                         JOIN visit_attribute_type vat ON va.attribute_type_id = vat.visit_attribute_type_id
                     WHERE
-                        vat.name = \'Visit Time\'
+                        vat.name = 'Visit Time'
                 ) AS visit_times ON v.visit_id = visit_times.visit_id
                 LEFT JOIN (
                     SELECT
@@ -52,18 +52,18 @@ FROM
                         visit_attribute va
                         JOIN visit_attribute_type vat ON va.attribute_type_id = vat.visit_attribute_type_id
                     WHERE
-                        vat.name = \'Visit Status\'
+                        vat.name = 'Visit Status'
                         AND va.voided = 0
                 ) AS visit_statuses ON v.visit_id = visit_statuses.visit_id
             WHERE
                 v.voided = 0
-                AND visit_statuses.visit_status = \'SCHEDULED\'
+                AND visit_statuses.visit_status = 'SCHEDULED'
         ) dates_of_visit
-    WHERE concat(\',\',(
+    WHERE concat(',',(
         SELECT property_value
         FROM global_property
-        WHERE property =\'message.daysToCallBeforeVisit.default\'), \',\')
-            LIKE concat(\'%,\',datediff(visit_dates, selected_date),\',%\')
+        WHERE property ='message.daysToCallBeforeVisit.default'), ',')
+            LIKE concat('%,',datediff(visit_dates, selected_date),',%')
             AND date(visit_dates) !=  selected_date
 ) dates_before_visit
 UNION
@@ -81,7 +81,7 @@ UNION
         JOIN messages_patient_template mpt ON mpt.messages_patient_template_id = mss.patient_template_id
         JOIN messages_template mt ON mt.messages_template_id = mpt.template_id
         JOIN messages_scheduled_service_group mssg ON mssg.messages_scheduled_service_group_id = mss.group_id
-    WHERE mt.name = \'Visit reminder\'
+    WHERE mt.name = 'Visit reminder'
         AND mpt.patient_id = mpt.patient_id
         AND mpt.actor_id = mpt.actor_id
         AND mssg.patient_id = mpt.patient_id

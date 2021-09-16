@@ -10,11 +10,11 @@ FROM
         WHERE selected_date <= DATE(:endDateTime)
             AND selected_date >= DATE(:startDateTime)
             AND :Week_day_of_delivering_message
-                LIKE concat(\'%\',DAYNAME(selected_date),\'%\') ) dates ) temp
+                LIKE concat('%',DAYNAME(selected_date),'%') ) dates ) temp
     WHERE EXECUTION_DATE > GET_PREDICTION_START_DATE_FOR_ADHERENCE_DAILY(:patientId, :actorId, :executionStartDateTime)
         AND EXECUTION_DATE <= :endDateTime
         AND EXECUTION_DATE >= :startDateTime
-        AND CHANNEL_ID != \'Deactivate service\'
+        AND CHANNEL_ID != 'Deactivate service'
 UNION
     SELECT mssg.msg_send_time AS EXECUTION_DATE,
         1 AS MESSAGE_ID,
@@ -24,7 +24,7 @@ UNION
         JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
         JOIN messages_template mt on mt.messages_template_id = mpt.template_id
         JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
-    WHERE mt.name = \'Adherence report daily\'
+    WHERE mt.name = 'Adherence report daily'
         AND mpt.patient_id = :patientId
         AND mpt.actor_id = :actorId
         AND mssg.patient_id = :patientId
