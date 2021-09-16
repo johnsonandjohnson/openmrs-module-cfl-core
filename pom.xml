@@ -28,7 +28,7 @@
     </modules>
 
     <properties>
-        <openmrs.platform.version>2.0.1</openmrs.platform.version>
+        <openmrsPlatformVersion>2.0.1</openmrsPlatformVersion>
         <javaCompilerSource>1.8</javaCompilerSource>
         <javaCompilerTarget>1.8</javaCompilerTarget>
         <javax.servlet.version>3.1.0</javax.servlet.version>
@@ -39,6 +39,7 @@
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
         <cflVersion>1.4.1-SNAPSHOT</cflVersion>
+        <messagesVersion>1.2.2-SNAPSHOT</messagesVersion>
     </properties>
 
     <dependencyManagement>
@@ -84,6 +85,19 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>locationbasedaccess-api</artifactId>
                 <version>${locationbasedaccessVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.web</groupId>
+                <artifactId>openmrs-web</artifactId>
+                <version>${openmrsPlatformVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>messages-api</artifactId>
+                <version>${messagesVersion}</version>
+                <type>jar</type>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
