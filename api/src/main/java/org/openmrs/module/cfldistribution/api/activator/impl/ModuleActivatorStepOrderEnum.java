@@ -8,13 +8,13 @@ package org.openmrs.module.cfldistribution.api.activator.impl;
  */
 public enum ModuleActivatorStepOrderEnum {
     /**
+     * @see DataCleanupActivatorStep
+     */
+    DATA_CLEANUP_ACTIVATOR_STEP,
+    /**
      * @see CreateGlobalParametersActivatorStep
      */
     CREATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP,
-    /**
-     * @see UpdateGlobalParametersActivatorStep
-     */
-    UPDATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP,
     /**
      * @see FixRiskFactorForHIVConceptsActivatorStep
      */
@@ -24,23 +24,11 @@ public enum ModuleActivatorStepOrderEnum {
      */
     INSTALL_METADATA_PACKAGES_ACTIVATOR_STEP,
     /**
-     * @see EnableCFLAppsActivatorStep
-     */
-    ENABLE_CFL_APPS_ACTIVATOR_STEP,
-    /**
      * @see ConfigurePatientDashboardAppsActivatorStep
      */
     CONFIGURE_PATIENT_DASHBOARD_APPS_ACTIVATOR_STEP,
     /**
      * @see InstallMetadataBundleActivatorStep
      */
-    INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP,
-    /**
-     * @see DataCleanupActivatorStep
-     */
-    DATA_CLEANUP_ACTIVATOR_STEP,
-    /**
-     * @see EnsureCFLTagRoleConfigurationIncludesDoctorRoleActivatorStep
-     */
-    ENSURE_CFL_TAG_ROLE_CONFIGURATION_INCLUDES_DOCTOR_ROLE_ACTIVATOR_STEP
+    INSTALL_METADATA_BUNDLE_ACTIVATOR_STEP
 }
