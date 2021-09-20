@@ -15,7 +15,7 @@ import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
     @Override
     public int getVersion() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -28,6 +28,8 @@ public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
         final AdministrationService administrationService = Context.getAdministrationService();
         // Enable and keep enabled patient dashboard redirection
         administrationService.setGlobalProperty(CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
+                Boolean.TRUE.toString());
+        administrationService.setGlobalProperty(CFLConstants.CFL_LOGIN_REDIRECT_GLOBAL_PROPERTY_NAME,
                 Boolean.TRUE.toString());
         administrationService.setGlobalProperty(GlobalPropertiesConstants.VISIT_FORM_URIS.getKey(), "{\n" + //
                 "  \"Medicine refill\": {\n" + //
