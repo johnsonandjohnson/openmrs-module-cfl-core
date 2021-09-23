@@ -14,12 +14,15 @@ public class PersonAttributeBuilder extends AbstractBuilder<PersonAttribute> {
 
     private PersonAttributeType personAttributeType;
 
+    private boolean voided;
+
     public PersonAttributeBuilder() {
         super();
         id = getInstanceNumber();
         person = new PersonBuilder().build();
         value = "48100200300";
         personAttributeType = new PersonAttributeTypeBuilder().build();
+        voided = false;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class PersonAttributeBuilder extends AbstractBuilder<PersonAttribute> {
         personAttribute.setPerson(person);
         personAttribute.setValue(value);
         personAttribute.setAttributeType(personAttributeType);
+        personAttribute.setVoided(voided);
         return personAttribute;
     }
 
@@ -54,6 +58,11 @@ public class PersonAttributeBuilder extends AbstractBuilder<PersonAttribute> {
 
     public PersonAttributeBuilder withPersonAttributeType(PersonAttributeType personAttributeType) {
         this.personAttributeType = personAttributeType;
+        return this;
+    }
+
+    public PersonAttributeBuilder withVoided(boolean voided) {
+        this.voided = voided;
         return this;
     }
 }

@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Visit;
 import org.openmrs.api.VisitService;
@@ -43,7 +44,12 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
         updatePatientDateChanged(patient);
 
         if (VACCINATION_PROGRAM_ATTRIBUTE_NAME.equals(personAttribute.getAttributeType().getName())) {
-            updateVaccination(patient);
+            boolean isFirstVaccinationAttribute = isFirstVaccinationAttribute(patient);
+
+            if ((action == Event.Action.CREATED && isFirstVaccinationAttribute) ||
+                    (action == Event.Action.UPDATED && !isFirstVaccinationAttribute)) {
+                updateVaccination(patient);
+            }
         }
     }
 
@@ -69,6 +75,13 @@ public class PersonAttributeListenerServiceImpl implements PersonAttributeListen
             patient.setChangedBy(Context.getUserContext().getAuthenticatedUser());
             patientDAO.savePatient(patient);
         }
+    }
+
+    private boolean isFirstVaccinationAttribute(Person person) {
+        return person.getAttributes()
+                .stream()
+                .filter(attr -> attr.getAttributeType().getName().equals(VACCINATION_PROGRAM_ATTRIBUTE_NAME))
+                .count() == 1;
     }
 
     private void updateVaccination(Patient patient) {

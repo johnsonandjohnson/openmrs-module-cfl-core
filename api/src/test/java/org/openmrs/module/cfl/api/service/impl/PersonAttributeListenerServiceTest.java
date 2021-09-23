@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,12 +15,15 @@ import org.openmrs.module.cfl.api.helper.PatientHelper;
 import org.openmrs.module.cfl.api.helper.PersonHelper;
 import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.service.VaccinationService;
+import org.openmrs.module.cfl.builder.PersonAttributeBuilder;
+import org.openmrs.module.cfl.builder.PersonAttributeTypeBuilder;
 import org.openmrs.test.BaseContextMockTest;
 
 import java.util.Date;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -27,6 +31,8 @@ import static org.mockito.Mockito.when;
 import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME;
 
 public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
+
+    private Person person;
 
     @Mock
     private PatientDAO patientDAO;
@@ -43,21 +49,80 @@ public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
     @InjectMocks
     private PersonAttributeListenerServiceImpl personAttributeListenerService;
 
+    @Before
+    public void setUp(){
+        person = PersonHelper.createPerson();
+
+        when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(emptyList());
+        when(configService.getVaccinationProgram(any(Patient.class))).thenReturn(
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue());
+    }
+
     @Test
-    public void onPersonAttributeEvent_whenVisitListIsEmpty() {
-        final Person person = PersonHelper.createPerson();
+    public void onPersonAttributeEvent_whenCreatedEventIsTriggeredAndPatientHasOneVaccinationAttribute() {
         final Patient patient = PatientHelper.createPatient(person, null);
 
         when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
-        when(visitService.getActiveVisitsByPatient(any(Patient.class))).thenReturn(emptyList());
-        when(configService.getVaccinationProgram(patient)).thenReturn(
-                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME).getValue());
+
+        personAttributeListenerService.onPersonAttributeEvent(Event.Action.CREATED,
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
+
+        verify(patientDAO).getPatientByUuid(anyString());
+        verify(configService).getVaccinationProgram(patient);
+        verify(visitService).getActiveVisitsByPatient(patient);
+        verifyZeroInteractions(vaccinationService);
+    }
+
+    @Test
+    public void onPersonAttributeEvent_whenCreatedEventIsTriggeredAndPatientHasMultipleVaccinationAttributes() {
+        person.addAttribute(new PersonAttributeBuilder().withPerson(person).withValue("Covid 2D vaccine")
+                .withPersonAttributeType(new PersonAttributeTypeBuilder().withName("Vaccination program").build())
+                .withVoided(true).build());
+
+        final Patient patient = PatientHelper.createPatient(person, null);
+
+        when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
+
+        personAttributeListenerService.onPersonAttributeEvent(Event.Action.CREATED,
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
+
+        verify(patientDAO).getPatientByUuid(anyString());
+        verifyZeroInteractions(configService);
+        verifyZeroInteractions(visitService);
+        verifyZeroInteractions(vaccinationService);
+    }
+
+    @Test
+    public void onPersonAttributeEvent_whenUpdatedEventIsTriggeredAndPatientHasOneVaccinationAttribute() {
+        final Patient patient = PatientHelper.createPatient(person, null);
+
+        when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
 
         personAttributeListenerService.onPersonAttributeEvent(Event.Action.UPDATED,
                 person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
 
-        verify(patientDAO, times(1)).getPatientByUuid(person.getUuid());
-        verify(visitService, times(1)).getActiveVisitsByPatient(patient);
+        verify(patientDAO).getPatientByUuid(anyString());
+        verifyZeroInteractions(configService);
+        verifyZeroInteractions(visitService);
+        verifyZeroInteractions(vaccinationService);
+    }
+
+    @Test
+    public void onPersonAttributeEvent_whenUpdatedEventIsTriggeredAndPatientHasMultipleVaccinationAttributes() {
+        person.addAttribute(new PersonAttributeBuilder().withPerson(person).withValue("Covid 2D vaccine")
+                .withPersonAttributeType(new PersonAttributeTypeBuilder().withName("Vaccination program").build())
+                .withVoided(true).build());
+
+        final Patient patient = PatientHelper.createPatient(person, null);
+
+        when(patientDAO.getPatientByUuid(person.getUuid())).thenReturn(patient);
+
+        personAttributeListenerService.onPersonAttributeEvent(Event.Action.UPDATED,
+                person.getAttribute(VACCINATION_PROGRAM_ATTRIBUTE_NAME));
+
+        verify(patientDAO).getPatientByUuid(anyString());
+        verify(configService).getVaccinationProgram(patient);
+        verify(visitService).getActiveVisitsByPatient(patient);
         verifyZeroInteractions(vaccinationService);
     }
 
@@ -90,5 +155,4 @@ public class PersonAttributeListenerServiceTest extends BaseContextMockTest {
         verify(patient, times(1)).setChangedBy(any(User.class));
         verify(patientDAO, times(1)).savePatient(patient);
     }
-
 }
