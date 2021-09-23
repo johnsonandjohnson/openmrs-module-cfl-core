@@ -26,7 +26,7 @@ public class PersonAttributeActionListener extends BaseActionListener {
     private static final List<Class<? extends OpenmrsObject>> PERSON_ATTRIBUTE_CLASS =
             Collections.singletonList(PersonAttribute.class);
     private static final List<String> ALL_ATTRIBUTE_RELEVANT_ACTIONS =
-            Arrays.asList(Event.Action.CREATED.name(), Event.Action.UPDATED.name(), Event.Action.VOIDED.name());
+            Arrays.asList(Event.Action.CREATED.name(), Event.Action.UPDATED.name());
 
     private PersonAttributeListenerService personAttributeListenerService;
 
