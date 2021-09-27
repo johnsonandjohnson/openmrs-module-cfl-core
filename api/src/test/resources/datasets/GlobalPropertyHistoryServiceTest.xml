@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <global_property_history
+            global_property_history_id="1"
+            action="UPDATE"
+            property="cfl.vaccines"
+            property_value="Value1"/>
+
+    <global_property_history
+            global_property_history_id="2"
+            action="UPDATE"
+            property="cfl.vaccines"
+            property_value="Value2"/>
+
+    <global_property_history
+            global_property_history_id="3"
+            action="UPDATE"
+            property="cfl.vaccines"
+            property_value="Value3"/>
+</dataset>
