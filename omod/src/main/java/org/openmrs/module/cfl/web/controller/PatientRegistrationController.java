@@ -1,9 +1,13 @@
 package org.openmrs.module.cfl.web.controller;
 
+import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Relationship;
 import org.openmrs.api.APIException;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.web.service.CFLRegistrationUiService;
 import org.openmrs.module.registrationcore.RegistrationData;
 import org.openmrs.module.registrationcore.api.RegistrationCoreService;
@@ -12,6 +16,7 @@ import org.openmrs.ui.framework.UiUtils;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Controller("cfl.patientRegistrationController")
 public class PatientRegistrationController extends BaseCflModuleRestController {
@@ -34,6 +40,13 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
 
     @Autowired
     private CFLRegistrationUiService cflRegistrationUiService;
+
+    @Autowired
+    @Qualifier("adminService")
+    private AdministrationService administrationService;
+
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private UiUtils uiUtils;
@@ -50,11 +63,24 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
         final RegistrationData registrationData = new RegistrationData();
         registrationData.setPatient(patient);
         registrationData.setRelationships(patientRelationships);
+        getLocationFromAttribute(patient).ifPresent(registrationData::setIdentifierLocation);
         final Patient registeredPatient = registrationCoreService.registerPatient(registrationData);
 
         flashInfoMessage(registrationRequest, patient);
 
         return new ResponseEntity<>(registeredPatient.getUuid(), HttpStatus.OK);
+    }
+
+    private Optional<Location> getLocationFromAttribute(Patient patient) {
+        final String locationAttributeName =
+                administrationService.getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY);
+
+        if (locationAttributeName == null) {
+            return Optional.empty();
+        }
+
+        final String locationUuid = patient.getAttribute(locationAttributeName).getValue();
+        return Optional.ofNullable(locationService.getLocationByUuid(locationUuid));
     }
 
     private void flashInfoMessage(final ServletRequest registrationRequest, final Patient patient) {
