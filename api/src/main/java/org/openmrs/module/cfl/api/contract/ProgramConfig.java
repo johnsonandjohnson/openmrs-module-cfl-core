@@ -4,9 +4,13 @@ public class ProgramConfig {
 
     private String name;
 
+    private String programFormProvider;
+
     private String programFormName;
 
     private String programFormEncounterTypeUuid;
+
+    private String discontinuationFormProvider;
 
     private String discontinuationFormName;
 
@@ -18,6 +22,14 @@ public class ProgramConfig {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProgramFormProvider() {
+        return programFormProvider;
+    }
+
+    public void setProgramFormProvider(String programFormProvider) {
+        this.programFormProvider = programFormProvider;
     }
 
     public String getProgramFormName() {
@@ -34,6 +46,14 @@ public class ProgramConfig {
 
     public void setProgramFormEncounterTypeUuid(String programFormEncounterTypeUuid) {
         this.programFormEncounterTypeUuid = programFormEncounterTypeUuid;
+    }
+
+    public String getDiscontinuationFormProvider() {
+        return discontinuationFormProvider;
+    }
+
+    public void setDiscontinuationFormProvider(String discontinuationFormProvider) {
+        this.discontinuationFormProvider = discontinuationFormProvider;
     }
 
     public String getDiscontinuationFormName() {
