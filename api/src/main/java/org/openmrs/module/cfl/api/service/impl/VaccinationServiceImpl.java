@@ -11,6 +11,9 @@ import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
+import org.openmrs.module.cfl.api.contract.Vaccine;
+import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
@@ -111,6 +114,27 @@ public class VaccinationServiceImpl implements VaccinationService {
                 rescheduleVisits(lastOccurredDosingVisit, patient);
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP) {
+        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        if (StringUtils.isNotBlank(configGP)) {
+            RandomizationRegimen randomizationRegimen = new RandomizationRegimen(getGson().
+                                                    fromJson(configGP, Regimen.class));
+
+            Regimen regimen = randomizationRegimen.getRegimens();
+            for (Vaccine vaccine : regimen.getVaccine()) {
+                List<Patient> patients = getCFLPatientService().findByVaccinationName(vaccine.getName());
+                List<String> patientsUuids = getPatientsUuids(patients);
+                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patients.size(),
+                        CollectionUtils.isNotEmpty(patients))
+                );
+            }
+        }
+
+        return resultList;
     }
 
     private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {
