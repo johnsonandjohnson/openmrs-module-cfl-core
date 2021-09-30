@@ -64,4 +64,15 @@ public interface VaccinationService {
      * @param patient the patient whose visits are to be rescheduled
      */
     void rescheduleRegimenVisitsByPatient(Patient patient);
+
+    /**
+     * Retrieves information about available regimens and related patients and adapts results
+     * to {@link RegimensPatientsDataDTO} structure
+     *
+     * @param configGP - name of configuration global property
+     *
+     * @return - results adapted to {@link RegimensPatientsDataDTO} structure
+     */
+    List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP);
+
 }

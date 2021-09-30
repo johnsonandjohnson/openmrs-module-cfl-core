@@ -50,8 +50,8 @@ public class RegimenControllerTest {
         ResponseEntity<List<RegimensPatientsDataDTO>> response = regimenController.getRegimensPatientsInfo();
 
         verify(administrationService, times(1))
-                .getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        verify(vaccinationService, times(1)).getResultsList(anyString());
+                .getGlobalProperty(CFLConstants.MAIN_CONFIG);
+        verify(vaccinationService, times(1)).getRegimenResultsList(anyString());
         assertEquals(200, response.getStatusCode().value());
     }
 }
