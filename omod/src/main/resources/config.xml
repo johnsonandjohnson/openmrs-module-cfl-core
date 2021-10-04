@@ -73,6 +73,11 @@
         <class>org.openmrs.module.cfl.extension.html.AdminList</class>
     </extension>
 
+    <advice>
+        <point>org.openmrs.module.addresshierarchy.service.AddressHierarchyService</point>
+        <class>org.openmrs.module.cfl.advice.DeleteAllAddressHierarchyEntriesAdvice</class>
+    </advice>
+
     <aware_of_modules>
         <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
         <aware_of_module>org.openmrs.module.visits</aware_of_module>

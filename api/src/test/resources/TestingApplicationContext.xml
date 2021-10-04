@@ -23,4 +23,26 @@
           primary="true">
         <constructor-arg value="org.openmrs.module.htmlformentry.handler.StandardRegimenTagHandlerSupport"/>
     </bean>
+
+    <bean id="testHibernateAddressHierarchyDAO"
+          class="org.openmrs.module.addresshierarchy.db.hibernate.HibernateAddressHierarchyDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- We need explicitly add address hierarchy entities. -->
+    <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
+        <property name="configLocations">
+            <list>
+                <value>classpath:hibernate.cfg.xml</value>
+                <value>classpath:test-hibernate.cfg.xml</value>
+            </list>
+        </property>
+        <property name="mappingJarLocations" ref="mappingJarResources"/>
+        <property name="packagesToScan">
+            <list>
+                <value>org.openmrs</value>
+            </list>
+        </property>
+        <!--  default properties must be set in the hibernate.default.properties -->
+    </bean>
 </beans>
