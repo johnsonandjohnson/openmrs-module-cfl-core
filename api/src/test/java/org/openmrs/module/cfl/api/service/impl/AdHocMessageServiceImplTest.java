@@ -1,6 +1,5 @@
 package org.openmrs.module.cfl.api.service.impl;
 
-import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -17,7 +16,6 @@ import org.openmrs.module.messages.api.service.MessagesDeliveryService;
 import org.openmrs.module.messages.api.service.MessagingService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
 import org.openmrs.module.messages.api.service.ScheduledServiceGroupService;
-import org.openmrs.module.messages.api.util.JsonUtil;
 import org.openmrs.module.messages.api.util.ScheduledExecutionContextUtil;
 import org.openmrs.module.messages.domain.criteria.QueryCriteria;
 import org.openmrs.module.messages.domain.criteria.ScheduledServiceCriteria;

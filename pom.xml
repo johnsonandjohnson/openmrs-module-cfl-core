@@ -53,7 +53,6 @@
         <registrationappVersion>1.13.0</registrationappVersion>
         <registrationcoreVersion>1.8.0</registrationcoreVersion>
         <uicommonsVersion>2.6.1</uicommonsVersion>
-        <idgenVersion>4.3</idgenVersion>
         <eventVersion>2.8.0</eventVersion>
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
         <referenceapplication>2.10.0</referenceapplication>
@@ -74,7 +73,7 @@
             <dependency>
                 <groupId>org.openmrs.distro</groupId>
                 <artifactId>referenceapplication</artifactId>
-                <version>2.4</version>
+                <version>${referenceapplication}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -234,13 +233,6 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>uicommons-api</artifactId>
                 <version>${uicommonsVersion}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>idgen-api</artifactId>
-                <version>${idgenVersion}</version>
-                <type>jar</type>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -496,11 +488,6 @@
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
             <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>cfl-openmrs-repo</id>
-            <name>CfL OpenMRS Repository</name>
-            <url>https://bitbucket.org/soldevelo/cfl-openmrs/src/dev/cfl/web/cfl-modules</url>
         </repository>
     </repositories>
     <pluginRepositories>
