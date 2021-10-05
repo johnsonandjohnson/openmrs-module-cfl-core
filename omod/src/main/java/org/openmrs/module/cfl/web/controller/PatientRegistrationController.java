@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.web.controller;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Relationship;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
@@ -79,8 +80,9 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
             return Optional.empty();
         }
 
-        final String locationUuid = patient.getAttribute(locationAttributeName).getValue();
-        return Optional.ofNullable(locationService.getLocationByUuid(locationUuid));
+        return Optional.ofNullable(patient.getAttribute(locationAttributeName))
+                .map(PersonAttribute::getValue)
+                .map(locationService::getLocationByUuid);
     }
 
     private void flashInfoMessage(final ServletRequest registrationRequest, final Patient patient) {
