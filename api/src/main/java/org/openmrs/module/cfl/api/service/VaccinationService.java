@@ -48,15 +48,6 @@ public interface VaccinationService {
      */
     void rescheduleVisitsBasedOnRegimenChanges(String previousVaccineGPValue, String currentVaccineGPValue);
 
-    /**
-     * Retrieves information about available regimens and related patients and adapts results
-     * to {@link RegimensPatientsDataDTO} structure
-     *
-     * @param regimenGP - name of regimen global property
-     *
-     * @return - results adapted to {@link RegimensPatientsDataDTO} structure
-     */
-    List<RegimensPatientsDataDTO> getResultsList(String regimenGP);
 
     /**
      * Reschedules (voids and recreates) future visits based on patient's regimen configuration
@@ -64,4 +55,15 @@ public interface VaccinationService {
      * @param patient the patient whose visits are to be rescheduled
      */
     void rescheduleRegimenVisitsByPatient(Patient patient);
+
+    /**
+     * Retrieves information about available regimens and related patients and adapts results
+     * to {@link RegimensPatientsDataDTO} structure
+     *
+     * @param configGP - name of configuration global property
+     *
+     * @return - results adapted to {@link RegimensPatientsDataDTO} structure
+     */
+    List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP);
+
 }

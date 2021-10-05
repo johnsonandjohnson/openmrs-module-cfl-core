@@ -321,6 +321,8 @@ public final class CFLConstants {
 
     public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID = "1e566e6d-108e-11ec-a36a-0242ac130002";
 
+    public static final String MAIN_CONFIG = "biometric.api.config.main";
+
     private CFLConstants() {
     }
 }

@@ -59,6 +59,8 @@ public class VaccinationServiceTest {
 
     private static final String CFL_VACCINES = "CFLVaccines.json";
 
+    private static final String CONFIG_JSON = "Config.json";
+
     private static final String VAC_001 = "vac001";
 
     private static final String VAC_002 = "vac002";
@@ -120,40 +122,6 @@ public class VaccinationServiceTest {
     }
 
     @Test
-    public void getRegimensPatientsInfo_whenVaccinesGPIsNotBlank() throws IOException {
-        String cflVaccinesGP = jsonToString(CFL_VACCINES);
-        when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(cflVaccinesGP);
-
-        List<RegimensPatientsDataDTO> results = vaccinationService.getResultsList(cflVaccinesGP);
-
-        verify(cflPatientService, times(3)).findByVaccinationName(anyString());
-        assertNotNull(results);
-        assertEquals(3, results.size());
-
-        RegimensPatientsDataDTO firstElem = results.get(0);
-        assertEquals(VAC_001, firstElem.getRegimenName());
-        assertEquals(3, firstElem.getPatientUuids().size());
-        assertEquals((Integer) 3, firstElem.getNumberOfParticipants());
-        assertTrue(firstElem.isAnyPatientLinkedWithRegimen());
-
-        RegimensPatientsDataDTO lastElem = results.get(2);
-        assertEquals(VAC_003, lastElem.getRegimenName());
-        assertEquals(0, lastElem.getPatientUuids().size());
-        assertEquals((Integer) 0, lastElem.getNumberOfParticipants());
-        assertFalse(lastElem.isAnyPatientLinkedWithRegimen());
-    }
-
-    @Test
-    public void getRegimensPatientsInfo_whenVaccinesGPIsBlank() {
-        when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(null);
-
-        List<RegimensPatientsDataDTO> results = vaccinationService.getResultsList(null);
-
-        verify(cflPatientService, times(0)).findByVaccinationName(anyString());
-        assertEquals(0, results.size());
-    }
-
-    @Test
     public void rescheduleVisitsBasedOnRegimenChanges_whenVisitsAreNotNull() throws IOException {
         Person person = PersonHelper.createPerson();
         Location location = LocationHelper.createLocation();
@@ -170,6 +138,29 @@ public class VaccinationServiceTest {
         vaccinationService.rescheduleVisitsBasedOnRegimenChanges(randomization, randomizationUpdated);
         verify(cflPatientService, times(1)).findByVaccinationName(anyString());
         // verify(visitService, times(5)).getActiveVisitsByPatient(any(Patient.class));
+    }
+
+    @Test
+    public void getRegimensPatientsInfo_whenConfigGPIsNotBlank() throws IOException {
+        String configGP = jsonToString(CONFIG_JSON);
+        when(administrationService.getGlobalProperty(CFLConstants.MAIN_CONFIG)).thenReturn(configGP);
+
+        List<RegimensPatientsDataDTO> results = vaccinationService.getRegimenResultsList(configGP);
+
+        verify(cflPatientService, times(3)).getPatientUuids(anyString());
+        assertNotNull(results);
+        assertEquals(3, results.size());
+
+    }
+
+    @Test
+    public void getRegimensPatientsInfo_whenConfigGPIsBlank() throws IOException {
+        when(administrationService.getGlobalProperty(CFLConstants.MAIN_CONFIG)).thenReturn(null);
+
+        List<RegimensPatientsDataDTO> results = vaccinationService.getRegimenResultsList(null);
+
+        verify(cflPatientService, times(0)).findByVaccinationName(anyString());
+        assertEquals(0, results.size());
     }
 
     private List<Patient> preparePatientsWithVac001() {

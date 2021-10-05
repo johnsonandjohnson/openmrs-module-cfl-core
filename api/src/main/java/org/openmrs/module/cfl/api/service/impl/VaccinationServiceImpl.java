@@ -11,6 +11,9 @@ import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
+import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
+import org.openmrs.module.cfl.api.contract.Vaccine;
+import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
@@ -86,23 +89,6 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     @Transactional
     @Override
-    public List<RegimensPatientsDataDTO> getResultsList(String regimenGP) {
-        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
-        if (StringUtils.isNotBlank(regimenGP)) {
-            Randomization randomization = new Randomization(getGson().fromJson(regimenGP, Vaccination[].class));
-            for (Vaccination vaccination : randomization.getVaccinations()) {
-                List<Patient> patients = getCFLPatientService().findByVaccinationName(vaccination.getName());
-                List<String> patientsUuids = getPatientsUuids(patients);
-                resultList.add(new RegimensPatientsDataDTO(vaccination.getName(), patientsUuids, patients.size(),
-                        CollectionUtils.isNotEmpty(patients))
-                );
-            }
-        }
-        return resultList;
-    }
-
-    @Transactional
-    @Override
     public void rescheduleRegimenVisitsByPatient(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
         if (CollectionUtils.isNotEmpty(visits)) {
@@ -111,6 +97,26 @@ public class VaccinationServiceImpl implements VaccinationService {
                 rescheduleVisits(lastOccurredDosingVisit, patient);
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP) {
+        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        if (StringUtils.isNotBlank(configGP)) {
+            RandomizationRegimen randomizationRegimen = new RandomizationRegimen(getGson().
+                                                    fromJson(configGP, Regimen.class));
+
+            Regimen regimen = randomizationRegimen.getRegimens();
+            for (Vaccine vaccine : regimen.getVaccine()) {
+                List<String> patientsUuids = getCFLPatientService().getPatientUuids(vaccine.getName());
+                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patientsUuids.size(),
+                        CollectionUtils.isNotEmpty(patientsUuids))
+                );
+            }
+        }
+
+        return resultList;
     }
 
     private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {
@@ -132,14 +138,6 @@ public class VaccinationServiceImpl implements VaccinationService {
                 prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
             }
         }
-    }
-
-    private List<String> getPatientsUuids(List<Patient> patients) {
-        List<String> patientUuids = new ArrayList<>();
-        for (Patient patient : patients) {
-            patientUuids.add(patient.getUuid());
-        }
-        return patientUuids;
     }
 
     private void processRegimensChanges(Map<String, Boolean> regimensDiffsMap) {
