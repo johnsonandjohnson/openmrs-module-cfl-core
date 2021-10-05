@@ -89,23 +89,6 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     @Transactional
     @Override
-    public List<RegimensPatientsDataDTO> getResultsList(String regimenGP) {
-        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
-        if (StringUtils.isNotBlank(regimenGP)) {
-            Randomization randomization = new Randomization(getGson().fromJson(regimenGP, Vaccination[].class));
-            for (Vaccination vaccination : randomization.getVaccinations()) {
-                List<Patient> patients = getCFLPatientService().findByVaccinationName(vaccination.getName());
-                List<String> patientsUuids = getPatientsUuids(patients);
-                resultList.add(new RegimensPatientsDataDTO(vaccination.getName(), patientsUuids, patients.size(),
-                        CollectionUtils.isNotEmpty(patients))
-                );
-            }
-        }
-        return resultList;
-    }
-
-    @Transactional
-    @Override
     public void rescheduleRegimenVisitsByPatient(Patient patient) {
         List<Visit> visits = Context.getVisitService().getActiveVisitsByPatient(patient);
         if (CollectionUtils.isNotEmpty(visits)) {
@@ -126,10 +109,9 @@ public class VaccinationServiceImpl implements VaccinationService {
 
             Regimen regimen = randomizationRegimen.getRegimens();
             for (Vaccine vaccine : regimen.getVaccine()) {
-                List<Patient> patients = getCFLPatientService().findByVaccinationName(vaccine.getName());
-                List<String> patientsUuids = getPatientsUuids(patients);
-                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patients.size(),
-                        CollectionUtils.isNotEmpty(patients))
+                List<String> patientsUuids = getCFLPatientService().getPatientUuids(vaccine.getName());
+                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patientsUuids.size(),
+                        CollectionUtils.isNotEmpty(patientsUuids))
                 );
             }
         }
@@ -156,14 +138,6 @@ public class VaccinationServiceImpl implements VaccinationService {
                 prepareDataAndSaveVisit(occurredVisit.getPatient(), occurrenceDateTime, futureVisit);
             }
         }
-    }
-
-    private List<String> getPatientsUuids(List<Patient> patients) {
-        List<String> patientUuids = new ArrayList<>();
-        for (Patient patient : patients) {
-            patientUuids.add(patient.getUuid());
-        }
-        return patientUuids;
     }
 
     private void processRegimensChanges(Map<String, Boolean> regimensDiffsMap) {
