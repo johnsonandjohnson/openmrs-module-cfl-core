@@ -34,14 +34,8 @@ public class CFLPatientServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribu
     @Transactional(readOnly = true)
     @Override
     public List<Patient> findByVaccinationName(String vaccinationName) {
-        Criteria criteria = getSession().createCriteria(this.mappedClass, PERSON_ATTRIBUTE_NAME);
-        criteria.createAlias(PERSON_ATTRIBUTE_NAME + "." + PERSON_PROPERTY_NAME, PERSON_PROPERTY_NAME);
-        criteria.add(Restrictions.eq(VALUE_PROPERTY_NAME, vaccinationName));
-        criteria.add(Restrictions.eq(VOIDED_PROPERTY_NAME, false));
-        criteria.add(Restrictions.eq(PERSON_PROPERTY_NAME + "." + VOIDED_PROPERTY_NAME, false));
-        criteria.add(Restrictions.eq(PERSON_PROPERTY_NAME + "." + DEAD_PROPERTY_NAME, false));
 
-        List<PersonAttribute> personAttributes = criteria.list();
+        List<PersonAttribute> personAttributes = getPersonAttributeList(vaccinationName);
 
         List<Patient> patientList = new ArrayList<>();
         for (PersonAttribute personAttribute : personAttributes) {
@@ -51,11 +45,35 @@ public class CFLPatientServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribu
         return patientList;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<String> getPatientUuids(String vaccinationName) {
+
+        List<PersonAttribute> personAttributes = getPersonAttributeList(vaccinationName);
+
+        List<String> patientUuids = new ArrayList<>();
+        for (PersonAttribute personAttribute : personAttributes) {
+            patientUuids.add(personAttribute.getPerson().getUuid());
+        }
+
+        return patientUuids;
+    }
+
     public void setSessionFactory(DbSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     private DbSession getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    private List<PersonAttribute> getPersonAttributeList(String vaccinationName) {
+        Criteria criteria = getSession().createCriteria(this.mappedClass, PERSON_ATTRIBUTE_NAME);
+        criteria.createAlias(PERSON_ATTRIBUTE_NAME + "." + PERSON_PROPERTY_NAME, PERSON_PROPERTY_NAME);
+        criteria.add(Restrictions.eq(VALUE_PROPERTY_NAME, vaccinationName));
+        criteria.add(Restrictions.eq(VOIDED_PROPERTY_NAME, false));
+        criteria.add(Restrictions.eq(PERSON_PROPERTY_NAME + "." + VOIDED_PROPERTY_NAME, false));
+        criteria.add(Restrictions.eq(PERSON_PROPERTY_NAME + "." + DEAD_PROPERTY_NAME, false));
+        return criteria.list();
     }
 }

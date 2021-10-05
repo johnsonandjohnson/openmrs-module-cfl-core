@@ -23,8 +23,6 @@ public class RegimenController {
     @RequestMapping(value = "/patient-info", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<RegimensPatientsDataDTO>> getRegimensPatientsInfo() {
-        /*String regimenGP = Context.getAdministrationService().getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY);
-        List<RegimensPatientsDataDTO> resultList = getVaccinationService().getResultsList(regimenGP);*/
 
         String configGP = Context.getAdministrationService().getGlobalProperty(CFLConstants.MAIN_CONFIG);
         List<RegimensPatientsDataDTO> resultList = getVaccinationService().getRegimenResultsList(configGP);

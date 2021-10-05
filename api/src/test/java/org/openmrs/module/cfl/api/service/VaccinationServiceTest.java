@@ -122,40 +122,6 @@ public class VaccinationServiceTest {
     }
 
     @Test
-    public void getRegimensPatientsInfo_whenVaccinesGPIsNotBlank() throws IOException {
-        String cflVaccinesGP = jsonToString(CFL_VACCINES);
-        when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(cflVaccinesGP);
-
-        List<RegimensPatientsDataDTO> results = vaccinationService.getResultsList(cflVaccinesGP);
-
-        verify(cflPatientService, times(3)).findByVaccinationName(anyString());
-        assertNotNull(results);
-        assertEquals(3, results.size());
-
-        RegimensPatientsDataDTO firstElem = results.get(0);
-        assertEquals(VAC_001, firstElem.getRegimenName());
-        assertEquals(3, firstElem.getPatientUuids().size());
-        assertEquals((Integer) 3, firstElem.getNumberOfParticipants());
-        assertTrue(firstElem.isAnyPatientLinkedWithRegimen());
-
-        RegimensPatientsDataDTO lastElem = results.get(2);
-        assertEquals(VAC_003, lastElem.getRegimenName());
-        assertEquals(0, lastElem.getPatientUuids().size());
-        assertEquals((Integer) 0, lastElem.getNumberOfParticipants());
-        assertFalse(lastElem.isAnyPatientLinkedWithRegimen());
-    }
-
-    @Test
-    public void getRegimensPatientsInfo_whenVaccinesGPIsBlank() {
-        when(administrationService.getGlobalProperty(CFLConstants.VACCINATION_PROGRAM_KEY)).thenReturn(null);
-
-        List<RegimensPatientsDataDTO> results = vaccinationService.getResultsList(null);
-
-        verify(cflPatientService, times(0)).findByVaccinationName(anyString());
-        assertEquals(0, results.size());
-    }
-
-    @Test
     public void rescheduleVisitsBasedOnRegimenChanges_whenVisitsAreNotNull() throws IOException {
         Person person = PersonHelper.createPerson();
         Location location = LocationHelper.createLocation();
@@ -181,7 +147,7 @@ public class VaccinationServiceTest {
 
         List<RegimensPatientsDataDTO> results = vaccinationService.getRegimenResultsList(configGP);
 
-        verify(cflPatientService, times(3)).findByVaccinationName(anyString());
+        verify(cflPatientService, times(3)).getPatientUuids(anyString());
         assertNotNull(results);
         assertEquals(3, results.size());
 
