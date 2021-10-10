@@ -7,6 +7,7 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.db.hibernate.HibernateOpenmrsDataDAO;
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,15 +46,18 @@ public class CFLPatientServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribu
         return patientList;
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<String> getPatientUuids(String vaccinationName) {
-        return getSession()
-                .createSQLQuery(
-                        "select p.uuid from person p inner join person_attribute pa on pa.person_id = p.person_id\n" +
-                                "where p.dead = 0\n and p.voided = 0\n and pa.value = :vaccinationName")
-                .setParameter("vaccinationName", vaccinationName)
-                .list();
+    @Transactional(readOnly = true)
+    public List<String> getVaccineNamesLinkedToAnyPatient() {
+        String query = "SELECT DISTINCT(value) from person_attribute pa " +
+                "INNER JOIN person_attribute_type pat ON pa.person_attribute_type_id = pat.person_attribute_type_id " +
+                "INNER JOIN person p ON pa.person_id = p.person_id " +
+                "WHERE p.dead = 0 " +
+                "AND p.voided = 0 " +
+                "AND pa.voided = 0 " +
+                "AND pat.name = '" + CFLConstants.VACCINATION_PROGRAM_ATTRIBUTE_NAME + "'";
+
+        return getSession().createSQLQuery(query).list();
     }
 
     public void setSessionFactory(DbSessionFactory sessionFactory) {

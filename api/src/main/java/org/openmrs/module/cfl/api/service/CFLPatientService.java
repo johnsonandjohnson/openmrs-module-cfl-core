@@ -8,5 +8,5 @@ public interface CFLPatientService {
 
     List<Patient> findByVaccinationName(String vaccinationName);
 
-    List<String> getPatientUuids(String vaccinationName);
+    List<String> getVaccineNamesLinkedToAnyPatient();
 }
