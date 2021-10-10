@@ -11,12 +11,12 @@ import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
-import org.openmrs.module.cfl.api.contract.Vaccine;
-import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
+import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
+import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.Vaccine;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
@@ -99,24 +99,28 @@ public class VaccinationServiceImpl implements VaccinationService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP) {
         List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
         if (StringUtils.isNotBlank(configGP)) {
-            RandomizationRegimen randomizationRegimen = new RandomizationRegimen(getGson().
-                                                    fromJson(configGP, Regimen.class));
-
-            Regimen regimen = randomizationRegimen.getRegimens();
-            for (Vaccine vaccine : regimen.getVaccine()) {
-                List<String> patientsUuids = getCFLPatientService().getPatientUuids(vaccine.getName());
-                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patientsUuids.size(),
-                        CollectionUtils.isNotEmpty(patientsUuids))
-                );
-            }
+            RandomizationRegimen randomizationRegimen =
+                    new RandomizationRegimen(getGson().fromJson(configGP, Regimen.class));
+            resultList = buildRegimensPatientsData(randomizationRegimen.getRegimens().getVaccine());
         }
-
         return resultList;
+    }
+
+    private List<RegimensPatientsDataDTO> buildRegimensPatientsData(List<Vaccine> allVaccineTypes) {
+        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        List<String> vaccineNamesLinkedToAnyPatient = getCFLPatientService().getVaccineNamesLinkedToAnyPatient();
+        allVaccineTypes.forEach(vaccine -> resultList.add(new RegimensPatientsDataDTO(vaccine.getName(),
+                isVaccineLinkedWithAnyPatient(vaccineNamesLinkedToAnyPatient, vaccine.getName()))));
+        return resultList;
+    }
+
+    private boolean isVaccineLinkedWithAnyPatient(List<String> vaccineNamesLinkedToAnyPatient, String vaccineName) {
+        return vaccineNamesLinkedToAnyPatient.contains(vaccineName);
     }
 
     private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {

@@ -1,7 +1,5 @@
 package org.openmrs.module.cfl.api.dto;
 
-import java.util.List;
-
 /**
  * The RegimensPatientsDataDTO class - represents required data for regimens configuration UI.
  */
@@ -9,21 +7,13 @@ public class RegimensPatientsDataDTO {
 
     private String regimenName;
 
-    private List<String> patientUuids;
-
-    private Integer numberOfParticipants;
-
     private Boolean isAnyPatientLinkedWithRegimen;
 
     public RegimensPatientsDataDTO() {
-
     }
 
-    public RegimensPatientsDataDTO(String regimenName, List<String> patientUuids, Integer numberOfParticipants,
-                                   boolean isAnyPatientLinkedWithRegimen) {
+    public RegimensPatientsDataDTO(String regimenName, boolean isAnyPatientLinkedWithRegimen) {
         this.regimenName = regimenName;
-        this.patientUuids = patientUuids;
-        this.numberOfParticipants = numberOfParticipants;
         this.isAnyPatientLinkedWithRegimen = isAnyPatientLinkedWithRegimen;
     }
 
@@ -33,22 +23,6 @@ public class RegimensPatientsDataDTO {
 
     public void setRegimenName(String regimenName) {
         this.regimenName = regimenName;
-    }
-
-    public List<String> getPatientUuids() {
-        return patientUuids;
-    }
-
-    public void setPatientUuids(List<String> patientUuids) {
-        this.patientUuids = patientUuids;
-    }
-
-    public Integer getNumberOfParticipants() {
-        return numberOfParticipants;
-    }
-
-    public void setNumberOfParticipants(Integer numberOfParticipants) {
-        this.numberOfParticipants = numberOfParticipants;
     }
 
     public Boolean isAnyPatientLinkedWithRegimen() {
