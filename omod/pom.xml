@@ -7,7 +7,6 @@
     </parent>
 
     <artifactId>cfl-omod</artifactId>
-  <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>CFL Module OMOD</name>
     <description>Omod submodule for CFL Module</description>
