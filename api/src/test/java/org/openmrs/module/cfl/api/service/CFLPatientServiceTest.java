@@ -13,7 +13,9 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CFLPatientServiceTest extends BaseModuleContextSensitiveTest {
 
@@ -51,5 +53,21 @@ public class CFLPatientServiceTest extends BaseModuleContextSensitiveTest {
     public void shouldNotFindAnyPatientsByVaccination_4ProgramName() {
         List<Patient> patients = cflPatientService.findByVaccinationName("Vaccination_4");
         assertThat(patients, is((empty())));
+    }
+
+    @Test
+    public void shouldReturnFourDifferentNonVoidedVaccinesTypes() {
+        List<String> vaccinesTypes = cflPatientService.getVaccineNamesLinkedToAnyPatient();
+
+        assertEquals(4, vaccinesTypes.size());
+        assertTrue(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_1"));
+        assertTrue(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_2"));
+        assertTrue(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_3"));
+        assertFalse(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_4"));
+        assertTrue(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_5"));
+    }
+
+    private boolean isVaccinesListContainsVaccineName(List<String> vaccinesTypes, String vaccineName) {
+        return vaccinesTypes.contains(vaccineName);
     }
 }
