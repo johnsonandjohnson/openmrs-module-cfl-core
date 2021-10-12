@@ -3,6 +3,7 @@ package org.openmrs.module.cfl.rest.web;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.LocationAttribute;
 import org.openmrs.attribute.Attribute;
+import org.openmrs.attribute.AttributeType;
 import org.openmrs.customdatatype.CustomDatatype;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.customdatatype.datatype.LongFreeTextDatatype;
@@ -13,10 +14,9 @@ import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs1_9.Location
 
 /**
  * The CflLocationAttributeResource Class.
- * <p>
- *     This is OpenMRS REST sub-resource for Location's attributes. It contains workaround for
- *     {@link LongFreeTextDatatype} handling in via new OpenMRS REST.
- * </p>
+ *
+ * <p>This is OpenMRS REST sub-resource for Location's attributes. It contains workaround for {@link
+ * LongFreeTextDatatype} handling in via new OpenMRS REST.
  */
 @SubResource(
     order = CflLocationAttributeResource.SUB_RESOURCE_ORDER,
@@ -35,15 +35,15 @@ public class CflLocationAttributeResource extends LocationAttributeResource1_9 {
       return;
     }
 
-    final CustomDatatype<?> datatype =
+    final AttributeType valueAttributeType = instance.getAttributeType();
+    final CustomDatatype<?> valueDatatypeHandler =
         CustomDatatypeUtil.getDatatype(
-            instance.getAttributeType().getDatatypeClassname(),
-            instance.getAttributeType().getDatatypeConfig());
+            valueAttributeType.getDatatypeClassname(), valueAttributeType.getDatatypeConfig());
 
-    if (datatype instanceof LongFreeTextDatatype) {
+    if (valueDatatypeHandler instanceof LongFreeTextDatatype) {
       instance.setValue(value);
     } else {
-      instance.setValue(datatype.fromReferenceString(value));
+      instance.setValue(valueDatatypeHandler.fromReferenceString(value));
     }
   }
 }

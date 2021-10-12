@@ -15,10 +15,9 @@ import java.util.stream.Collectors;
 
 /**
  * The CfLLocationResource Class.
- * <p>
- *    This overrides default OpenMRS REST resource for Location and provides workaround fix for handling Location
- *    Attributes in more FE-friendly way.
- * </p>
+ *
+ * <p>This overrides default OpenMRS REST resource for Location and provides workaround fix for
+ * handling Location Attributes in more FE-friendly way.
  */
 @Resource(
     order = CfLLocationResource.RESOURCE_ORDER,
@@ -31,10 +30,7 @@ public class CfLLocationResource extends LocationResource2_0 {
   @PropertySetter("attributes")
   public static void setAttributes(Location instance, List<LocationAttribute> attrs) {
     voidOther(instance, attrs);
-
-    for (LocationAttribute attribute : attrs) {
-      instance.setAttribute(attribute);
-    }
+    attrs.forEach(instance::setAttribute);
   }
 
   private static void voidOther(Location instance, List<LocationAttribute> attrs) {
