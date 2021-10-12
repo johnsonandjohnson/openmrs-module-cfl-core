@@ -1,12 +1,11 @@
 package org.openmrs.module.cfl.api.monitor.impl;
 
 import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.module.cfl.api.monitor.ComponentMonitoringProvider;
 import org.openmrs.module.cfl.api.monitor.MonitoredComponentStatusData;
 import org.openmrs.module.cfl.api.monitor.MonitoringStatus;
-import org.openmrs.module.cfl.api.monitor.ComponentMonitoringProvider;
+import org.openmrs.module.cfl.api.util.DateUtil;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 public class DatabaseMonitoringProviderImpl implements ComponentMonitoringProvider {
     private static final String COMPONENT_NAME = "Database";
@@ -30,7 +29,7 @@ public class DatabaseMonitoringProviderImpl implements ComponentMonitoringProvid
     public MonitoredComponentStatusData getStatus() {
         try {
             sessionFactory.getCurrentSession().createSQLQuery(CHECK_SQL_QUERY).uniqueResult();
-            return new MonitoredComponentStatusData(new Date(), MonitoringStatus.OK, null);
+            return new MonitoredComponentStatusData(DateUtil.now(), MonitoringStatus.OK, null);
         } catch (final Exception ex) {
             return MonitoredComponentStatusData.fromException(ex);
         }
