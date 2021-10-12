@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.monitor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.openmrs.module.cfl.api.util.DateUtil;
 
 import java.util.Date;
 
@@ -39,7 +40,7 @@ public final class MonitoredComponentStatusData {
         if (exception == null) {
             throw new IllegalArgumentException("exception must not be null!");
         }
-        return new MonitoredComponentStatusData(new Date(), MonitoringStatus.ERROR, exception.toString());
+        return new MonitoredComponentStatusData(DateUtil.now(), MonitoringStatus.ERROR, exception.toString());
     }
 
     public Date getTimestamp() {
