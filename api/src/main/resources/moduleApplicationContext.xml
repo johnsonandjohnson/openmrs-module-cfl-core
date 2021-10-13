@@ -197,7 +197,12 @@
         </property>
     </bean>
 
-    <bean id="cfl.vaccinationService" class="org.openmrs.module.cfl.api.service.impl.VaccinationServiceImpl"/>
+    <bean id="cfl.vaccinationService" class="org.openmrs.module.cfl.api.service.impl.VaccinationServiceImpl">
+        <property name="extendedPatientDataDAO">
+            <ref local="cfl.extendedPatientDataDAO"/>
+        </property>
+    </bean>
+
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
@@ -248,5 +253,9 @@
                 <ref local="cfl.CFLAddressHierarchyService"/>
             </list>
         </property>
+    </bean>
+
+    <bean id="cfl.extendedPatientDataDAO" class="org.openmrs.module.cfl.db.impl.ExtendedPatientDataDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 </beans>

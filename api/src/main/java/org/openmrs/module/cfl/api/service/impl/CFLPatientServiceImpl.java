@@ -45,20 +45,6 @@ public class CFLPatientServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribu
         return patientList;
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<String> getPatientUuids(String vaccinationName) {
-
-        List<PersonAttribute> personAttributes = getPersonAttributeList(vaccinationName);
-
-        List<String> patientUuids = new ArrayList<>();
-        for (PersonAttribute personAttribute : personAttributes) {
-            patientUuids.add(personAttribute.getPerson().getUuid());
-        }
-
-        return patientUuids;
-    }
-
     public void setSessionFactory(DbSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

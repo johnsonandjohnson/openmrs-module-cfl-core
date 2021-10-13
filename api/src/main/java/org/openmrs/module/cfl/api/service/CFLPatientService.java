@@ -7,6 +7,4 @@ import java.util.List;
 public interface CFLPatientService {
 
     List<Patient> findByVaccinationName(String vaccinationName);
-
-    List<String> getPatientUuids(String vaccinationName);
 }

@@ -11,12 +11,12 @@ import org.openmrs.Visit;
 import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
-import org.openmrs.module.cfl.api.contract.Vaccine;
-import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.Randomization;
+import org.openmrs.module.cfl.api.contract.RandomizationRegimen;
+import org.openmrs.module.cfl.api.contract.Regimen;
 import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.Vaccine;
 import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.dto.RegimensPatientsDataDTO;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
@@ -26,15 +26,18 @@ import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PatientUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.openmrs.module.cfl.db.ExtendedPatientDataDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VaccinationServiceImpl implements VaccinationService {
 
@@ -47,6 +50,12 @@ public class VaccinationServiceImpl implements VaccinationService {
     private static final String NUMBER_OF_DOSE_FIELD_NAME = "numberOfDose";
 
     private static final Integer BATCH_SIZE = 100;
+
+    private ExtendedPatientDataDAO extendedPatientDataDAO;
+
+    public void setExtendedPatientDataDAO(ExtendedPatientDataDAO extendedPatientDataDAO) {
+        this.extendedPatientDataDAO = extendedPatientDataDAO;
+    }
 
     @Transactional
     @Override
@@ -99,24 +108,31 @@ public class VaccinationServiceImpl implements VaccinationService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP) {
-        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        final List<RegimensPatientsDataDTO> resultList;
         if (StringUtils.isNotBlank(configGP)) {
-            RandomizationRegimen randomizationRegimen = new RandomizationRegimen(getGson().
-                                                    fromJson(configGP, Regimen.class));
-
-            Regimen regimen = randomizationRegimen.getRegimens();
-            for (Vaccine vaccine : regimen.getVaccine()) {
-                List<String> patientsUuids = getCFLPatientService().getPatientUuids(vaccine.getName());
-                resultList.add(new RegimensPatientsDataDTO(vaccine.getName(), patientsUuids, patientsUuids.size(),
-                        CollectionUtils.isNotEmpty(patientsUuids))
-                );
-            }
+            RandomizationRegimen randomizationRegimen =
+                    new RandomizationRegimen(getGson().fromJson(configGP, Regimen.class));
+            resultList = buildRegimensPatientsData(randomizationRegimen.getRegimens().getVaccine());
+        } else {
+            resultList = Collections.emptyList();
         }
-
         return resultList;
+    }
+
+    private List<RegimensPatientsDataDTO> buildRegimensPatientsData(List<Vaccine> allVaccineTypes) {
+        List<String> vaccineNamesLinkedToAnyPatient = extendedPatientDataDAO.getVaccineNamesLinkedToAnyPatient();
+        return allVaccineTypes
+                .stream()
+                .map(vaccine -> new RegimensPatientsDataDTO(vaccine.getName(),
+                        isVaccineLinkedWithAnyPatient(vaccineNamesLinkedToAnyPatient, vaccine.getName())))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isVaccineLinkedWithAnyPatient(List<String> vaccineNamesLinkedToAnyPatient, String vaccineName) {
+        return vaccineNamesLinkedToAnyPatient.contains(vaccineName);
     }
 
     private void rescheduleVisits(Visit occurredVisit, Date occurrenceDateTime, Vaccination vaccination) {

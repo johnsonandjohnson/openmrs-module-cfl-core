@@ -5,11 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
-import org.openmrs.Location;
 import org.openmrs.Visit;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.VisitService;
@@ -30,17 +30,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -138,19 +135,6 @@ public class VaccinationServiceTest {
         vaccinationService.rescheduleVisitsBasedOnRegimenChanges(randomization, randomizationUpdated);
         verify(cflPatientService, times(1)).findByVaccinationName(anyString());
         // verify(visitService, times(5)).getActiveVisitsByPatient(any(Patient.class));
-    }
-
-    @Test
-    public void getRegimensPatientsInfo_whenConfigGPIsNotBlank() throws IOException {
-        String configGP = jsonToString(CONFIG_JSON);
-        when(administrationService.getGlobalProperty(CFLConstants.MAIN_CONFIG)).thenReturn(configGP);
-
-        List<RegimensPatientsDataDTO> results = vaccinationService.getRegimenResultsList(configGP);
-
-        verify(cflPatientService, times(3)).getPatientUuids(anyString());
-        assertNotNull(results);
-        assertEquals(3, results.size());
-
     }
 
     @Test
