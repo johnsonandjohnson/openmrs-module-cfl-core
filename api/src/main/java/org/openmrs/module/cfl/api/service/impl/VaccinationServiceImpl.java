@@ -26,15 +26,18 @@ import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PatientUtil;
 import org.openmrs.module.cfl.api.util.VisitUtil;
+import org.openmrs.module.cfl.db.ExtendedPatientDataDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VaccinationServiceImpl implements VaccinationService {
 
@@ -47,6 +50,12 @@ public class VaccinationServiceImpl implements VaccinationService {
     private static final String NUMBER_OF_DOSE_FIELD_NAME = "numberOfDose";
 
     private static final Integer BATCH_SIZE = 100;
+
+    private ExtendedPatientDataDAO extendedPatientDataDAO;
+
+    public void setExtendedPatientDataDAO(ExtendedPatientDataDAO extendedPatientDataDAO) {
+        this.extendedPatientDataDAO = extendedPatientDataDAO;
+    }
 
     @Transactional
     @Override
@@ -102,21 +111,24 @@ public class VaccinationServiceImpl implements VaccinationService {
     @Transactional(readOnly = true)
     @Override
     public List<RegimensPatientsDataDTO> getRegimenResultsList(String configGP) {
-        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
+        final List<RegimensPatientsDataDTO> resultList;
         if (StringUtils.isNotBlank(configGP)) {
             RandomizationRegimen randomizationRegimen =
                     new RandomizationRegimen(getGson().fromJson(configGP, Regimen.class));
             resultList = buildRegimensPatientsData(randomizationRegimen.getRegimens().getVaccine());
+        } else {
+            resultList = Collections.emptyList();
         }
         return resultList;
     }
 
     private List<RegimensPatientsDataDTO> buildRegimensPatientsData(List<Vaccine> allVaccineTypes) {
-        List<RegimensPatientsDataDTO> resultList = new ArrayList<>();
-        List<String> vaccineNamesLinkedToAnyPatient = getCFLPatientService().getVaccineNamesLinkedToAnyPatient();
-        allVaccineTypes.forEach(vaccine -> resultList.add(new RegimensPatientsDataDTO(vaccine.getName(),
-                isVaccineLinkedWithAnyPatient(vaccineNamesLinkedToAnyPatient, vaccine.getName()))));
-        return resultList;
+        List<String> vaccineNamesLinkedToAnyPatient = extendedPatientDataDAO.getVaccineNamesLinkedToAnyPatient();
+        return allVaccineTypes
+                .stream()
+                .map(vaccine -> new RegimensPatientsDataDTO(vaccine.getName(),
+                        isVaccineLinkedWithAnyPatient(vaccineNamesLinkedToAnyPatient, vaccine.getName())))
+                .collect(Collectors.toList());
     }
 
     private boolean isVaccineLinkedWithAnyPatient(List<String> vaccineNamesLinkedToAnyPatient, String vaccineName) {

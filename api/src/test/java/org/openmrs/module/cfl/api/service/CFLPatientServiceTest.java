@@ -3,6 +3,7 @@ package org.openmrs.module.cfl.api.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Patient;
+import org.openmrs.module.cfl.db.ExtendedPatientDataDAO;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +23,10 @@ public class CFLPatientServiceTest extends BaseModuleContextSensitiveTest {
     @Autowired
     @Qualifier("cfl.patientService")
     private CFLPatientService cflPatientService;
+
+    @Autowired
+    @Qualifier("cfl.extendedPatientDataDAO")
+    private ExtendedPatientDataDAO extendedPatientDataDAO;
 
     @Before
     public void setUp() throws Exception {
@@ -57,7 +62,7 @@ public class CFLPatientServiceTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void shouldReturnFourDifferentNonVoidedVaccinesTypes() {
-        List<String> vaccinesTypes = cflPatientService.getVaccineNamesLinkedToAnyPatient();
+        List<String> vaccinesTypes = extendedPatientDataDAO.getVaccineNamesLinkedToAnyPatient();
 
         assertEquals(4, vaccinesTypes.size());
         assertTrue(isVaccinesListContainsVaccineName(vaccinesTypes, "Vaccination_1"));
