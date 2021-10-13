@@ -143,6 +143,9 @@
     <bean id="cfl.monitoringProvider.Modules"
           class="org.openmrs.module.cfl.api.monitor.impl.ModulesMonitoringProviderImpl"/>
 
+    <bean id="cfl.monitoringProvider.ActiveMQ"
+          class="org.openmrs.module.cfl.api.monitor.impl.ActiveMQMonitoringProviderImpl"/>
+
     <bean id="cfl.monitoringService" class="org.openmrs.module.cfl.api.service.impl.MonitoringServiceImpl"/>
     <bean parent="serviceContext">
         <property name="moduleService">

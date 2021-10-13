@@ -85,18 +85,33 @@ public class CflLoginPageController {
                       @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
                       @SpringBean("adminService") AdministrationService administrationService) {
 
-        String redirectUrl = getRedirectUrl(pageRequest);
+        final String redirectUrl = getRedirectUrl(pageRequest);
+        final String methodResult;
 
         if (Context.isAuthenticated() && Context.getUserContext().getLocationId() != null) {
-            if (StringUtils.isNotBlank(redirectUrl)) {
-                return "redirect:" + getRelativeUrl(redirectUrl, pageRequest);
-            }
-            return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+            methodResult = getRedirectForAuthenticated(redirectUrl, pageRequest, ui);
+        } else {
+            initLoginPageModel(model, redirectUrl, pageRequest, lastSessionLocationId, locationService, appFrameworkService,
+                    administrationService);
+            methodResult = null;
         }
 
+        return methodResult;
+    }
+
+    private String getRedirectForAuthenticated(String redirectUrl, PageRequest pageRequest, UiUtils ui) {
+        if (StringUtils.isNotBlank(redirectUrl)) {
+            return "redirect:" + getRelativeUrl(redirectUrl, pageRequest);
+        }
+        return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+    }
+
+    private void initLoginPageModel(PageModel model, String redirectUrl, PageRequest pageRequest,
+                                    String lastSessionLocationId, LocationService locationService,
+                                    AppFrameworkService appFrameworkService, AdministrationService administrationService) {
         model.addAttribute(REQUEST_PARAMETER_NAME_REDIRECT_URL, getRelativeUrl(redirectUrl, pageRequest));
 
-        Boolean isLocationUserPropertyAvailable = isLocationUserPropertyAvailable(administrationService);
+        boolean isLocationUserPropertyAvailable = isLocationUserPropertyAvailable(administrationService);
         Object showLocation = pageRequest.getAttribute("showSessionLocations");
         if (showLocation != null && showLocation.toString().equals("true")) {
             // if the request contains a attribute as showSessionLocations,
@@ -136,8 +151,6 @@ public class CflLoginPageController {
         model.addAttribute("showSessionLocations", showSessionLocations);
         model.addAttribute("selectLocation", selectLocation);
         model.addAttribute("lastSessionLocation", lastSessionLocation);
-
-        return null;
     }
 
     private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {
@@ -219,8 +232,8 @@ public class CflLoginPageController {
      */
     @SuppressWarnings({"checkstyle:ParameterNumber", "checkstyle:ParameterAssignment",
             "checkstyle:CyclomaticComplexity", "PMD.ExcessiveParameterList",
-            "PMD.ExcessiveMethodLength", "PMD.CyclomaticComplexity", "PMD.NPathComplexity",
-            "PMD.AvoidReassigningParameters", "PMD.CollapsibleIfStatements"})
+            "PMD.ExcessiveMethodLength", "PMD.NcssCount", "PMD.CyclomaticComplexity",
+            "PMD.NPathComplexity", "PMD.AvoidReassigningParameters", "PMD.CollapsibleIfStatements"})
     public String post(@RequestParam(value = "username", required = false) String username,
                        @RequestParam(value = "password", required = false) String password,
                        @RequestParam(value = "sessionLocation", required = false) Integer sessionLocationId,

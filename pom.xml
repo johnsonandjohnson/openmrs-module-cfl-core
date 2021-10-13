@@ -39,7 +39,8 @@
         <idgenVersion>4.5.0</idgenVersion>
         <legacyUiVersion>1.6.0</legacyUiVersion>
         <pmdPluginVersion>3.12.0</pmdPluginVersion>
-        <checkStylePluginVersion>3.0.0</checkStylePluginVersion>
+        <checkStylePluginVersion>3.1.2</checkStylePluginVersion>
+        <checkStyleVersion>9.0.1</checkStyleVersion>
         <findBugsPluginVersion>3.0.5</findBugsPluginVersion>
         <appuiVersion>1.9.0</appuiVersion>
         <coreappsVersion>1.21.0</coreappsVersion>
@@ -49,7 +50,7 @@
         <patientFlagVersion>3.0.1</patientFlagVersion>
         <appframeworkVersion>2.9</appframeworkVersion>
         <emrapiVersion>1.28.0</emrapiVersion>
-        <webservicesRestVersion>2.11</webservicesRestVersion>
+        <webservicesRestVersion>2.27.0</webservicesRestVersion>
         <registrationappVersion>1.13.0</registrationappVersion>
         <registrationcoreVersion>1.8.0</registrationcoreVersion>
         <uicommonsVersion>2.6.1</uicommonsVersion>
@@ -165,6 +166,12 @@
             <dependency>
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>webservices.rest-omod</artifactId>
+                <version>${webservicesRestVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>webservices.rest-omod-2.0</artifactId>
                 <version>${webservicesRestVersion}</version>
                 <scope>provided</scope>
             </dependency>
@@ -340,6 +347,13 @@
                     <configuration>
                         <configLocation>checkstyle.xml</configLocation>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkStyleVersion}</version>
+                        </dependency>
+                    </dependencies>
                     <executions>
                         <execution>
                             <id>verify-checkstyle</id>
