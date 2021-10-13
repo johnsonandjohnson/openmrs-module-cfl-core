@@ -5,6 +5,7 @@ import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.cfl.api.monitor.MonitoredComponentStatusData;
 import org.openmrs.module.cfl.api.monitor.MonitoringStatus;
 import org.openmrs.module.cfl.api.monitor.ComponentMonitoringProvider;
+import org.openmrs.module.cfl.api.util.DateUtil;
 
 import java.util.Collection;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class ModulesMonitoringProviderImpl implements ComponentMonitoringProvide
 
     @Override
     public MonitoredComponentStatusData getStatus() {
-        final Date timestamp = new Date();
+        final Date timestamp = DateUtil.now();
         final Collection<Module> loadedModules = ModuleFactory.getLoadedModules();
 
         final StringBuilder notStartedList = new StringBuilder();
