@@ -4,6 +4,7 @@ import org.openmrs.Visit;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cfl.api.service.IrisVisitService;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisitService {
@@ -15,7 +16,7 @@ public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisi
     }
 
     @Override
-    @Transactional(noRollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Visit saveVisit(Visit visit) {
         return visitService.saveVisit(visit);
     }
