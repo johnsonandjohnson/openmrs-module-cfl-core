@@ -15,7 +15,6 @@ import org.openmrs.module.webservices.rest.web.response.InvalidSearchException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.rest.web.v1_0.wrapper.openmrs1_8.UserAndPassword1_8;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -49,11 +48,9 @@ public class UserSearchByPerson implements SearchHandler {
               .build());
 
   @Autowired
-  @Qualifier("personService")
   private PersonService personService;
 
   @Autowired
-  @Qualifier("userService")
   private UserService userService;
 
   @Override
@@ -68,7 +65,7 @@ public class UserSearchByPerson implements SearchHandler {
         Boolean.parseBoolean(requestContext.getParameter(INCLUDE_RETIRED_URL_PARAM));
 
     if (!StringUtils.isNumeric(personIdRaw)) {
-      throw new InvalidSearchException("personId must by a number, but was: " + personIdRaw);
+      throw new InvalidSearchException("personId must be a number, but was: " + personIdRaw);
     }
 
     final Person person = personService.getPerson(Integer.parseInt(personIdRaw));
