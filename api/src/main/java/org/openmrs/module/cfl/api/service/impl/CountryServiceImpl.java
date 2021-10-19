@@ -1,15 +1,20 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.cfl.api.builder.ConceptBuilder;
 import org.openmrs.module.cfl.api.builder.ConceptNameBuilder;
-import org.openmrs.module.cfl.api.service.CFLConceptService;
 import org.openmrs.module.cfl.api.service.CountryService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,8 +32,6 @@ public class CountryServiceImpl implements CountryService {
 
     private ConceptService conceptService;
 
-    private CFLConceptService cflConceptService;
-
     @Override
     @Transactional
     public Concept buildAndSaveCountryResources(String countryName) {
@@ -42,7 +45,7 @@ public class CountryServiceImpl implements CountryService {
                 .withConceptDatatype(conceptService.getConceptDatatypeByName(NOT_ASSOCIATED_DATATYPE_NAME))
                 .withConceptClass(conceptService.getConceptClassByName(MISC_CLASS_NAME))
                 .withIsSet(false)
-                .withConceptName(name)
+                .withFullySpecifiedName(name)
                 .build();
 
         return conceptService.saveConcept(newCountryConcept);
@@ -50,30 +53,43 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     @Transactional
-    public List<String> processCountriesAndReturnDuplicates(List<String> countriesList) {
+    public List<String> processAndReturnAlreadyExistingCountries(List<String> countriesList) {
         List<String> duplicatedCountriesNames = new ArrayList<>();
         Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
-        List<Concept> countryConcepts = cflConceptService.getConceptMembersByConcept(countryConcept);
 
-        countriesList.forEach(country -> {
-            Concept enteredCountryConcept = conceptService.getConceptByName(country);
-            if (enteredCountryConcept == null) {
-                Concept newCountryConcept = buildAndSaveCountryResources(country);
-                countryConcept.addSetMember(newCountryConcept);
-            } else if (countryConcepts.contains(enteredCountryConcept)) {
-                duplicatedCountriesNames.add(country);
+        List<Concept> countryConcepts = conceptService.getConceptsByConceptSet(countryConcept);
+
+        countriesList.forEach(countryName -> {
+            Concept concept = getOrCreateCountryConcept(countryName);
+            if (countryConcepts.contains(concept)) {
+                duplicatedCountriesNames.add(countryName);
             } else {
-                countryConcept.addSetMember(enteredCountryConcept);
+                countryConcept.addSetMember(concept);
             }
         });
+
         return duplicatedCountriesNames;
+    }
+
+    @Override
+    @Transactional
+    public List<String> getCountriesListFromFile(InputStream inputStream) throws IOException {
+        List<String> countryList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            reader.lines().filter(StringUtils::isNotBlank).forEach(countryList::add);
+        }
+        return countryList;
+    }
+
+    private Concept getOrCreateCountryConcept(String countryName) {
+        Concept concept = conceptService.getConceptByName(countryName);
+        if (concept == null) {
+            concept = buildAndSaveCountryResources(countryName);
+        }
+        return concept;
     }
 
     public void setConceptService(ConceptService conceptService) {
         this.conceptService = conceptService;
-    }
-
-    public void setCflConceptService(CFLConceptService cflConceptService) {
-        this.cflConceptService = cflConceptService;
     }
 }

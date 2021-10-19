@@ -1,9 +1,5 @@
 package org.openmrs.module.cfl.api.service;
 
-import org.openmrs.Concept;
-
-import java.util.List;
-
 /**
  * Provides custom methods related to concept functionalities
  */
@@ -17,12 +13,4 @@ public interface CFLConceptService {
      * @return description content
      */
     String getMessageByConceptNameAndLanguage(String conceptName, String language);
-
-    /**
-     * Retrieves concepts (members) from concept that is a set
-     *
-     * @param concept parent concept which has concept members
-     * @return list of concepts
-     */
-    List<Concept> getConceptMembersByConcept(Concept concept);
 }

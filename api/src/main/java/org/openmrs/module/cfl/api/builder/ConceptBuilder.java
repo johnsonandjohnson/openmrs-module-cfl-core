@@ -13,14 +13,14 @@ public class ConceptBuilder {
 
     private boolean isSet;
 
-    private ConceptName conceptFullyName;
+    private ConceptName fullySpecifiedName;
 
     public Concept build() {
         Concept concept = new Concept();
         concept.setDatatype(conceptDatatype);
         concept.setConceptClass(conceptClass);
         concept.setSet(isSet);
-        concept.setFullySpecifiedName(conceptFullyName);
+        concept.setFullySpecifiedName(fullySpecifiedName);
         return concept;
     }
 
@@ -39,8 +39,8 @@ public class ConceptBuilder {
         return this;
     }
 
-    public ConceptBuilder withConceptName(ConceptName conceptName) {
-        this.conceptFullyName = conceptName;
+    public ConceptBuilder withFullySpecifiedName(ConceptName fullySpecifiedName) {
+        this.fullySpecifiedName = fullySpecifiedName;
         return this;
     }
 }

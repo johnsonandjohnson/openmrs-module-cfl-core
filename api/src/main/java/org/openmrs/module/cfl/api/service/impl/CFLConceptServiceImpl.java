@@ -3,14 +3,9 @@ package org.openmrs.module.cfl.api.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptDescription;
-import org.openmrs.ConceptSet;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cfl.api.service.CFLConceptService;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CFLConceptServiceImpl extends BaseOpenmrsService implements CFLConceptService {
 
@@ -36,14 +31,5 @@ public class CFLConceptServiceImpl extends BaseOpenmrsService implements CFLConc
             }
         }
         return message;
-    }
-
-    @Override
-    @Transactional
-    public List<Concept> getConceptMembersByConcept(Concept concept) {
-        return conceptService.getConceptSetsByConcept(concept)
-                .stream()
-                .map(ConceptSet::getConcept)
-                .collect(Collectors.toList());
     }
 }
