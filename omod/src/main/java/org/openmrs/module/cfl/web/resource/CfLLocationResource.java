@@ -7,11 +7,15 @@ import org.openmrs.attribute.BaseAttribute;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.LocationResource2_0;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * The CfLLocationResource Class.
@@ -27,10 +31,22 @@ import java.util.stream.Collectors;
 public class CfLLocationResource extends LocationResource2_0 {
   public static final int RESOURCE_ORDER = 10;
 
-  @PropertySetter("attributes")
+  private static final String ATTRIBUTES_REPRESENTATION_PROPERTY = "attributes";
+  private static final String ACTIVE_ATTRIBUTES_ENTITY_PROPERTY = "activeAttributes";
+
+  @PropertySetter(ATTRIBUTES_REPRESENTATION_PROPERTY)
   public static void setAttributes(Location instance, List<LocationAttribute> attrs) {
     voidOther(instance, attrs);
     attrs.forEach(instance::setAttribute);
+  }
+
+  @Override
+  public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
+    final DelegatingResourceDescription description = super.getRepresentationDescription(rep);
+    ofNullable(description.getProperties().get(ATTRIBUTES_REPRESENTATION_PROPERTY))
+        .ifPresent(
+            attributeProp -> attributeProp.setDelegateProperty(ACTIVE_ATTRIBUTES_ENTITY_PROPERTY));
+    return description;
   }
 
   private static void voidOther(Location instance, List<LocationAttribute> attrs) {
