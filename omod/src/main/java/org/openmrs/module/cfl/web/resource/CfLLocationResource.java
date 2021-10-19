@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.rest.web;
+package org.openmrs.module.cfl.web.resource;
 
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Location;

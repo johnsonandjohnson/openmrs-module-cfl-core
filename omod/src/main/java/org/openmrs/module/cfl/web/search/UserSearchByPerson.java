@@ -1,6 +1,5 @@
 package org.openmrs.module.cfl.web.search;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang.StringUtils.isNumeric;
 
 /**
  * The UserSearchByPerson Class.
@@ -47,11 +48,9 @@ public class UserSearchByPerson implements SearchHandler {
               .withOptionalParameters(INCLUDE_RETIRED_URL_PARAM)
               .build());
 
-  @Autowired
-  private PersonService personService;
+  @Autowired private PersonService personService;
 
-  @Autowired
-  private UserService userService;
+  @Autowired private UserService userService;
 
   @Override
   public SearchConfig getSearchConfig() {
@@ -64,8 +63,9 @@ public class UserSearchByPerson implements SearchHandler {
     final boolean includeRetired =
         Boolean.parseBoolean(requestContext.getParameter(INCLUDE_RETIRED_URL_PARAM));
 
-    if (!StringUtils.isNumeric(personIdRaw)) {
-      throw new InvalidSearchException("personId must be a number, but was: " + personIdRaw);
+    if (!isNumeric(personIdRaw)) {
+      throw new InvalidSearchException(
+          "The 'personId' query parameter must be a number, but was: " + personIdRaw);
     }
 
     final Person person = personService.getPerson(Integer.parseInt(personIdRaw));
