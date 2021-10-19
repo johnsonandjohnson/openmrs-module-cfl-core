@@ -2,6 +2,8 @@ package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.Concept;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -23,5 +25,14 @@ public interface CountryService {
      * @param countriesList list of countries names
      * @return list of duplicated countries
      */
-    List<String> processCountriesAndReturnDuplicates(List<String> countriesList);
+    List<String> processAndReturnAlreadyExistingCountries(List<String> countriesList);
+
+    /**
+     * Retrieves list of countries from file
+     *
+     * @param inputStream input stream of bytes
+     * @return list of countries
+     * @throws IOException if something issue occurs during reading bytes from stream
+     */
+    List<String> getCountriesListFromFile(InputStream inputStream) throws IOException;
 }

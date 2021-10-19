@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.cfl.api.service.CFLConceptService;
 import org.openmrs.module.cfl.web.model.CountryControllerModel;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -35,9 +34,6 @@ public class CountryControllerTest {
     @Mock
     private ConceptService conceptService;
 
-    @Mock
-    private CFLConceptService cflConceptService;
-
     @Before
     public void setUp() {
         mockStatic(Context.class);
@@ -46,12 +42,12 @@ public class CountryControllerTest {
     @Test
     public void getCountryList_shouldCallServiceMethodsSuccessfullyAndReturnNotNullConceptMapModel() {
         when(conceptService.getConceptByName(anyString())).thenReturn(new Concept());
-        when(cflConceptService.getConceptMembersByConcept(new Concept())).thenReturn(anyListOf(Concept.class));
+        when(conceptService.getConceptsByConceptSet(new Concept())).thenReturn(anyListOf(Concept.class));
 
         ModelAndView result = countryController.getCountryList();
 
         verify(conceptService).getConceptByName(anyString());
-        verify(cflConceptService).getConceptMembersByConcept(any(Concept.class));
+        verify(conceptService).getConceptsByConceptSet(any(Concept.class));
         assertNotNull(((CountryControllerModel) result.getModel().get(MODEL_NAME)).getConceptMap());
     }
 

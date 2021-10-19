@@ -3,11 +3,12 @@ package org.openmrs.module.cfl.api.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Concept;
-import org.openmrs.api.ConceptService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -19,12 +20,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CountryServiceTest extends BaseModuleContextSensitiveTest {
 
-    @Autowired
-    private ConceptService conceptService;
-
-    @Autowired
-    @Qualifier("cfl.conceptService")
-    private CFLConceptService cflConceptService;
+    private static final String COUNTRIES_LIST = "CountriesList.txt";
 
     @Autowired
     @Qualifier("cfl.countryService")
@@ -50,12 +46,31 @@ public class CountryServiceTest extends BaseModuleContextSensitiveTest {
     public void shouldSuccessfullyProcessCountriesAndReturnDuplicates() {
         List<String> countries = Arrays.asList("Poland", "China", "Belgium");
 
-        List<String> result = countryService.processCountriesAndReturnDuplicates(countries);
+        List<String> result = countryService.processAndReturnAlreadyExistingCountries(countries);
 
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains("Poland"));
         assertTrue(result.contains("Belgium"));
         assertFalse(result.contains("China"));
+    }
+
+    @Test
+    public void shouldGetCountriesFromFile() throws IOException {
+        InputStream inputStream = getInputStreamFromFile(COUNTRIES_LIST);
+
+        List<String> result = countryService.getCountriesListFromFile(inputStream);
+
+        assertNotNull(result);
+        assertEquals(5, result.size());
+        assertTrue(result.contains("Poland"));
+        assertTrue(result.contains("Belgium"));
+        assertTrue(result.contains("India"));
+        assertTrue(result.contains("China"));
+        assertTrue(result.contains("Argentina"));
+    }
+
+    private InputStream getInputStreamFromFile(String fileName) {
+        return this.getClass().getClassLoader().getResourceAsStream(fileName);
     }
 }

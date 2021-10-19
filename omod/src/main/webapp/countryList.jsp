@@ -2,17 +2,13 @@
 
 <%@ include file="/WEB-INF/template/header.jsp" %>
 
-<script type="text/javascript">
-
-</script>
-
 <h2><spring:message code="cfl.manageCountries.title"/></h2>
 
 <a href="countryForm.form">Add new country</a>
 <a href="countryImport.form">Import countries</a>
 
-<br />
-<br />
+<br/>
+<br/>
 
 <b class="boxHeader">Current countries</b>
 <form method="post">
@@ -28,7 +24,7 @@
                 </tr>
             </c:forEach>
         </table>
-        </br>
+        <br/>
     </fieldset>
 </form>
 

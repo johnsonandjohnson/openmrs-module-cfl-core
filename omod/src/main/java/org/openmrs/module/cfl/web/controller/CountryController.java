@@ -3,15 +3,11 @@ package org.openmrs.module.cfl.web.controller;
 import liquibase.util.file.FilenameUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.io.UnicodeInputStream;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.cfl.api.service.CFLConceptService;
 import org.openmrs.module.cfl.api.service.CountryService;
 import org.openmrs.module.cfl.web.model.CountryControllerModel;
 import org.openmrs.web.WebConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -23,12 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,23 +47,21 @@ public class CountryController {
 
     private static final String COUNTRY_CONCEPT_NAME = "Country";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CountryController.class);
-
     @Autowired
     private ConceptService conceptService;
-
-    @Autowired
-    @Qualifier("cfl.conceptService")
-    private CFLConceptService cflConceptService;
 
     @Autowired
     @Qualifier("cfl.countryService")
     private CountryService cflCountryService;
 
+    @Autowired
+    @Qualifier("cfl.countryService")
+    private CountryService countryService;
+
     @RequestMapping(value = "/countryList.form", method = RequestMethod.GET)
     public ModelAndView getCountryList() {
         Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
-        List<Concept> countryConcepts = cflConceptService.getConceptMembersByConcept(countryConcept);
+        List<Concept> countryConcepts = conceptService.getConceptsByConceptSet(countryConcept);
         Map<Integer, String> conceptMap = new HashMap<>();
         countryConcepts.forEach(concept -> conceptMap.put(concept.getConceptId(),
                 concept.getFullySpecifiedName(Locale.ENGLISH).getName()));
@@ -106,8 +94,8 @@ public class CountryController {
         try {
             String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
             if (StringUtils.equals(fileExtension, "txt") || StringUtils.equals(fileExtension, "csv")) {
-                List<String> countriesList = getCountriesListFromFile(file);
-                duplicatedCountriesNames = cflCountryService.processCountriesAndReturnDuplicates(countriesList);
+                List<String> countriesList = countryService.getCountriesListFromFile(file.getInputStream());
+                duplicatedCountriesNames = cflCountryService.processAndReturnAlreadyExistingCountries(countriesList);
                 checkDuplicatedCountriesAndSetProperInfoMsg(httpServletRequest, duplicatedCountriesNames);
                 returnViewName = COUNTRIES_LIST_REDIRECT_VIEW;
             } else {
@@ -125,7 +113,7 @@ public class CountryController {
                                                       Concept existingCountryConcept, String enteredCountryName) {
         String returnViewName;
         Concept enteredCountryConcept = conceptService.getConceptByName(enteredCountryName);
-        List<Concept> countryConcepts = cflConceptService.getConceptMembersByConcept(existingCountryConcept);
+        List<Concept> countryConcepts = conceptService.getConceptsByConceptSet(existingCountryConcept);
         try {
             if (enteredCountryConcept == null) {
                 Concept newCountryConcept = cflCountryService.buildAndSaveCountryResources(enteredCountryName);
@@ -145,19 +133,6 @@ public class CountryController {
             returnViewName = COUNTRY_FORM_REDIRECT_VIEW;
         }
         return new ModelAndView(new RedirectView(returnViewName));
-    }
-
-    private List<String> getCountriesListFromFile(MultipartFile file) {
-        List<String> countryList = new ArrayList<>();
-        try {
-            InputStream inputStream = file.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    new UnicodeInputStream(inputStream), StandardCharsets.UTF_8));
-            reader.lines().filter(StringUtils::isNotBlank).forEach(countryList::add);
-        } catch (IOException ex) {
-            LOGGER.error("Unable to import file. " + ex.getMessage());
-        }
-        return countryList;
     }
 
     private Map<Integer, String> sortCountriesAlphabetically(Map<Integer, String> conceptMap) {
