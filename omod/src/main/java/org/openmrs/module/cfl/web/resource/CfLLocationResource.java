@@ -7,8 +7,6 @@ import org.openmrs.attribute.BaseAttribute;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
-import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.LocationResource2_0;
@@ -16,6 +14,8 @@ import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.Location
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * The CfLLocationResource Class.
@@ -43,18 +43,9 @@ public class CfLLocationResource extends LocationResource2_0 {
   @Override
   public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
     final DelegatingResourceDescription description = super.getRepresentationDescription(rep);
-    if (rep instanceof DefaultRepresentation) {
-      description.addProperty(
-          ATTRIBUTES_REPRESENTATION_PROPERTY,
-          ACTIVE_ATTRIBUTES_ENTITY_PROPERTY,
-          Representation.REF);
-    } else if (rep instanceof FullRepresentation) {
-      description.addProperty(
-          ATTRIBUTES_REPRESENTATION_PROPERTY,
-          ACTIVE_ATTRIBUTES_ENTITY_PROPERTY,
-          Representation.DEFAULT);
-    }
-
+    ofNullable(description.getProperties().get(ATTRIBUTES_REPRESENTATION_PROPERTY))
+        .ifPresent(
+            attributeProp -> attributeProp.setDelegateProperty(ACTIVE_ATTRIBUTES_ENTITY_PROPERTY));
     return description;
   }
 
