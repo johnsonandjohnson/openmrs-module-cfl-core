@@ -32,6 +32,7 @@ public class AdminList extends AdministrationSectionExt {
     public Map<String, String> getLinks() {
         final Map<String, String> map = new HashMap<>();
         map.put("module/cfl/adHocMessage.form", "cfl.adHocMessage.title");
+        map.put("module/cfl/countryList.form", "cfl.manageCountries.title");
         return map;
     }
 
