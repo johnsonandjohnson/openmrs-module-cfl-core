@@ -40,9 +40,16 @@
     <bean id="cfl.irisPatientService" class="org.openmrs.module.cfl.api.service.impl.IrisPatientServiceImpl">
         <property name="patientService" ref="patientService"/>
     </bean>
-
+    
     <bean id="cfl.irisVisitService" class="org.openmrs.module.cfl.api.service.impl.IrisVisitServiceImpl">
-        <property name="visitService" ref="visitService"/>
+        <property name="dbSessionFactory" ref="dbSessionFactory"/>
+        <property name="entitySaveTransactionalWrapperService">
+            <bean autowire-candidate="false"
+                  class="org.openmrs.module.cfl.api.service.impl.EntitySaveTransactionalWrapperService">
+                <property name="dbSessionFactory" ref="dbSessionFactory" />
+                <property name="visitService" ref="visitService" />
+            </bean>
+        </property>
     </bean>
 
     <bean id="cfl.irisAdminService" class="org.openmrs.module.cfl.api.service.impl.IrisAdminServiceImpl">
