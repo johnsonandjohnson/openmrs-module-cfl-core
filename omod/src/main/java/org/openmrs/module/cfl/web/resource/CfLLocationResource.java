@@ -43,6 +43,11 @@ public class CfLLocationResource extends LocationResource2_0 {
   @Override
   public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
     final DelegatingResourceDescription description = super.getRepresentationDescription(rep);
+
+    if (description == null) {
+      return null;
+    }
+
     ofNullable(description.getProperties().get(ATTRIBUTES_REPRESENTATION_PROPERTY))
         .ifPresent(
             attributeProp -> attributeProp.setDelegateProperty(ACTIVE_ATTRIBUTES_ENTITY_PROPERTY));
