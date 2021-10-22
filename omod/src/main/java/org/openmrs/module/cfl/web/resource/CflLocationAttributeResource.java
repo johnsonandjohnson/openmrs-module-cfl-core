@@ -2,6 +2,8 @@ package org.openmrs.module.cfl.web.resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.LocationAttribute;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.db.ClobDatatypeStorage;
 import org.openmrs.attribute.Attribute;
 import org.openmrs.attribute.AttributeType;
 import org.openmrs.customdatatype.CustomDatatype;
@@ -41,9 +43,16 @@ public class CflLocationAttributeResource extends LocationAttributeResource1_9 {
             valueAttributeType.getDatatypeClassname(), valueAttributeType.getDatatypeConfig());
 
     if (valueDatatypeHandler instanceof LongFreeTextDatatype) {
-      instance.setValue(value);
+      instance.setValue(safeLongFreeTextFromReferenceString(value));
     } else {
       instance.setValue(valueDatatypeHandler.fromReferenceString(value));
     }
+  }
+
+  private static String safeLongFreeTextFromReferenceString(String value) {
+    final ClobDatatypeStorage clobStorage =
+        Context.getDatatypeService().getClobDatatypeStorageByUuid(value);
+
+    return clobStorage == null ? value : clobStorage.getValue();
   }
 }
