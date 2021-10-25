@@ -33,6 +33,9 @@
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <referenceapplication>2.10.0</referenceapplication>
         <patientFlagVersion>3.0.1</patientFlagVersion>
+        <checkStylePluginVersion>3.1.2</checkStylePluginVersion>
+        <checkStyleVersion>9.0.1</checkStyleVersion>
+        <pmdPluginVersion>3.12.0</pmdPluginVersion>
         <!-- Upgraded version compared to referenceapplication -->
         <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
@@ -123,8 +126,70 @@
                         <tagNameFormat>@{project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkStylePluginVersion}</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkStyleVersion}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>verify-checkstyle</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <configLocation>checkstyle.xml</configLocation>
+                                <consoleOutput>true</consoleOutput>
+                                <failsOnError>true</failsOnError>
+                            </configuration>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${pmdPluginVersion}</version>
+                    <configuration>
+                        <rulesets>
+                            <ruleset>${project.basedir}/../pmd.xml</ruleset>
+                        </rulesets>
+                        <linkXRef>false</linkXRef>
+                        <printFailingErrors>true</printFailingErrors>
+                        <analysisCache>true</analysisCache>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>cpd-check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <repositories>

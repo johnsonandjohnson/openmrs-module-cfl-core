@@ -14,6 +14,7 @@ import java.util.HashSet;
 /**
  * Adds Patient flags.
  */
+@SuppressWarnings("PMD.ExcessiveMethodLength")
 public class PatientFlagsMetadata extends VersionedMetadataBundle {
     private FlagService flagService;
 
