@@ -21,6 +21,11 @@
                             <c:out value="${entry.value}"/>
                         </a>
                     </td>
+                    <td>
+                        <span>
+                            <a href="editCountryForm.form?conceptId=${entry.key}">Edit</a>
+                        </span>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

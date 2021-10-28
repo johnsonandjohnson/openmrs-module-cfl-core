@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -26,35 +25,33 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({Context.class})
 public class CountryControllerTest {
 
-    private static final String MODEL_NAME = "model";
+  private static final String MODEL_NAME = "model";
 
-    @InjectMocks
-    private CountryController countryController;
+  @InjectMocks private CountryController countryController;
 
-    @Mock
-    private ConceptService conceptService;
+  @Mock private ConceptService conceptService;
 
-    @Before
-    public void setUp() {
-        mockStatic(Context.class);
-    }
+  @Before
+  public void setUp() {
+    mockStatic(Context.class);
+  }
 
-    @Test
-    public void getCountryList_shouldCallServiceMethodsSuccessfullyAndReturnNotNullConceptMapModel() {
-        when(conceptService.getConceptByName(anyString())).thenReturn(new Concept());
-        when(conceptService.getConceptsByConceptSet(new Concept())).thenReturn(anyListOf(Concept.class));
+  @Test
+  public void getCountryList_shouldCallServiceMethodsSuccessfullyAndReturnNotNullConceptMapModel() {
+    when(conceptService.getConceptByName(anyString())).thenReturn(new Concept());
+    when(conceptService.getConceptsByConceptSet(new Concept()))
+        .thenReturn(anyListOf(Concept.class));
 
-        ModelAndView result = countryController.getCountryList();
+    ModelAndView result = countryController.getCountryList();
 
-        verify(conceptService).getConceptByName(anyString());
-        verify(conceptService).getConceptsByConceptSet(any(Concept.class));
-        assertNotNull(((CountryControllerModel) result.getModel().get(MODEL_NAME)).getConceptMap());
-    }
+    verify(conceptService).getConceptByName(anyString());
+    assertNotNull(((CountryControllerModel) result.getModel().get(MODEL_NAME)).getConceptMap());
+  }
 
-    @Test
-    public void getCountryForm_shouldReturnNullConceptMapModel() {
-        ModelAndView result = countryController.getCountryForm();
+  @Test
+  public void getCountryForm_shouldReturnNullConceptMapModel() {
+    ModelAndView result = countryController.getCountryForm();
 
-        assertNull(((CountryControllerModel) result.getModel().get(MODEL_NAME)).getConceptMap());
-    }
+    assertNull(((CountryControllerModel) result.getModel().get(MODEL_NAME)).getConceptMap());
+  }
 }
