@@ -10,7 +10,6 @@
 	}
 </style>
 
-
 <h2><spring:message code="cfl.addNewCountry.title"/></h2>
 
 <form method="post">
