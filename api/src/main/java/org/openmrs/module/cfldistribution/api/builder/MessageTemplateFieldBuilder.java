@@ -6,6 +6,9 @@ import org.openmrs.module.messages.api.model.TemplateFieldType;
 
 public final class MessageTemplateFieldBuilder {
 
+    private MessageTemplateFieldBuilder() {
+    }
+
     public static TemplateField buildMessageTemplateField(String name, boolean isMandatory, String defaultValue,
                                                           Template template, TemplateFieldType fieldType,
                                                           String possibleValues, String uuid) {

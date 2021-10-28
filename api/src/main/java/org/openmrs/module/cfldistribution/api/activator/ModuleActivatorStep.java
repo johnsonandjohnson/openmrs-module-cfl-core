@@ -27,5 +27,6 @@ public interface ModuleActivatorStep {
      */
     int getOrder();
 
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     void startup(Log log) throws Exception;
 }

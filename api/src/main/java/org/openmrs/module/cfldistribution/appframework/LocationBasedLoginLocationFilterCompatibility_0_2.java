@@ -22,6 +22,7 @@ import java.util.Collections;
  * </p>
  */
 @OpenmrsProfile(modules = "locationbasedaccess:0.2.* - 0.3.*")
+@SuppressWarnings("PMD.ClassNamingConventions")
 public class LocationBasedLoginLocationFilterCompatibility_0_2 implements LoginLocationFilter {
     @Override
     public boolean accept(Location location) {

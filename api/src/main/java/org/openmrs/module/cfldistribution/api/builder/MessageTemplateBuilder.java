@@ -4,6 +4,9 @@ import org.openmrs.module.messages.api.model.Template;
 
 public final class MessageTemplateBuilder {
 
+    private MessageTemplateBuilder() {
+    }
+
     public static Template buildMessageTemplate(String serviceQuery, String serviceQueryType, String calendarServiceQuery,
                                                 String name, boolean shouldUseOptimizedQuery, String uuid) {
         Template template = new Template();
