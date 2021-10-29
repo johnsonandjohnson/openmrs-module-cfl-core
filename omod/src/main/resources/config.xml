@@ -78,6 +78,11 @@
         <class>org.openmrs.module.cfl.advice.DeleteAllAddressHierarchyEntriesAdvice</class>
     </advice>
 
+    <advice>
+        <point>org.openmrs.module.appframework.service.AppFrameworkService</point>
+        <class>org.openmrs.module.cfl.advice.SaveUserAppAdvice</class>
+    </advice>
+
     <aware_of_modules>
         <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
         <aware_of_module>org.openmrs.module.visits</aware_of_module>
