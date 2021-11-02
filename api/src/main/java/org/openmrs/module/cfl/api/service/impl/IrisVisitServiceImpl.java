@@ -1,22 +1,36 @@
 package org.openmrs.module.cfl.api.service.impl;
 
 import org.openmrs.Visit;
-import org.openmrs.api.VisitService;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cfl.api.service.IrisVisitService;
-import org.springframework.transaction.annotation.Transactional;
 
 public class IrisVisitServiceImpl extends BaseOpenmrsService implements IrisVisitService {
 
-    private VisitService visitService;
+  private EntitySaveTransactionalWrapperService entitySaveTransactionalWrapperService;
+  private DbSessionFactory dbSessionFactory;
 
-    public void setVisitService(VisitService visitService) {
-        this.visitService = visitService;
+  public void setEntitySaveTransactionalWrapperService(
+      EntitySaveTransactionalWrapperService entitySaveTransactionalWrapperService) {
+    this.entitySaveTransactionalWrapperService = entitySaveTransactionalWrapperService;
+  }
+
+  public void setDbSessionFactory(DbSessionFactory dbSessionFactory) {
+    this.dbSessionFactory = dbSessionFactory;
+  }
+
+  @Override
+  public Visit saveVisit(Visit visit) {
+    try {
+      entitySaveTransactionalWrapperService.saveOrUpdateVisitInNewTransaction(visit);
+    } finally {
+      // It was either saved or not in #saveOrUpdateVisitInNewTransaction, we don't want any
+      // following attempts to save it again in Db
+      if (visit.getId() != null) {
+        dbSessionFactory.getCurrentSession().evict(visit);
+      }
     }
 
-    @Override
-    @Transactional(noRollbackFor = Exception.class)
-    public Visit saveVisit(Visit visit) {
-        return visitService.saveVisit(visit);
-    }
+    return (Visit) dbSessionFactory.getCurrentSession().get(Visit.class, visit.getId());
+  }
 }
