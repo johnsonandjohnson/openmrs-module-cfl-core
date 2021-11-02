@@ -87,7 +87,7 @@ public class CountryServiceImpl implements CountryService {
               line -> {
                 if (line.contains(":")) {
                   String[] splittedLine = line.split(":");
-                  countriesResourcesList.put(splittedLine[0], splittedLine[1]);
+                  countriesResourcesList.put(splittedLine[0].trim(), splittedLine[1].trim());
                 } else {
                   LOGGER.info(
                       String.format(
@@ -106,14 +106,16 @@ public class CountryServiceImpl implements CountryService {
   public void createClusterMembersResources(String clusterMembersList, Concept countryConcept) {
     Arrays.stream(clusterMembersList.split(","))
         .filter(StringUtils::isNotBlank)
-        .map(this::getOrCreateCountryConcept)
+        .map(name -> getOrCreateCountryConcept(name.trim()))
         .forEach(clusterMember -> addCountryClusterMember(countryConcept, clusterMember));
   }
 
-  private Concept getOrCreateCountryConcept(String countryName) {
-    Concept concept = conceptService.getConceptByName(countryName);
+  @Override
+  @Transactional
+  public Concept getOrCreateCountryConcept(String name) {
+    Concept concept = conceptService.getConceptByName(name);
     if (concept == null) {
-      concept = buildAndSaveCountryResources(countryName);
+      concept = buildAndSaveCountryResources(name);
     } else if (BooleanUtils.isFalse(concept.getSet())) {
       concept.setSet(true);
       conceptService.saveConcept(concept);

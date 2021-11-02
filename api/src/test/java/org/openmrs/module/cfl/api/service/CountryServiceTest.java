@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -42,22 +40,6 @@ public class CountryServiceTest extends BaseModuleContextSensitiveTest {
     assertEquals("N/A", result.getDatatype().getName());
     assertEquals("ConvSet", result.getConceptClass().getName());
     assertTrue(result.getSet());
-  }
-
-  @Test
-  public void shouldSuccessfullyProcessCountriesAndReturnDuplicates() {
-    Map<String, String> countriesMap = new HashMap<>();
-    countriesMap.put("Poland", "member1");
-    countriesMap.put("China", "member1");
-    countriesMap.put("Belgium", "member1");
-
-    List<String> result = countryService.processAndReturnAlreadyExistingCountries(countriesMap);
-
-    assertNotNull(result);
-    assertEquals(2, result.size());
-    assertTrue(result.contains("Poland"));
-    assertTrue(result.contains("Belgium"));
-    assertFalse(result.contains("China"));
   }
 
   @Test

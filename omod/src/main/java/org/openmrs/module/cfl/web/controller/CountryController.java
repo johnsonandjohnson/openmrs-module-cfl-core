@@ -110,11 +110,12 @@ public class CountryController {
     Concept countryConcept = conceptService.getConcept(conceptId);
 
     List<String> previousClusterMembersNames = getPreviousClusterMembersNames(countryConcept);
-    List<String> actualClusterMembersNames = getActualClusterMembersNames(model);
+    List<String> actualClusterMembersNames =
+        getActualClusterMembersNames(model.getClusterMembers());
 
-    handleNewClusterMembers(countryConcept, previousClusterMembersNames, actualClusterMembersNames);
-    handleChangedClusterMembers(previousClusterMembersNames, actualClusterMembersNames);
-    handleCountryNameChange(countryConcept, model);
+    handleCountryNameChange(countryConcept, model.getName());
+    handleClusterMembersChanges(
+        countryConcept, previousClusterMembersNames, actualClusterMembersNames);
 
     setInfoMessage(httpServletRequest, "cfl.addNewCountry.success.info");
     return new ModelAndView(new RedirectView(COUNTRIES_LIST_REDIRECT_VIEW));
@@ -133,10 +134,11 @@ public class CountryController {
     try {
       String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
       if (StringUtils.equals(fileExtension, "txt") || StringUtils.equals(fileExtension, "csv")) {
-        Map<String, String> countriesList =
+        Map<String, String> countriesMap =
             countryService.getCountriesListFromFile(file.getInputStream());
         duplicatedCountriesNames =
-            countryService.processAndReturnAlreadyExistingCountries(countriesList);
+            countryService.processAndReturnAlreadyExistingCountries(countriesMap);
+        handleCountriesFromFile(countriesMap);
         checkDuplicatedCountriesAndSetProperInfoMsg(httpServletRequest, duplicatedCountriesNames);
         returnViewName = COUNTRIES_LIST_REDIRECT_VIEW;
       } else {
@@ -150,16 +152,33 @@ public class CountryController {
     return new ModelAndView(new RedirectView(returnViewName));
   }
 
+  private void handleCountriesFromFile(Map<String, String> countriesMap) {
+    countriesMap.forEach(
+        (key, value) -> {
+          Concept concept = conceptService.getConceptByName(key.trim());
+          handleClusterMembersChanges(
+              concept,
+              getPreviousClusterMembersNames(concept),
+              getActualClusterMembersNames(value));
+        });
+  }
+
   private List<String> getPreviousClusterMembersNames(Concept countryConcept) {
     return countryConcept.getSetMembers().stream()
         .map(c -> c.getFullySpecifiedName(Locale.ENGLISH).getName())
         .collect(Collectors.toList());
   }
 
-  private List<String> getActualClusterMembersNames(CountryControllerModel model) {
-    return Arrays.stream(model.getClusterMembers().split(","))
-        .map(String::trim)
-        .collect(Collectors.toList());
+  private List<String> getActualClusterMembersNames(String clusterMembers) {
+    return Arrays.stream(clusterMembers.split(",")).map(String::trim).collect(Collectors.toList());
+  }
+
+  private void handleClusterMembersChanges(
+      Concept countryConcept,
+      List<String> previousClusterMembers,
+      List<String> actualClusterMembers) {
+    handleNewClusterMembers(countryConcept, previousClusterMembers, actualClusterMembers);
+    handleChangedClusterMembers(previousClusterMembers, actualClusterMembers);
   }
 
   private void handleNewClusterMembers(
@@ -170,10 +189,10 @@ public class CountryController {
     actualClusterMembers.stream()
         .filter(
             name -> StringUtils.isNotBlank(name) && !previousClusterMembers.contains(name.trim()))
+        .map(name -> countryService.getOrCreateCountryConcept(name))
         .forEach(
-            name -> {
-              Concept newClusterMember = countryService.buildAndSaveCountryResources(name);
-              countryConcept.addSetMember(newClusterMember);
+            concept -> {
+              countryConcept.addSetMember(concept);
               conceptService.saveConcept(countryConcept);
             });
   }
@@ -192,8 +211,8 @@ public class CountryController {
             name ->
                 !previousClusterMembers.contains(name.trim())
                     && StringUtils.isNotBlank(name)
-                    && conceptService.getConceptByName(name) == null)
-        .forEach(name -> countryService.buildAndSaveCountryResources(name));
+                    && conceptService.getConceptByName(name.trim()) == null)
+        .forEach(name -> countryService.buildAndSaveCountryResources(name.trim()));
   }
 
   private void retireConcept(Concept concept) {
@@ -203,19 +222,18 @@ public class CountryController {
     conceptService.saveConcept(concept);
   }
 
-  private void handleCountryNameChange(Concept countryConcept, CountryControllerModel model) {
-    if (isCountryNameChanged(countryConcept, model)) {
-      ConceptName newName = new ConceptNameBuilder().withName(model.getName()).build();
+  private void handleCountryNameChange(Concept countryConcept, String countryName) {
+    if (isCountryNameChanged(countryConcept, countryName)) {
+      ConceptName newName = new ConceptNameBuilder().withName(countryName).build();
       countryConcept.getName().setVoided(true);
       countryConcept.setFullySpecifiedName(newName);
       conceptService.saveConcept(countryConcept);
     }
   }
 
-  private boolean isCountryNameChanged(Concept countryConcept, CountryControllerModel model) {
+  private boolean isCountryNameChanged(Concept countryConcept, String countryName) {
     String previousCountryName = countryConcept.getFullySpecifiedName(Locale.ENGLISH).getName();
-    String actualCountryName = model.getName();
-    return !StringUtils.equals(previousCountryName, actualCountryName);
+    return !StringUtils.equals(previousCountryName, countryName);
   }
 
   private String getClusterMembersByCountry(Concept countryConcept) {
