@@ -42,4 +42,11 @@ public interface CountryService {
    * @param countryConcept concept for which cluster members resources are created
    */
   void createClusterMembersResources(String clusterMembersList, Concept countryConcept);
+
+  /**
+   * Gets or creates concept if it does not exist
+   * @param name concept name
+   * @return existing or new concept
+   */
+  Concept getOrCreateCountryConcept(String name);
 }
