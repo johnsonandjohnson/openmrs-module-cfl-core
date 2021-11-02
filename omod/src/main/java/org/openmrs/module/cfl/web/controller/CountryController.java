@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** The CountryController class */
@@ -165,45 +166,34 @@ public class CountryController {
       Concept countryConcept,
       List<String> previousClusterMembers,
       List<String> actualClusterMembers) {
-    List<String> newClusterMembers =
-        actualClusterMembers.stream()
-            .filter(str -> !previousClusterMembers.contains(str.trim()))
-            .collect(Collectors.toList());
-    newClusterMembers.forEach(
-        name -> {
-          if (StringUtils.isNotBlank(name)) {
-            Concept newClusterMember = countryService.buildAndSaveCountryResources(name);
-            countryConcept.addSetMember(newClusterMember);
-            conceptService.saveConcept(countryConcept);
-          }
-        });
+
+    actualClusterMembers.stream()
+        .filter(
+            name -> StringUtils.isNotBlank(name) && !previousClusterMembers.contains(name.trim()))
+        .forEach(
+            name -> {
+              Concept newClusterMember = countryService.buildAndSaveCountryResources(name);
+              countryConcept.addSetMember(newClusterMember);
+              conceptService.saveConcept(countryConcept);
+            });
   }
 
   private void handleChangedClusterMembers(
       List<String> previousClusterMembers, List<String> actualClusterMembers) {
-    List<String> changedClusterMembers =
-        previousClusterMembers.stream()
-            .filter(name -> !actualClusterMembers.contains(name.trim()))
-            .collect(Collectors.toList());
-    changedClusterMembers.forEach(
-        name -> {
-          Concept concept = conceptService.getConceptByName(name);
-          if (concept != null) {
-            retireConcept(concept);
-          }
-        });
 
-    List<String> newClusterMembersAfterUpdating =
-        actualClusterMembers.stream()
-            .filter(name -> !previousClusterMembers.contains(name.trim()))
-            .collect(Collectors.toList());
-    newClusterMembersAfterUpdating.forEach(
-        name -> {
-          Concept clusterMember = conceptService.getConceptByName(name);
-          if (clusterMember == null && StringUtils.isNotBlank(name)) {
-            countryService.buildAndSaveCountryResources(name);
-          }
-        });
+    previousClusterMembers.stream()
+        .filter(name -> !actualClusterMembers.contains(name.trim()))
+        .map(name -> conceptService.getConceptByName(name))
+        .filter(Objects::nonNull)
+        .forEach(this::retireConcept);
+
+    actualClusterMembers.stream()
+        .filter(
+            name ->
+                !previousClusterMembers.contains(name.trim())
+                    && StringUtils.isNotBlank(name)
+                    && conceptService.getConceptByName(name) == null)
+        .forEach(name -> countryService.buildAndSaveCountryResources(name));
   }
 
   private void retireConcept(Concept concept) {
@@ -229,12 +219,10 @@ public class CountryController {
   }
 
   private String getClusterMembersByCountry(Concept countryConcept) {
-    List<String> clusterMembersNameList =
-        countryConcept.getSetMembers().stream()
-            .filter(concept -> !concept.getRetired())
-            .map(concept -> concept.getFullySpecifiedName(Locale.ENGLISH).getName())
-            .collect(Collectors.toList());
-    return String.join(", ", clusterMembersNameList);
+    return countryConcept.getSetMembers().stream()
+        .filter(concept -> !concept.getRetired())
+        .map(concept -> concept.getFullySpecifiedName(Locale.ENGLISH).getName())
+        .collect(Collectors.joining(", "));
   }
 
   private ModelAndView createOrUpdateCountryConcept(

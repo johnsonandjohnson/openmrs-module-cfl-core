@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,20 +105,20 @@ public class CountryServiceImpl implements CountryService {
   @Transactional
   public void createClusterMembersResources(String clusterMembersList, Concept countryConcept) {
     Arrays.stream(clusterMembersList.split(","))
-        .forEach(
-            name -> {
-              if (StringUtils.isNotBlank(name)) {
-                Concept clusterMember = getOrCreateCountryConcept(name);
-                addCountryClusterMember(countryConcept, clusterMember);
-              }
-            });
+        .filter(StringUtils::isNotBlank)
+        .map(this::getOrCreateCountryConcept)
+        .forEach(clusterMember -> addCountryClusterMember(countryConcept, clusterMember));
   }
 
   private Concept getOrCreateCountryConcept(String countryName) {
     Concept concept = conceptService.getConceptByName(countryName);
     if (concept == null) {
       concept = buildAndSaveCountryResources(countryName);
+    } else if (BooleanUtils.isFalse(concept.getSet())) {
+      concept.setSet(true);
+      conceptService.saveConcept(concept);
     }
+
     return concept;
   }
 
