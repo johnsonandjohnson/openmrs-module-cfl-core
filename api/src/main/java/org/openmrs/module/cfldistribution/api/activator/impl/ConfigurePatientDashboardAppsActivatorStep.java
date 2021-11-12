@@ -35,6 +35,7 @@ import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsCo
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.COREAPPS_OBS_GRAPH_APP;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.COREAPPS_RELATIONSHIPS_APP;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.LOCATIONBASEDACCESS_EXT;
+import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.LOCATIONBASEDACCES_PATIENT_HEADER_LOCATION_EXT;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.PATIENTFLAGS_EXT;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.PATIENT_DASHBOARD_APPOINTMENTS_EXT;
 import static org.openmrs.module.cfldistribution.api.util.PatientDashboardAppsConstants.REFAPP_CAPTURE_VITALS_APP;
@@ -69,7 +70,8 @@ public class ConfigurePatientDashboardAppsActivatorStep implements ModuleActivat
             Arrays.asList(APPOINTMENTSCHEDULINGUI_TAB_EXT, PATIENT_DASHBOARD_APPOINTMENTS_EXT, STICKY_NOTE_EXT,
                     ACTIVE_VISIT_STATUS_EXT, COREAPPS_CREATE_VISIT_EXT, COREAPPS_CREATE_RETROSPECTIVE_VISIT_EXT,
                     COREAPPS_MERGE_VISITS_EXT, ALLERGYUI_PATIENT_DASHBOARD_EXT, PATIENTFLAGS_EXT, ATTACHMENTS_EXT,
-                    ATTACHMENTS_OVERALL_ACTION_EXT, LOCATIONBASEDACCESS_EXT, COREAPPS_MARK_PATIENT_DECEASED_EXT);
+                    ATTACHMENTS_OVERALL_ACTION_EXT, LOCATIONBASEDACCESS_EXT, COREAPPS_MARK_PATIENT_DECEASED_EXT,
+                    LOCATIONBASEDACCES_PATIENT_HEADER_LOCATION_EXT);
 
     private static final List<String> DISABLE_EXTENSIONS_IDS =
             Collections.singletonList(REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT);

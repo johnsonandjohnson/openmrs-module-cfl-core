@@ -68,6 +68,8 @@ public final class PatientDashboardAppsConstants {
     public static final String REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT =
             "org.openmrs.module.registrationapp.editPatientDemographics";
 
+    public static final String LOCATIONBASEDACCES_PATIENT_HEADER_LOCATION_EXT = "org.openmrs.module.locationbasedaccess.patientHeader.secondLineFragments.patientLocation";
+
     private PatientDashboardAppsConstants() {
 
     }
