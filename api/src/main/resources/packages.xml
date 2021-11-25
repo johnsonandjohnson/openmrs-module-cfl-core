@@ -114,5 +114,11 @@
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+            <filenameBase>20_HIV_Program_Concepts</filenameBase>
+            <groupUuid>522d8310-371e-4dff-b9be-0ff9b1c06017</groupUuid>
+            <version>1</version>
+            <importMode>MIRROR</importMode>
+        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
     </packages>
 </org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>
