@@ -16,8 +16,10 @@ import org.openmrs.module.ModuleException;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
 import org.openmrs.module.cfl.api.event.CflEventListenerHelper;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseListener;
+import org.openmrs.module.cfl.api.htmlformentry.tag.RegimenHandler;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
+import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 
@@ -54,6 +56,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
       // Install metadata packages
       MetadataUtil.setupStandardMetadata(getClass().getClassLoader());
       installMetadataBundles();
+
+      addTagHandlers();
     } catch (Exception e) {
       throw new ModuleException("failed to setup the required modules", e);
     }
@@ -267,5 +271,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
             .collect(Collectors.toList());
 
     service.installBundles(cflBundles);
+  }
+
+  private void addTagHandlers() {
+    Context.getService(HtmlFormEntryService.class)
+        .addHandler(CFLConstants.REGIMEN_TAG_NAME, new RegimenHandler());
   }
 }

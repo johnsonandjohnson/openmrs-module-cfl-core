@@ -65,6 +65,7 @@
         <serializationXstream>0.2.12</serializationXstream>
         <providermanagementVersion>2.10.0</providermanagementVersion>
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
+        <javax.servlet.version>3.0.1</javax.servlet.version>
         <!-- CfL modules -->
         <messagesVersion>1.3.0</messagesVersion>
     </properties>
@@ -332,6 +333,12 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>providermanagement-api</artifactId>
                 <version>${providermanagementVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

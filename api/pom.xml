@@ -100,5 +100,10 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>addresshierarchy-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
