@@ -104,7 +104,7 @@
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>18_CfL_Configure_Metadata_Apps</filenameBase>
-            <groupUuid>83ab9218-5d2e-3afa-b8a5-7a5d5786c5c</groupUuid>
+            <groupUuid>d624e6f7-0163-4949-b2d8-c8d8eee5b653</groupUuid>
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
