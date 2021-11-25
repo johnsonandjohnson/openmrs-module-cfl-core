@@ -797,5 +797,4 @@
         </div>
         <redirectOnSave url="/coreapps/clinicianfacing/patient.page?patientId={{patient.id}}"/>
     </ifMode>
-    <postSubmissionAction class="org.openmrs.module.cfldistribution.api.htmlformentry.action.CflHIVRegimenFormSubmissionAction"/>
 </htmlform>
