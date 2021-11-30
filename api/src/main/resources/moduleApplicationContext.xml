@@ -269,4 +269,8 @@
     <bean id="cfl.countryService" class="org.openmrs.module.cfl.api.service.impl.CountryServiceImpl">
         <property name="conceptService"><ref bean="conceptService"/></property>
     </bean>
+
+    <bean id="cfl.extendedConceptDataDAO" class="org.openmrs.module.cfl.db.impl.ExtendedConceptDataDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 </beans>
