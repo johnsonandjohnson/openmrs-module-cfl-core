@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * The ExtendedPatientDataDAO class.
  *
- * Provides additional custom methods related to vaccines functionalities.
+ * <p>Provides additional custom methods related to vaccines functionalities.
  */
 public interface ExtendedPatientDataDAO {
 
-    /**
-     * Returns all different vaccine names linked with any patient.
-     *
-     * @return list of different vaccine names linked with any patient
-     */
-    List<String> getVaccineNamesLinkedToAnyPatient();
+  /**
+   * Returns all different vaccine names linked with any patient.
+   *
+   * @return list of different vaccine names linked with any patient
+   */
+  List<String> getVaccineNamesLinkedToAnyPatient();
 }
