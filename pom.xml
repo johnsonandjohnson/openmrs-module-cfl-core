@@ -66,6 +66,7 @@
         <providermanagementVersion>2.10.0</providermanagementVersion>
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
         <javax.servlet.version>3.0.1</javax.servlet.version>
+        <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
         <messagesVersion>1.3.0</messagesVersion>
     </properties>
@@ -339,6 +340,12 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>locationbasedaccess-api</artifactId>
+                <version>${locationbasedaccessVersion}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
