@@ -4,10 +4,10 @@ import org.hibernate.Session;
 import org.openmrs.Concept;
 import org.openmrs.ConceptSet;
 import org.openmrs.api.db.hibernate.HibernateOpenmrsObjectDAO;
-import org.openmrs.module.cfl.db.ExtendedConceptDataDAO;
+import org.openmrs.module.cfl.db.ExtendedConceptSetDAO;
 
-public class ExtendedConceptDataDAOImpl extends HibernateOpenmrsObjectDAO<ConceptSet>
-    implements ExtendedConceptDataDAO {
+public class ExtendedConceptSetDAOImpl extends HibernateOpenmrsObjectDAO<ConceptSet>
+    implements ExtendedConceptSetDAO {
 
   private static final String DELETE_CONCEPT_SETS =
       "DELETE FROM ConceptSet cs WHERE cs.concept = :concept";
