@@ -67,6 +67,12 @@
         </require_module>
     </require_modules>
 
+    <aware_of_modules>
+        <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+        <aware_of_module>org.openmrs.module.visits</aware_of_module>
+        <aware_of_module>org.openmrs.module.locationbasedaccess</aware_of_module>
+    </aware_of_modules>
+
     <!-- Extensions -->
     <extension>
         <point>org.openmrs.admin.list</point>
@@ -88,10 +94,10 @@
         <class>org.openmrs.module.cfl.advice.PurgeConceptAdvice</class>
     </advice>
 
-    <aware_of_modules>
-        <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
-        <aware_of_module>org.openmrs.module.visits</aware_of_module>
-    </aware_of_modules>
+    <advice>
+        <point>org.openmrs.api.PatientService</point>
+        <class>org.openmrs.module.cfl.advice.PatientCountAdviser</class>
+    </advice>
 
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->
