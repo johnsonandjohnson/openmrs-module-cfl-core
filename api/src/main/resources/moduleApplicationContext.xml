@@ -270,7 +270,7 @@
         <property name="conceptService"><ref bean="conceptService"/></property>
     </bean>
 
-    <bean id="cfl.extendedConceptDataDAO" class="org.openmrs.module.cfl.db.impl.ExtendedConceptDataDAOImpl">
+    <bean id="cfl.extendedConceptSetDAO" class="org.openmrs.module.cfl.db.impl.ExtendedConceptSetDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 </beans>

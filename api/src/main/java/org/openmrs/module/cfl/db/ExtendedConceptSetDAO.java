@@ -7,7 +7,7 @@ import org.openmrs.Concept;
  *
  * <p>Provides additional custom methods related to concept resources.
  */
-public interface ExtendedConceptDataDAO {
+public interface ExtendedConceptSetDAO {
 
   /**
    * Removes concept sets related to the concept. It is performed before calling purgeConcept method

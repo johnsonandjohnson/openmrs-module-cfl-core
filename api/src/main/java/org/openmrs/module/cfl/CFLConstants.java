@@ -354,7 +354,7 @@ public final class CFLConstants {
 
   public static final String REGIMEN_TAG_NAME = "regimen";
 
-  public static final String EXTENDED_CONCEPT_DATA_DAO_BEAN_NAME = "cfl.extendedConceptDataDAO";
+  public static final String EXTENDED_CONCEPT_SET_DAO_BEAN_NAME = "cfl.extendedConceptSetDAO";
 
   private CFLConstants() {}
 }
