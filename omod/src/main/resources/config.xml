@@ -83,6 +83,11 @@
         <class>org.openmrs.module.cfl.advice.SaveUserAppAdvice</class>
     </advice>
 
+    <advice>
+        <point>org.openmrs.api.ConceptService</point>
+        <class>org.openmrs.module.cfl.advice.PurgeConceptAdvice</class>
+    </advice>
+
     <aware_of_modules>
         <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
         <aware_of_module>org.openmrs.module.visits</aware_of_module>
