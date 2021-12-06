@@ -20,8 +20,7 @@ FROM
      PATIENT_ID,
      ACTOR_ID
     FROM
-    DATES_LIST_10_DAYS
-
+    DATES_LIST_10K_DAYS_TABLE
         JOIN (
             SELECT
                 v.date_started AS visit_dates,

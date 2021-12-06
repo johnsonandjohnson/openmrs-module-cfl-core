@@ -10,7 +10,7 @@ FROM (
     FROM (
         SELECT *
         FROM
-            (SELECT * FROM DATES_LIST_10_DAYS) dates_list
+            (SELECT * FROM DATES_LIST_10K_DAYS_TABLE) dates_list
         WHERE selected_date >= DATE(:startDateTime)
             AND selected_date <= DATE(:endDateTime)
             AND (DAYOFMONTH(selected_date) < IF

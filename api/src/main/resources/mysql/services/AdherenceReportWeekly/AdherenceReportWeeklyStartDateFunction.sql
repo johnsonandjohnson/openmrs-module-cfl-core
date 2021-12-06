@@ -1,4 +1,4 @@
-CREATE FUNCTION `GET_PREDICTION_START_DATE_FOR_ADHERENCE_WEEKLY`(patient_id long, actor_id long, execution_start_date DATETIME)
+CREATE FUNCTION GET_PREDICTION_START_DATE_FOR_ADHERENCE_WEEKLY(patient_id long, actor_id long, execution_start_date DATETIME)
     RETURNS DATETIME
 BEGIN
     DECLARE mssg_date DATETIME;

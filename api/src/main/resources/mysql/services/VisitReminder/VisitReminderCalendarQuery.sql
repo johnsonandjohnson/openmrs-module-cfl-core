@@ -8,7 +8,7 @@ FROM
      1 AS MESSAGE_ID,
      :Service_type AS CHANNEL_ID
     FROM
-    DATES_LIST
+    DATES_LIST_10K_DAYS_TABLE
         JOIN (
             SELECT
                 v.date_started AS visit_dates
