@@ -96,7 +96,7 @@
 
     <advice>
         <point>org.openmrs.api.PatientService</point>
-        <class>org.openmrs.module.cfl.advice.PatientCountAdviser</class>
+        <class>org.openmrs.module.cfl.advice.PatientCountAdvisor</class>
     </advice>
 
     <!-- Internationalization -->

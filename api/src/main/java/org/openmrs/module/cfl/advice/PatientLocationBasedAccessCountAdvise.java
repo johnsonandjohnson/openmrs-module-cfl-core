@@ -2,7 +2,6 @@ package org.openmrs.module.cfl.advice;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.service.CFLPatientService;
@@ -13,9 +12,10 @@ import java.util.Arrays;
 /**
  * The MethodInterceptor Advice which replaces the result of {@link
  * org.openmrs.api.PatientService#getCountOfPatients(String)} with a count of patients limited by
- * currently logged user's assigned locations. This is extension of locationbasedaccess
+ * currently logged user's assigned locations.
+ *
+ * @see CFLPatientService#getCountOfPatients(String)
  */
-@OpenmrsProfile(modules = "locationbasedaccess:2.* - 3.*")
 public class PatientLocationBasedAccessCountAdvise implements MethodInterceptor {
   private static final int QUERY_ARG = 0;
   private static final int INCLUDE_VOIDED_ARG = 1;
