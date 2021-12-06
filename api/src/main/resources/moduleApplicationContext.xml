@@ -227,8 +227,16 @@
     </bean>
 
     <bean id="cfl.patientService" class="org.openmrs.module.cfl.api.service.impl.CFLPatientServiceImpl">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory"/>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
+        <property name="patientDAO" ref="patientDAO"/>
+        <property name="extendedPatientDataDAO" ref="cfl.extendedPatientDataDAO"/>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfl.api.service.CFLPatientService</value>
+                <ref local="cfl.patientService"/>
+            </list>
         </property>
     </bean>
 
@@ -264,6 +272,7 @@
 
     <bean id="cfl.extendedPatientDataDAO" class="org.openmrs.module.cfl.db.impl.ExtendedPatientDataDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="patientDAO" ref="patientDAO"/>
     </bean>
 
     <bean id="cfl.countryService" class="org.openmrs.module.cfl.api.service.impl.CountryServiceImpl">
