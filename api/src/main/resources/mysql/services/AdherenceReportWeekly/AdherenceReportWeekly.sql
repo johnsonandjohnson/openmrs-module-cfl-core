@@ -9,7 +9,7 @@ FROM
      :Service_type AS CHANNEL_ID
  FROM (
      SELECT *
-     FROM (SELECT * FROM DATES_LIST_10_DAYS) v
+     FROM (SELECT * FROM DATES_LIST_10K_DAYS_TABLE) v
      WHERE selected_date <= DATE(:endDateTime)
      AND selected_date >= DATE(:startDateTime)
      AND :Week_day_of_delivering_message

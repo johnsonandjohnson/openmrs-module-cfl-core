@@ -78,7 +78,7 @@ FROM   (
                             SELECT *
                             FROM   (
                                           SELECT *
-                                          FROM DATES_LIST_10_DAYS) dates_list
+                                          FROM DATES_LIST_10K_DAYS_TABLE) dates_list
                             WHERE  (
                                           Dayofmonth(selected_date) <IF (:Frequency_of_the_message = 'Weekly', 32, 8))
                             AND    :Week_day_of_delivering_message LIKE concat('%',dayname(selected_date),'%')) dates
