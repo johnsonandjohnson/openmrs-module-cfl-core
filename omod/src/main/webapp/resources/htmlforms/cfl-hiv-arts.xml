@@ -286,7 +286,6 @@
 
     <ifMode mode="ENTER">
         <script type="text/javascript">
-
             beforeSubmit.push(function() {
                 var hivArtDateStartedValue = getValue('hivArtDateStartedValue.value');
                 if (hivArtDateStartedValue == null || hivArtDateStartedValue == '') {
@@ -294,10 +293,18 @@
                     return false;
                 }
 
-                var regimenValue = getValue('regimenValue.value');
+                var regimenValue = $('#regimenValueTd').find('#regimenValue > select').val();
                 if (regimenValue == null || regimenValue == '') {
-                    getField('regimenValue.error').html("Required").show();
+                    $('#regimenValueTd').find('#regimenValue > span').html("Required").show();
                     return false;
+                }
+
+                var hivArtDateStoppedValue = getValue('hivArtDateStoppedValue.value');
+                if (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '') {
+                    if (!$('#currentRegimen > input[type="checkbox"]').is(":checked")) {
+                        getField('hivArtDateStoppedValue.error').html("Required").show();
+                        return false;
+                    }
                 }
 
                 return true;
@@ -359,38 +366,37 @@
             </h2>
         </div>
 
-        <obs conceptId="20fb8dc4-b958-4c88-b9a7-96ea36b4b0ef" answerConceptId="c8537436-e345-444b-a26a-6e03562b3838" answerLabel="Current regimen" style="checkbox" id="currentRegimen"/><b/>
-        <table>
-            <obsgroup groupingConceptId="7e08e42b-744c-4a33-8a59-e0ec735ffd59">
-                <tr>
-                    <td class="datePickerField"><div><lookup expression="fn.getConcept('ddfdf4fa-1d0a-40ca-8930-ad914bd07b23').name"/><span style="color:red">*</span><obs id="hivArtDateStartedValue" conceptId="ddfdf4fa-1d0a-40ca-8930-ad914bd07b23" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
-                    <td id="dateStoppedTd" class="datePickerField"><div><lookup expression="fn.getConcept('806195ad-9f5c-42f0-ad9f-736a21a1dac1').name"/><span style="color:red">*</span><obs id="hivArtDateStoppedValue" conceptId="806195ad-9f5c-42f0-ad9f-736a21a1dac1" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
-                    <td id="reasonStoppedTd"><div><lookup expression="fn.getConcept('9c65e0a7-8c12-46d4-8ad2-da1aa37b8276').name"/><obs conceptId="9c65e0a7-8c12-46d4-8ad2-da1aa37b8276" defaultObsDatetime="now"/></div></td>
-                </tr>
-                <tr>
-                    <td><div><span class="left">First line regimen</span><span style="color:red">*</span><br></br><regimen/></div></td>
-                    <td><div><span class="left"><lookup expression="fn.getConcept('324f28ab-cfa7-46ac-99f3-c7d928ba5e79').name"/></span><br></br><obs conceptId="324f28ab-cfa7-46ac-99f3-c7d928ba5e79" defaultObsDatetime="now"/></div></td>
-                </tr>
-                <tr id="interruptionOptionsTr">
-                    <td><div id="interruptionOptionsDiv"><span class="left"><lookup expression="fn.getConcept('ecab0816-0f06-47cd-aa4d-68f428a26f3f').name"/></span>
-                        <br></br>
-                        <br></br>
-                        <div id="radioDiv" style="display: flex;"><obs conceptId="ecab0816-0f06-47cd-aa4d-68f428a26f3f" style="yes_no" defaultObsDatetime="now" /></div></div>
-                    </td>
-                </tr>
-                <tr id="interruptionOptionsTrToHide">
-                    <td><div><span class="left"><lookup expression="fn.getConcept('dca99985-a303-4418-a440-d2af44f62c4b').name"/></span><obs conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" /></div></td>
-                    <td><div><span class="left"><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span><obs conceptId="30d09891-6bae-492c-b45b-ebe142837497" /></div></td>
-                    <td><div><span class="left"><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span><obs conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false" /></div></td>
-                </tr>
-            </obsgroup>
-        </table>
+        <obsgroup groupingConceptId="7e08e42b-744c-4a33-8a59-e0ec735ffd59">
+            <obs conceptId="20fb8dc4-b958-4c88-b9a7-96ea36b4b0ef" answerConceptId="c8537436-e345-444b-a26a-6e03562b3838" answerLabel="Current regimen" style="checkbox" id="currentRegimen"/><b/>
+            <table>
+                    <tr>
+                        <td class="datePickerField"><div><lookup expression="fn.getConcept('ddfdf4fa-1d0a-40ca-8930-ad914bd07b23').name"/><span style="color:red">*</span><obs id="hivArtDateStartedValue" conceptId="ddfdf4fa-1d0a-40ca-8930-ad914bd07b23" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
+                        <td id="dateStoppedTd" class="datePickerField"><div><lookup expression="fn.getConcept('806195ad-9f5c-42f0-ad9f-736a21a1dac1').name"/><span style="color:red">*</span><obs id="hivArtDateStoppedValue" conceptId="806195ad-9f5c-42f0-ad9f-736a21a1dac1" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
+                        <td id="reasonStoppedTd"><div><lookup expression="fn.getConcept('9c65e0a7-8c12-46d4-8ad2-da1aa37b8276').name"/><obs conceptId="9c65e0a7-8c12-46d4-8ad2-da1aa37b8276" defaultObsDatetime="now"/></div></td>
+                    </tr>
+                    <tr>
+                        <td id="regimenValueTd"><div><span class="left">First line regimen</span><span style="color:red">*</span><br></br><span id="regimenValue"><regimen conceptId="c7e17ce8-d832-4349-a326-b20f5ae7f432" addNew="false"/></span></div></td>
+                        <td><div><span class="left"><lookup expression="fn.getConcept('324f28ab-cfa7-46ac-99f3-c7d928ba5e79').name"/></span><br></br><obs id="artType" conceptId="324f28ab-cfa7-46ac-99f3-c7d928ba5e79" defaultObsDatetime="now"/></div></td>
+                    </tr>
+                    <tr id="interruptionOptionsTr">
+                        <td><div id="interruptionOptionsDiv"><span class="left"><lookup expression="fn.getConcept('ecab0816-0f06-47cd-aa4d-68f428a26f3f').name"/></span>
+                            <br></br>
+                            <br></br>
+                            <div id="radioDiv" style="display: flex;"><obs conceptId="ecab0816-0f06-47cd-aa4d-68f428a26f3f" style="yes_no" defaultObsDatetime="now" /></div></div>
+                        </td>
+                    </tr>
+                    <tr id="interruptionOptionsTrToHide">
+                        <td><div><span class="left"><lookup expression="fn.getConcept('dca99985-a303-4418-a440-d2af44f62c4b').name"/></span><obs conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" /></div></td>
+                        <td><div><span class="left"><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span><obs conceptId="30d09891-6bae-492c-b45b-ebe142837497" /></div></td>
+                        <td><div><span class="left"><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span><obs conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false" /></div></td>
+                    </tr>
+            </table>
+        </obsgroup>
         <br></br>
         <br></br>
     </ifMode>
 
     <ifMode mode="EDIT">
-
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -606,7 +612,7 @@
                                 <tr id="{n}-mainRowART" class="mainRowARTClass">
                                     <td class="headerRow"><span><h3><obs id="{n}-ARTDateStarted" conceptId="ddfdf4fa-1d0a-40ca-8930-ad914bd07b23"/></h3></span></td>
                                     <td class="headerRow"><span><h3><obs id="{n}-ARTDateStopped" conceptId="806195ad-9f5c-42f0-ad9f-736a21a1dac1"/></h3></span></td>
-                                    <td class="headerRow"><span><h3><obs id="{n}-ARTFirstLineRegimen" conceptId="c7e17ce8-d832-4349-a326-b20f5ae7f432"/></h3></span></td>
+                                    <td class="headerRow regimenTd"><span id="{n}-regimenSpan"><h3><regimen conceptId="c7e17ce8-d832-4349-a326-b20f5ae7f432" addNew="false"/></h3></span></td>
                                     <td class="headerRow"><span><h3><obs id="{n}-ARTType" conceptId="324f28ab-cfa7-46ac-99f3-c7d928ba5e79"/></h3></span></td>
                                     <td><span><div><input id="{n}-removeArtButton" class="removeArtButtonClass" type="button" value="X" title="Remove ART"/></div></span></td>
                                 </tr>
@@ -615,116 +621,136 @@
                                     <td class="detailsRow"><span><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span></td>
                                     <td class="detailsRow"><span><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span></td>
                                 </tr>
-                                <tr id="{n}-1-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-1-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-1-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-1-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-1-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-1-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-2-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-2-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-2-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-2-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-2-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-2-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-3-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-3-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-3-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-3-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-3-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-3-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-4-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-4-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-4-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-4-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-4-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-4-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-5-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-5-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-5-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-5-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-5-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-5-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-6-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-6-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-6-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-6-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-6-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-6-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-7-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-7-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-7-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-7-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-7-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-7-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-8-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-8-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-8-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-8-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-8-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-8-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-9-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-9-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-9-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-9-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-9-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-9-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="{n}-10-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
-                                    <td class="detailsRow"><obs id="{n}-10-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
-                                    <td class="detailsRow"><obs id="{n}-10-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
-                                    <td class="detailsRow"><obs id="{n}-10-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
-                                    <td>
-                                        <div style="display: flex;">
-                                            <span><div><input id="{n}-10-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
-                                            <span><div><input id="{n}-10-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-1-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-1-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-1-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-1-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-1-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-1-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-2-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-2-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-2-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-2-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-2-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-2-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-3-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-3-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-3-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-3-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-3-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-3-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-4-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-4-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-4-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-4-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-4-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-4-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-5-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-5-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-5-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-5-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-5-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-5-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-6-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-6-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-6-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-6-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-6-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-6-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-7-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-7-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-7-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-7-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-7-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-7-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-8-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-8-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-8-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-8-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-8-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-8-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-9-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-9-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-9-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-9-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-9-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-9-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
+                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
+                                    <tr id="{n}-10-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
+                                        <td class="detailsRow"><obs id="{n}-10-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
+                                        <td class="detailsRow"><obs id="{n}-10-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
+                                        <td class="detailsRow"><obs id="{n}-10-interruptionRestartDate" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e"/></td>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <span><div><input id="{n}-10-addInterruptionButton" class="addNewInterruptionButtonClass" type="button" value="+" title="Add new interruption"/></div></span>
+                                                <span><div><input id="{n}-10-removeInterruptionButton" class="removeInterruptionButtonClass" type="button" value="-" title="Remove interruption"/></div></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </obsgroup>
                             </obsgroup>
                         </table>
                         <div id="{n}-noInterruptionsRow" style="display: none;" class="noInterruptionsClass">
@@ -754,18 +780,17 @@
         </div>
         <br></br>
         <br></br>
-
         <div id="addNewArtDiv" style="display:none;">
-            <obs conceptId="20fb8dc4-b958-4c88-b9a7-96ea36b4b0ef" answerConceptId="c8537436-e345-444b-a26a-6e03562b3838" answerLabel="Current regimen" style="checkbox" id="currentRegimen"/><b/>
-            <table>
-                <obsgroup groupingConceptId="7e08e42b-744c-4a33-8a59-e0ec735ffd59">
+            <obsgroup groupingConceptId="7e08e42b-744c-4a33-8a59-e0ec735ffd59">
+                <table>
+                    <obs conceptId="20fb8dc4-b958-4c88-b9a7-96ea36b4b0ef" answerConceptId="c8537436-e345-444b-a26a-6e03562b3838" answerLabel="Current regimen" style="checkbox" id="currentRegimen"/><b/>
                     <tr>
                         <td class="datePickerField"><div><lookup expression="fn.getConcept('ddfdf4fa-1d0a-40ca-8930-ad914bd07b23').name"/><br></br><obs conceptId="ddfdf4fa-1d0a-40ca-8930-ad914bd07b23" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
                         <td id="dateStoppedTd" class="datePickerField"><div><lookup expression="fn.getConcept('806195ad-9f5c-42f0-ad9f-736a21a1dac1').name"/><br></br><obs conceptId="806195ad-9f5c-42f0-ad9f-736a21a1dac1" allowFutureDates="false" allowTime="false" defaultObsDatetime="now"/></div></td>
                         <td id="reasonStoppedTd"><div><lookup expression="fn.getConcept('9c65e0a7-8c12-46d4-8ad2-da1aa37b8276').name"/><br></br><obs conceptId="9c65e0a7-8c12-46d4-8ad2-da1aa37b8276" defaultObsDatetime="now"/></div></td>
                     </tr>
                     <tr>
-                        <td><div><span class="left">First line regimen</span><span style="color:red">*</span><br></br><regimen/></div></td>
+                        <td><div><span class="left">First line regimen</span><br></br><span><regimen conceptId="c7e17ce8-d832-4349-a326-b20f5ae7f432" addNew="true"/></span></div></td>
                         <td><div><span class="left"><lookup expression="fn.getConcept('324f28ab-cfa7-46ac-99f3-c7d928ba5e79').name"/></span><br></br><obs conceptId="324f28ab-cfa7-46ac-99f3-c7d928ba5e79" defaultObsDatetime="now"/></div></td>
                     </tr>
                     <tr id="interruptionOptionsTr">
@@ -778,13 +803,13 @@
                             </div>
                         </td>
                     </tr>
-                    <tr id="interruptionOptionsTrToHide">
-                        <td><div><span class="left"><lookup expression="fn.getConcept('dca99985-a303-4418-a440-d2af44f62c4b').name"/></span><br></br><obs conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" /></div></td>
-                        <td><div><span class="left"><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span><br></br><obs conceptId="30d09891-6bae-492c-b45b-ebe142837497" /></div></td>
-                        <td><div><span class="left"><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span><br></br><obs conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false" /></div></td>
-                    </tr>
-                </obsgroup>
-            </table>
+                        <tr id="interruptionOptionsTrToHide">
+                            <td><div><span class="left"><lookup expression="fn.getConcept('dca99985-a303-4418-a440-d2af44f62c4b').name"/></span><br></br><obs conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" /></div></td>
+                            <td><div><span class="left"><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span><br></br><obs conceptId="30d09891-6bae-492c-b45b-ebe142837497" /></div></td>
+                            <td><div><span class="left"><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span><br></br><obs conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false" /></div></td>
+                        </tr>
+                </table>
+            </obsgroup>
         </div>
     </ifMode>
 
