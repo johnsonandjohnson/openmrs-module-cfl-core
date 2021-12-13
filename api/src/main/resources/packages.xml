@@ -116,7 +116,7 @@
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>20_HIV_Program_Concepts</filenameBase>
-            <groupUuid>23805288-02a2-45b5-8dc4-2cae57254e4b</groupUuid>
+            <groupUuid>be06e5aa-1656-4452-a51b-c1d6c343691c</groupUuid>
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>

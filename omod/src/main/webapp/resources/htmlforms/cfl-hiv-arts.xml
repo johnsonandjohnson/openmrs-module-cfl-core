@@ -621,7 +621,6 @@
                                     <td class="detailsRow"><span><lookup expression="fn.getConcept('30d09891-6bae-492c-b45b-ebe142837497').name"/></span></td>
                                     <td class="detailsRow"><span><lookup expression="fn.getConcept('d9cd2810-d600-47c4-b29c-234c72514b9e').name"/></span></td>
                                 </tr>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-1-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-1-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-1-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -633,8 +632,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-2-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-2-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-2-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -646,8 +643,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-3-mainRowInterruption" class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-3-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-3-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -659,8 +654,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-4-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-4-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-4-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -672,8 +665,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-5-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-5-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-5-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -685,8 +676,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-6-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-6-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-6-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -698,8 +687,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-7-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-7-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-7-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -711,8 +698,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-8-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-8-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-8-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -724,8 +709,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-9-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-9-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-9-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -737,8 +720,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
-                                <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                     <tr id="{n}-10-mainRowInterruption"  class="{n}-mainRowInterruptionClass" style="display: none;">
                                         <td class="detailsRow"><obs id="{n}-10-interruptionDate" conceptId="dca99985-a303-4418-a440-d2af44f62c4b"/></td>
                                         <td class="detailsRow"><obs id="{n}-10-interruptionReason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/></td>
@@ -750,7 +731,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                </obsgroup>
                             </obsgroup>
                         </table>
                         <div id="{n}-noInterruptionsRow" style="display: none;" class="noInterruptionsClass">
