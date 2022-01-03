@@ -282,4 +282,7 @@
     <bean id="cfl.extendedConceptSetDAO" class="org.openmrs.module.cfl.db.impl.ExtendedConceptSetDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="cfl.customVelocityContextContentProvider"
+          class="org.openmrs.module.cfl.api.htmlformentry.context.RegimenContextContentProvider"/>
 </beans>
