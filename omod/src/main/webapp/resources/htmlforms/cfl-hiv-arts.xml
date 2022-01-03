@@ -5,298 +5,300 @@
         /** HTML Forms default styles **/
 
         #metadata {
-        display: none;
+            display: none;
         }
 
         #htmlform {
-        font-family: CircularStd;
-        display: flex;
-        padding: 20px;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.15);
+            font-family: CircularStd;
+            display: flex;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid rgba(0, 0, 0, 0.15);
         }
 
         #htmlform htmlform {
-        width: 100%;
+            width: 100%;
         }
 
         #htmlform htmlform h2 {
-        color: #333333;
+            color: #333333;
         }
 
         #htmlform htmlform h1, h3, h4, h5, h6 {
-        color: inherit !important;
+            color: inherit !important;
         }
 
         #htmlform htmlform input,
         #htmlform htmlform label {
-        margin-top: 0;
-        margin-bottom: 0;
-
+            margin-top: 0;
+            margin-bottom: 0;
         }
 
         #htmlform htmlform .obs-field {
-        <!--        display: flex;-->
-        align-items: flex-start;
+            align-items: flex-start;
         }
 
         #htmlform htmlform table {
-        margin: 10px 0;
+            margin: 10px 0;
         }
 
         #htmlform htmlform table tr {
-        padding: 5px 0;
-        border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
+            padding: 5px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
         }
 
         #htmlform htmlform table td {
-        background-color: white !important;
-        cursor: default;
-        padding: 20px 0;
+            background-color: white !important;
+            cursor: default;
+            padding: 20px 0;
         }
 
         #htmlform htmlform table td[style*="display: none;"] {
-        display: table-cell !important;
+            display: table-cell !important;
         }
 
         #htmlform htmlform table td[style*="display: none;"] * {
-        display: none;
+            display: none;
         }
 
         #htmlform htmlform .section {
-        border: none;
+            border: none;
         }
 
         #htmlform htmlform input,
         #htmlform htmlform select,
         #htmlform htmlform textarea,
         #htmlform htmlform ul.select {
-        background-color: white;
+            background-color: white;
         }
 
         #htmlform htmlform input[type='button'] {
-        font-family: CircularStd;
-        font-size: 13px !important;
-        border: 1px solid #6c757d !important;
-        margin-right: 0.75rem !important;
-        border-radius: 4px !important;
-        line-height: 1.5;
+            font-family: CircularStd;
+            font-size: 13px !important;
+            border: 1px solid #6c757d !important;
+            margin-right: 0.75rem !important;
+            border-radius: 4px !important;
+            line-height: 1.5;
         }
 
         #htmlform htmlform input.addNewInterruptionButtonClass[type='button'] {
-        border-radius: 0px !important;
-        padding: 0px 10px !important;
-        font-size: 20px !important;
-        font-weight: bold;
-        height: 35px;
-        width: 35px;
+            border-radius: 0px !important;
+            padding: 0px 10px !important;
+            font-size: 20px !important;
+            font-weight: bold;
+            height: 35px;
+            width: 35px;
         }
 
         #htmlform htmlform input.removeInterruptionButtonClass[type='button'] {
-        border-radius: 0px !important;
-        padding: 0px 10px !important;
-        font-size: 20px !important;
-        font-weight: bold;
-        height: 35px;
-        width: 35px;
+            border-radius: 0px !important;
+            padding: 0px 10px !important;
+            font-size: 20px !important;
+            font-weight: bold;
+            height: 35px;
+            width: 35px;
         }
 
         #htmlform htmlform input.addNewInterruptionButtonIfEmptyClass[type='button'] {
-        border-radius: 0px !important;
-        padding: 0px 10px !important;
-        font-size: 20px !important;
-        font-weight: bold;
-        height: 35px;
-        width: 35px;
-        margin-left: 10px;
+            border-radius: 0px !important;
+            padding: 0px 10px !important;
+            font-size: 20px !important;
+            font-weight: bold;
+            height: 35px;
+            width: 35px;
+            margin-left: 10px;
         }
 
         #htmlform htmlform input.removeArtButtonClass[type='button'] {
-        border-radius: 0px !important;
-        padding: 0px 10px !important;
-        font-size: 20px !important;
-        font-weight: bold;
+            border-radius: 0px !important;
+            padding: 0px 10px !important;
+            font-size: 20px !important;
+            font-weight: bold;
         }
 
         #htmlform htmlform button.confirm,
         #htmlform htmlform input.confirm {
-        background: #00455c;
-        border: 1px solid #6c757d !important;
-        font-size: 11px !important;
-        text-transform: uppercase;
-        color: white !important;
+            background: #00455c;
+            border: 1px solid #6c757d !important;
+            font-size: 11px !important;
+            text-transform: uppercase;
+            color: white !important;
         }
 
         #htmlform htmlform button.cancel,
         #htmlform htmlform input.cancel {
-        background: none !important;
-        border: 1px solid #00455c !important;
-        color: #00455c !important;
-        padding: 8px 20px;
+            background: none !important;
+            border: 1px solid #00455c !important;
+            color: #00455c !important;
+            padding: 8px 20px;
         }
 
         ul.ui-autocomplete {
-        border-radius: 0;
+            border-radius: 0;
         }
 
         ul.ui-autocomplete li.ui-menu-item a {
-        border-radius: 0;
-        border: none;
-        margin: -1px;
+            border-radius: 0;
+            border: none;
+            margin: -1px;
         }
 
         ul.ui-autocomplete li.ui-menu-item a.ui-state-focus,
         ul.ui-autocomplete li.ui-menu-item a.ui-state-hover {
-        background: #e4e7e7 !important;
+            background: #e4e7e7 !important;
         }
 
         #htmlform htmlform input,
         #htmlform htmlform select {
-        color: inherit !important;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+            color: inherit !important;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
         }
 
         #htmlform htmlform input:focus,
         #htmlform htmlform select:focus {
-        outline: none !important;
-        border: 1px solid #AEC2D5 !important;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+            outline: none !important;
+            border: 1px solid #AEC2D5 !important;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
         }
 
         #ui-datepicker-div {
-        color: #2B3640;
+            color: #2B3640;
         }
 
         #ui-datepicker-div .ui-datepicker-header {
-        background: none;
-        border: none;
+            background: none;
+            border: none;
         }
 
         #ui-datepicker-div .ui-datepicker-header .ui-datepicker-prev,
         #ui-datepicker-div .ui-datepicker-header .ui-datepicker-next {
-        background: none;
-        border: none;
+            background: none;
+            border: none;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td {
-        background: inherit !important;
+            background: inherit !important;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td:hover {
-        background: inherit !important;
+            background: inherit !important;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-default {
-        background: white !important;
+            background: white !important;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-hover {
-        background: #e4e7e7 !important;
+            background: #e4e7e7 !important;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-active {
-        background: #00455c !important;
-        color: white;
+            background: #00455c !important;
+            color: white;
         }
 
         #ui-datepicker-div .ui-datepicker-calendar tr td a.ui-state-highlight {
-        border-color: #d3d3d3;
+            border-color: #d3d3d3;
         }
 
         .patient-header .value {
-        color: inherit;
-        font-weight: inherit;
+            color: inherit;
+            font-weight: inherit;
         }
 
         #htmlform htmlform table td.headerRow {
-        cursor: pointer;
-        width: 23%;
-        text-align: center;
+            cursor: pointer;
+            width: 23%;
+            text-align: center;
         }
 
         #htmlform htmlform table td.headerRow input,
         #htmlform htmlform table td.headerRow select {
-        display: inline-block;
-        float: center;
+            display: inline-block;
+            float: center;
         }
 
         #htmlform htmlform .error {
-        color: red;
+            color: red;
         }
 
         #htmlform htmlform table td.detailsRow {
-        text-align: center;
-        background-color: #ededed !important;
-        cursor: default;
-        padding: 20px 0;
+            text-align: center;
+            background-color: #ededed !important;
+            cursor: default;
+            padding: 20px 0;
         }
 
         #htmlform htmlform table td.titleRowTd {
-        text-align: center;
-        background-color: #ededed !important;
-        cursor: default;
-        padding: 20px 0;
-        width: 23%;
+            text-align: center;
+            background-color: #ededed !important;
+            cursor: default;
+            padding: 20px 0;
+            width: 23%;
         }
 
         #htmlform htmlform table td.detailsRow input,
         #htmlform htmlform table td.detailsRow select {
-        display: inline-block;
-        float: center;
+            display: inline-block;
+            float: center;
         }
 
         .addNewInterruptionButtonClass {
-        font-size: 20px !important;
-        padding: 0px 10px !important;
+            font-size: 20px !important;
+            padding: 0px 10px !important;
         }
 
         .removeInterruptionButtonClass {
-        font-size: 20px !important;
-        padding: 0px 10px !important;
+            font-size: 20px !important;
+            padding: 0px 10px !important;
         }
 
         .removeArtButtonClass {
-        font-size: 20px !important;
-        padding: 0px 10px !important;
+            font-size: 20px !important;
+            padding: 0px 10px !important;
         }
 
         .noInterruptionsClass {
-        justify-content: center;
-        align-items: center;
-        margin-top: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
         }
 
         .drugFieldTd {
-        text-align: center;
-        cursor: default;
-        padding: 20px 0;
-        width: 23%;
+            text-align: center;
+            cursor: default;
+            padding: 20px 0;
+            width: 23%;
         }
 
         #regimenDetailsHeaderTable .regimenDetailsHeaderTd {
-        text-align: center;
-        cursor: default;
-        background-color: #ededed !important;
-        padding: 20px 0;
-        width: 23%;
+            text-align: center;
+            cursor: default;
+            background-color: #ededed !important;
+            padding: 20px 0;
+            width: 23%;
         }
 
         #radioDiv label {
-        margin-top: -5px !important;
+            margin-top: -5px !important;
         }
 
         span.obs-field.customInput > input {
-        min-width: 200px;
+            min-width: 200px;
         }
 
         #titleDiv {
-        margin-bottom: 20px;
-        margin-top: -20px;
+            margin-bottom: 20px;
+            margin-top: -20px;
         }
 
         .disabledElem {
-        background-color: #EAEAEA !important;
+            background-color: #EAEAEA !important;
+        }
+
+        .alignInput {
+            margin-top: 20px !important;
         }
 
     </style>
@@ -334,41 +336,17 @@
         <script type="text/javascript">
             $(document).ready(function() {
 
-            const handleRegimenChange = function() {
-            $('#regimenValue > select').change(function () {
-            var selectedValue = $(this).val();
-            var regimensInfo = $('#regimensInfo').text().trim();
-            var splittedRegimens = regimensInfo.split('|');
-            $('#regimenDetailsTable').empty();
-            for (var i = 0; i &lt; splittedRegimens.length; i++) {
-            var splittedRegimenDetails = splittedRegimens[i].split(':');
-            if (splittedRegimenDetails[0] == selectedValue) {
-            var splittedRegimenDrugDetails = splittedRegimenDetails[1].split(';');
-            for (var j=0; j &lt; splittedRegimenDrugDetails.length; j++) {
-            var splittedRegimenDrugDetailsObject = splittedRegimenDrugDetails[j];
-            if (splittedRegimenDrugDetailsObject.length != 0) {
-            var drugFields = splittedRegimenDrugDetailsObject.split('_');
-            $('#regimenDetailsTable').append('<tr><td class="drugFieldTd">' + drugFields[0] + '</td><td class="drugFieldTd">' + drugFields[1] + '</td><td class="drugFieldTd">' + drugFields[2] + '</td><td class="drugFieldTd">' + drugFields[3] + '</td></tr>');
-            }
-            }
-            }
-            }
-            $('#regimenDetailsDiv').show();
-            })
-            }
+                const handleCancelButtonClick = function() {
+                    $('#cancelButton').click(() => {
+                        var queryParams = new URLSearchParams(window.location.search);
+                        if (queryParams.has('patientId')) {
+                            window.location.replace("/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + queryParams.get('patientId'));
+                        }
+                    });
+                }
 
-            const handleCancelButtonClick = function() {
-            $('#cancelButton').click(() => {
-            var queryParams = new URLSearchParams(window.location.search);
-            if (queryParams.has('patientId')) {
-            window.location.replace("/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + queryParams.get('patientId'));
-            }
-            });
-            }
-
-            //executions
-            handleRegimenChange();
-            handleCancelButtonClick();
+                //executions
+                handleCancelButtonClick();
             });
 
         </script>
@@ -378,128 +356,153 @@
         <script type="text/javascript">
             beforeSubmit.push(function() {
 
-            var isValidForm = true;
+                var isValidForm = true;
 
-            //validation of HIV ART Date Started in ENTER mode
-            var hivArtDateStartedValue = getValue('hivArtDateStarted.value');
-            var hivArtDateStartedErrorField = getField('hivArtDateStarted.error');
-            hivArtDateStartedErrorField.hide();
-            if (hivArtDateStartedValue == null || hivArtDateStartedValue == '') {
-            hivArtDateStartedErrorField.html("Required").show();
-            isValidForm = false;
-            }
+                //validation of HIV ART Date Started in ENTER mode
+                var hivArtDateStartedValue = getValue('hivArtDateStarted.value');
+                var hivArtDateStartedErrorField = getField('hivArtDateStarted.error');
+                hivArtDateStartedErrorField.hide();
+                if (hivArtDateStartedValue == null || hivArtDateStartedValue == '') {
+                    hivArtDateStartedErrorField.html("Required").show();
+                    isValidForm = false;
+                }
 
-            //validation of Regimen value in ENTER mode
-            var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
-            var regimenValue = regimenField.val();
-            var regimenErrorField = regimenField.closest('span').find('.error');
-            regimenErrorField.hide();
-            if (regimenValue == null || regimenValue == '') {
-            regimenErrorField.html("Required").show();
-            isValidForm = false;
-            }
+                //validation of Regimen value in ENTER mode
+                var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
+                var regimenValue = regimenField.val();
+                var regimenErrorField = regimenField.closest('span').find('.error');
+                regimenErrorField.hide();
+                if (regimenValue == null || regimenValue == '') {
+                    regimenErrorField.html("Required").show();
+                    isValidForm = false;
+                }
 
-            //validation of HIV ART Date Stopped in ENTER mode
-            var hivArtDateStoppedValue = getValue('hivArtDateStopped.value');
-            var hivArtDateStoppedErrorField = getField('hivArtDateStopped.error');
-            hivArtDateStoppedErrorField.hide();
-            if (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '') {
-            if (!$('#currentRegimen > input[type="checkbox"]').is(":checked")) {
-            hivArtDateStoppedErrorField.html("Required").show();
-            isValidForm = false;
-            }
-            }
+                //validation of HIV ART Date Stopped in ENTER mode
+                var hivArtDateStoppedValue = getValue('hivArtDateStopped.value');
+                var hivArtDateStoppedErrorField = getField('hivArtDateStopped.error');
+                hivArtDateStoppedErrorField.hide();
+                if (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '') {
+                    if (!$('#currentRegimen > input[type="checkbox"]').is(":checked")) {
+                        hivArtDateStoppedErrorField.html("Required").show();
+                        isValidForm = false;
+                    }
+                }
 
-            //validation of ART interruption date in ENTER mode
-            if ($('#interruptionOptionsTrToHide').is(':visible')) {
-            var artInterruptionDateValue = getValue('artInterruptionDate.value');
-            var artInterruptionErrorField = getField('artInterruptionDate.error');
-            artInterruptionErrorField.hide();
-            if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
-            artInterruptionErrorField.html("Required").show();
-            isValidForm = false;
-            }
-            }
+                //validation of ART interruption date in ENTER mode
+                if ($('#interruptionOptionsTrToHide').is(':visible')) {
+                    var artInterruptionDateValue = getValue('artInterruptionDate.value');
+                    var artInterruptionErrorField = getField('artInterruptionDate.error');
+                    artInterruptionErrorField.hide();
+                    if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
+                        artInterruptionErrorField.html("Required").show();
+                        isValidForm = false;
+                    }
+                }
 
-            if (isValidForm == false) {
-            return false;
-            }
+                if (isValidForm == false) {
+                    return false;
+                }
 
-            return true;
+                return true;
             });
 
 
             $(document).ready(function() {
 
-            const setCurrentRegimenActiveByDefault = function(selector) {
-            const checkboxSelector = selector + ' > input[type=checkbox]';
-            $(checkboxSelector).prop("checked", true);
-            $('#dateStoppedTd').hide();
-            $('#reasonStoppedTd').hide();
-            }
+                const setCurrentRegimenActiveByDefault = function(selector) {
+                    const checkboxSelector = selector + ' > input[type=checkbox]';
+                    $(checkboxSelector).prop("checked", true);
+                    $('#dateStoppedTd').hide();
+                    $('#reasonStoppedTd').hide();
+                }
 
-            const addTogglingFieldsVisibilityToCurrentRegimentCheckbox = function(selector) {
-            const checkboxSelector = selector + ' > input[type=checkbox]';
-            const isCheckedSelector = checkboxSelector + ':checked';
-            const toggleInputVisibility = function() {
-            if ($(isCheckedSelector).length) {
-            $('#dateStoppedTd').hide();
-            $('#reasonStoppedTd').hide();
-            } else {
-            $('#dateStoppedTd').show();
-            $('#reasonStoppedTd').show();
-            }
-            }
-            $(checkboxSelector).click(() => toggleInputVisibility());
-            }
+                const addTogglingFieldsVisibilityToCurrentRegimentCheckbox = function(selector) {
+                    const checkboxSelector = selector + ' > input[type=checkbox]';
+                    const isCheckedSelector = checkboxSelector + ':checked';
+                    const toggleInputVisibility = function() {
+                    if ($(isCheckedSelector).length) {
+                        $('#dateStoppedTd').hide();
+                        $('#reasonStoppedTd').hide();
+                    } else {
+                        $('#dateStoppedTd').show();
+                        $('#reasonStoppedTd').show();
+                        }
+                    }
+                    $(checkboxSelector).click(() => toggleInputVisibility());
+                }
 
-            const addTogglingFieldsVisibilityToArtInterruptionsRadioButton = function() {
-            $('#radioDiv > input[type=radio]').click(function() {
-            if ($(this).val() === "true") {
-            $('#interruptionOptionsTrToHide').show();
-            $('#interruptionOptionsTrToHide').show();
-            } else if ($(this).val() === "false") {
-            $('#interruptionOptionsTrToHide').hide();
-            $('#interruptionOptionsTrToHide').hide();
-            }
-            });
-            }
+                const addTogglingFieldsVisibilityToArtInterruptionsRadioButton = function() {
+                    $('#radioDiv > input[type=radio]').click(function() {
+                        if ($(this).val() === "true") {
+                            $('#interruptionOptionsTrToHide').show();
+                            $('#interruptionOptionsTrToHide').show();
+                        } else if ($(this).val() === "false") {
+                            $('#interruptionOptionsTrToHide').hide();
+                            $('#interruptionOptionsTrToHide').hide();
+                        }
+                    });
+                }
 
-            const setARTInterruptionsHiddenByDefault = function() {
-            $('#interruptionOptionsDiv > input[type=radio]').prop( "checked", true );
-            $('#interruptionOptionsTrToHide').hide();
-            $('#interruptionOptionsTrToHide').hide();
-            }
+                const setARTInterruptionsHiddenByDefault = function() {
+                    $('#interruptionOptionsDiv > input[type=radio]').prop( "checked", true );
+                    $('#interruptionOptionsTrToHide').hide();
+                    $('#interruptionOptionsTrToHide').hide();
+                }
 
-            const handleRegimenChange = function() {
-            $('#regimenValue > select').change(function () {
-            var selectedValue = $(this).val();
-            var regimensInfo = $('#regimensInfo').text().trim();
-            var splittedRegimens = regimensInfo.split('|');
-            $('#regimenDetailsTable').empty();
-            for (var i = 0; i &lt; splittedRegimens.length; i++) {
-            var splittedRegimenDetails = splittedRegimens[i].split(':');
-            if (splittedRegimenDetails[0] == selectedValue) {
-            var splittedRegimenDrugDetails = splittedRegimenDetails[1].split(';');
-            for (var j=0; j &lt; splittedRegimenDrugDetails.length; j++) {
-            var splittedRegimenDrugDetailsObject = splittedRegimenDrugDetails[j];
-            if (splittedRegimenDrugDetailsObject.length != 0) {
-            var drugFields = splittedRegimenDrugDetailsObject.split('_');
-            $('#regimenDetailsTable').append('<tr><td class="drugFieldTd">' + drugFields[0] + '</td><td class="drugFieldTd">' + drugFields[1] + '</td><td class="drugFieldTd">' + drugFields[2] + '</td><td class="drugFieldTd">' + drugFields[3] + '</td></tr>');
-            }
-            }
-            }
-            }
+                const handleOnChange = function(field) {
+                    $('#' + field).change(function () {
+                        var fieldValue = getValue(field + '.value');
+                        var errorField = getField(field + '.error');
+                        if (fieldValue == null || fieldValue == '') {
+                            errorField.html("Required").show();
+                            $('#' + field).parent().addClass("alignInput");
+                        } else {
+                            errorField.hide();
+                            $('#' + field).parent().removeClass("alignInput");
+                        }
+                    })
+                }
 
-            $('#regimenDetailsDiv').show();
-            })
-            }
+                const handleRegimenChange = function(field) {
+                    $(field).change(function () {
+                        var selectedValue = $(this).val();
+                        var regimensInfo = $('#regimensInfo').text().trim();
+                        var splittedRegimens = regimensInfo.split('|');
+                        $('#regimenDetailsTable').empty();
+                        var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
+                        var regimenErrorField = regimenField.closest('span').find('.error');
+                        if (selectedValue != '') {
+                            for (var i = 0; i &lt; splittedRegimens.length; i++) {
+                            var splittedRegimenDetails = splittedRegimens[i].split(':');
+                                if (splittedRegimenDetails[0] == selectedValue) {
+                                    var splittedRegimenDrugDetails = splittedRegimenDetails[1].split(';');
+                                    for (var j=0; j &lt; splittedRegimenDrugDetails.length; j++) {
+                                        var splittedRegimenDrugDetailsObject = splittedRegimenDrugDetails[j];
+                                        if (splittedRegimenDrugDetailsObject.length != 0) {
+                                            var drugFields = splittedRegimenDrugDetailsObject.split('_');
+                                            $('#regimenDetailsTable').append('<tr><td class="drugFieldTd">' + drugFields[0] + '</td><td class="drugFieldTd">' + drugFields[1] + '</td><td class="drugFieldTd">' + drugFields[2] + '</td><td class="drugFieldTd">' + drugFields[3] + '</td></tr>');
+                                        }
+                                    }
+                                }
+                            }
+                            $('#regimenDetailsDiv').show();
+                            regimenErrorField.html("Required").hide();
+                        } else {
+                            $('#regimenDetailsDiv').hide();
+                            regimenErrorField.html("Required").show();
+                        }
+                    })
+                }
 
-            //executions
-            setCurrentRegimenActiveByDefault('#currentRegimen');
-            addTogglingFieldsVisibilityToCurrentRegimentCheckbox('#currentRegimen');
-            setARTInterruptionsHiddenByDefault();
-            addTogglingFieldsVisibilityToArtInterruptionsRadioButton();
+                //executions
+                setCurrentRegimenActiveByDefault('#currentRegimen');
+                addTogglingFieldsVisibilityToCurrentRegimentCheckbox('#currentRegimen');
+                setARTInterruptionsHiddenByDefault();
+                addTogglingFieldsVisibilityToArtInterruptionsRadioButton();
+                handleOnChange('hivArtDateStarted');
+                handleOnChange('hivArtDateStopped');
+                handleRegimenChange('#regimenValue > select');
+                handleOnChange('artInterruptionDate');
             });
         </script>
 
@@ -563,343 +566,436 @@
         <script type="text/javascript">
             beforeSubmit.push(function() {
 
-            var isValidForm = true;
+                var isValidForm = true;
 
-            // validation of ART interruption date fields in EDIT mode
-            for (i = 1; i &lt; 11; i++) {
-            for (j = 1; j &lt; 11; j++) {
-            var interruptionRowElem = $('#' + i + '-' + j + '-mainRowInterruption:visible');
-            if (interruptionRowElem.length) {
-            var artInterruptionDateValue = getValue(i + '-' + j + '-interruptionDate.value');
-            var artInterruptionDateErrorField = getField(i + '-' + j + '-interruptionDate.error');
-            artInterruptionDateErrorField.hide();
-            if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
-            artInterruptionDateErrorField.html("Required").show();
-            if (!artInterruptionDateErrorField.prev().is('br')) {
-            $('<br></br>').insertBefore(artInterruptionDateErrorField);
-            }
-            isValidForm = false;
-            }
-            }
-            }
-            }
+                // validation of ART interruption date fields in EDIT mode
+                for (i = 1; i &lt; 11; i++) {
+                    for (j = 1; j &lt; 11; j++) {
+                        var interruptionRowElem = $('#' + i + '-' + j + '-mainRowInterruption:visible');
+                        if (interruptionRowElem.length) {
+                            var artInterruptionDateValue = getValue(i + '-' + j + '-interruptionDate.value');
+                            var artInterruptionDateErrorField = getField(i + '-' + j + '-interruptionDate.error');
+                            artInterruptionDateErrorField.hide();
+                            if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
+                                artInterruptionDateErrorField.html("Required").show();
+                                if (!artInterruptionDateErrorField.prev().is('br')) {
+                                    $('<br></br>').insertBefore(artInterruptionDateErrorField);
+                                }
+                                isValidForm = false;
+                            }
+                        }
+                    }
+                }
 
-            // validation of ART main fields (HIV ART Date Started, HIV ART Date Stopped, Regimen) in EDIT mode
-            for (i = 1; i &lt; 11; i++) {
-            //HIV ART Date Started validation
-            var hivArtDateStartedValue = getValue(i + '-ARTDateStarted.value');
-            var hivArtDateStartedErrorField = getField(i + '-ARTDateStarted.error');
-            hivArtDateStartedErrorField.hide();
-            if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivArtDateStartedValue == null || hivArtDateStartedValue == '')) {
-            hivArtDateStartedErrorField.html("Required").show();
-            if (!hivArtDateStartedErrorField.prev().is('br')) {
-            $('<br></br>').insertBefore(hivArtDateStartedErrorField);
-            }
-            isValidForm = false;
-            }
+                // validation of ART main fields (HIV ART Date Started, HIV ART Date Stopped, Regimen) in EDIT mode
+                for (i = 1; i &lt; 11; i++) {
+                    //HIV ART Date Started validation
+                    var hivArtDateStartedValue = getValue(i + '-ARTDateStarted.value');
+                    var hivArtDateStartedErrorField = getField(i + '-ARTDateStarted.error');
+                    hivArtDateStartedErrorField.hide();
+                    if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivArtDateStartedValue == null || hivArtDateStartedValue == '')) {
+                        hivArtDateStartedErrorField.html("Required").show();
+                        if (!hivArtDateStartedErrorField.prev().is('br')) {
+                            $('<br></br>').insertBefore(hivArtDateStartedErrorField);
+                        }
+                        isValidForm = false;
+                    }
 
-            //Regimen value validation
-            var hivRegimenField = $('#' + i + '-regimenSpan select');
-            var hivRegimenValue = hivRegimenField.val();
-            var spanError = hivRegimenField.closest('span').find('.error');
-            spanError.hide();
-            if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivRegimenValue == null || hivRegimenValue == '')) {
-            spanError.html("Required").show();
-            if (!spanError.prev().is('br')) {
-            $('<br></br>').insertBefore(spanError);
-            }
-            isValidForm = false;
-            }
+                    //Regimen value validation
+                    var hivRegimenField = $('#' + i + '-regimenSpan select');
+                    var hivRegimenValue = hivRegimenField.val();
+                    var spanError = hivRegimenField.closest('span').find('.error');
+                    spanError.hide();
+                    if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivRegimenValue == null || hivRegimenValue == '')) {
+                        spanError.html("Required").show();
+                        if (!spanError.prev().is('br')) {
+                            $('<br></br>').insertBefore(spanError);
+                        }
+                        isValidForm = false;
+                    }
 
-            //HIV ART Date Stopped validation
-            if (getValue(i + '-currentRegimen.value') == null) {
-            var hivArtDateStoppedValue = getValue(i + '-ARTDateStopped.value');
-            var hivArtDateStoppedErrorField = getField(i + '-ARTDateStopped.error');
-            hivArtDateStoppedErrorField.hide();
-            if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '')) {
-            hivArtDateStoppedErrorField.html("Required").show();
-            if (!hivArtDateStoppedErrorField.prev().is('br')) {
-            $('<br></br>').insertBefore(hivArtDateStoppedErrorField);
-            }
-            isValidForm = false;
-            }
-            }
-            }
+                    //HIV ART Date Stopped validation
+                    if (getValue(i + '-currentRegimen.value') == null) {
+                        var hivArtDateStoppedValue = getValue(i + '-ARTDateStopped.value');
+                        var hivArtDateStoppedErrorField = getField(i + '-ARTDateStopped.error');
+                        hivArtDateStoppedErrorField.hide();
+                        if (($('#' + i + '-ART:visible').length) &amp;&amp; (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '')) {
+                            hivArtDateStoppedErrorField.html("Required").show();
+                            if (!hivArtDateStoppedErrorField.prev().is('br')) {
+                                $('<br></br>').insertBefore(hivArtDateStoppedErrorField);
+                            }
+                            isValidForm = false;
+                        }
+                    }
+                }
 
+                //Add new ART form validation in EDIT mode
+                if ($('#addNewArtDiv').is(':visible')) {
+                    //validation of HIV ART Date Started in EDIT mode
+                    var hivArtDateStartedValue = getValue('artDateStartedInEditMode.value');
+                    var hivArtDateStartedErrorField = getField('artDateStartedInEditMode.error');
+                    hivArtDateStartedErrorField.hide();
+                    if (hivArtDateStartedValue == null || hivArtDateStartedValue == '') {
+                        hivArtDateStartedErrorField.html("Required").show();
+                        isValidForm = false;
+                    }
 
-            //Add new ART form validation in EDIT mode
-            if ($('#addNewArtDiv').is(':visible')) {
+                    //validation of Regimen value in EDIT mode
+                    var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
+                    var regimenValue = regimenField.val();
+                    var regimenErrorField = regimenField.closest('span').find('.error');
+                    regimenErrorField.hide();
+                    if (regimenValue == null || regimenValue == '') {
+                        regimenErrorField.html("Required").show();
+                        isValidForm = false;
+                    }
 
-            //validation of HIV ART Date Started in EDIT mode
-            var hivArtDateStartedValue = getValue('artDateStartedInEditMode.value');
-            var hivArtDateStartedErrorField = getField('artDateStartedInEditMode.error');
-            hivArtDateStartedErrorField.hide();
-            if (hivArtDateStartedValue == null || hivArtDateStartedValue == '') {
-            hivArtDateStartedErrorField.html("Required").show();
-            isValidForm = false;
-            }
+                    //validation of HIV ART Date Stopped in EDIT mode
+                    var hivArtDateStoppedValue = getValue('artDateStoppedInEditMode.value');
+                    var hivArtDateStoppedErrorField = getField('artDateStoppedInEditMode.error');
+                    hivArtDateStoppedErrorField.hide();
+                    if (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '') {
+                        if (!$('#currentRegimenForNewArt > input[type="checkbox"]').is(":checked")) {
+                            hivArtDateStoppedErrorField.html("Required").show();
+                            isValidForm = false;
+                        }
+                    }
 
-            //validation of Regimen value in EDIT mode
-            var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
-            var regimenValue = regimenField.val();
-            var regimenErrorField = regimenField.closest('span').find('.error');
-            regimenErrorField.hide();
-            if (regimenValue == null || regimenValue == '') {
-            regimenErrorField.html("Required").show();
-            isValidForm = false;
-            }
+                    //validation of ART interruption date in EDIT mode
+                    if ($('#interruptionOptionsTrToHide').is(':visible')) {
+                        var artInterruptionDateValue = getValue('artInterruptionDateInEditMode.value');
+                        var artInterruptionErrorField = getField('artInterruptionDateInEditMode.error');
+                        artInterruptionErrorField.hide();
+                        if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
+                            artInterruptionErrorField.html("Required").show();
+                            isValidForm = false;
+                        }
+                    }
+                }
 
-            //validation of HIV ART Date Stopped in EDIT mode
-            var hivArtDateStoppedValue = getValue('artDateStoppedInEditMode.value');
-            var hivArtDateStoppedErrorField = getField('artDateStoppedInEditMode.error');
-            hivArtDateStoppedErrorField.hide();
-            if (hivArtDateStoppedValue == null || hivArtDateStoppedValue == '') {
-            if (!$('#currentRegimenForNewArt > input[type="checkbox"]').is(":checked")) {
-            hivArtDateStoppedErrorField.html("Required").show();
-            isValidForm = false;
-            }
-            }
+                if (isValidForm == false) {
+                    return false;
+                }
 
-            //validation of ART interruption date in EDIT mode
-            if ($('#interruptionOptionsTrToHide').is(':visible')) {
-            var artInterruptionDateValue = getValue('artInterruptionDateInEditMode.value');
-            var artInterruptionErrorField = getField('artInterruptionDateInEditMode.error');
-            artInterruptionErrorField.hide();
-            if (artInterruptionDateValue == null || artInterruptionDateValue == '') {
-            artInterruptionErrorField.html("Required").show();
-            isValidForm = false;
-            }
-            }
-            }
-
-
-            if (isValidForm == false) {
-            return false;
-            }
-
-            return true;
+                return true;
             });
-
 
             $(document).ready(function() {
 
-            const handleAddNewArtButton = function() {
-            $('#addNewArtButton').click(() => {
-            $('#addNewArtDiv').slideToggle();
-            $('html, body').animate({
-            scrollTop: $("#buttons").offset().top
-            }, 1000);
-            });
-            }
+                const handleAddNewArtButton = function() {
+                    $('#addNewArtButton').click(() => {
+                        $('#addNewArtDiv').slideToggle();
+                        $('html, body').animate({
+                            scrollTop: $("#buttons").offset().top
+                        }, 1000);
+                    });
+                }
 
-            const handleAccordionForARTDetails = function() {
-            $('.artTableClass').find('tr.mainRowARTClass').click(function() {
-            var elemId = $(this).attr('id');
-            var currentId = parseFloat(elemId);
-            var isEmptyInterruptions = true;
-            if ($('#' + currentId + '-headerRowInterruption:visible').length ||
-            $('#' + currentId + '-noInterruptionsRow:visible').length) {
+                const handleAccordionForARTDetails = function() {
+                    $('.artTableClass').find('tr.mainRowARTClass').click(function() {
+                        var elemId = $(this).attr('id');
+                        var currentId = parseFloat(elemId);
+                        var isEmptyInterruptions = true;
+                        if ($('#' + currentId + '-headerRowInterruption:visible').length ||
+                            $('#' + currentId + '-noInterruptionsRow:visible').length) {
+                            for (j = 1; j &lt; 11; j++) {
+                                if(j &lt; 10) {
+                                    var fieldValue = getValue(currentId + '-' + j + '-interruptionDate.value');
+                                    var nextId = j + 1;
+                                    var nextFieldValue = getValue(currentId + '-' + nextId + '-interruptionDate.value');
+                                    if (nextFieldValue) {
+                                        $('#' + currentId + '-' + j + '-addInterruptionButton').hide();
+                                    } else {
+                                        $('#' + currentId + '-' + j + '-addInterruptionButton').show();
+                                    }
+                                }
+                            }
+                                $('#' + currentId + '-headerRowInterruption').slideUp();
+                                $('.' + currentId + '-mainRowInterruptionClass').slideUp();
+                                $('#' + currentId + '-noInterruptionsRow').hide();
+                        } else {
+                                for(i = 1; getValue(currentId + '-' + i + '-interruptionDate.value') &amp;&amp; i &lt; 11; i++) {
+                                    isEmptyInterruptions = false;
+                                    $('#' + currentId + '-headerRowInterruption').slideDown();
+                                    $('#' + currentId + '-' + i + '-mainRowInterruption').show();
+                                }
+                                if (isEmptyInterruptions == true) {
+                                        $('#' + currentId + '-noInterruptionsRow').show();
+                                        $('#' + currentId + '-noInterruptionsRow').css('display', 'flex');
+                                }
+                        }
+                    });
+                }
 
-            for (j = 1; j &lt; 11; j++) {
-            if(j &lt; 10) {
-            var fieldValue = getValue(currentId + '-' + j + '-interruptionDate.value');
-            var nextId = j + 1;
-            var nextFieldValue = getValue(currentId + '-' + nextId + '-interruptionDate.value');
-            if (nextFieldValue) {
-            $('#' + currentId + '-' + j + '-addInterruptionButton').hide();
-            } else {
-            $('#' + currentId + '-' + j + '-addInterruptionButton').show();
-            }
-            }
-            }
-            $('#' + currentId + '-headerRowInterruption').slideUp();
-            $('.' + currentId + '-mainRowInterruptionClass').slideUp();
-            $('#' + currentId + '-noInterruptionsRow').hide();
-            } else {
-            for(i = 1; getValue(currentId + '-' + i + '-interruptionDate.value') &amp;&amp; i &lt; 11; i++) {
-            isEmptyInterruptions = false;
-            $('#' + currentId + '-headerRowInterruption').slideDown();
-            $('#' + currentId + '-' + i + '-mainRowInterruption').show();
-            }
-            if (isEmptyInterruptions == true) {
-            $('#' + currentId + '-noInterruptionsRow').show();
-            $('#' + currentId + '-noInterruptionsRow').css('display', 'flex');
-            }
-            }
-            });
-            }
+                const showActiveARTs = function() {
+                    for (i=1; i &lt; 11; i++) {
+                        var fieldValue = getValue(i + '-ARTDateStarted.value');
+                        if (fieldValue) {
+                            var currentArtDiv = $('#' + i + '-ART');
+                            currentArtDiv.show();
+                            if (getValue(i + '-currentRegimen.value') != null) {
+                                var artDateStoppedElement = $('#' + i + '-ARTDateStopped input');
+                                artDateStoppedElement.prop("disabled", true);
+                                artDateStoppedElement.val("");
+                                artDateStoppedElement.addClass("disabledElem");
+                                currentArtDiv.insertBefore($('#1-ART'))
+                            }
+                        }
+                    }
+                }
 
-            const showActiveARTs = function() {
-            for (i=1; i &lt; 11; i++) {
-            var fieldValue = getValue(i + '-ARTDateStarted.value');
-            if (fieldValue) {
-            var currentArtDiv = $('#' + i + '-ART');
-            currentArtDiv.show();
-            if (getValue(i + '-currentRegimen.value') != null) {
-            var artDateStoppedElement = $('#' + i + '-ARTDateStopped input');
-            artDateStoppedElement.prop("disabled", true);
-            artDateStoppedElement.val("");
-            artDateStoppedElement.addClass("disabledElem");
-            currentArtDiv.insertBefore($('#1-ART'))
-            }
-            }
-            }
-            }
+                const showOrHideAddInterruptionsButtons = function() {
+                    for (i = 1; i &lt; 11; i++) {
+                        for (j = 1; j &lt; 11; j++) {
+                            if(j &lt; 10) {
+                                var fieldValue = getValue(i + '-' + j + '-interruptionDate.value');
+                                var nextId = j + 1;
+                                var nextFieldValue = getValue(i + '-' + nextId + '-interruptionDate.value');
+                                if (nextFieldValue) {
+                                    $('#' + i + '-' + j + '-addInterruptionButton').hide();
+                                } else {
+                                    $('#' + i + '-' + j + '-addInterruptionButton').show();
+                                }
+                            }
+                        }
+                    }
+                }
 
-            const showOrHideAddInterruptionsButtons = function() {
-            for (i = 1; i &lt; 11; i++) {
-            for (j = 1; j &lt; 11; j++) {
-            if(j &lt; 10) {
-            var fieldValue = getValue(i + '-' + j + '-interruptionDate.value');
-            var nextId = j + 1;
-            var nextFieldValue = getValue(i + '-' + nextId + '-interruptionDate.value');
-            if (nextFieldValue) {
-            $('#' + i + '-' + j + '-addInterruptionButton').hide();
-            } else {
-            $('#' + i + '-' + j + '-addInterruptionButton').show();
-            }
-            }
-            }
-            }
-            }
+                const handleAddNewInterruptionButtonClick = function() {
+                    $('input.addNewInterruptionButtonClass').click(function() {
+                    var clickedElemId = this.id;
+                    $('#' + clickedElemId).hide();
+                    var artId = parseFloat(clickedElemId);
 
-            const handleAddNewInterruptionButtonClick = function() {
-            $('input.addNewInterruptionButtonClass').click(function() {
-            var clickedElemId = this.id;
-            $('#' + clickedElemId).hide();
-            var firstNumberOfId = parseFloat(clickedElemId);
+                    var startPosition = clickedElemId.indexOf('-') + 1;
+                    var croppedElemId = clickedElemId.substring(startPosition);
+                    var currentId = parseFloat(croppedElemId);
+                    var nextId = currentId + 1;
+                    var htmlElementToShow = '#' + artId + '-' + nextId + '-mainRowInterruption';
+                    $('#' + artId + '-' + nextId + '-addInterruptionButton').show();
+                    $('#' + artId + '-' + nextId + '-removeInterruptionButton').show();
+                    $(htmlElementToShow).show();
 
-            var startPosition = clickedElemId.indexOf('-') + 1;
-            var croppedElemId = clickedElemId.substring(startPosition);
-            var currentId = parseFloat(croppedElemId);
-            var nextId = currentId + 1;
-            var htmlElementToShow = '#' + firstNumberOfId + '-' + nextId + '-mainRowInterruption';
-            $(htmlElementToShow).show();
+                    $('html, body').animate({
+                        scrollTop: $(htmlElementToShow).offset().top
+                    }, 1000);
+                    });
+                }
 
-            $('html, body').animate({
-            scrollTop: $(htmlElementToShow).offset().top
-            }, 1000);
-            });
-            }
+                const handleAddNewInterruptionIfEmptyButtonClick = function() {
+                    $('input.addNewInterruptionButtonIfEmptyClass').click(function() {
+                        var clickedElemId = this.id;
+                        var artId = parseFloat(clickedElemId);
+                        $('#' + artId + '-noInterruptionsRow').hide();
+                        $('#' + artId + '-headerRowInterruption').show();
+                        $('#' + artId + '-1' + '-addInterruptionButton').show();
+                        $('#' + artId + '-1' + '-removeInterruptionButton').show();
+                        $('#' + artId + '-1' + '-mainRowInterruption').show();
 
-            const handleAddNewInterruptionIfEmptyButtonClick = function() {
-            $('input.addNewInterruptionButtonIfEmptyClass').click(function() {
-            var clickedElemId = this.id;
-            var firstNumberOfId = parseFloat(clickedElemId);
-            var interruptionRowElemIdToHide = '#' + firstNumberOfId + '-noInterruptionsRow';
-            $(interruptionRowElemIdToHide).hide();
-            var interruptionHeaderIdToShow = '#' + firstNumberOfId + '-headerRowInterruption';
-            $(interruptionHeaderIdToShow).show();
-            var htmlElementToShow = '#' + firstNumberOfId + '-1' + '-mainRowInterruption';
-            $(htmlElementToShow).show();
-            return false;
-            });
-            }
+                        return false;
+                    });
+                }
 
-            const handleRemoveARTButtonClick = function() {
-            $('input.removeArtButtonClass').click(function() {
-            var clickedElemId = this.id;
-            var prefixId = parseFloat(clickedElemId);
-            setValue(prefixId + '-ARTDateStarted.value', "");
-            $('#' + prefixId + '-ART').hide();
-            });
-            }
+                const handleRemoveARTButtonClick = function() {
+                    $('input.removeArtButtonClass').click(function() {
+                        var clickedElemId = this.id;
+                        var prefixId = parseFloat(clickedElemId);
+                        setValue(prefixId + '-ARTDateStarted.value', "");
+                        $('#' + prefixId + '-ART').hide();
+                    });
+                }
 
-            const handleRemoveInterruptionClick = function() {
-            $('input.removeInterruptionButtonClass').click(function() {
-            var clickedElemId = this.id;
-            var artId = parseFloat(clickedElemId);
-            var startPosition = clickedElemId.indexOf('-') + 1;
-            var extractedInterruptionIdWithoutArtId = clickedElemId.substring(startPosition);
-            var interruptionId = parseFloat(extractedInterruptionIdWithoutArtId);
-            setValue(artId + '-' + interruptionId + '-interruptionDate.value', "");
-            setValue(artId + '-' + interruptionId + '-interruptionReason.value', "");
-            setValue(artId + '-' + interruptionId + '-interruptionRestartDate.value', "");
-            $('#' + artId + '-' + interruptionId + '-mainRowInterruption').hide();
-            });
-            }
+                const handleRemoveInterruptionClick = function() {
+                    $('input.removeInterruptionButtonClass').click(function() {
+                        var clickedElemId = this.id;
+                        var artId = parseFloat(clickedElemId);
+                        var startPosition = clickedElemId.indexOf('-') + 1;
+                        var extractedInterruptionIdWithoutArtId = clickedElemId.substring(startPosition);
+                        var interruptionId = parseFloat(extractedInterruptionIdWithoutArtId);
+                        setValue(artId + '-' + interruptionId + '-interruptionDate.value', "");
+                        setValue(artId + '-' + interruptionId + '-interruptionReason.value', "");
+                        setValue(artId + '-' + interruptionId + '-interruptionRestartDate.value', "");
+                        $('#' + artId + '-' + interruptionId + '-mainRowInterruption').hide();
 
-            const setBreadcrumbsUrl = function() {
-            var queryParams = new URLSearchParams(window.location.search);
-            if (queryParams.has('patientId')) {
-            $('#breadcrumbs li:nth-child(2) a[href]').attr("href", "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + queryParams.get('patientId'));
-            }
-            }
+                        var nextInterruptionTr = $('#' + artId + '-' + interruptionId + '-mainRowInterruption').nextAll('tr:visible').first();
+                        if (nextInterruptionTr.length == 0) {
+                            var previousInterruptionTr = $('#' + artId + '-' + interruptionId + '-mainRowInterruption').prevAll('tr:visible').first();
+                            var previousInterruptionTrId = previousInterruptionTr.attr('id');
+                            var extractedInterruptionIdWithoutArtId = previousInterruptionTrId.substring(previousInterruptionTrId.indexOf('-') + 1);
+                            var interruptionId = parseFloat(extractedInterruptionIdWithoutArtId);
+                            $('#' + artId + '-' + interruptionId + '-addInterruptionButton').show();
+                        }
 
+                        var isVisibleAnyInterruptionRow = false;
+                        for (i = 1; i &lt; 11; i++) {
+                            if ($('#' + artId + '-' + i + '-mainRowInterruption').is(':visible')) {
+                                isVisibleAnyInterruptionRow = true;
+                            }
+                        }
 
-            const handleTogglingCurrentRegimenCheckbox = function() {
-            $('.currentRegimenCheckbox').click(function(event) {
-            var checkboxId = event.target.id;
-            var parentId = $('#' + checkboxId).parent().attr('id');
-            var rowNumber = parentId.substr(0, parentId.indexOf('-'));
-            var artDateStoppedElement = $('#' + rowNumber + '-ARTDateStopped input');
-            if ($('#' + checkboxId).is(":checked")) {
-            artDateStoppedElement.prop("disabled", true);
-            artDateStoppedElement.val("");
-            artDateStoppedElement.addClass("disabledElem");
-            } else {
-            artDateStoppedElement.prop("disabled", false);
-            artDateStoppedElement.removeClass("disabledElem");
-            }
-            });
-            }
+                        if (!isVisibleAnyInterruptionRow) {
+                            $('#' + artId + '-headerRowInterruption').hide();
+                            $('#' + artId + '-noInterruptionsRow').show();
+                        }
+                    });
+                }
 
-            //FUNCTIONS FOR ADD ART IN EDIT MODE
-            const setCurrentRegimentActiveByDefault = function(selector) {
-            const checkboxSelector = selector + ' > input[type=checkbox]';
-            $(checkboxSelector).prop("checked", false);
-            $('#dateStoppedTd').show();
-            $('#reasonStoppedTd').show();
-            }
+                const setBreadcrumbsUrl = function() {
+                    var queryParams = new URLSearchParams(window.location.search);
+                    if (queryParams.has('patientId')) {
+                        $('#breadcrumbs li:nth-child(2) a[href]').attr("href", "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + queryParams.get('patientId'));
+                    }
+                }
 
-            const addTogglingFieldsVisibilityToCurrentRegimentCheckbox = function(selector) {
-            const checkboxSelector = selector + ' > input[type=checkbox]';
-            const isCheckedSelector = checkboxSelector + ':checked';
-            const toggleInputVisibility = function() {
-            if ($(isCheckedSelector).length) {
-            $('#dateStoppedTd').hide();
-            $('#reasonStoppedTd').hide();
-            } else {
-            $('#dateStoppedTd').show();
-            $('#reasonStoppedTd').show();
-            }
-            }
-            $(checkboxSelector).click(() => toggleInputVisibility());
-            }
+                const handleTogglingCurrentRegimenCheckbox = function() {
+                    $('.currentRegimenCheckbox').click(function(event) {
+                        var checkboxId = event.target.id;
+                        var parentId = $('#' + checkboxId).parent().attr('id');
+                        var rowNumber = parentId.substr(0, parentId.indexOf('-'));
+                        var artDateStoppedElement = $('#' + rowNumber + '-ARTDateStopped input');
+                        if ($('#' + checkboxId).is(":checked")) {
+                            artDateStoppedElement.prop("disabled", true);
+                            artDateStoppedElement.val("");
+                            artDateStoppedElement.addClass("disabledElem");
+                        } else {
+                            artDateStoppedElement.prop("disabled", false);
+                            artDateStoppedElement.removeClass("disabledElem");
+                        }
+                    });
+                }
 
-            const addTogglingFieldsVisibilityToArtInterruptionsRadioButton = function() {
-            $('#radioDiv > input[type=radio]').click(function() {
-            if ($(this).val() === "true") {
-            $('#interruptionOptionsTrToHide').show();
-            $('#interruptionOptionsTrToHide').show();
-            } else if ($(this).val() === "false") {
-            $('#interruptionOptionsTrToHide').hide();
-            $('#interruptionOptionsTrToHide').hide();
-            }
-            });
-            }
+                const handleOnChange = function(field) {
+                    $('#' + field).change(function () {
+                        var fieldValue = getValue(field + '.value');
+                        var errorField = getField(field + '.error');
+                        if (fieldValue == null || fieldValue == '') {
+                            errorField.html("Required").show();
+                            $('#' + field + ' > input').first().addClass("alignInput");
+                            if (!errorField.prev().is('br')) {
+                                $('<br></br>').insertBefore(errorField);
+                            }
+                        } else {
+                            errorField.hide();
+                            $('#' + field + ' > input').first().removeClass("alignInput");
+                        }
+                    })
+                }
 
-            const setARTInterruptionsHiddenByDefault = function() {
-            $('#interruptionOptionsDiv > input[type=radio]').prop("checked", true);
-            $('#interruptionOptionsTrToHide').hide();
-            $('#interruptionOptionsTrToHide').hide();
-            }
+                const handleRegimenChange = function(field) {
+                    $(field).change(function () {
+                        var selectedValue = $(this).val();
+                        var regimensInfo = $('#regimensInfo').text().trim();
+                        var splittedRegimens = regimensInfo.split('|');
+                        $('#regimenDetailsTable').empty();
+                        var regimenField =  $('#regimenValueTd').find('#regimenValue > select');
+                        var regimenErrorField = regimenField.closest('span').find('.error');
+                        if (selectedValue != '') {
+                            for (var i = 0; i &lt; splittedRegimens.length; i++) {
+                                var splittedRegimenDetails = splittedRegimens[i].split(':');
+                                if (splittedRegimenDetails[0] == selectedValue) {
+                                    var splittedRegimenDrugDetails = splittedRegimenDetails[1].split(';');
+                                    for (var j=0; j &lt; splittedRegimenDrugDetails.length; j++) {
+                                        var splittedRegimenDrugDetailsObject = splittedRegimenDrugDetails[j];
+                                        if (splittedRegimenDrugDetailsObject.length != 0) {
+                                            var drugFields = splittedRegimenDrugDetailsObject.split('_');
+                                            $('#regimenDetailsTable').append('<tr><td class="drugFieldTd">' + drugFields[0] + '</td><td class="drugFieldTd">' + drugFields[1] + '</td><td class="drugFieldTd">' + drugFields[2] + '</td><td class="drugFieldTd">' + drugFields[3] + '</td></tr>');
+                                        }
+                                    }
+                                }
+                            }
+                            $('#regimenDetailsDiv').show();
+                            regimenErrorField.html("Required").hide();
+                        } else {
+                            $('#regimenDetailsDiv').hide();
+                            regimenErrorField.html("Required").show();
+                        }
+                    })
+                }
 
-            //executions
-            setCurrentRegimentActiveByDefault('#currentRegimenForNewArt');
-            addTogglingFieldsVisibilityToCurrentRegimentCheckbox('#currentRegimenForNewArt');
-            setARTInterruptionsHiddenByDefault();
-            showActiveARTs();
-            showOrHideAddInterruptionsButtons();
-            addTogglingFieldsVisibilityToArtInterruptionsRadioButton();
-            handleAccordionForARTDetails();
-            handleAddNewArtButton();
-            handleRemoveARTButtonClick();
-            handleRemoveInterruptionClick();
-            handleAddNewInterruptionButtonClick();
-            handleAddNewInterruptionIfEmptyButtonClick();
-            setTimeout(setBreadcrumbsUrl, 1000);
-            handleTogglingCurrentRegimenCheckbox();
+                //FUNCTIONS FOR ADD ART IN EDIT MODE
+                const setCurrentRegimentActiveByDefault = function(selector) {
+                    const checkboxSelector = selector + ' > input[type=checkbox]';
+                    $(checkboxSelector).prop("checked", false);
+                    $('#dateStoppedTd').show();
+                    $('#reasonStoppedTd').show();
+                }
+
+                const addTogglingFieldsVisibilityToCurrentRegimentCheckbox = function(selector) {
+                    const checkboxSelector = selector + ' > input[type=checkbox]';
+                    const isCheckedSelector = checkboxSelector + ':checked';
+                    const toggleInputVisibility = function() {
+                        if ($(isCheckedSelector).length) {
+                            $('#dateStoppedTd').hide();
+                            $('#reasonStoppedTd').hide();
+                        } else {
+                            $('#dateStoppedTd').show();
+                            $('#reasonStoppedTd').show();
+                        }
+                    }
+                    $(checkboxSelector).click(() => toggleInputVisibility());
+                }
+
+                const addTogglingFieldsVisibilityToArtInterruptionsRadioButton = function() {
+                    $('#radioDiv > input[type=radio]').click(function() {
+                        if ($(this).val() === "true") {
+                            $('#interruptionOptionsTrToHide').show();
+                            $('#interruptionOptionsTrToHide').show();
+                        } else if ($(this).val() === "false") {
+                            $('#interruptionOptionsTrToHide').hide();
+                            $('#interruptionOptionsTrToHide').hide();
+                        }
+                    });
+                }
+
+                const setARTInterruptionsHiddenByDefault = function() {
+                    $('#interruptionOptionsDiv > input[type=radio]').prop("checked", true);
+                    $('#interruptionOptionsTrToHide').hide();
+                    $('#interruptionOptionsTrToHide').hide();
+                }
+
+                const handleNewArtFieldInEditModeOnChange = function(field) {
+                    $('#' + field).change(function () {
+                        var fieldValue = getValue(field + '.value');
+                        var errorField = getField(field + '.error');
+                        if (fieldValue == null || fieldValue == '') {
+                            errorField.html("Required").show();
+                            $('#' + field).parent().addClass("alignInput");
+                        } else {
+                            errorField.hide();
+                            $('#' + field).parent().removeClass("alignInput");
+                        }
+                    })
+                }
+
+                //executions
+                setCurrentRegimentActiveByDefault('#currentRegimenForNewArt');
+                addTogglingFieldsVisibilityToCurrentRegimentCheckbox('#currentRegimenForNewArt');
+                setARTInterruptionsHiddenByDefault();
+                showActiveARTs();
+                showOrHideAddInterruptionsButtons();
+                addTogglingFieldsVisibilityToArtInterruptionsRadioButton();
+                handleAccordionForARTDetails();
+                handleAddNewArtButton();
+                handleRemoveARTButtonClick();
+                handleRemoveInterruptionClick();
+                handleAddNewInterruptionButtonClick();
+                handleAddNewInterruptionIfEmptyButtonClick();
+                setTimeout(setBreadcrumbsUrl, 1000);
+                handleTogglingCurrentRegimenCheckbox();
+
+                for (var i = 1; i &lt; 11; i++) {
+                    handleOnChange(i + '-ARTDateStarted');
+                    handleOnChange(i + '-ARTDateStopped');
+                    handleRegimenChange('#' + i + '-regimenSpan > h3 > select');
+                    for (var j = 1; j &lt; 11; j++) {
+                        handleOnChange(i + '-' + j + '-interruptionDate');
+                    }
+                }
+
+                handleNewArtFieldInEditModeOnChange('artDateStartedInEditMode');
+                handleNewArtFieldInEditModeOnChange('artDateStoppedInEditMode');
+                handleRegimenChange('#regimenValue > select');
+                handleNewArtFieldInEditModeOnChange('artInterruptionDateInEditMode');
             });
         </script>
 
