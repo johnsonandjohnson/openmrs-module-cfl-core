@@ -1,5 +1,6 @@
 package org.openmrs.module.cfldistribution.api.metadata.services;
 
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -11,42 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
+  private static final int VERSION = 2;
 
-  @Override
-  public int getVersion() {
-    return 2;
+  public AdherenceFeedbackMetadata(DbSessionFactory dbSessionFactory) {
+    super(dbSessionFactory, VERSION, "9556a62d-20b2-11ea-ac12-0242c0a82002");
   }
 
   @Override
-  protected void installEveryTime() throws Exception {
-    // nothing to do
+  protected Template createTemplate() throws IOException {
+    final String adherenceFeedbackServiceQuery = getAdherenceFeedbackServiceQuery();
+
+    return MessageTemplateBuilder.buildMessageTemplate(
+        adherenceFeedbackServiceQuery,
+        SQL_QUERY_TYPE,
+        null,
+        "Adherence feedback",
+        false,
+        templateUuid);
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
-    createAdherenceFeedbackTemplateResources();
-  }
-
-  @Override
-  protected Template createOrUpdateTemplate() throws IOException {
-    String templateUuid = "9556a62d-20b2-11ea-ac12-0242c0a82002";
-    Template adherenceFeedbackTemplate = getTemplateByUuid(templateUuid);
-    String adherenceFeedbackServiceQuery =
-        getQuery(SERVICES_BASE_PATH + "AdherenceFeedback/AdherenceFeedback.sql");
-
-    if (adherenceFeedbackTemplate == null) {
-      adherenceFeedbackTemplate =
-          MessageTemplateBuilder.buildMessageTemplate(
-              adherenceFeedbackServiceQuery,
-              SQL_QUERY_TYPE,
-              null,
-              "Adherence feedback",
-              false,
-              templateUuid);
-    }
-
-    adherenceFeedbackTemplate.setServiceQuery(adherenceFeedbackServiceQuery);
-    return getTemplateService().saveOrUpdate(adherenceFeedbackTemplate);
+  protected void updateTemplate(Template template) throws IOException {
+    final String adherenceFeedbackServiceQuery = getAdherenceFeedbackServiceQuery();
+    template.setServiceQuery(adherenceFeedbackServiceQuery);
   }
 
   @Override
@@ -116,11 +104,16 @@ public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
     templateFields.forEach(getTemplateFieldService()::saveOrUpdate);
   }
 
-  private void createAdherenceFeedbackTemplateResources() throws IOException {
-    Template adherenceFeedbackTemplate = createOrUpdateTemplate();
-    createAndSaveTemplateFields(adherenceFeedbackTemplate);
-    executeQuery("DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_FEEDBACK;");
-    executeQuery(
-        getQuery(SERVICES_BASE_PATH + "AdherenceFeedback/AdherenceFeedbackStartDateFunction.sql"));
+  @Override
+  protected void performAdditionalUpdate() throws IOException {
+    metadataSQLScriptRunner.executeQuery(
+        "DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_FEEDBACK;");
+    metadataSQLScriptRunner.executeQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceFeedback" + "/AdherenceFeedbackStartDateFunction.sql");
+  }
+
+  private String getAdherenceFeedbackServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceFeedback/AdherenceFeedback.sql");
   }
 }
