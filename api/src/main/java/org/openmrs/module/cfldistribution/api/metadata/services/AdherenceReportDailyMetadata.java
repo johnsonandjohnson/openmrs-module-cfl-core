@@ -1,5 +1,6 @@
 package org.openmrs.module.cfldistribution.api.metadata.services;
 
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -11,42 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceReportDailyMetadata extends AbstractMessageServiceMetadata {
+  private static final int VERSION = 2;
 
-  @Override
-  public int getVersion() {
-    return 2;
+  public AdherenceReportDailyMetadata(DbSessionFactory dbSessionFactory) {
+    super(dbSessionFactory, VERSION, "9556482a-20b2-11ea-ac12-0242c0a82002");
   }
 
   @Override
-  protected void installEveryTime() {
-    // nothing to do
+  protected Template createTemplate() throws IOException {
+    final String adherenceReportDailyServiceQuery = getAdherenceReportDailyServiceQuery();
+
+    return MessageTemplateBuilder.buildMessageTemplate(
+        adherenceReportDailyServiceQuery,
+        SQL_QUERY_TYPE,
+        null,
+        "Adherence report daily",
+        false,
+        templateUuid);
   }
 
   @Override
-  protected void installNewVersion() throws IOException {
-    createAdherenceReportDailyTemplateResources();
-  }
-
-  @Override
-  public Template createOrUpdateTemplate() throws IOException {
-    String templateUuid = "9556482a-20b2-11ea-ac12-0242c0a82002";
-    Template adherenceReportDailyTemplate = getTemplateByUuid(templateUuid);
-    String adherenceReportDailyServiceQuery =
-        getQuery(SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDaily.sql");
-
-    if (adherenceReportDailyTemplate == null) {
-      adherenceReportDailyTemplate =
-          MessageTemplateBuilder.buildMessageTemplate(
-              adherenceReportDailyServiceQuery,
-              SQL_QUERY_TYPE,
-              null,
-              "Adherence report daily",
-              false,
-              templateUuid);
-    }
-
-    adherenceReportDailyTemplate.setServiceQuery(adherenceReportDailyServiceQuery);
-    return getTemplateService().saveOrUpdate(adherenceReportDailyTemplate);
+  protected void updateTemplate(Template template) throws IOException {
+    final String adherenceReportDailyServiceQuery = getAdherenceReportDailyServiceQuery();
+    template.setServiceQuery(adherenceReportDailyServiceQuery);
   }
 
   @Override
@@ -104,12 +92,16 @@ public class AdherenceReportDailyMetadata extends AbstractMessageServiceMetadata
     templateFields.forEach(getTemplateFieldService()::saveOrUpdate);
   }
 
-  private void createAdherenceReportDailyTemplateResources() throws IOException {
-    Template adherenceReportDailyTemplate = createOrUpdateTemplate();
-    createAndSaveTemplateFields(adherenceReportDailyTemplate);
-    executeQuery("DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_DAILY;");
-    executeQuery(
-        getQuery(
-            SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDailyStartDateFunction.sql"));
+  @Override
+  protected void performAdditionalUpdate() throws IOException {
+    metadataSQLScriptRunner.executeQuery(
+        "DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_DAILY;");
+    metadataSQLScriptRunner.executeQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDailyStartDateFunction.sql");
+  }
+
+  private String getAdherenceReportDailyServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDaily.sql");
   }
 }

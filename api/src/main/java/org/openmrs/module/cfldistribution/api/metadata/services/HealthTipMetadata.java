@@ -1,5 +1,6 @@
 package org.openmrs.module.cfldistribution.api.metadata.services;
 
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -11,36 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HealthTipMetadata extends AbstractMessageServiceMetadata {
+  private static final int VERSION = 2;
 
-  @Override
-  public int getVersion() {
-    return 2;
+  public HealthTipMetadata(DbSessionFactory dbSessionFactory) {
+    super(dbSessionFactory, VERSION, "9556f9ab-20b2-11ea-ac12-0242c0a82002");
   }
 
   @Override
-  protected void installEveryTime() throws Exception {
-    // nothing to do
+  protected Template createTemplate() throws IOException {
+    final String healthTipServiceQuery = getHealthTipServiceQuery();
+
+    return MessageTemplateBuilder.buildMessageTemplate(
+        healthTipServiceQuery, SQL_QUERY_TYPE, null, "Health tip", false, templateUuid);
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
-    createHealthTipTemplateResources();
-  }
-
-  @Override
-  protected Template createOrUpdateTemplate() throws IOException {
-    String templateUuid = "9556f9ab-20b2-11ea-ac12-0242c0a82002";
-    Template healthTipTemplate = getTemplateByUuid(templateUuid);
-    String healthTipServiceQuery = getQuery(SERVICES_BASE_PATH + "HealthTip/HealthTip.sql");
-
-    if (healthTipTemplate == null) {
-      healthTipTemplate =
-          MessageTemplateBuilder.buildMessageTemplate(
-              healthTipServiceQuery, SQL_QUERY_TYPE, null, "Health tip", false, templateUuid);
-    }
-
-    healthTipTemplate.setServiceQuery(healthTipServiceQuery);
-    return getTemplateService().saveOrUpdate(healthTipTemplate);
+  protected void updateTemplate(Template template) throws IOException {
+    final String healthTipServiceQuery = getHealthTipServiceQuery();
+    template.setServiceQuery(healthTipServiceQuery);
   }
 
   @Override
@@ -122,10 +111,16 @@ public class HealthTipMetadata extends AbstractMessageServiceMetadata {
     templateFields.forEach(getTemplateFieldService()::saveOrUpdate);
   }
 
-  private void createHealthTipTemplateResources() throws IOException {
-    Template healthTipTemplate = createOrUpdateTemplate();
-    createAndSaveTemplateFields(healthTipTemplate);
-    executeQuery("DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_HEALTH_TIP;");
-    executeQuery(getQuery(SERVICES_BASE_PATH + "HealthTip/HealthTipStartDateFunction.sql"));
+  @Override
+  protected void performAdditionalUpdate() throws IOException {
+    metadataSQLScriptRunner.executeQuery(
+        "DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_HEALTH_TIP;");
+    metadataSQLScriptRunner.executeQueryFromResource(
+        SERVICES_BASE_PATH + "HealthTip/HealthTipStartDateFunction.sql");
+  }
+
+  private String getHealthTipServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "HealthTip/HealthTip.sql");
   }
 }

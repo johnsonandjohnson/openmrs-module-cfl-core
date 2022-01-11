@@ -1,5 +1,6 @@
 package org.openmrs.module.cfldistribution.api.metadata.services;
 
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -11,42 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceReportWeeklyMetadata extends AbstractMessageServiceMetadata {
+  private static final int VERSION = 2;
 
-  @Override
-  public int getVersion() {
-    return 2;
+  public AdherenceReportWeeklyMetadata(DbSessionFactory dbSessionFactory) {
+    super(dbSessionFactory, VERSION, "96d93c15-3884-11ea-b1e9-0242ac160002");
   }
 
   @Override
-  protected void installEveryTime() throws Exception {
-    // nothing to do
+  protected Template createTemplate() throws IOException {
+    final String adherenceReportWeeklyServiceQuery = getAdherenceReportWeeklyServiceQuery();
+
+    return MessageTemplateBuilder.buildMessageTemplate(
+        adherenceReportWeeklyServiceQuery,
+        SQL_QUERY_TYPE,
+        null,
+        "Adherence report weekly",
+        false,
+        templateUuid);
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
-    createAdherenceReportWeeklyTemplateResources();
-  }
-
-  @Override
-  protected Template createOrUpdateTemplate() throws IOException {
-    String templateUuid = "96d93c15-3884-11ea-b1e9-0242ac160002";
-    Template adherenceReportWeeklyTemplate = getTemplateByUuid(templateUuid);
-    String adherenceReportWeeklyServiceQuery =
-        getQuery(SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeekly.sql");
-
-    if (adherenceReportWeeklyTemplate == null) {
-      adherenceReportWeeklyTemplate =
-          MessageTemplateBuilder.buildMessageTemplate(
-              adherenceReportWeeklyServiceQuery,
-              SQL_QUERY_TYPE,
-              null,
-              "Adherence report weekly",
-              false,
-              templateUuid);
-    }
-
-    adherenceReportWeeklyTemplate.setServiceQuery(adherenceReportWeeklyServiceQuery);
-    return getTemplateService().saveOrUpdate(adherenceReportWeeklyTemplate);
+  protected void updateTemplate(Template template) throws IOException {
+    final String adherenceReportWeeklyServiceQuery = getAdherenceReportWeeklyServiceQuery();
+    template.setServiceQuery(adherenceReportWeeklyServiceQuery);
   }
 
   @Override
@@ -104,13 +92,16 @@ public class AdherenceReportWeeklyMetadata extends AbstractMessageServiceMetadat
     templateFields.forEach(getTemplateFieldService()::saveOrUpdate);
   }
 
-  private void createAdherenceReportWeeklyTemplateResources() throws IOException {
-    Template adherenceReportWeeklyTemplate = createOrUpdateTemplate();
-    createAndSaveTemplateFields(adherenceReportWeeklyTemplate);
-    executeQuery("DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_WEEKLY;");
-    executeQuery(
-        getQuery(
-            SERVICES_BASE_PATH
-                + "AdherenceReportWeekly/AdherenceReportWeeklyStartDateFunction.sql"));
+  @Override
+  protected void performAdditionalUpdate() throws IOException {
+    metadataSQLScriptRunner.executeQuery(
+        "DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_ADHERENCE_WEEKLY;");
+    metadataSQLScriptRunner.executeQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeeklyStartDateFunction.sql");
+  }
+
+  private String getAdherenceReportWeeklyServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeekly" + ".sql");
   }
 }

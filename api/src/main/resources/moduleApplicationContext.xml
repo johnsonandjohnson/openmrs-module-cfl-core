@@ -49,47 +49,43 @@
     <bean id="cflUpdateGlobalParametersActivatorStep"
           class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
     <bean id="cflProgramsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.ProgramsMetadata"/>
-    <bean id="cflPatientFlagsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PatientFlagsMetadata">
-        <property name="flagService" ref="flagService"/>
-    </bean>
-    <bean id="cflPersonAttributesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata">
-        <property name="personService" ref="personService"/>
-    </bean>
+    <bean id="cflPatientFlagsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PatientFlagsMetadata"/>
+    <bean id="cflPersonAttributesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata"/>
     <!-- Message Services Metadata -->
     <bean id="cflAdherenceReportDailyMetaData"
           class="org.openmrs.module.cfldistribution.api.metadata.services.AdherenceReportDailyMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
     <bean id="cflVisitReminderMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.services.VisitReminderMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
     <bean id="cflAdherenceReportWeeklyMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.services.AdherenceReportWeeklyMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
     <bean id="cflHealthTipMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.services.HealthTipMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
     <bean id="cflAdherenceFeedbackMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.services.AdherenceFeedbackMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
     <bean id="cflDbViewsMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.views.DbViewsMetadata">
-        <property name="dbSessionFactory">
+        <constructor-arg>
             <ref bean="dbSessionFactory"/>
-        </property>
+        </constructor-arg>
     </bean>
 </beans>

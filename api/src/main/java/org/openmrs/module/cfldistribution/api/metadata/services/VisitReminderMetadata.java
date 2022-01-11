@@ -3,6 +3,7 @@ package org.openmrs.module.cfldistribution.api.metadata.services;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateBuilder;
 import org.openmrs.module.cfldistribution.api.builder.MessageTemplateFieldBuilder;
 import org.openmrs.module.messages.api.model.Template;
@@ -14,45 +15,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisitReminderMetadata extends AbstractMessageServiceMetadata {
+  private static final int VERSION = 2;
 
-  @Override
-  public int getVersion() {
-    return 2;
+  public VisitReminderMetadata(DbSessionFactory dbSessionFactory) {
+    super(dbSessionFactory, VERSION, "95573fe3-20b2-11ea-ac12-0242c0a82002");
   }
 
   @Override
-  protected void installEveryTime() {
-    // nothing to do
+  protected Template createTemplate() throws IOException {
+    final String visitReminderServiceQuery = getVisitReminderServiceQuery();
+    final String visitReminderCalendarServiceQuery = getVisitReminderCalendarServiceQuery();
+
+    return MessageTemplateBuilder.buildMessageTemplate(
+        visitReminderServiceQuery,
+        SQL_QUERY_TYPE,
+        visitReminderCalendarServiceQuery,
+        "Visit reminder",
+        true,
+        templateUuid);
   }
 
   @Override
-  protected void installNewVersion() throws IOException {
-    createVisitReminderTemplateResources();
-  }
+  protected void updateTemplate(Template template) throws IOException {
+    final String visitReminderServiceQuery = getVisitReminderServiceQuery();
+    template.setServiceQuery(visitReminderServiceQuery);
 
-  @Override
-  protected Template createOrUpdateTemplate() throws IOException {
-    String templateUuid = "95573fe3-20b2-11ea-ac12-0242c0a82002";
-    Template visitReminderTemplate = getTemplateByUuid(templateUuid);
-    String visitReminderServiceQuery =
-        getQuery(SERVICES_BASE_PATH + "VisitReminder/VisitReminder.sql");
-    String visitReminderCalendarServiceQuery =
-        getQuery(SERVICES_BASE_PATH + "VisitReminder/VisitReminderCalendarQuery.sql");
-
-    if (visitReminderTemplate == null) {
-      visitReminderTemplate =
-          MessageTemplateBuilder.buildMessageTemplate(
-              visitReminderServiceQuery,
-              SQL_QUERY_TYPE,
-              visitReminderCalendarServiceQuery,
-              "Visit reminder",
-              true,
-              templateUuid);
-    }
-
-    visitReminderTemplate.setServiceQuery(visitReminderServiceQuery);
-    visitReminderTemplate.setCalendarServiceQuery(visitReminderCalendarServiceQuery);
-    return getTemplateService().saveOrUpdate(visitReminderTemplate);
+    final String visitReminderCalendarServiceQuery = getVisitReminderCalendarServiceQuery();
+    template.setCalendarServiceQuery(visitReminderCalendarServiceQuery);
   }
 
   @Override
@@ -98,11 +87,13 @@ public class VisitReminderMetadata extends AbstractMessageServiceMetadata {
     templateFields.forEach(getTemplateFieldService()::saveOrUpdate);
   }
 
-  private void createVisitReminderTemplateResources() throws IOException {
-    Template visitReminderTemplate = createOrUpdateTemplate();
-    createAndSaveTemplateFields(visitReminderTemplate);
-    executeQuery("DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_VISIT;");
-    executeQuery(getQuery(SERVICES_BASE_PATH + "VisitReminder/VisitReminderStartDateFunction.sql"));
+  @Override
+  protected void performAdditionalUpdate() throws IOException {
+    metadataSQLScriptRunner.executeQuery(
+        "DROP FUNCTION IF EXISTS GET_PREDICTION_START_DATE_FOR_VISIT;");
+    metadataSQLScriptRunner.executeQueryFromResource(
+        SERVICES_BASE_PATH + "VisitReminder/VisitReminderStartDateFunction.sql");
+
     createRelatedGlobalProperty(
         "message.daysToCallBeforeVisit.default",
         "1,7",
@@ -117,5 +108,15 @@ public class VisitReminderMetadata extends AbstractMessageServiceMetadata {
       GlobalProperty gp = new GlobalProperty(key, value, description);
       Context.getAdministrationService().saveGlobalProperty(gp);
     }
+  }
+
+  private String getVisitReminderServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "VisitReminder/VisitReminder.sql");
+  }
+
+  private String getVisitReminderCalendarServiceQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "VisitReminder/VisitReminderCalendarQuery.sql");
   }
 }

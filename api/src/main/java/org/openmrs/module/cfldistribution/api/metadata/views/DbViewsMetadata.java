@@ -1,17 +1,24 @@
 package org.openmrs.module.cfldistribution.api.metadata.views;
 
-import org.openmrs.module.cfldistribution.api.metadata.services.AbstractMessageServiceMetadata;
-import org.openmrs.module.messages.api.model.Template;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.module.cfldistribution.api.util.MetadataSQLScriptRunner;
+import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 
 import java.io.IOException;
 
-public class DbViewsMetadata extends AbstractMessageServiceMetadata {
+public class DbViewsMetadata extends VersionedMetadataBundle {
 
   private static final String DROP_VIEW_IF_EXISTS_STATEMENT = "DROP VIEW IF EXISTS ";
 
   private static final String DIGITS_VIEW_PATH = "mysql/views/digits/";
 
   private static final String DATES_LIST_TABLE_NAME = "DATES_LIST_10K_DAYS_TABLE";
+
+  private final MetadataSQLScriptRunner metadataSQLScriptRunner;
+
+  public DbViewsMetadata(DbSessionFactory dbSessionFactory) {
+    this.metadataSQLScriptRunner = new MetadataSQLScriptRunner(dbSessionFactory);
+  }
 
   @Override
   public int getVersion() {
@@ -28,42 +35,32 @@ public class DbViewsMetadata extends AbstractMessageServiceMetadata {
     createDbViews();
   }
 
-  @Override
-  protected Template createOrUpdateTemplate() {
-    // nothing to do
-    return null;
-  }
-
-  @Override
-  protected void createAndSaveTemplateFields(Template template) {
-    // nothing to do
-  }
-
   private void createDbViews() throws IOException {
     createDigitsView();
     createDatesListTable();
   }
 
   private void createDigitsView() throws IOException {
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_0");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Digits_0.sql"));
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_1");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Digits_1.sql"));
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_2");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Digits_2.sql"));
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_3");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Digits_3.sql"));
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_4");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Digits_4.sql"));
-    executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "NUMBERS_100");
-    executeQuery(getQuery(DIGITS_VIEW_PATH + "Numbers_100.sql"));
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_0");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Digits_0.sql");
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_1");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Digits_1.sql");
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_2");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Digits_2.sql");
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_3");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Digits_3.sql");
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "DIGITS_4");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Digits_4.sql");
+    metadataSQLScriptRunner.executeQuery(DROP_VIEW_IF_EXISTS_STATEMENT + "NUMBERS_100");
+    metadataSQLScriptRunner.executeQueryFromResource(DIGITS_VIEW_PATH + "Numbers_100.sql");
   }
 
   private void createDatesListTable() throws IOException {
-    executeQuery("DROP TABLE IF EXISTS " + DATES_LIST_TABLE_NAME + ";");
-    executeQuery("CREATE TABLE " + DATES_LIST_TABLE_NAME + " (selected_date date DEFAULT NULL);");
-    executeQuery(
+    metadataSQLScriptRunner.executeQuery("DROP TABLE IF EXISTS " + DATES_LIST_TABLE_NAME + ";");
+    metadataSQLScriptRunner.executeQuery(
+        "CREATE TABLE " + DATES_LIST_TABLE_NAME + " (selected_date date DEFAULT NULL);");
+    metadataSQLScriptRunner.executeQuery(
         "CREATE INDEX selected_date_idx ON " + DATES_LIST_TABLE_NAME + " (selected_date);");
-    executeQuery(getQuery("mysql/views/dates/DatesList_10kDays.sql"));
+    metadataSQLScriptRunner.executeQueryFromResource("mysql/views/dates/DatesList_10kDays.sql");
   }
 }
