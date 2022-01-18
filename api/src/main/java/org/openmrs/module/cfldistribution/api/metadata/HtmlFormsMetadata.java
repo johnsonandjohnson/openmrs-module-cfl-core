@@ -15,7 +15,7 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
 
   @Override
   public int getVersion() {
-    return 6;
+    return 7;
   }
 
   @Override
@@ -32,13 +32,6 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
 
     final List<String> htmlforms =
         Arrays.asList(
-            "cfldistribution:htmlforms/cfl-HIV.xml",
-            "cfldistribution:htmlforms/cfl-check-in.xml",
-            "cfldistribution:htmlforms/cfl-visit-note.xml",
-            "cfldistribution:htmlforms/cfl-medicine-refill.xml",
-            "cfldistribution:htmlforms/cfl-sputum-visit-note.xml",
-            "cfldistribution:htmlforms/encounters-form.xml",
-            "cfldistribution:htmlforms/cfl-hiv-enrollment.xml",
             "cfldistribution:htmlforms/discontinue-program.xml",
             "cfldistribution:htmlforms/program-form.xml");
 

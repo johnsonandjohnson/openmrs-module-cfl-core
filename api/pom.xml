@@ -64,8 +64,15 @@
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>messages-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>idgen-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>appframework-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
@@ -125,7 +132,7 @@
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>messages-api</artifactId>
+            <artifactId>metadatamapping-api</artifactId>
         </dependency>
     </dependencies>
 </project>

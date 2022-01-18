@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -16,7 +17,8 @@
 
     <scm>
         <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</connection>
-        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</developerConnection>
+        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git
+        </developerConnection>
         <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</url>
         <tag>HEAD</tag>
     </scm>
@@ -31,20 +33,29 @@
         <javaCompilerSource>1.8</javaCompilerSource>
         <javaCompilerTarget>1.8</javaCompilerTarget>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <referenceapplication>2.10.0</referenceapplication>
         <patientFlagVersion>3.0.1</patientFlagVersion>
         <checkStylePluginVersion>3.1.2</checkStylePluginVersion>
         <checkStyleVersion>9.0.1</checkStyleVersion>
         <pmdPluginVersion>3.12.0</pmdPluginVersion>
         <reportingVersion>1.20.0</reportingVersion>
         <calculationVersion>1.1</calculationVersion>
-        <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <eventVersion>2.8.0</eventVersion>
         <serializationXstream>0.2.12</serializationXstream>
         <providermanagementVersion>2.10.0</providermanagementVersion>
-        <emrapiVersion>1.28.0</emrapiVersion>
-        <idgenVersion>4.5.0</idgenVersion>
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
+        <uicommonsVersion>2.12.0</uicommonsVersion>
+        <emrapiVersion>1.28.0</emrapiVersion>
+        <metadatadeployVersion>1.7</metadatadeployVersion>
+        <metadatasharingVersion>1.2.2</metadatasharingVersion>
+        <metadatamappingVersion>1.3.4</metadatamappingVersion>
+        <uiframeworkVersion>3.9</uiframeworkVersion>
+        <htmlformentryVersion>3.3.0</htmlformentryVersion>
+        <htmlformentryuiVersion>1.6.1</htmlformentryuiVersion>
+        <appuiVersion>1.7</appuiVersion>
+        <legacyuiVersion>1.2.3</legacyuiVersion>
+        <webservices.restVersion>2.16</webservices.restVersion>
+        <uicommonsVersion>2.12.0</uicommonsVersion>
+        <idgenVersion>4.5.0</idgenVersion>
         <!-- Upgraded version compared to referenceapplication -->
         <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
@@ -55,19 +66,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>referenceapplication</artifactId>
-                <version>${referenceapplication}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>referenceapplication-omod</artifactId>
-                <version>${referenceapplication}</version>
-                <scope>provided</scope>
-            </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
@@ -212,6 +210,103 @@
                 <artifactId>messages-api</artifactId>
                 <version>${messagesVersion}</version>
                 <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>uicommons-omod</artifactId>
+                <version>${uicommonsVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>emrapi-api</artifactId>
+                <version>${emrapiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>metadatadeploy-api</artifactId>
+                <version>${metadatadeployVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>metadatasharing-api</artifactId>
+                <version>${metadatasharingVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>metadatamapping-api</artifactId>
+                <version>${metadatamappingVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>uiframework-api</artifactId>
+                <version>${uiframeworkVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>htmlformentry-api</artifactId>
+                <version>${htmlformentryVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>htmlformentry-api-1.10</artifactId>
+                <version>${htmlformentryVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>htmlformentryui-api</artifactId>
+                <version>${htmlformentryuiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>appui-api</artifactId>
+                <version>${appuiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>appui-omod</artifactId>
+                <version>${appuiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>legacyui-api</artifactId>
+                <version>${legacyuiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>legacyui-omod</artifactId>
+                <version>${legacyuiVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>webservices.rest-omod-common</artifactId>
+                <version>${webservices.restVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>uicommons-scss</artifactId>
+                <version>${uicommonsVersion}</version>
+                <scope>provided</scope>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>idgen-api</artifactId>
+                <version>${idgenVersion}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

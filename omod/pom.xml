@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.openmrs.module</groupId>
@@ -10,6 +11,12 @@
     <packaging>jar</packaging>
     <name>CFL Distribution Module OMOD</name>
     <description>OpenMRS module project for CFL Distribution Module</description>
+
+    <!-- by default rubygems are installed in the target directory, which we don't want, because then they'd need to be reinstalled after every clean -->
+    <properties>
+        <gem.home>${basedir}/.rubygems</gem.home>
+        <gem.path>${basedir}/.rubygems</gem.path>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -55,12 +62,31 @@
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>referenceapplication-omod</artifactId>
+            <artifactId>uiframework-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>uiframework-api</artifactId>
+            <artifactId>uicommons-omod</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>webservices.rest-omod-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>compass</artifactId>
+            <version>0.11.7</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>sass</artifactId>
+            <version>3.2.5</version>
+            <type>gem</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -68,10 +94,57 @@
     <build>
         <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>resources</exclude>
+                </excludes>
+                <targetPath>web/module</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>resources</include>
+                </includes>
+                <targetPath>web/module</targetPath>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.openmrs.maven.plugins</groupId>
                 <artifactId>maven-openmrs-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>init</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>initialize-module</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pack</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-module</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -102,6 +175,47 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Fetch SASS sources from uicommons</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.openmrs.module</groupId>
+                                    <artifactId>uicommons-scss</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>src/main/compass/sass-external</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>de.saumya.mojo</groupId>
+                <artifactId>gem-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jrubyVersion>1.7.10</jrubyVersion>
+                    <execArgs>${gem.home}/bin/compass compile ${basedir}/src/main/compass</execArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

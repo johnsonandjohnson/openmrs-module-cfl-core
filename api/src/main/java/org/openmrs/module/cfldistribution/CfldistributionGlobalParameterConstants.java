@@ -21,6 +21,8 @@ public final class CfldistributionGlobalParameterConstants {
 
     public static final String CFL_EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID = "58cb9e76-75a1-4f49-956f-4ff6d0e02312";
 
+    public static final String REGISTRATIONCORE_IDENTIFIER_SOURCE_ID_KEY = "registrationcore.identifierSourceId";
+
     private CfldistributionGlobalParameterConstants() {
 
     }

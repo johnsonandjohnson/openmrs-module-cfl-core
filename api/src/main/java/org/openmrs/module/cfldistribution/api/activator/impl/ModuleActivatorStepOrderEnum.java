@@ -8,10 +8,6 @@ package org.openmrs.module.cfldistribution.api.activator.impl;
  */
 public enum ModuleActivatorStepOrderEnum {
     /**
-     * @see DataCleanupActivatorStep
-     */
-    DATA_CLEANUP_ACTIVATOR_STEP,
-    /**
      * @see CreateGlobalParametersActivatorStep
      */
     CREATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP,
