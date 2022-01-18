@@ -13,21 +13,38 @@ public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPa
 
     private PatientService patientService;
 
-    private static final Log LOGGER = LogFactory.getLog(IrisPatientServiceImpl.class);
+    private final Log log;
 
-    public void setPatientService(PatientService patientService) {
-        this.patientService = patientService;
+    /**
+     * Default constructor
+     *
+     * LogFactory used to get log
+     */
+    public IrisPatientServiceImpl() {
+        this(LogFactory.getLog(IrisPatientServiceImpl.class));
+    }
+
+    /**
+     * Constructor to facilitate unit tests.
+     *
+     * @param log log instance to use by this object
+     */
+    IrisPatientServiceImpl(Log log) {
+        this.log = log;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Patient savePatient(Patient patient) {
-       return patientService.savePatient(patient);
+        return patientService.savePatient(patient);
     }
 
     public Patient updatePatient(Patient patient) {
-
-        LOGGER.info("Patient with uuid: " + patient.getUuid() + "has not been updated");
+        log.info("Patient with uuid: " + patient.getUuid() + " has not been updated. Update feature is not supported yet.");
         return patient;
+    }
+
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
     }
 }
