@@ -65,33 +65,38 @@
     </div>
     <div class="info-body" style="padding-bottom: 4px;">
         <ul>
-            <% programsList.each { program -> %>
+            <% patientProgramsDetailsList.each { program -> %>
             <li>
                 <% if(program.isEnrolled) { %>
-                <span class="cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
-                <span class="not-cropped-text-span"><a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi", ["patientId" : patientId,"encounterId":program.encounterId,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}"><i class="icon-pencil edit-action" title="Edit"></i></a></span>
+                <span class="cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
+                <span class="not-cropped-text-span">
+                    <a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi",
+                    ["patientId" : program.patient.patientId,"encounterId":program.encounterId,
+                    "returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}">
+                    <i class="icon-pencil edit-action" title="Edit"></i>
+                    </a>
+                </span>
                 <span class="not-cropped-text-span">
                     <i class="icon-remove delete-action" title="Discontinue"
-                       onclick="location.href = '${ ui.pageLink("htmlformentryui",
-                                "htmlform/enterHtmlFormWithStandardUi", ["patientId" :
-                                patientId, "definitionUiResource":
-                                (program.programConfig?.discontinuationFormProvider ?: "cfl") +
-                                ":htmlforms/" + program.programConfig.discontinuationFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId]) }'">
-                    </i></span>
-                <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
+                       onclick="location.href = '${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
+                       ["patientId" : program.patient.patientId, "formUuid": program.programConfig.discontinuationFormUuid,
+                       "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}'">
+                    </i>
+                </span>
+                <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - Current</div>
                 <% } else { %>
                 <% if(program.dateCompleted != null) { %>
-                <span class="not-cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
+                <span class="not-cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
                 <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
                 <% } else { %>
-                <span class="not-cropped-text-span" title="${ui.format(program.name)}">${ui.format(program.name)}</span>
+                <span class="not-cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
                 <span class="not-cropped-text-span">
                     <button class="enrollButton"
-                            onClick = "location.href='${ui.pageLink("htmlformentryui",
-                                        "htmlform/enterHtmlFormWithStandardUi", ["patientId" : patientId,
-                                        "definitionUiResource":
-                                        (program.programConfig?.programFormProvider ?: "cfl") + ":htmlforms/" +
-                                        program.programConfig.programFormName,"returnUrl":"/openmrs/coreapps/clinicianfacing/patient.page?patientId="+patientId])}'">Enroll</button></span>
+                        onClick = "location.href='${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
+                        ["patientId" : program.patient.patientId, "formUuid" : program.programConfig.programFormUuid,
+                        "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}'">Enroll
+                    </button>
+                </span>
                 <% } %>
                 <% } %>
             </li>

@@ -1,4 +1,4 @@
-package org.openmrs.module.cfl.fragment.controller;
+package org.openmrs.module.cfl.fragment.controller.dashboardwidgets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +8,6 @@ import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.cfl.fragment.controller.dashboardwidgets.EncountersWidgetFragmentController;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.powermock.core.classloader.annotations.PrepareForTest;
