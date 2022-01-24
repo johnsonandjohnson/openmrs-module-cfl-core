@@ -147,4 +147,8 @@
             </list>
         </property>
     </bean>
+
+    <bean id="cflSendAdHocMessage" class="org.openmrs.module.cfl.api.service.SendAdHocMessage">
+        <property name="dbSessionFactory" ref="dbSessionFactory"/>
+    </bean>
 </beans>
