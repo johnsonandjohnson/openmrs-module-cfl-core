@@ -10,7 +10,7 @@ public class NavigationSteps {
 
     @Then("^I navigate to patient \"([^\"]*)\" dashboard$")
     public void iNavigateToPatientDashboard(String patient) {
-        getDefaultDriver().get(ContextService.getServerUrl() + "/referenceapplication/home.page");
+        getDefaultDriver().get(ContextService.getServerUrl() + "/cfldistribution/home.page");
         getDefaultDriver().findElement(By.xpath("//a[contains(@href,'findpatient')]")).click();
         getDefaultDriver().findElement(By.id("patient-search")).sendKeys(patient);
         getDefaultDriver().findElement(By.xpath("//td[contains(text(),'" + patient + "')]")).click();

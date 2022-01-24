@@ -25,7 +25,7 @@ public class Hooks {
 
     @Before()
     public void logIn() {
-        getDefaultDriver().get(ContextService.getServerUrl() + "/referenceapplication/login.page?showSessionLocations=true&");
+        getDefaultDriver().get(ContextService.getServerUrl() + "/cfldistribution/login.page?showSessionLocations=true&");
         fillLoginForm();
     }
 

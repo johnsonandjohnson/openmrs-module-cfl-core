@@ -144,10 +144,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
     createGlobalSettingIfNotExists(
-        CFLConstants.CFL_LOGIN_REDIRECT_GLOBAL_PROPERTY_NAME,
-        CFLConstants.CFL_LOGIN_REDIRECT_DEFAULT_VALUE,
-        CFLConstants.CFL_LOGIN_REDIRECT_DESCRIPTION);
-    createGlobalSettingIfNotExists(
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
