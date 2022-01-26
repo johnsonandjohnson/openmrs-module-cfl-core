@@ -39,7 +39,8 @@ public class SendAdHocMessage {
           + "WHERE\n"
           + "    p.voided = 0\n"
           + "    AND NOT NULLIF(phone_pa.value,'') IS NULL\n"
-          + "    AND lang_pa.value = :language";
+          + "    AND p.patient_id > :fromId\n"
+          + "    AND p.patient_id < :toId";
 
   private DbSessionFactory dbSessionFactory;
 
@@ -47,11 +48,11 @@ public class SendAdHocMessage {
     this.dbSessionFactory = dbSessionFactory;
   }
 
-  public void sendSMS(String templateName, String language, String smsConfigName) {
+  public void sendSMS(String templateName, String language, String smsConfigName, String fromId, String toId) {
     LOGGER.info("SendAdHocMessage.sendSMS started.");
 
     try {
-      final List<String> patientPhones = getPatientPhones(language);
+      final List<String> patientPhones = getPatientPhones(fromId, toId);
       final SMSContext context = new SMSContext(templateName, language, smsConfigName);
 
       sendSMS(patientPhones, context);
@@ -62,13 +63,13 @@ public class SendAdHocMessage {
     LOGGER.info("SendAdHocMessage.sendSMS ended.");
   }
 
-  private List<String> getPatientPhones(String language) {
-    LOGGER.info("Reading Patient phones of language: " + language);
+  private List<String> getPatientPhones(String fromId, String toId) {
     final List<String> phones =
         dbSessionFactory
             .getCurrentSession()
             .createSQLQuery(GET_PATIENT_PHONES_SQL)
-            .setParameter("language", language)
+            .setParameter("fromId", fromId)
+                .setParameter("toId", toId)
             .list();
 
     LOGGER.info("Read Patient phones: " + phones.size());
