@@ -1,5 +1,7 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -11,13 +13,39 @@ public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPa
 
     private PatientService patientService;
 
-    public void setPatientService(PatientService patientService) {
-        this.patientService = patientService;
+    private final Log log;
+
+    /**
+     * Default constructor
+     *
+     * LogFactory used to get log
+     */
+    public IrisPatientServiceImpl() {
+        this(LogFactory.getLog(IrisPatientServiceImpl.class));
+    }
+
+    /**
+     * Constructor to facilitate unit tests.
+     *
+     * @param log log instance to use by this object
+     */
+    IrisPatientServiceImpl(Log log) {
+        this.log = log;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Patient savePatient(Patient patient) {
-       return patientService.savePatient(patient);
+        return patientService.savePatient(patient);
+    }
+
+    @Override
+    public Patient updatePatient(Patient patient) {
+        log.info("Patient with uuid: " + patient.getUuid() + " has not been updated. Update feature is not supported yet.");
+        return patient;
+    }
+
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
     }
 }
