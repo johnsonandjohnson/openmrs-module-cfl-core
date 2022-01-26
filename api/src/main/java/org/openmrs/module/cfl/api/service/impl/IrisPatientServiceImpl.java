@@ -39,11 +39,7 @@ public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPa
         return patientService.savePatient(patient);
     }
 
-    /**
-     * Updates already existing patient.
-     *
-     * log.info used to get information about patient Uuid and status.
-     */
+    @Override
     public Patient updatePatient(Patient patient) {
         log.info("Patient with uuid: " + patient.getUuid() + " has not been updated. Update feature is not supported yet.");
         return patient;

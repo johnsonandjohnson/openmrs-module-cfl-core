@@ -12,7 +12,7 @@ import org.openmrs.test.BaseContextMockTest;
 
 public class IrisPatientServiceImplTest extends BaseContextMockTest {
 
-    private final String patientUuid = "266063d4-7a5b-486a-84cd-0ef002d9d802";
+    private static final String PATIENT_UUID = "266063d4-7a5b-486a-84cd-0ef002d9d802";
 
     @Captor
     private ArgumentCaptor<Object> captor;
@@ -21,7 +21,7 @@ public class IrisPatientServiceImplTest extends BaseContextMockTest {
     private Log log;
 
     @Test
-    public void updatePatient_shouldUpdatePatientWhichAlreadyExist(){
+    public void updatePatient_shouldPrintLog(){
         //given
         final Patient patient = createTestPatient();
         final IrisPatientServiceImpl irisPatientService = new IrisPatientServiceImpl(log);
@@ -33,12 +33,12 @@ public class IrisPatientServiceImplTest extends BaseContextMockTest {
         Mockito.verify(log).info(captor.capture());
         final String value = (String) captor.getValue();
 
-        Assert.assertEquals("Patient with uuid: " +  patientUuid + " has not been updated. Update feature is not supported yet.", value);
+        Assert.assertEquals("Patient with uuid: " +  PATIENT_UUID + " has not been updated. Update feature is not supported yet.", value);
     }
 
     private Patient createTestPatient() {
         final Patient patient = new Patient();
-        patient.setUuid(patientUuid);
+        patient.setUuid(PATIENT_UUID);
         return patient;
     }
 }
