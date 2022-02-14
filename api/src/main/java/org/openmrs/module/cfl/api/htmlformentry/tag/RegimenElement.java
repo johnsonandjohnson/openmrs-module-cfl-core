@@ -33,8 +33,6 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
 
   private Concept concept;
 
-  private String addNewValue;
-
   private Obs existingObs;
 
   public RegimenElement(FormEntryContext context, Map<String, String> parameters) {
@@ -84,15 +82,12 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
   private void createOrUpdateObsInEditMode(FormEntrySession formEntrySession, String regimenValue) {
     FormSubmissionActions actions = formEntrySession.getSubmissionActions();
     Date date = DateUtil.now();
-    if (isAddNewRegimenOptionSelected()) {
+
+    if (existingObs == null) {
       actions.createObs(concept, regimenValue, date, null);
-    } else if (existingObs != null && isRegimenValueChanged(existingObs, regimenValue)) {
+    } else if (isRegimenValueChanged(existingObs, regimenValue)) {
       actions.modifyObs(existingObs, concept, regimenValue, date, null);
     }
-  }
-
-  private boolean isAddNewRegimenOptionSelected() {
-    return StringUtils.equalsIgnoreCase(addNewValue, "true");
   }
 
   private boolean isRegimenValueChanged(Obs existingObs, String regimenValue) {
@@ -104,11 +99,6 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
 
     if (CollectionUtils.isNotEmpty(context.getCurrentObsGroupConcepts())) {
       existingObs = context.getObsFromCurrentGroup(concept, (Concept) null);
-    }
-
-    String addNewParamValue = parameters.get("addNew");
-    if (addNewParamValue != null) {
-      addNewValue = addNewParamValue;
     }
   }
 
