@@ -283,6 +283,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="cfl.customVelocityContextContentProvider"
+    <bean id="cfl.regimensContentProvider"
           class="org.openmrs.module.cfl.api.htmlformentry.context.RegimenContextContentProvider"/>
+
+    <bean id="cfl.treatmentsContentProvider"
+          class="org.openmrs.module.cfl.api.htmlformentry.context.TreatmentDataContentProvider"/>
 </beans>
