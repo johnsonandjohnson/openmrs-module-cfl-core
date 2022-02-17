@@ -1,6 +1,9 @@
 package org.openmrs.module.cfl.api.htmlformentry.context;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Obs;
@@ -15,6 +18,7 @@ import org.openmrs.module.htmlformentry.velocity.VelocityContextContentProvider;
 import org.openmrs.parameter.EncounterSearchCriteria;
 import org.openmrs.parameter.EncounterSearchCriteriaBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +33,8 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
 
   private static final String TREATMENTS_VELOCITY_PROPERTY_NAME = "treatments";
 
+  private static final Log LOGGER = LogFactory.getLog(TreatmentDataContentProvider.class);
+
   @Override
   public void populateContext(FormEntrySession formEntrySession, VelocityContext velocityContext) {
     Optional<Encounter> currentEncounter =
@@ -37,7 +43,12 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
       List<Obs> treatmentGroups = findTreatmentGroups(currentEncounter.get());
       List<Treatment> treatments = buildAllTreatments(treatmentGroups);
 
-      formEntrySession.addToVelocityContext(TREATMENTS_VELOCITY_PROPERTY_NAME, treatments);
+      try {
+        formEntrySession.addToVelocityContext(
+            TREATMENTS_VELOCITY_PROPERTY_NAME, new ObjectMapper().writeValueAsString(treatments));
+      } catch (IOException e) {
+        LOGGER.error("Unable to write treatments object into JSON string");
+      }
     }
   }
 
