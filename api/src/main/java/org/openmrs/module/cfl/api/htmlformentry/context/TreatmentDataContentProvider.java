@@ -13,6 +13,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.htmlformentry.model.Interruption;
 import org.openmrs.module.cfl.api.htmlformentry.model.Treatment;
+import org.openmrs.module.cfl.api.util.PatientUtil;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.velocity.VelocityContextContentProvider;
 import org.openmrs.parameter.EncounterSearchCriteria;
@@ -49,6 +50,12 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
       } catch (IOException e) {
         LOGGER.error("Unable to write treatments object into JSON string");
       }
+    } else {
+      LOGGER.warn(
+          String.format(
+              "Encounter with encounter type uuid %s for patient %s not found",
+              PROGRAM_FORM_ENCOUNTER_TYPE_UUID,
+              PatientUtil.getPatientFullName(formEntrySession.getPatient())));
     }
   }
 

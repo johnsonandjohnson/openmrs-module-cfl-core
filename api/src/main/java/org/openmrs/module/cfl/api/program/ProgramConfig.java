@@ -11,6 +11,8 @@ public class ProgramConfig {
 
   private String discontinuationFormUuid;
 
+  private Boolean enterModeOnly;
+
   public String getName() {
     return name;
   }
@@ -33,5 +35,13 @@ public class ProgramConfig {
 
   public void setDiscontinuationFormUuid(String discontinuationFormUuid) {
     this.discontinuationFormUuid = discontinuationFormUuid;
+  }
+
+  public Boolean getEnterModeOnly() {
+    return enterModeOnly;
+  }
+
+  public void setEnterModeOnly(Boolean enterModeOnly) {
+    this.enterModeOnly = enterModeOnly;
   }
 }
