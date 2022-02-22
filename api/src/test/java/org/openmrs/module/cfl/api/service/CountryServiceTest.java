@@ -33,12 +33,12 @@ public class CountryServiceTest extends BaseModuleContextSensitiveTest {
 
   @Test
   public void shouldSuccessfullyBuildAndSaveCountry() {
-    Concept result = countryService.buildAndSaveCountryResources("Test Country Name");
+    Concept result = countryService.buildAndSaveCountryResources("Test Country Name", null);
 
     assertNotNull(result);
     assertEquals("Test Country Name", result.getFullySpecifiedName(Locale.ENGLISH).getName());
     assertEquals("N/A", result.getDatatype().getName());
-    assertEquals("ConvSet", result.getConceptClass().getName());
+    assertEquals("Misc", result.getConceptClass().getName());
     assertTrue(result.getSet());
   }
 
