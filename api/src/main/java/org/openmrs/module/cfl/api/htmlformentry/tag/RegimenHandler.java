@@ -19,7 +19,6 @@ public class RegimenHandler extends SubstitutionTagHandler implements TagHandler
   protected List<AttributeDescriptor> createAttributeDescriptors() {
     List<AttributeDescriptor> attributeDescriptors = new ArrayList<>();
     attributeDescriptors.add(new AttributeDescriptor("conceptId", Concept.class));
-    attributeDescriptors.add(new AttributeDescriptor("addNew", String.class));
     return Collections.unmodifiableList(attributeDescriptors);
   }
 
