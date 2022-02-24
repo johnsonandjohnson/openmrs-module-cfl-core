@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.cfl.api.builder.ConceptBuilder;
 import org.openmrs.module.cfl.api.builder.ConceptNameBuilder;
@@ -28,7 +29,7 @@ public class CountryServiceImpl implements CountryService {
 
   private static final String NOT_ASSOCIATED_DATATYPE_NAME = "N/A";
 
-  private static final String CONV_SET_CLASS_NAME = "ConvSet";
+  private static final String MISC_CONCEPT_CLASS_NAME = "Misc";
 
   private static final String COUNTRY_CONCEPT_NAME = "Country";
 
@@ -38,16 +39,22 @@ public class CountryServiceImpl implements CountryService {
 
   @Override
   @Transactional
-  public Concept buildAndSaveCountryResources(String name) {
-    ConceptName conceptName = new ConceptNameBuilder().withName(name).build();
+  public Concept buildAndSaveCountryResources(String name, String shortName) {
+    ConceptName fullyConceptName = new ConceptNameBuilder().withName(name).build();
+    ConceptName shortConceptName =
+        new ConceptNameBuilder()
+            .withName(shortName)
+            .withConceptNameType(ConceptNameType.SHORT)
+            .build();
 
     Concept newCountryConcept =
         new ConceptBuilder()
             .withConceptDatatype(
                 conceptService.getConceptDatatypeByName(NOT_ASSOCIATED_DATATYPE_NAME))
-            .withConceptClass(conceptService.getConceptClassByName(CONV_SET_CLASS_NAME))
+            .withConceptClass(conceptService.getConceptClassByName(MISC_CONCEPT_CLASS_NAME))
             .withIsSet(true)
-            .withFullySpecifiedName(conceptName)
+            .withFullySpecifiedName(fullyConceptName)
+            .withShortName(shortConceptName)
             .build();
 
     return conceptService.saveConcept(newCountryConcept);
@@ -59,17 +66,12 @@ public class CountryServiceImpl implements CountryService {
       Map<String, String> countriesResourcesMap) {
     List<String> duplicatedCountriesNames = new ArrayList<>();
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
-
-    countriesResourcesMap.forEach(
-        (key, value) -> {
-          Concept concept = getOrCreateCountryConcept(key);
-          createClusterMembersResources(value, concept);
-          if (countryConcept.getSetMembers().contains(concept)) {
-            duplicatedCountriesNames.add(key);
-          } else {
-            countryConcept.addSetMember(concept);
-          }
-        });
+    if (countryConcept != null) {
+      duplicatedCountriesNames =
+          processCountriesResourcesMap(countriesResourcesMap, countryConcept);
+    } else {
+      LOGGER.warn(String.format("Concept with name %s not found", COUNTRY_CONCEPT_NAME));
+    }
 
     return duplicatedCountriesNames;
   }
@@ -115,13 +117,29 @@ public class CountryServiceImpl implements CountryService {
   public Concept getOrCreateCountryConcept(String name) {
     Concept concept = conceptService.getConceptByName(name);
     if (concept == null) {
-      concept = buildAndSaveCountryResources(name);
+      concept = buildAndSaveCountryResources(name, null);
     } else if (BooleanUtils.isFalse(concept.getSet())) {
       concept.setSet(true);
       conceptService.saveConcept(concept);
     }
 
     return concept;
+  }
+
+  private List<String> processCountriesResourcesMap(
+      Map<String, String> countriesResourcesMap, Concept countryConcept) {
+    List<String> duplicatedCountriesNames = new ArrayList<>();
+    countriesResourcesMap.forEach(
+        (key, value) -> {
+          Concept concept = getOrCreateCountryConcept(key);
+          createClusterMembersResources(value, concept);
+          if (countryConcept.getSetMembers().contains(concept)) {
+            duplicatedCountriesNames.add(key);
+          } else {
+            countryConcept.addSetMember(concept);
+          }
+        });
+    return duplicatedCountriesNames;
   }
 
   private void addCountryClusterMember(Concept countryConcept, Concept clusterMember) {

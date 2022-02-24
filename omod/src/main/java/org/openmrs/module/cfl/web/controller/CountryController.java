@@ -5,6 +5,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.builder.ConceptNameBuilder;
@@ -27,7 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -64,13 +64,10 @@ public class CountryController {
   public ModelAndView getCountryList() {
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
     Map<Integer, String> conceptMap = new HashMap<>();
+
     countryConcept
         .getSetMembers()
-        .forEach(
-            concept ->
-                conceptMap.put(
-                    concept.getConceptId(),
-                    concept.getFullySpecifiedName(Locale.ENGLISH).getName()));
+        .forEach(concept -> conceptMap.put(concept.getConceptId(), concept.getName().getName()));
 
     return new ModelAndView(
         COUNTRY_LIST_VIEW,
@@ -96,10 +93,7 @@ public class CountryController {
     String clusterMembers = getClusterMembersByCountry(concept);
 
     return new ModelAndView(
-        EDIT_COUNTRY_VIEW,
-        MODEL,
-        new CountryControllerModel(
-            concept.getFullySpecifiedName(Locale.ENGLISH).getName(), clusterMembers));
+        EDIT_COUNTRY_VIEW, MODEL, new CountryControllerModel(concept, clusterMembers));
   }
 
   @RequestMapping(value = "/editCountryForm.form", method = RequestMethod.POST)
@@ -114,6 +108,7 @@ public class CountryController {
         getActualClusterMembersNames(model.getClusterMembers());
 
     handleCountryNameChange(countryConcept, model.getName());
+    handleCountryCodeChange(countryConcept, model.getCountryCode());
     handleClusterMembersChanges(
         countryConcept, previousClusterMembersNames, actualClusterMembersNames);
 
@@ -165,7 +160,7 @@ public class CountryController {
 
   private List<String> getPreviousClusterMembersNames(Concept countryConcept) {
     return countryConcept.getSetMembers().stream()
-        .map(c -> c.getFullySpecifiedName(Locale.ENGLISH).getName())
+        .map(c -> c.getName().getName())
         .collect(Collectors.toList());
   }
 
@@ -212,7 +207,7 @@ public class CountryController {
                 !previousClusterMembers.contains(name.trim())
                     && StringUtils.isNotBlank(name)
                     && conceptService.getConceptByName(name.trim()) == null)
-        .forEach(name -> countryService.buildAndSaveCountryResources(name.trim()));
+        .forEach(name -> countryService.buildAndSaveCountryResources(name.trim(), null));
   }
 
   private void retireConcept(Concept concept) {
@@ -225,21 +220,48 @@ public class CountryController {
   private void handleCountryNameChange(Concept countryConcept, String countryName) {
     if (isCountryNameChanged(countryConcept, countryName)) {
       ConceptName newName = new ConceptNameBuilder().withName(countryName).build();
-      countryConcept.getName().setVoided(true);
+      voidOldName(countryConcept.getName());
       countryConcept.setFullySpecifiedName(newName);
       conceptService.saveConcept(countryConcept);
     }
   }
 
   private boolean isCountryNameChanged(Concept countryConcept, String countryName) {
-    String previousCountryName = countryConcept.getFullySpecifiedName(Locale.ENGLISH).getName();
+    String previousCountryName = countryConcept.getName().getName();
     return !StringUtils.equals(previousCountryName, countryName);
+  }
+
+  private void handleCountryCodeChange(Concept countryConcept, String countryCode) {
+    if (isCountryCodeChanged(countryConcept, countryCode)) {
+      ConceptName newShortName =
+          new ConceptNameBuilder()
+              .withName(countryCode)
+              .withConceptNameType(ConceptNameType.SHORT)
+              .build();
+      voidOldName(countryConcept.getShortNameInLocale(Context.getLocale()));
+      countryConcept.setShortName(newShortName);
+      conceptService.saveConcept(countryConcept);
+    }
+  }
+
+  private boolean isCountryCodeChanged(Concept countryConcept, String countryCode) {
+    ConceptName previousCountryCode = countryConcept.getShortNameInLocale(Context.getLocale());
+    if (previousCountryCode != null) {
+      return !StringUtils.equals(previousCountryCode.getName(), countryCode);
+    }
+    return true;
+  }
+
+  private void voidOldName(ConceptName conceptName) {
+    if (conceptName != null) {
+      conceptName.setVoided(true);
+    }
   }
 
   private String getClusterMembersByCountry(Concept countryConcept) {
     return countryConcept.getSetMembers().stream()
         .filter(concept -> !concept.getRetired())
-        .map(concept -> concept.getFullySpecifiedName(Locale.ENGLISH).getName())
+        .map(concept -> concept.getName().getName())
         .collect(Collectors.joining(", "));
   }
 
@@ -251,9 +273,11 @@ public class CountryController {
     Concept enteredCountryConcept = conceptService.getConceptByName(model.getName());
     List<Concept> countryConcepts = existingCountryConcept.getSetMembers();
     String clusterMembers = model.getClusterMembers();
+    String countryCode = model.getCountryCode();
     try {
       if (enteredCountryConcept == null) {
-        Concept newCountryConcept = countryService.buildAndSaveCountryResources(model.getName());
+        Concept newCountryConcept =
+            countryService.buildAndSaveCountryResources(model.getName(), countryCode);
         addCountryConceptToExistingCountriesList(existingCountryConcept, newCountryConcept);
         countryService.createClusterMembersResources(clusterMembers, newCountryConcept);
         setInfoMessage(httpServletRequest, "cfl.addNewCountry.success.info");

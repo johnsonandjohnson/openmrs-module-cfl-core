@@ -14,9 +14,10 @@ public interface CountryService {
    * Creates required resources for a new country or country members i.e. ConceptName and Concept.
    *
    * @param name name of country or country member
+   * @param shortName short name of country, nullable
    * @return country concept
    */
-  Concept buildAndSaveCountryResources(String name);
+  Concept buildAndSaveCountryResources(String name, String shortName);
 
   /**
    * Creates country resources or adds existing concept to list of duplicated countries
@@ -45,6 +46,7 @@ public interface CountryService {
 
   /**
    * Gets or creates concept if it does not exist
+   *
    * @param name concept name
    * @return existing or new concept
    */
