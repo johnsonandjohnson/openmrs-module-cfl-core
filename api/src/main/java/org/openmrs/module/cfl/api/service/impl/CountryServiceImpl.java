@@ -66,18 +66,9 @@ public class CountryServiceImpl implements CountryService {
       Map<String, String> countriesResourcesMap) {
     List<String> duplicatedCountriesNames = new ArrayList<>();
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
-
     if (countryConcept != null) {
-      countriesResourcesMap.forEach(
-          (key, value) -> {
-            Concept concept = getOrCreateCountryConcept(key);
-            createClusterMembersResources(value, concept);
-            if (countryConcept.getSetMembers().contains(concept)) {
-              duplicatedCountriesNames.add(key);
-            } else {
-              countryConcept.addSetMember(concept);
-            }
-          });
+      duplicatedCountriesNames =
+          processCountriesResourcesMap(countriesResourcesMap, countryConcept);
     } else {
       LOGGER.warn(String.format("Concept with name %s not found", COUNTRY_CONCEPT_NAME));
     }
@@ -133,6 +124,22 @@ public class CountryServiceImpl implements CountryService {
     }
 
     return concept;
+  }
+
+  private List<String> processCountriesResourcesMap(
+      Map<String, String> countriesResourcesMap, Concept countryConcept) {
+    List<String> duplicatedCountriesNames = new ArrayList<>();
+    countriesResourcesMap.forEach(
+        (key, value) -> {
+          Concept concept = getOrCreateCountryConcept(key);
+          createClusterMembersResources(value, concept);
+          if (countryConcept.getSetMembers().contains(concept)) {
+            duplicatedCountriesNames.add(key);
+          } else {
+            countryConcept.addSetMember(concept);
+          }
+        });
+    return duplicatedCountriesNames;
   }
 
   private void addCountryClusterMember(Concept countryConcept, Concept clusterMember) {

@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -65,13 +64,10 @@ public class CountryController {
   public ModelAndView getCountryList() {
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
     Map<Integer, String> conceptMap = new HashMap<>();
+
     countryConcept
         .getSetMembers()
-        .forEach(
-            concept ->
-                conceptMap.put(
-                    concept.getConceptId(),
-                    concept.getFullySpecifiedName(Locale.ENGLISH).getName()));
+        .forEach(concept -> conceptMap.put(concept.getConceptId(), concept.getName().getName()));
 
     return new ModelAndView(
         COUNTRY_LIST_VIEW,
@@ -164,7 +160,7 @@ public class CountryController {
 
   private List<String> getPreviousClusterMembersNames(Concept countryConcept) {
     return countryConcept.getSetMembers().stream()
-        .map(c -> c.getFullySpecifiedName(Locale.ENGLISH).getName())
+        .map(c -> c.getName().getName())
         .collect(Collectors.toList());
   }
 
@@ -231,7 +227,7 @@ public class CountryController {
   }
 
   private boolean isCountryNameChanged(Concept countryConcept, String countryName) {
-    String previousCountryName = countryConcept.getFullySpecifiedName(Locale.ENGLISH).getName();
+    String previousCountryName = countryConcept.getName().getName();
     return !StringUtils.equals(previousCountryName, countryName);
   }
 
@@ -242,14 +238,14 @@ public class CountryController {
               .withName(countryCode)
               .withConceptNameType(ConceptNameType.SHORT)
               .build();
-      voidOldName(countryConcept.getShortNameInLocale(Locale.ENGLISH));
+      voidOldName(countryConcept.getShortNameInLocale(Context.getLocale()));
       countryConcept.setShortName(newShortName);
       conceptService.saveConcept(countryConcept);
     }
   }
 
   private boolean isCountryCodeChanged(Concept countryConcept, String countryCode) {
-    ConceptName previousCountryCode = countryConcept.getShortNameInLocale(Locale.ENGLISH);
+    ConceptName previousCountryCode = countryConcept.getShortNameInLocale(Context.getLocale());
     if (previousCountryCode != null) {
       return !StringUtils.equals(previousCountryCode.getName(), countryCode);
     }
@@ -265,7 +261,7 @@ public class CountryController {
   private String getClusterMembersByCountry(Concept countryConcept) {
     return countryConcept.getSetMembers().stream()
         .filter(concept -> !concept.getRetired())
-        .map(concept -> concept.getFullySpecifiedName(Locale.ENGLISH).getName())
+        .map(concept -> concept.getName().getName())
         .collect(Collectors.joining(", "));
   }
 
