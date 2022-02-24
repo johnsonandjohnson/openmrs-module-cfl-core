@@ -192,10 +192,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
         CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
     createGlobalSettingIfNotExists(
-        CFLConstants.COUNTRY_SETTINGS_MAP_KEY,
-        CFLConstants.COUNTRY_SETTINGS_MAP_DEFAULT_VALUE,
-        CFLConstants.COUNTRY_SETTINGS_MAP_DESCRIPTION);
-    createGlobalSettingIfNotExists(
         CFLConstants.ACTOR_TYPES_KEY, CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
     createGlobalSettingIfNotExists(
         CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,

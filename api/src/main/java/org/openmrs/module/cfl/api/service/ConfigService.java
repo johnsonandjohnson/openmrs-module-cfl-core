@@ -18,7 +18,6 @@ import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -73,8 +72,6 @@ public interface ConfigService {
     boolean isVaccinationListenerEnabled(String listenerName);
 
     String getDefaultUserTimeZone();
-
-    Map<String, CountrySetting> getCountrySettingMap(String globalPropertyName);
 
     /**
      * Gets the safe delivery time from {@code requestedDeliveryTime}.

@@ -184,29 +184,6 @@ public final class CFLConstants {
 
   public static final String COUNTRY_LOCATION_ATTR_TYPE_NAME = "Country decoded";
 
-  public static final String COUNTRY_SETTINGS_MAP_KEY = "cfl.countrySettingsMap";
-  public static final String COUNTRY_SETTINGS_MAP_DEFAULT_VALUE =
-      "[\n"
-          + "   {\n"
-          + "      \"default\":{\n"
-          + "         \"SMS\":\"\",\n"
-          + "         \"CALL\":\"\",\n"
-          + "         \"performCallOnPatientRegistration\":false,\n"
-          + "         \"sendSmsOnPatientRegistration\":false,\n"
-          + "         \"shouldSendReminderViaCall\":false,\n"
-          + "         \"shouldSendReminderViaSms\":false,\n"
-          + "         \"shouldCreateFirstVisit\":false,\n"
-          + "         \"shouldCreateFutureVisit\":false,\n"
-          + "         \"patientNotificationTimeWindowFrom\":\"10:00\",\n"
-          + "         \"patientNotificationTimeWindowTo\":\"18:00\""
-          + "      }\n"
-          + "   }\n"
-          + "]";
-  public static final String COUNTRY_SETTINGS_MAP_DESCRIPTION =
-      "Specifies a map with countries as a keys and all country settings as a values";
-
-  public static final String DEFAULT_COUNTRY_SETTING_KEY = "default";
-
   public static final String SMS_CHANNEL_TYPE = "SMS";
 
   public static final String CALL_CHANNEL_TYPE = "Call";
