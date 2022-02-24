@@ -2,8 +2,8 @@ package org.openmrs.module.cfl.web.model;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.api.context.Context;
 
-import java.util.Locale;
 import java.util.Map;
 
 /** The AddCountryControllerModel class */
@@ -24,9 +24,9 @@ public class CountryControllerModel {
   }
 
   public CountryControllerModel(Concept countryConcept, String clusterMembers) {
-    ConceptName countryConceptFullName = countryConcept.getFullySpecifiedName(Locale.ENGLISH);
+    ConceptName countryConceptFullName = countryConcept.getName();
     this.name = countryConceptFullName != null ? countryConceptFullName.getName() : null;
-    ConceptName countryConceptShortName = countryConcept.getShortNameInLocale(Locale.ENGLISH);
+    ConceptName countryConceptShortName = countryConcept.getShortNameInLocale(Context.getLocale());
     this.countryCode = countryConceptShortName != null ? countryConceptShortName.getName() : null;
     this.clusterMembers = clusterMembers;
   }

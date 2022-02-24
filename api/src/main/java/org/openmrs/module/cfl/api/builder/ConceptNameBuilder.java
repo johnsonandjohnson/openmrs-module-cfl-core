@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.api.builder;
 
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
+import org.openmrs.api.context.Context;
 
 import java.util.Locale;
 
@@ -15,7 +16,7 @@ public class ConceptNameBuilder {
 
   public ConceptNameBuilder() {
     conceptNameType = ConceptNameType.FULLY_SPECIFIED;
-    locale = Locale.ENGLISH;
+    locale = Context.getLocale();
   }
 
   public ConceptName build() {
