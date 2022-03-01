@@ -41,7 +41,7 @@ public class CountryServiceTest extends BaseModuleContextSensitiveTest {
     Concept result = countryService.buildAndSaveCountryResources("Test Country Name", null);
 
     assertNotNull(result);
-    assertEquals("Test Country Name", result.getFullySpecifiedName(Locale.ENGLISH).getName());
+    assertEquals("Test Country Name", result.getName().getName());
     assertEquals("N/A", result.getDatatype().getName());
     assertEquals("Misc", result.getConceptClass().getName());
     assertNull(result.getShortNameInLocale(Locale.ENGLISH));
@@ -53,7 +53,7 @@ public class CountryServiceTest extends BaseModuleContextSensitiveTest {
     Concept result = countryService.buildAndSaveCountryResources("Test Country Name", "TCN");
 
     assertNotNull(result);
-    assertEquals("Test Country Name", result.getFullySpecifiedName(Locale.ENGLISH).getName());
+    assertEquals("Test Country Name", result.getName().getName());
     assertEquals("N/A", result.getDatatype().getName());
     assertEquals("Misc", result.getConceptClass().getName());
     assertEquals("TCN", result.getShortNameInLocale(Locale.ENGLISH).getName());
