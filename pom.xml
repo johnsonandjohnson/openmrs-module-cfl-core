@@ -68,7 +68,7 @@
         <javax.servlet.version>3.0.1</javax.servlet.version>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
-        <messagesVersion>1.4.3-SNAPSHOT</messagesVersion>
+        <messagesVersion>1.5.0</messagesVersion>
     </properties>
 
     <dependencyManagement>
