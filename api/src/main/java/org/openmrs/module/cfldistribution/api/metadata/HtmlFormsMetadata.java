@@ -39,8 +39,7 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
             "cfldistribution:htmlforms/cfl-sputum-visit-note.xml",
             "cfldistribution:htmlforms/encounters-form.xml",
             "cfldistribution:htmlforms/cfl-hiv-enrollment.xml",
-            "cfldistribution:htmlforms/discontinue-program.xml",
-            "cfldistribution:htmlforms/cfl-hiv-arts.xml");
+            "cfldistribution:htmlforms/discontinue-program.xml");
 
     for (String htmlform : htmlforms) {
       HtmlFormUtil.getHtmlFormFromUiResource(
