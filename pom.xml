@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cfldistribution</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.4</version>
     <packaging>pom</packaging>
     <name>CFL Distribution Module</name>
     <description>The module contains metadata and various customizations distinct for the CFL Distribution.</description>
@@ -18,7 +18,7 @@
         <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</connection>
         <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</developerConnection>
         <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</url>
-        <tag>HEAD</tag>
+        <tag>1.2.4</tag>
     </scm>
 
     <modules>
