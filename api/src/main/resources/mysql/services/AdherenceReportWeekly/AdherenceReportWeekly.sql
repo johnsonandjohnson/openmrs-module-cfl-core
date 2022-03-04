@@ -1,38 +1,47 @@
-SELECT EXECUTION_DATE,
- MESSAGE_ID,
- CHANNEL_ID,
- null AS STATUS_ID
-FROM
-(
- SELECT TIMESTAMP(selected_date, :bestContactTime) AS EXECUTION_DATE,
-     1 AS MESSAGE_ID,
-     :Service_type AS CHANNEL_ID
- FROM (
-     SELECT *
-     FROM (SELECT * FROM DATES_LIST_10K_DAYS_TABLE) v
-     WHERE selected_date <= DATE(:endDateTime)
-     AND selected_date >= DATE(:startDateTime)
-     AND :Week_day_of_delivering_message
-     LIKE concat('%',DAYNAME(selected_date),'%')
- ) dates
-) temp
-WHERE EXECUTION_DATE > GET_PREDICTION_START_DATE_FOR_ADHERENCE_WEEKLY(:patientId, :actorId, :executionStartDateTime)
- AND EXECUTION_DATE <= :endDateTime
- AND EXECUTION_DATE >= :startDateTime
- AND CHANNEL_ID != 'Deactivate service'
-UNION
- SELECT mssg.msg_send_time AS EXECUTION_DATE,
-     1 AS MESSAGE_ID,
-     mssg.channel_type AS CHANNEL_ID,
-     mss.status AS STATUS_ID
- FROM messages_scheduled_service mss
-     JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
-     JOIN messages_template mt on mt.messages_template_id = mpt.template_id
-     JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
- WHERE mt.name = 'Adherence report weekly'
-     AND mpt.patient_id = :patientId
-     AND mpt.actor_id = :actorId
-     AND mssg.patient_id = :patientId
-     AND mssg.msg_send_time >= :startDateTime
-     AND mssg.msg_send_time <= :endDateTime
- ORDER BY 1 DESC;
+select cast(CASE
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%') THEN :startDateTime
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%')
+                    THEN DATE_ADD(:startDateTime, INTERVAL 1 DAY)
+    END AS DATE)         AS EXECUTION_DATE,
+       1                 AS MESSAGE_ID,
+       mtfv.SERVICE_TYPE as CHANNEL_ID,
+       pmt.patient_id    AS PATIENT_ID,
+       pmt.actor_id      AS ACTOR_ID,
+       pmt.messages_patient_template_id,
+       pmt.template_id,
+       mt.name,
+       mtfv.frequency,
+       mtfv.weekdays,
+       mtfv.start_date,
+       mtfv.end_Date,
+       mtfv.end_Date_type
+from messages_patient_template pmt
+         join (SELECT t.patient_template_id,
+                      MAX(CASE WHEN tf.name = 'Service type' THEN t.value ELSE NULL END)                   AS SERVICE_TYPE,
+                      MAX(CASE WHEN tf.name = 'Frequency of the message' THEN t.value ELSE NULL END)       AS FREQUENCY,
+                      MAX(CASE WHEN tf.name = 'Week day of delivering message' THEN t.value ELSE NULL END) AS WEEKDAYS,
+                      MAX(CASE WHEN tf.name = 'Start of weekly messages' THEN t.value ELSE NULL END)       AS START_DATE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of weekly messages' THEN SUBSTRING_INDEX(t.value, '|', 1)
+                              ELSE NULL END)                                                               AS END_DATE_TYPE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of weekly messages' THEN SUBSTRING_INDEX(t.value, '|', -1)
+                              ELSE NULL END)                                                               AS END_DATE
+               FROM messages_template_field_value t
+                        JOIN messages_template_field tf ON tf.messages_template_field_id = t.template_field_id
+               GROUP BY t.patient_template_id) mtfv
+              on mtfv.patient_template_id = pmt.messages_patient_template_id
+                  and mtfv.service_type <> 'Deactivate service'
+                  and (mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%')
+                      || mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%'))
+                  and mtfv.start_date <= :startDateTime
+                  and (mtfv.end_date = 'EMPTY'
+                      || (mtfv.end_date_type = 'DATE_PICKER' && mtfv.end_date >= :startDateTime)
+                      || (mtfv.end_date_type = 'AFTER_TIMES' && mtfv.end_date > (select count(*)
+                                                                                 from messages_scheduled_service
+                                                                                 where patient_template_id = pmt.messages_patient_template_id)))
+         join person_attribute pa on pa.person_id = pmt.patient_id and pa.value = 'ACTIVATED' and pa.voided = 0
+         JOIN person_attribute_type pat
+              ON pat.person_attribute_type_id = pa.person_attribute_type_id AND pat.name = 'Person status'
+         join messages_template mt on mt.name = 'Adherence report weekly' and mt.messages_template_id = pmt.template_id
+where pmt.voided = 0

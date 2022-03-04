@@ -21,20 +21,25 @@ public class AdherenceReportWeeklyMetadata extends AbstractMessageServiceMetadat
   @Override
   protected Template createTemplate() throws IOException {
     final String adherenceReportWeeklyServiceQuery = getAdherenceReportWeeklyServiceQuery();
+    final String adherenceReportWeeklyCalendarQuery = getAdherenceReportWeeklyCalendarQuery();
 
     return MessageTemplateBuilder.buildMessageTemplate(
         adherenceReportWeeklyServiceQuery,
         SQL_QUERY_TYPE,
-        null,
+        adherenceReportWeeklyCalendarQuery,
         "Adherence report weekly",
-        false,
+        true,
         templateUuid);
   }
 
   @Override
   protected void updateTemplate(Template template) throws IOException {
     final String adherenceReportWeeklyServiceQuery = getAdherenceReportWeeklyServiceQuery();
+    final String adherenceReportWeeklyCalendarQuery = getAdherenceReportWeeklyCalendarQuery();
+
     template.setServiceQuery(adherenceReportWeeklyServiceQuery);
+    template.setCalendarServiceQuery(adherenceReportWeeklyCalendarQuery);
+    template.setShouldUseOptimizedQuery(true);
   }
 
   @Override
@@ -102,6 +107,11 @@ public class AdherenceReportWeeklyMetadata extends AbstractMessageServiceMetadat
 
   private String getAdherenceReportWeeklyServiceQuery() throws IOException {
     return metadataSQLScriptRunner.getQueryFromResource(
-        SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeekly" + ".sql");
+        SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeekly.sql");
+  }
+
+  private String getAdherenceReportWeeklyCalendarQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportWeekly/AdherenceReportWeeklyCalendar.sql");
   }
 }

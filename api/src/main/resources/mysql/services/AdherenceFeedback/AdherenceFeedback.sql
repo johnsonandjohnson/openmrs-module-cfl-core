@@ -1,326 +1,47 @@
-SELECT EXECUTION_DATE,
-       MESSAGE_ID,
-       CHANNEL_ID,
-       NULL AS STATUS_ID,
-       ADHERENCE_LEVEL,
-       ADHERENCE_TREND,
-       (SELECT property_value
-       FROM global_property
-       WHERE property = 'messages.cutOffScoreForMediumLowAdherenceLevel') as ADHERENCE_LEVEL_CUT_OFF_SCORE_MEDIUM_LOW,
-       (SELECT property_value
-       FROM global_property
-       WHERE property = 'messages.cutOffScoreForHighMediumAdherenceLevel') as ADHERENCE_LEVEL_CUT_OFF_SCORE_HIGH_MEDIUM,
-       (SELECT property_value
-       FROM global_property
-       WHERE property = 'messages.cutOffScoreForAdherenceTrend') as ADHERENCE_TREND_CUT_OFF_SCORE,
-       (SELECT property_value
-       FROM global_property
-       WHERE property = 'messages.benchmarkPeriod') as BENCHMARK_PERIOD,
-       IFNULL((SELECT sum(text_response = 'YES')
-       FROM (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-       AND    patient_id = :patientId AND actor_id = :actorId) mar
-       JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-       JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-       JOIN   messages_patient_template mpt
-       ON     mss.patient_template_id = mpt.messages_patient_template_id
-       JOIN   messages_template mt
-       ON     mpt.template_id = mt.messages_template_id
-       WHERE  mt.name = 'Adherence report daily' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime
-       OR     mt.name = 'Adherence report weekly' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime), 0) as NUMBER_OF_DAYS_USER_GAVE_YES_RESPONSE,
-       IFNULL((SELECT sum(text_response = 'YES' or text_response = 'NO')
-       FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-       AND    patient_id = :patientId AND actor_id = :actorId) mar
-       JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-       JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-       JOIN   messages_patient_template mpt
-       ON     mss.patient_template_id = mpt.messages_patient_template_id
-       JOIN   messages_template mt
-       ON     mpt.template_id = mt.messages_template_id
-       WHERE  mt.name = 'Adherence report daily' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime
-       OR     mt.name = 'Adherence report weekly' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime), 0) as NUMBER_OF_DAYS_USER_GAVE_RESPONSE,
-       IFNULL((SELECT sum(text_response = 'YES') / sum(text_response = 'YES' or text_response = 'NO')
-       FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-       AND    patient_id = :patientId AND actor_id = :actorId) mar
-       JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-       JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-       JOIN   messages_patient_template mpt
-       ON     mss.patient_template_id = mpt.messages_patient_template_id
-       JOIN   messages_template mt
-       ON     mpt.template_id = mt.messages_template_id
-       WHERE  mt.name = 'Adherence report daily' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select 2 * (select property_value from global_property where property = 'messages.benchmarkPeriod')) day))
-       AND    mar.answered_time <= (select date_add(:executionStartDateTime, interval - (select property_value from global_property where property = 'messages.benchmarkPeriod') day))
-       OR     mt.name = 'Adherence report weekly' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select 2 * (select property_value from global_property where property = 'messages.benchmarkPeriod')) day))
-       AND    mar.answered_time <= (select date_add(:executionStartDateTime, interval - (select property_value from global_property where property = 'messages.benchmarkPeriod') day))), 0) as ADHERENCE_LEVEL_TWO_BENCHMARK_PERIODS_AGO,
-       IFNULL((SELECT sum(text_response = 'YES') / sum(text_response = 'YES' or text_response = 'NO')
-       FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-       AND    patient_id = :patientId AND actor_id = :actorId) mar
-       JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-       JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-       JOIN   messages_patient_template mpt
-       ON     mss.patient_template_id = mpt.messages_patient_template_id
-       JOIN   messages_template mt
-       ON     mpt.template_id = mt.messages_template_id
-       WHERE  mt.name = 'Adherence report daily' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime
-       OR     mt.name = 'Adherence report weekly' and mar.answered_time >= (select date_add(:executionStartDateTime, interval -
-              (select property_value from global_property where property = 'messages.benchmarkPeriod') day)) and mar.answered_time <= :executionStartDateTime), 0) as ADHERENCE_LEVEL_BENCHMARK_PERIOD_AGO
-FROM   (
-              SELECT Timestamp(selected_date, times) AS EXECUTION_DATE,
-                     1                               AS MESSAGE_ID,
-                     :Service_type                   AS CHANNEL_ID
-              FROM   (
-                            SELECT *
-                            FROM   (
-                                          SELECT *
-                                          FROM DATES_LIST_10K_DAYS_TABLE) dates_list
-                            WHERE  (
-                                          Dayofmonth(selected_date) <IF (:Frequency_of_the_message = 'Weekly', 32, 8))
-                            AND    :Week_day_of_delivering_message LIKE concat('%',dayname(selected_date),'%')) dates
-              JOIN
-                     (
-                            SELECT :bestContactTime times) timeslist) temp
-JOIN
-       (
-              SELECT IF(sum(text_response = 'YES') / sum(text_response = 'YES'
-              OR     text_response = 'NO') >
-                     (
-                            SELECT
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.cutOffScoreForHighMediumAdherenceLevel') / 100), 'HIGH',
-                     (
-                            SELECT IF(sum(text_response = 'YES') / sum(text_response = 'YES'
-                            OR     text_response = 'NO') >
-                                   (
-                                          SELECT
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.cutOffScoreForMediumLowAdherenceLevel') / 100), 'MEDIUM', 'LOW')
-                            FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-                            AND    patient_id = :patientId AND actor_id = :actorId) mar
-                            JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                            JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                            JOIN   messages_patient_template mpt
-                            ON     mss.patient_template_id = mpt.messages_patient_template_id
-                            JOIN   messages_template mt
-                            ON     mpt.template_id = mt.messages_template_id
-                            WHERE  mt.NAME = 'Adherence report daily'
-                            AND    mar.answered_time >=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.benchmarkPeriod') day))
-                            AND    mar.answered_time <= :executionStartDateTime
-                            OR     mt.NAME = 'Adherence report weekly'
-                            AND    mar.answered_time >=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.benchmarkPeriod') day))
-                            AND    mar.answered_time <= :executionStartDateTime)) AS ADHERENCE_LEVEL
-              FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-              AND    patient_id = :patientId AND actor_id = :actorId) mar
-              JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-              JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-              JOIN   messages_patient_template mpt
-              ON     mss.patient_template_id = mpt.messages_patient_template_id
-              JOIN   messages_template mt
-              ON     mpt.template_id = mt.messages_template_id
-              WHERE  mt.NAME = 'Adherence report daily'
-              AND    mar.answered_time >=
-                     (
-                            SELECT date_add(:executionStartDateTime, interval -
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.benchmarkPeriod') day))
-              AND    mar.answered_time <= :executionStartDateTime
-              OR     mt.NAME = 'Adherence report weekly'
-              AND    mar.answered_time >=
-                     (
-                            SELECT date_add(:executionStartDateTime, interval -
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.benchmarkPeriod') day))
-              AND    mar.answered_time <= :executionStartDateTime) adhlev
-JOIN
-       (
-              SELECT IF(sum(text_response = 'YES') / sum(text_response = 'YES'
-              OR     text_response = 'NO')         -
-                     (
-                            SELECT sum(text_response = 'YES') / sum(text_response = 'YES'
-                            OR     text_response = 'NO')
-                            FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-                            AND    patient_id = :patientId AND actor_id = :actorId) mar
-                            JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                            JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                            JOIN   messages_patient_template mpt
-                            ON     mss.patient_template_id = mpt.messages_patient_template_id
-                            JOIN   messages_template mt
-                            ON     mpt.template_id = mt.messages_template_id
-                            WHERE  mt.NAME = 'Adherence report daily'
-                            AND    mar.answered_time >=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT 2 *
-                                                               (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.benchmarkPeriod')) day))
-                            AND    mar.answered_time <=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.benchmarkPeriod') day))
-                            OR     mt.NAME = 'Adherence report weekly'
-                            AND    mar.answered_time >=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT 2 *
-                                                               (
-                                                                      SELECT property_value
-                                                                      FROM   global_property
-                                                                      WHERE  property = 'messages.benchmarkPeriod')) day))
-                            AND    mar.answered_time <=
-                                   (
-                                          SELECT date_add(:executionStartDateTime, interval -
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.benchmarkPeriod') day))) >
-                     (
-                            SELECT
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.cutOffScoreForAdherenceTrend') / 100), 'RISING',
-                     (
-                            SELECT IF(sum(text_response = 'YES') / sum(text_response = 'YES'
-                            OR     text_response = 'NO')         -
-                                   (
-                                          SELECT sum(text_response = 'YES') / sum(text_response = 'YES'
-                                          OR     text_response = 'NO')
-                                          FROM   (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-                                          AND    patient_id = :patientId AND actor_id = :actorId) mar
-                                          JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                                          JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                                          JOIN   messages_patient_template mpt
-                                          ON     mss.patient_template_id = mpt.messages_patient_template_id
-                                          JOIN   messages_template mt
-                                          ON     mpt.template_id = mt.messages_template_id
-                                          WHERE  mt.NAME = 'Adherence report daily'
-                                          AND    mar.answered_time >=
-                                                 (
-                                                        SELECT date_add(:executionStartDateTime, interval -
-                                                               (
-                                                                      SELECT 2 *
-                                                                             (
-                                                                                    SELECT property_value
-                                                                                    FROM   global_property
-                                                                                    WHERE  property = 'messages.benchmarkPeriod')) day))
-                                          AND    mar.answered_time <=
-                                                 (
-                                                        SELECT date_add(:executionStartDateTime, interval -
-                                                               (
-                                                                      SELECT property_value
-                                                                      FROM   global_property
-                                                                      WHERE  property = 'messages.benchmarkPeriod') day))
-                                          OR     mt.NAME = 'Adherence report weekly'
-                                          AND    mar.answered_time >=
-                                                 (
-                                                        SELECT date_add(:executionStartDateTime, interval -
-                                                               (
-                                                                      SELECT 2 *
-                                                                             (
-                                                                                    SELECT property_value
-                                                                                    FROM   global_property
-                                                                                    WHERE  property = 'messages.benchmarkPeriod')) day))
-                                          AND    mar.answered_time <=
-                                                 (
-                                                        SELECT date_add(:executionStartDateTime, interval -
-                                                               (
-                                                                      SELECT property_value
-                                                                      FROM   global_property
-                                                                      WHERE  property = 'messages.benchmarkPeriod') day)) ) <-1 *
-                                   (
-                                          SELECT
-                                                 (
-                                                        SELECT property_value
-                                                        FROM   global_property
-                                                        WHERE  property = 'messages.cutOffScoreForAdherenceTrend') / 100), 'FALLING', 'STABLE'))) AS ADHERENCE_TREND
-              FROM (SELECT * FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP'
-              AND    patient_id = :patientId AND actor_id = :actorId) mar
-              JOIN   messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-              JOIN   messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-              JOIN   messages_patient_template mpt
-              ON     mss.patient_template_id = mpt.messages_patient_template_id
-              JOIN   messages_template mt
-              ON     mpt.template_id = mt.messages_template_id
-              WHERE  mt.NAME = 'Adherence report daily'
-              AND    mar.answered_time >=
-                     (
-                            SELECT date_add(:executionStartDateTime, interval -
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.benchmarkPeriod') day))
-              AND    mar.answered_time <= :executionStartDateTime
-              OR     mt.NAME = 'Adherence report weekly'
-              AND    mar.answered_time >=
-                     (
-                            SELECT date_add(:executionStartDateTime, interval -
-                                   (
-                                          SELECT property_value
-                                          FROM   global_property
-                                          WHERE  property = 'messages.benchmarkPeriod') day))
-              AND    mar.answered_time <= :executionStartDateTime) adhtre
-WHERE  EXECUTION_DATE >= :startDateTime
-AND    EXECUTION_DATE <= :endDateTime
-AND    EXECUTION_DATE > get_prediction_start_date_for_adherence_feedback(:patientId, :actorId, :executionStartDateTime)
-AND    CHANNEL_ID != 'Deactivate service'
-UNION
-SELECT   mssg.msg_send_time AS EXECUTION_DATE,
-         1                  AS MESSAGE_ID,
-         mssg.channel_type  AS CHANNEL_ID,
-         mss.status         AS STATUS_ID,
-         NULL               AS ADHERENCE_LEVEL,
-         NULL               AS ADHERENCE_TREND,
-         NULL               AS ADHERENCE_LEVEL_CUT_OFF_SCORE_MEDIUM_LOW,
-         NULL               AS ADHERENCE_LEVEL_CUT_OFF_SCORE_HIGH_MEDIUM,
-         NULL               AS ADHERENCE_TREND_CUT_OFF_SCORE,
-         NULL               AS BENCHMARK_PERIOD,
-         NULL               AS NUMBER_OF_DAYS_USER_GAVE_YES_RESPONSE,
-         NULL               AS NUMBER_OF_DAYS_USER_GAVE_RESPONSE,
-         NULL               AS ADHERENCE_LEVEL_TWO_BENCHMARK_PERIODS_AGO,
-         NULL               AS ADHERENCE_LEVEL_BENCHMARK_PERIOD_AGO
-FROM     messages_scheduled_service mss
-JOIN     messages_patient_template mpt
-ON       mpt.messages_patient_template_id = mss.patient_template_id
-JOIN     messages_template mt
-ON       mt.messages_template_id = mpt.template_id
-JOIN     messages_scheduled_service_group mssg
-ON       mssg.messages_scheduled_service_group_id = mss.group_id
-WHERE    mt.NAME = 'Adherence feedback'
-AND      mpt.patient_id = :patientId
-AND      mpt.actor_id =:actorId
-AND      mssg.patient_id = :patientId
-AND      mssg.msg_send_time >= :startDateTime
-AND      mssg.msg_send_time <= :endDateTime
-ORDER BY 1 DESC;
+select cast(CASE
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%') THEN :startDateTime
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%')
+                    THEN DATE_ADD(:startDateTime, INTERVAL 1 DAY)
+    END AS DATE)         AS EXECUTION_DATE,
+       1                 AS MESSAGE_ID,
+       mtfv.SERVICE_TYPE as CHANNEL_ID,
+       pmt.patient_id    AS PATIENT_ID,
+       pmt.actor_id      AS ACTOR_ID,
+       pmt.messages_patient_template_id,
+       pmt.template_id,
+       mt.name,
+       mtfv.frequency,
+       mtfv.weekdays,
+       mtfv.start_date,
+       mtfv.end_Date,
+       mtfv.end_Date_type
+from messages_patient_template pmt
+         join (SELECT t.patient_template_id,
+                      MAX(CASE WHEN tf.name = 'Service type' THEN t.value ELSE NULL END)                   AS SERVICE_TYPE,
+                      MAX(CASE WHEN tf.name = 'Frequency of the message' THEN t.value ELSE NULL END)       AS FREQUENCY,
+                      MAX(CASE WHEN tf.name = 'Week day of delivering message' THEN t.value ELSE NULL END) AS WEEKDAYS,
+                      MAX(CASE WHEN tf.name = 'Start of weekly messages' THEN t.value ELSE NULL END)       AS START_DATE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of weekly messages' THEN SUBSTRING_INDEX(t.value, '|', 1)
+                              ELSE NULL END)                                                               AS END_DATE_TYPE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of weekly messages' THEN SUBSTRING_INDEX(t.value, '|', -1)
+                              ELSE NULL END)                                                               AS END_DATE
+               FROM messages_template_field_value t
+                        JOIN messages_template_field tf ON tf.messages_template_field_id = t.template_field_id
+               GROUP BY t.patient_template_id) mtfv
+              on mtfv.patient_template_id = pmt.messages_patient_template_id
+                  and mtfv.service_type <> 'Deactivate service'
+                  and (mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%')
+                      || mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%'))
+                  and mtfv.start_date <= :startDateTime
+                  and (mtfv.end_date = 'EMPTY'
+                      || (mtfv.end_date_type = 'DATE_PICKER' && mtfv.end_date >= :startDateTime)
+                      || (mtfv.end_date_type = 'AFTER_TIMES' && mtfv.end_date > (select count(*)
+                                                                                 from messages_scheduled_service
+                                                                                 where patient_template_id = pmt.messages_patient_template_id)))
+         join person_attribute pa on pa.person_id = pmt.patient_id and pa.value = 'ACTIVATED' and pa.voided = 0
+         JOIN person_attribute_type pat
+              ON pat.person_attribute_type_id = pa.person_attribute_type_id AND pat.name = 'Person status'
+         join messages_template mt on mt.name = 'Adherence feedback' and mt.messages_template_id = pmt.template_id
+where pmt.voided = 0

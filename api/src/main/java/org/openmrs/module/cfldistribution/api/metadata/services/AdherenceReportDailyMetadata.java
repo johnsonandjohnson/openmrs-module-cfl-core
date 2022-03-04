@@ -21,20 +21,25 @@ public class AdherenceReportDailyMetadata extends AbstractMessageServiceMetadata
   @Override
   protected Template createTemplate() throws IOException {
     final String adherenceReportDailyServiceQuery = getAdherenceReportDailyServiceQuery();
+    final String adherenceReportDailyCalendarQuery = getAdherenceReportDailyCalendarQuery();
 
     return MessageTemplateBuilder.buildMessageTemplate(
         adherenceReportDailyServiceQuery,
         SQL_QUERY_TYPE,
-        null,
+        adherenceReportDailyCalendarQuery,
         "Adherence report daily",
-        false,
+        true,
         templateUuid);
   }
 
   @Override
   protected void updateTemplate(Template template) throws IOException {
     final String adherenceReportDailyServiceQuery = getAdherenceReportDailyServiceQuery();
+    final String adherenceReportDailyCalendarQuery = getAdherenceReportDailyCalendarQuery();
+
     template.setServiceQuery(adherenceReportDailyServiceQuery);
+    template.setCalendarServiceQuery(adherenceReportDailyCalendarQuery);
+    template.setShouldUseOptimizedQuery(true);
   }
 
   @Override
@@ -103,5 +108,10 @@ public class AdherenceReportDailyMetadata extends AbstractMessageServiceMetadata
   private String getAdherenceReportDailyServiceQuery() throws IOException {
     return metadataSQLScriptRunner.getQueryFromResource(
         SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDaily.sql");
+  }
+
+  private String getAdherenceReportDailyCalendarQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceReportDaily/AdherenceReportDailyCalendar.sql");
   }
 }

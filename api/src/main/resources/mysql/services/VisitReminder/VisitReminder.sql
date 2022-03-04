@@ -1,89 +1,61 @@
-SELECT EXECUTION_DATE,
-    MESSAGE_ID,
-    null AS STATUS_ID,
-    visitTypeId,
-    locationId,
-    dateStarted,
-    visitId,
-    timeStarted,
-    PATIENT_ID,
-    ACTOR_ID
-FROM
-(
-    SELECT selected_date AS EXECUTION_DATE,
-     1 AS MESSAGE_ID,
-     visitTypeId,
-     locationId,
-     dateStarted,
-     visitId,
-     visitTime AS timeStarted,
-     PATIENT_ID,
-     ACTOR_ID
-    FROM
-    DATES_LIST_10K_DAYS_TABLE
-        JOIN (
-            SELECT
-                v.date_started AS visit_dates,
-                v.visit_type_id AS visitTypeId,
-                v.location_id AS locationId,
-                v.visit_id AS visitId,
-                v.date_started AS dateStarted,
-                visit_times.visit_time AS visitTime,
-                v.patient_id AS PATIENT_ID,
-                null AS ACTOR_ID
-            FROM
-                visit v
-                LEFT JOIN (
-                    SELECT
-                        visit_id,
-                        value_reference as visit_time
-                    FROM
-                        visit_attribute va
-                        JOIN visit_attribute_type vat ON va.attribute_type_id = vat.visit_attribute_type_id
-                    WHERE
-                        vat.name = 'Visit Time'
-                ) AS visit_times ON v.visit_id = visit_times.visit_id
-                LEFT JOIN (
-                    SELECT
-                        visit_id,
-                        value_reference as visit_status
-                    FROM
-                        visit_attribute va
-                        JOIN visit_attribute_type vat ON va.attribute_type_id = vat.visit_attribute_type_id
-                    WHERE
-                        vat.name = 'Visit Status'
-                        AND va.voided = 0
-                ) AS visit_statuses ON v.visit_id = visit_statuses.visit_id
-            WHERE
-                v.voided = 0
-                AND visit_statuses.visit_status = 'SCHEDULED'
-        ) dates_of_visit
-    WHERE concat(',',(
-        SELECT property_value
-        FROM global_property
-        WHERE property ='message.daysToCallBeforeVisit.default'), ',')
-            LIKE concat('%,',datediff(visit_dates, selected_date),',%')
-            AND date(visit_dates) !=  selected_date
-) dates_before_visit
-UNION
-    SELECT mssg.msg_send_time AS EXECUTION_DATE,
-        1 AS MESSAGE_ID,
-        mss.status AS STATUS_ID,
-        null AS visitTypeId,
-        null AS locationId,
-        null AS dateStarted,
-        null AS visitId,
-        null AS timeStarted,
-        mpt.patient_id AS PATIENT_ID,
-        mpt.actor_id AS ACTOR_ID
-    FROM messages_scheduled_service mss
-        JOIN messages_patient_template mpt ON mpt.messages_patient_template_id = mss.patient_template_id
-        JOIN messages_template mt ON mt.messages_template_id = mpt.template_id
-        JOIN messages_scheduled_service_group mssg ON mssg.messages_scheduled_service_group_id = mss.group_id
-    WHERE mt.name = 'Visit reminder'
-        AND mpt.patient_id = mpt.patient_id
-        AND mpt.actor_id = mpt.actor_id
-        AND mssg.patient_id = mpt.patient_id
-        AND mssg.msg_send_time >= :startDateTime
-        AND mssg.msg_send_time <= :endDateTime
-    ORDER BY 1 desc;
+SELECT cast(CASE
+                WHEN (SELECT concat(',', property_value, ',')
+                      FROM global_property
+                      WHERE property = 'message.daysToCallBeforeVisit.default'
+                      LIMIT 1) LIKE concat('%,', DATEDIFF(v.date_started, :startDateTime), ',%')
+                    THEN :startDateTime
+                WHEN (SELECT concat(',', property_value, ',')
+                      FROM global_property
+                      WHERE property = 'message.daysToCallBeforeVisit.default'
+                      LIMIT 1) LIKE concat('%,', DATEDIFF(v.date_started, DATE_ADD(@startDateTime, INTERVAL 1 DAY)), ',%')
+                    THEN DATE_ADD(v.date_started, INTERVAL 1 DAY)
+    END AS DATE)             AS EXECUTION_DATE,
+       1                     AS MESSAGE_ID,
+       mtfv.SERVICE_TYPE     AS CHANNEL_ID,
+       pmt.patient_id        AS PATIENT_ID,
+       pmt.actor_id          AS ACTOR_ID,
+       v.visit_type_id       AS visitTypeId,
+       v.location_id         AS locationId,
+       v.date_started        AS dateStarted,
+       v.visit_id            AS visitId,
+       (SELECT va.value_reference
+        FROM visit_attribute va
+                 JOIN visit_attribute_type vat ON va.attribute_type_id = vat.visit_attribute_type_id
+        WHERE vat.name = 'Visit Time'
+          AND va.visit_id = v.visit_id
+          AND va.voided = 0) AS timeStarted
+FROM messages_patient_template pmt
+         JOIN (SELECT t.patient_template_id,
+                      MAX(CASE WHEN tf.name = 'Service type' THEN t.value ELSE NULL END) AS      SERVICE_TYPE,
+                      MAX(CASE WHEN tf.name = 'Start of messages' THEN t.value ELSE NULL END) AS START_DATE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of messages' THEN SUBSTRING_INDEX(t.value, '|', 1)
+                              ELSE NULL END) AS                                                  END_DATE_TYPE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of messages' THEN SUBSTRING_INDEX(t.value, '|', -1)
+                              ELSE NULL END) AS                                                  END_DATE
+               FROM messages_template_field_value t
+                        JOIN messages_template_field tf ON tf.messages_template_field_id = t.template_field_id
+               GROUP BY t.patient_template_id) mtfv
+              ON mtfv.patient_template_id = pmt.messages_patient_template_id
+                  AND mtfv.service_type <> 'Deactivate service'
+                  AND mtfv.start_date <= :startDateTime
+                  AND (mtfv.end_date = 'EMPTY'
+                      || (mtfv.end_date_type = 'DATE_PICKER' && mtfv.end_date >= :startDateTime)
+                      || (mtfv.end_date_type = 'AFTER_TIMES' && mtfv.end_date > (select count(*)
+                                                                                 from messages_scheduled_service
+                                                                                 where patient_template_id = pmt.messages_patient_template_id)))
+         JOIN person_attribute pa ON pa.person_id = pmt.patient_id and pa.value = 'ACTIVATED' and pa.voided = 0
+         JOIN person_attribute_type pat
+              ON pat.person_attribute_type_id = pa.person_attribute_type_id AND pat.name = 'Person status'
+         JOIN messages_template mt ON mt.name = 'Visit reminder' and mt.messages_template_id = pmt.template_id
+         JOIN visit v ON v.patient_id = pmt.patient_id AND v.voided = 0
+    AND ((SELECT concat(',', property_value, ',')
+          FROM global_property
+          WHERE property = 'message.daysToCallBeforeVisit.default'
+          LIMIT 1) LIKE concat('%,', DATEDIFF(v.date_started, :startDateTime), ',%')
+        OR (SELECT concat(',', property_value, ',')
+            FROM global_property
+            WHERE property = 'message.daysToCallBeforeVisit.default'
+            LIMIT 1) LIKE concat('%,', DATEDIFF(v.date_started, DATE_ADD(@startDateTime, INTERVAL 1 DAY)), ',%'))
+WHERE pmt.voided = 0

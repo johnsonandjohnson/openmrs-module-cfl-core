@@ -21,15 +21,25 @@ public class HealthTipMetadata extends AbstractMessageServiceMetadata {
   @Override
   protected Template createTemplate() throws IOException {
     final String healthTipServiceQuery = getHealthTipServiceQuery();
+    final String healthTipCalendarQuery = getHealthTipCalendarQuery();
 
     return MessageTemplateBuilder.buildMessageTemplate(
-        healthTipServiceQuery, SQL_QUERY_TYPE, null, "Health tip", false, templateUuid);
+        healthTipServiceQuery,
+        SQL_QUERY_TYPE,
+        healthTipCalendarQuery,
+        "Health tip",
+        true,
+        templateUuid);
   }
 
   @Override
   protected void updateTemplate(Template template) throws IOException {
     final String healthTipServiceQuery = getHealthTipServiceQuery();
+    final String healthTipCalendarQuery = getHealthTipCalendarQuery();
+
     template.setServiceQuery(healthTipServiceQuery);
+    template.setCalendarServiceQuery(healthTipCalendarQuery);
+    template.setShouldUseOptimizedQuery(true);
   }
 
   @Override
@@ -122,5 +132,10 @@ public class HealthTipMetadata extends AbstractMessageServiceMetadata {
   private String getHealthTipServiceQuery() throws IOException {
     return metadataSQLScriptRunner.getQueryFromResource(
         SERVICES_BASE_PATH + "HealthTip/HealthTip.sql");
+  }
+
+  private String getHealthTipCalendarQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "HealthTip/HealthTipCalendar.sql");
   }
 }

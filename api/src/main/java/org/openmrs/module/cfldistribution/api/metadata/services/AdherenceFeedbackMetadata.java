@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
-  private static final int VERSION = 2;
+  private static final int VERSION = 3;
 
   public AdherenceFeedbackMetadata(DbSessionFactory dbSessionFactory) {
     super(dbSessionFactory, VERSION, "9556a62d-20b2-11ea-ac12-0242c0a82002");
@@ -21,20 +21,25 @@ public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
   @Override
   protected Template createTemplate() throws IOException {
     final String adherenceFeedbackServiceQuery = getAdherenceFeedbackServiceQuery();
+    final String adherenceFeedbackCalendarQuery = getAdherenceFeedbackCalendarQuery();
 
     return MessageTemplateBuilder.buildMessageTemplate(
         adherenceFeedbackServiceQuery,
         SQL_QUERY_TYPE,
-        null,
+        adherenceFeedbackCalendarQuery,
         "Adherence feedback",
-        false,
+        true,
         templateUuid);
   }
 
   @Override
   protected void updateTemplate(Template template) throws IOException {
     final String adherenceFeedbackServiceQuery = getAdherenceFeedbackServiceQuery();
+    final String adherenceFeedbackCalendarQuery = getAdherenceFeedbackCalendarQuery();
+
     template.setServiceQuery(adherenceFeedbackServiceQuery);
+    template.setCalendarServiceQuery(adherenceFeedbackCalendarQuery);
+    template.setShouldUseOptimizedQuery(true);
   }
 
   @Override
@@ -115,5 +120,10 @@ public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
   private String getAdherenceFeedbackServiceQuery() throws IOException {
     return metadataSQLScriptRunner.getQueryFromResource(
         SERVICES_BASE_PATH + "AdherenceFeedback/AdherenceFeedback.sql");
+  }
+
+  private String getAdherenceFeedbackCalendarQuery() throws IOException {
+    return metadataSQLScriptRunner.getQueryFromResource(
+        SERVICES_BASE_PATH + "AdherenceFeedback/AdherenceFeedbackCalendar.sql");
   }
 }

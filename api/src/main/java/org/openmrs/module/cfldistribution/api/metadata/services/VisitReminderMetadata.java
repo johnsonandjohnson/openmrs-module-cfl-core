@@ -38,10 +38,11 @@ public class VisitReminderMetadata extends AbstractMessageServiceMetadata {
   @Override
   protected void updateTemplate(Template template) throws IOException {
     final String visitReminderServiceQuery = getVisitReminderServiceQuery();
-    template.setServiceQuery(visitReminderServiceQuery);
-
     final String visitReminderCalendarServiceQuery = getVisitReminderCalendarServiceQuery();
+
+    template.setServiceQuery(visitReminderServiceQuery);
     template.setCalendarServiceQuery(visitReminderCalendarServiceQuery);
+    template.setShouldUseOptimizedQuery(true);
   }
 
   @Override

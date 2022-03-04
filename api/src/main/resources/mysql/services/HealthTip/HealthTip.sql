@@ -1,113 +1,47 @@
-SELECT EXECUTION_DATE,
-    MESSAGE_ID,
-    CHANNEL_ID,
-    NULL AS STATUS_ID,
-    HEALTH_TIP_ID
-FROM (
-    SELECT TIMESTAMP(selected_date, times) AS EXECUTION_DATE,
-        1 AS MESSAGE_ID,
-        :Service_type AS CHANNEL_ID
-    FROM (
-        SELECT *
-        FROM
-            (SELECT * FROM DATES_LIST_10K_DAYS_TABLE) dates_list
-        WHERE selected_date >= DATE(:startDateTime)
-            AND selected_date <= DATE(:endDateTime)
-            AND (DAYOFMONTH(selected_date) < IF
-                (
-                    :Frequency_of_the_message = 'Weekly'
-                    OR :Frequency_of_the_message = 'Daily', 32, 8
-                )
-            )
-            AND :Week_day_of_delivering_message
-                 LIKE concat('%',DAYNAME(selected_date),'%')
-    ) dates
-        JOIN (SELECT :bestContactTime times) timeslist) temp
-        JOIN (
-            SELECT group_concat(HT_ID) AS HEALTH_TIP_ID
-            FROM (
-                (
-                    SELECT @row_number\:=@row_number + 1, concept_id AS HT_ID
-                    FROM concept_set AS cs, (select @row_number\:=0) as rn
-                    WHERE
-                        cs.concept_set IN (
-                            SELECT concept_id
-                            FROM concept_name cn
-                            WHERE :Categories_of_the_message LIKE concat('%', cn.name, '%')
-                        )
-                        AND concept_id not IN (
-                            SELECT question
-                            FROM (SELECT question, source_id, answered_time FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP') mar
-                                JOIN messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                                JOIN messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                                JOIN messages_patient_template mpt on mss.patient_template_id = mpt.messages_patient_template_id
-                                JOIN messages_template mt on mpt.template_id = mt.messages_template_id
-                                WHERE mt.name = 'Health tip'
-                                    AND mpt.patient_id = :patientId
-                                    AND mss.status = 'DELIVERED'
-                                AND mar.answered_time >
-                                    IF( (SELECT COUNT(*) FROM
-                                    (SELECT question, source_id, answered_time FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP') mar
-                                    JOIN messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                                    JOIN messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                                    JOIN messages_patient_template mpt on mss.patient_template_id = mpt.messages_patient_template_id
-                                    JOIN messages_template mt on mpt.template_id = mt.messages_template_id
-                                    WHERE mt.name = 'Health tip'
-                                        AND mpt.patient_id = :patientId
-                                        AND mss.status = 'DELIVERED') <
-                                    (SELECT COUNT(*) FROM concept_set cs
-                                    WHERE cs.concept_set IN
-                                        (SELECT concept_id FROM concept_name cn
-                                        WHERE :Categories_of_the_message
-                                        LIKE concat('%', cn.name, '%'))),
-                                      '1900-01-01',
-                                      IFNULL(
-                                        (SELECT MAX(answered_time) FROM
-                                        (SELECT question, source_id, answered_time FROM messages_actor_response mar WHERE source_type like 'SCHEDULED_SERVICE_GROUP') mar
-                                        JOIN messages_scheduled_service_group mssg on mar.source_id = mssg.messages_scheduled_service_group_id
-                                        JOIN messages_scheduled_service mss on mssg.messages_scheduled_service_group_id = mss.group_id
-                                        JOIN messages_patient_template mpt on mss.patient_template_id = mpt.messages_patient_template_id
-                                        JOIN messages_template mt on mpt.template_id = mt.messages_template_id
-                                        WHERE mt.name = 'Health tip'
-                                            AND mpt.patient_id = :patientId
-                                            AND mss.status = 'DELIVERED'
-                                            AND mar.question = (
-                                        (SELECT concept_id FROM concept_set AS cs WHERE cs.concept_set IN
-                                        (SELECT concept_id FROM concept_name cn WHERE :Categories_of_the_message
-                                        LIKE concat('%', cn.name, '%'))
-                                        ORDER BY cs.sort_weight DESC
-                                        limit 1))),
-                                      '1900-01-01')
-                                    )
-                        )
-                    AND @row_number <
-                    (
-                        SELECT property_value
-                        FROM global_property
-                        WHERE property = 'messages.numberOfHealthTipsPlayedPerOneCall'
-                    )
-                    ORDER BY cs.sort_weight ASC
-                ) tips
-            )
-        ) gc
-WHERE EXECUTION_DATE > GET_PREDICTION_START_DATE_FOR_HEALTH_TIP(:patientId, :actorId, :executionStartDateTime)
-    AND EXECUTION_DATE >= :startDateTime
-    AND EXECUTION_DATE <= :endDateTime
-    AND CHANNEL_ID != 'Deactivate service'
-UNION
-SELECT mssg.msg_send_time AS EXECUTION_DATE,
-    1 AS MESSAGE_ID,
-    mssg.channel_type AS CHANNEL_ID,
-    mss.status AS STATUS_ID,
-    null AS HEALTH_TIP_ID
-FROM messages_scheduled_service mss
-    JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
-    JOIN messages_template mt on mt.messages_template_id = mpt.template_id
-    JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
-WHERE mt.name = 'Health tip'
-    AND mpt.patient_id = :patientId
-    AND mpt.actor_id = :actorId
-    AND mssg.patient_id = :patientId
-    AND mssg.msg_send_time >= :startDateTime
-    AND mssg.msg_send_time <= :endDateTime
-ORDER BY 1 DESC;
+select cast(CASE
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%') THEN :startDateTime
+                WHEN mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%')
+                    THEN DATE_ADD(:startDateTime, INTERVAL 1 DAY)
+    END AS DATE)         AS EXECUTION_DATE,
+       1                 AS MESSAGE_ID,
+       mtfv.SERVICE_TYPE AS CHANNEL_ID,
+       pmt.patient_id    AS PATIENT_ID,
+       pmt.actor_id      AS ACTOR_ID,
+       mtfv.HT_CATEGORY  AS HEALTH_TIP_ID
+from messages_patient_template pmt
+         join (SELECT t.patient_template_id,
+                      MAX(CASE WHEN tf.name = 'Service type' THEN t.value ELSE NULL END)                   AS SERVICE_TYPE,
+                      MAX(CASE WHEN tf.name = 'Frequency of the message' THEN t.value ELSE NULL END)       AS FREQUENCY,
+                      MAX(CASE WHEN tf.name = 'Week day of delivering message' THEN t.value ELSE NULL END) AS WEEKDAYS,
+                      MAX(CASE WHEN tf.name = 'Start of messages' THEN t.value ELSE NULL END)              AS START_DATE,
+                      MAX(CASE
+                              WHEN tf.name = 'Categories of the message' THEN concat(t.value, ',', t.value)
+                              ELSE NULL
+                          END)                                                                             AS HT_CATEGORY,
+                      MAX(CASE
+                              WHEN tf.name = 'End of messages' THEN SUBSTRING_INDEX(t.value, '|', 1)
+                              ELSE NULL
+                          END)                                                                             AS END_DATE_TYPE,
+                      MAX(CASE
+                              WHEN tf.name = 'End of messages' THEN SUBSTRING_INDEX(t.value, '|', -1)
+                              ELSE NULL
+                          END)                                                                             AS END_DATE
+               FROM messages_template_field_value t
+                        JOIN messages_template_field tf ON tf.messages_template_field_id = t.template_field_id
+               GROUP BY t.patient_template_id) mtfv
+              on mtfv.patient_template_id = pmt.messages_patient_template_id
+                  and mtfv.service_type <> 'Deactivate service'
+                  and (mtfv.weekdays LIKE concat('%', DAYNAME(:startDateTime), '%')
+                      || mtfv.weekdays LIKE concat('%', DAYNAME(DATE_ADD(:startDateTime, INTERVAL 1 DAY)), '%'))
+                  and mtfv.start_date <= :startDateTime
+                  and (mtfv.end_date = 'EMPTY'
+                      || (mtfv.end_date_type = 'DATE_PICKER' && mtfv.end_date >= :startDateTime)
+                      || (mtfv.end_date_type = 'AFTER_TIMES' && mtfv.end_date > (select count(*)
+                                                                                 from messages_scheduled_service
+                                                                                 where patient_template_id = pmt.messages_patient_template_id)))
+         join person_attribute pa
+              on pa.person_id = pmt.patient_id and pa.value = 'ACTIVATED' and pa.voided = 0
+         join person_attribute_type pat
+              on pat.person_attribute_type_id = pa.person_attribute_type_id and pat.name = 'Person status'
+         join messages_template mt on mt.name = 'Health tip' and mt.messages_template_id = pmt.template_id
+where pmt.voided = 0;
