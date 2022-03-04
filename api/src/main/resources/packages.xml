@@ -120,5 +120,11 @@
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
+            <filenameBase>21_Adherence_Weekly_Actor_Question</filenameBase>
+            <groupUuid>e2c4f6ba-9bc1-422c-86ed-6e9306c90e14</groupUuid>
+            <version>1</version>
+            <importMode>PARENT_AND_CHILD</importMode>
+        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
     </packages>
 </org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>
