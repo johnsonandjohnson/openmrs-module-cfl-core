@@ -14,6 +14,8 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.module.cfl.api.service.CFLEncounterService;
 import org.openmrs.module.cfl.api.util.DateUtil;
+import org.openmrs.parameter.EncounterSearchCriteria;
+import org.openmrs.parameter.EncounterSearchCriteriaBuilder;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -24,112 +26,147 @@ import java.util.Map;
 
 public class CFLEncounterServiceImpl implements CFLEncounterService {
 
-    private EncounterService encounterService;
+  private EncounterService encounterService;
 
-    private PatientService patientService;
+  private PatientService patientService;
 
-    private ConceptService conceptService;
+  private ConceptService conceptService;
 
-    private FormService formService;
+  private FormService formService;
 
-    private ObsService obsService;
+  private ObsService obsService;
 
-    @Override
-    public List<Encounter> getEncountersByPatientAndEncounterTypeAndForm(Integer patientId, String encounterTypeUuid,
-                                                                         String formUuid) {
-        EncounterType encounterType = encounterService.getEncounterTypeByUuid(encounterTypeUuid);
-        Form form = formService.getFormByUuid(formUuid);
+  @Override
+  public List<Encounter> getEncountersByPatientAndEncounterTypeAndForm(
+      Integer patientId, String encounterTypeUuid, String formUuid) {
+    EncounterType encounterType = encounterService.getEncounterTypeByUuid(encounterTypeUuid);
+    Form form = formService.getFormByUuid(formUuid);
 
-        List<Encounter> patientEncounters = encounterService.getEncounters(patientService.getPatient(patientId),
-                null, null, null, Arrays.asList(form), Arrays.asList(encounterType),
-                null, null, null, false);
-        sortEncounterListByDate(patientEncounters);
+    List<Encounter> patientEncounters =
+        encounterService.getEncounters(
+            patientService.getPatient(patientId),
+            null,
+            null,
+            null,
+            Arrays.asList(form),
+            Arrays.asList(encounterType),
+            null,
+            null,
+            null,
+            false);
+    sortEncounterListByDate(patientEncounters);
 
-        return patientEncounters;
+    return patientEncounters;
+  }
+
+  @Override
+  public Encounter createEncounter(
+      Integer patientId,
+      String encounterTypeUuid,
+      String formUuid,
+      Map<String, String> obsMap,
+      String comment)
+      throws ParseException {
+    Patient patient = patientService.getPatient(patientId);
+
+    Encounter encounter = new Encounter();
+    encounter.setPatient(patient);
+    encounter.setEncounterDatetime(DateUtil.now());
+    encounter.setEncounterType(encounterService.getEncounterTypeByUuid(encounterTypeUuid));
+    encounter.setForm(formService.getFormByUuid(formUuid));
+    encounter.setLocation(patient.getPatientIdentifier().getLocation());
+    encounter.addProvider(new EncounterRole(1), new Provider(1));
+
+    for (Map.Entry<String, String> entry : obsMap.entrySet()) {
+      encounter.addObs(createObs(patientId, entry.getKey(), entry.getValue(), comment));
     }
 
-    @Override
-    public Encounter createEncounter(Integer patientId, String encounterTypeUuid, String formUuid,
-                                     Map<String, String> obsMap, String comment) throws ParseException {
-        Patient patient = patientService.getPatient(patientId);
+    return saveEncounter(encounter);
+  }
 
-        Encounter encounter = new Encounter();
-        encounter.setPatient(patient);
-        encounter.setEncounterDatetime(DateUtil.now());
-        encounter.setEncounterType(encounterService.getEncounterTypeByUuid(encounterTypeUuid));
-        encounter.setForm(formService.getFormByUuid(formUuid));
-        encounter.setLocation(patient.getPatientIdentifier().getLocation());
-        encounter.addProvider(new EncounterRole(1), new Provider(1));
+  @Override
+  public Encounter saveEncounter(Encounter encounter) {
+    return encounterService.saveEncounter(encounter);
+  }
 
-        for (Map.Entry<String, String> entry : obsMap.entrySet()) {
-            encounter.addObs(createObs(patientId, entry.getKey(), entry.getValue(), comment));
-        }
+  @Override
+  public Encounter createObsWithGivenEncounter(
+      Integer patientId,
+      Integer encounterId,
+      String stringConceptName,
+      String answer,
+      String comment)
+      throws ParseException {
+    Obs obs = createObs(patientId, stringConceptName, answer, comment);
 
-        return saveEncounter(encounter);
+    Encounter encounter = null;
+    if (encounterId != null) {
+      encounter = encounterService.getEncounter(encounterId);
+      obs.setEncounter(encounter);
+      obs.setLocation(encounter.getLocation());
+      obsService.saveObs(obs, comment);
     }
 
-    @Override
-    public Encounter saveEncounter(Encounter encounter) {
-        return encounterService.saveEncounter(encounter);
+    return encounter;
+  }
+
+  @Override
+  public List<Encounter> getEncountersByPatientAndType(
+      Patient patient, EncounterType encounterType) {
+    EncounterSearchCriteria searchCriteria =
+        new EncounterSearchCriteriaBuilder()
+            .setPatient(patient)
+            .setEncounterTypes(Collections.singletonList(encounterType))
+            .setIncludeVoided(false)
+            .createEncounterSearchCriteria();
+
+    return encounterService.getEncounters(searchCriteria);
+  }
+
+  private Obs createObs(Integer patientId, String stringConceptName, String answer, String comment)
+      throws ParseException {
+    Obs obs = new Obs();
+    obs.setPerson(patientService.getPatient(patientId));
+    obs.setConcept(conceptService.getConceptByName(stringConceptName));
+    if (conceptService.getConceptByName(answer) != null) {
+      obs.setValueCoded(conceptService.getConceptByName(answer));
+    } else {
+      obs.setValueAsString(answer);
     }
+    obs.setObsDatetime(DateUtil.now());
+    obs.setComment(comment);
 
-    @Override
-    public Encounter createObsWithGivenEncounter(Integer patientId, Integer encounterId, String stringConceptName,
-                                                 String answer, String comment) throws ParseException {
-        Obs obs = createObs(patientId, stringConceptName, answer, comment);
+    return obs;
+  }
 
-        Encounter encounter = null;
-        if (encounterId != null) {
-            encounter = encounterService.getEncounter(encounterId);
-            obs.setEncounter(encounter);
-            obs.setLocation(encounter.getLocation());
-            obsService.saveObs(obs, comment);
-        }
+  public void setEncounterService(EncounterService encounterService) {
+    this.encounterService = encounterService;
+  }
 
-        return encounter;
-    }
+  public void setPatientService(PatientService patientService) {
+    this.patientService = patientService;
+  }
 
-    private Obs createObs(Integer patientId, String stringConceptName, String answer, String comment) throws ParseException {
-        Obs obs = new Obs();
-        obs.setPerson(patientService.getPatient(patientId));
-        obs.setConcept(conceptService.getConceptByName(stringConceptName));
-        if (conceptService.getConceptByName(answer) != null) {
-            obs.setValueCoded(conceptService.getConceptByName(answer));
-        } else {
-            obs.setValueAsString(answer);
-        }
-        obs.setObsDatetime(DateUtil.now());
-        obs.setComment(comment);
+  public void setConceptService(ConceptService conceptService) {
+    this.conceptService = conceptService;
+  }
 
-        return obs;
-    }
+  public void setFormService(FormService formService) {
+    this.formService = formService;
+  }
 
-    public void setEncounterService(EncounterService encounterService) {
-        this.encounterService = encounterService;
-    }
+  public void setObsService(ObsService obsService) {
+    this.obsService = obsService;
+  }
 
-    public void setPatientService(PatientService patientService) {
-        this.patientService = patientService;
-    }
-
-    public void setConceptService(ConceptService conceptService) {
-        this.conceptService = conceptService;
-    }
-
-    public void setFormService(FormService formService) {
-        this.formService = formService;
-    }
-
-    public void setObsService(ObsService obsService) {
-        this.obsService = obsService;
-    }
-
-    private void sortEncounterListByDate(List<Encounter> encounters) {
-        Collections.sort(encounters, new Comparator<Encounter>() {
-            @Override
-            public int compare(Encounter e1, Encounter e2) {
-                return e2.getEncounterDatetime().compareTo(e1.getEncounterDatetime());
-            }
+  private void sortEncounterListByDate(List<Encounter> encounters) {
+    Collections.sort(
+        encounters,
+        new Comparator<Encounter>() {
+          @Override
+          public int compare(Encounter e1, Encounter e2) {
+            return e2.getEncounterDatetime().compareTo(e1.getEncounterDatetime());
+          }
         });
-    }
+  }
 }
