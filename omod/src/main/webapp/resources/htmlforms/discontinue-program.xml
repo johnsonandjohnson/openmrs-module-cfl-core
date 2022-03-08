@@ -41,4 +41,6 @@
     </ifMode>
 
     <completeProgram programId="06c596e7-53dd-44c1-9609-f1406fd9e76d"/>
+
+    <postSubmissionAction class="org.openmrs.module.cfl.api.htmlformentry.action.DiscontinueHIVProgramAction"/>
 </htmlform>
