@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceFeedbackMetadata extends AbstractMessageServiceMetadata {
-  private static final int VERSION = 3;
+  private static final int VERSION = 4;
 
   public AdherenceFeedbackMetadata(DbSessionFactory dbSessionFactory) {
     super(dbSessionFactory, VERSION, "9556a62d-20b2-11ea-ac12-0242c0a82002");
