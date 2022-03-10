@@ -13,16 +13,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SendAdHocMessage {
   private static final Log LOGGER = LogFactory.getLog(SendAdHocMessage.class);
   private static final String MESSAGES_EVENT_SERVICE_BEAN_NAME = "messages.messagesEventService";
   private static final String SMS_INITIATE_EVENT = "send_sms";
   private static final String SMS_CONFIG_KEY = "config";
+  private static final String SMS_EVENT_PARAMETERS = "parameters";
+  private static final String SMS_EVENT_LANGUAGE = "language";
 
   private static final String GET_PATIENT_PHONES_SQL =
       "SELECT \n"
-          + "    phone_pa.value\n"
+          + "    phone_pa.value, MIN(lang_pa.value)\n"
           + "FROM\n"
           + "    patient AS p\n"
           + "INNER JOIN\n"
@@ -39,8 +42,10 @@ public class SendAdHocMessage {
           + "WHERE\n"
           + "    p.voided = 0\n"
           + "    AND NOT NULLIF(phone_pa.value,'') IS NULL\n"
+          + "    AND NOT NULLIF(phone_pa.value,'-') IS NULL\n"
           + "    AND p.patient_id > :fromId\n"
-          + "    AND p.patient_id < :toId";
+          + "    AND p.patient_id < :toId\n"
+          + "GROUP BY phone_pa.value";
 
   private DbSessionFactory dbSessionFactory;
 
@@ -48,14 +53,14 @@ public class SendAdHocMessage {
     this.dbSessionFactory = dbSessionFactory;
   }
 
-  public void sendSMS(String templateName, String language, String smsConfigName, String fromId, String toId) {
+  public void sendSMS(String templateName, String smsConfigName, String fromId, String toId) {
     LOGGER.info("SendAdHocMessage.sendSMS started.");
 
     try {
-      final List<String> patientPhones = getPatientPhones(fromId, toId);
-      final SMSContext context = new SMSContext(templateName, language, smsConfigName);
+      final List<PhoneAndLanguage> phonesAndLanguages = getPhonesAndLanguages(fromId, toId);
+      final SMSContext context = new SMSContext(templateName, smsConfigName);
 
-      sendSMS(patientPhones, context);
+      sendSMSToAll(phonesAndLanguages, context);
     } catch (Exception any) {
       LOGGER.error("FAILED TO SEND SMS! Caused: " + any.toString(), any);
     }
@@ -63,36 +68,44 @@ public class SendAdHocMessage {
     LOGGER.info("SendAdHocMessage.sendSMS ended.");
   }
 
-  private List<String> getPatientPhones(String fromId, String toId) {
-    final List<String> phones =
+  protected List<PhoneAndLanguage> getPhonesAndLanguages(String fromId, String toId) {
+    final List<Object[]> convertedPhonesAndLanguages = getPatientPhonesAndLanguages(fromId, toId);
+    return convertedPhonesAndLanguages
+            .stream()
+            .map(PhoneAndLanguage::new)
+            .collect(Collectors.toList());
+  }
+
+  private List<Object[]> getPatientPhonesAndLanguages(String fromId, String toId) {
+    final List<Object[]> phonesAndLanguages =
         dbSessionFactory
             .getCurrentSession()
             .createSQLQuery(GET_PATIENT_PHONES_SQL)
             .setParameter("fromId", fromId)
                 .setParameter("toId", toId)
-            .list();
+                .list();
 
-    LOGGER.info("Read Patient phones: " + phones.size());
-    return phones;
+    LOGGER.info("Read Patient phones: " + phonesAndLanguages.size());
+    return phonesAndLanguages;
   }
 
-  private void sendSMS(List<String> patientPhones, SMSContext context) {
-    LOGGER.info("Sending SMS to " + patientPhones.size() + "patients.");
+  private void sendSMSToAll(List<PhoneAndLanguage> patientPhonesAndLanguages, SMSContext context) {
+    LOGGER.info("Sending SMS to " + patientPhonesAndLanguages.size() + " patients.");
 
-    for (String patientPhone : patientPhones) {
-      sendSMS(patientPhone, context);
+    for (PhoneAndLanguage patientPhoneAndLanguage : patientPhonesAndLanguages) {
+      sendSMS(patientPhoneAndLanguage, context);
     }
   }
 
-  private void sendSMS(String patientPhone, SMSContext context) {
-    final Map<String, String> customParameters = new HashMap<String, String>();
-    customParameters.put("language", context.language);
-    customParameters.put("parameters", "");
+  private void sendSMS(PhoneAndLanguage patientPhoneAndLanguage, SMSContext context) {
+    final Map<String, String> customParameters = new HashMap<>();
+    customParameters.put(SMS_EVENT_LANGUAGE, patientPhoneAndLanguage.getLanguage());
+    customParameters.put(SMS_EVENT_PARAMETERS, "");
 
-    final Map<String, Object> properties = new HashMap<String, Object>();
+    final Map<String, Object> properties = new HashMap<>();
     properties.put(
         SmsEventParamConstants.RECIPIENTS,
-        new ArrayList<String>(Collections.singletonList(patientPhone)));
+        new ArrayList<>(Collections.singletonList(patientPhoneAndLanguage.getPhoneNumber())));
     properties.put(SmsEventParamConstants.MESSAGE, context.templateName);
     properties.put(SmsEventParamConstants.CUSTOM_PARAMS, customParameters);
     properties.put(SMS_CONFIG_KEY, context.smsConfigName);
@@ -103,14 +116,11 @@ public class SendAdHocMessage {
 
   static class SMSContext {
     private final String templateName;
-    private final String language;
     private final String smsConfigName;
 
-    SMSContext(String templateName, String language, String smsConfigName) {
+    SMSContext(String templateName, String smsConfigName) {
       this.templateName = templateName;
-      this.language = language;
       this.smsConfigName = smsConfigName;
     }
-
   }
 }

@@ -32,6 +32,8 @@
     </modules>
 
     <properties>
+        <javaCompilerSource>1.8</javaCompilerSource>
+        <javaCompilerTarget>1.8</javaCompilerTarget>
         <metadatamappingVersion>1.3.4</metadatamappingVersion>
         <idgenVersion>4.5.0</idgenVersion>
         <openmrsPlatformVersion>2.0.1</openmrsPlatformVersion>
