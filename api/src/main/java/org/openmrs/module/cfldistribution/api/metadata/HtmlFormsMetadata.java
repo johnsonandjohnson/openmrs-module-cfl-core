@@ -15,7 +15,7 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
 
   @Override
   public int getVersion() {
-    return 4;
+    return 5;
   }
 
   @Override
@@ -39,7 +39,8 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
             "cfldistribution:htmlforms/cfl-sputum-visit-note.xml",
             "cfldistribution:htmlforms/encounters-form.xml",
             "cfldistribution:htmlforms/cfl-hiv-enrollment.xml",
-            "cfldistribution:htmlforms/discontinue-program.xml");
+            "cfldistribution:htmlforms/discontinue-program.xml",
+            "cfldistribution:htmlforms/program-form.xml");
 
     for (String htmlform : htmlforms) {
       HtmlFormUtil.getHtmlFormFromUiResource(
