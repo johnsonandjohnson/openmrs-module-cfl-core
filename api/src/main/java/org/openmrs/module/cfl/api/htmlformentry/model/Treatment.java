@@ -17,6 +17,8 @@ public class Treatment {
   public static final String TREATMENT_REGIMEN_CONCEPT_UUID =
       "c7e17ce8-d832-4349-a326-b20f5ae7f432";
 
+  public static final String CURRENT_REGIMEN_CONCEPT_UUID = "20fb8dc4-b958-4c88-b9a7-96ea36b4b0ef";
+
   public static final String TREATMENT_REASON_CONCEPT_UUID = "324f28ab-cfa7-46ac-99f3-c7d928ba5e79";
 
   private Date startDate;
@@ -26,6 +28,8 @@ public class Treatment {
   private String regimenName;
 
   private String reason;
+
+  private boolean isCurrent;
 
   private List<Interruption> interruptions;
 
@@ -59,6 +63,14 @@ public class Treatment {
 
   public void setReason(String reason) {
     this.reason = reason;
+  }
+
+  public boolean isCurrent() {
+    return isCurrent;
+  }
+
+  public void setCurrent(boolean current) {
+    isCurrent = current;
   }
 
   public List<Interruption> getInterruptions() {
