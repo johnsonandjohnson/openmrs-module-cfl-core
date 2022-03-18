@@ -127,6 +127,12 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
         .equals(conceptService.getConceptByUuid(Treatment.TREATMENT_REASON_CONCEPT_UUID))) {
       treatment.setReason(treatmentChild.getValueCoded().getName().getName());
     }
+
+    if (treatmentChild
+        .getConcept()
+        .equals(conceptService.getConceptByUuid(Treatment.CURRENT_REGIMEN_CONCEPT_UUID))) {
+      treatment.setCurrent(treatmentChild.getValueBoolean());
+    }
   }
 
   private void buildInterruptions(List<Interruption> interruptions, Obs interruptionParent) {
