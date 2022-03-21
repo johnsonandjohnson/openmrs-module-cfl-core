@@ -56,6 +56,19 @@
     margin: right;
 }
 
+.single-entry {
+    display: flex;
+    align-items: center;
+}
+
+.flex-class {
+    flex: 1;
+}
+
+.program-name {
+    margin-right: 5px;
+}
+
 </style>
 
 <div class="info-section">
@@ -66,9 +79,9 @@
     <div class="info-body" style="padding-bottom: 4px;">
         <ul>
             <% patientProgramsDetailsList.each { program -> %>
-            <li>
+            <li class="single-entry">
                 <% if(program.isEnrolled) { %>
-                    <span class="cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
+                    <span class="cropped-text-span flex-class program-name" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
                     <% if(program.programConfig.enterModeOnly) { %>
                         <span class="not-cropped-text-span">
                             <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
@@ -96,10 +109,17 @@
                     <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - Current</div>
                 <% } else { %>
                     <% if(program.dateCompleted != null) { %>
-                        <span class="not-cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
+                        <span class="not-cropped-text-span flex-class program-name" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
+                        <span class="not-cropped-text-span">
+                            <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
+                                ["patientId" : program.patient.patientId, "formUuid" : program.programConfig.programFormUuid,
+                                "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}">
+                                <i class="icon-pencil edit-action" title="Edit"></i>
+                            </a>
+                        </span>
                         <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
                     <% } else { %>
-                        <span class="not-cropped-text-span" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
+                        <span class="not-cropped-text-span program-name" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
                         <span class="not-cropped-text-span">
                             <button class="enrollButton"
                                 onClick = "location.href='${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
