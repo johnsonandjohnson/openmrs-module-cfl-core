@@ -115,8 +115,8 @@
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>20_HIV_Program_Concepts</filenameBase>
-            <groupUuid>5dd83e4a-f176-44d7-b71a-706e61680194</groupUuid>
+            <filenameBase>20_Program_Form</filenameBase>
+            <groupUuid>8ed2b61b-8829-448b-95a1-b468201846e3</groupUuid>
             <version>1</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
@@ -125,12 +125,6 @@
             <groupUuid>e2c4f6ba-9bc1-422c-86ed-6e9306c90e14</groupUuid>
             <version>1</version>
             <importMode>PARENT_AND_CHILD</importMode>
-        </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-        <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
-            <filenameBase>22_Program_Form</filenameBase>
-            <groupUuid>8ed2b61b-8829-448b-95a1-b468201846e3</groupUuid>
-            <version>2</version>
-            <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
     </packages>
 </org.openmrs.module.emrapi.metadata.MetadataPackagesConfig>
