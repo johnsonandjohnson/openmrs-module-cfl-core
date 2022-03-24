@@ -248,8 +248,6 @@
         </property>
     </bean>
 
-    <bean id="cfl.addressService" class="org.openmrs.module.cfl.api.service.impl.AddressDataServiceImpl"/>
-
     <bean id="cfl.visitService" class="org.openmrs.module.cfl.api.service.impl.CFLVisitServiceImpl"/>
 
     <bean id="cfl.visitAttributeTypesBundle" class="org.openmrs.module.cfl.api.metadata.VisitAttributeTypesBundle"/>
