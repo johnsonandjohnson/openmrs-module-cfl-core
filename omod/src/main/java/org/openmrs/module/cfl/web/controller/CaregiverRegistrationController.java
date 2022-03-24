@@ -1,5 +1,10 @@
 package org.openmrs.module.cfl.web.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.openmrs.Person;
 import org.openmrs.Relationship;
 import org.openmrs.api.PersonService;
@@ -16,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
+@Api(value = "Caregiver registration", tags = {"REST API for Caregiver registration"})
 @Controller("cfl.caregiverRegistrationController")
 public class CaregiverRegistrationController extends BaseCflModuleRestController {
 
@@ -27,9 +34,16 @@ public class CaregiverRegistrationController extends BaseCflModuleRestController
     @Autowired
     private CFLRegistrationUiService cflRegistrationUiService;
 
+    @ApiOperation(value = "Caregiver registration", notes = "Caregiver registration")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful registration of Caregiver"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to register Caregiver"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in registration of Caregiver")})
     @RequestMapping(value = "/caregiverRegistration", method = {RequestMethod.POST, RequestMethod.PUT})
     @ResponseBody
-    public ResponseEntity<String> registerCaregiver(final @RequestBody SimpleObject registrationRequestBody) {
+    public ResponseEntity<String> registerCaregiver(
+            @ApiParam(name = "registrationRequestBody", value = "Request body")
+            final @RequestBody SimpleObject registrationRequestBody) {
         final PropertyValues registrationProperties = new MutablePropertyValues(registrationRequestBody);
 
         final Person person = cflRegistrationUiService.createOrUpdatePerson(registrationProperties);

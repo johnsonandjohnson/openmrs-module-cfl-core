@@ -13,6 +13,7 @@ import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.Constant;
+import org.openmrs.module.cfl.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cfl.api.contract.CountrySetting;
 import org.openmrs.module.cfl.api.contract.CountrySettingBuilder;
 import org.openmrs.module.cfl.api.contract.Randomization;
@@ -66,7 +67,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
             1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_OCCURRED, visitStartDate);
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
     shouldCreateFutureVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
@@ -210,7 +211,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
             1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_OCCURRED);
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
     shouldCreateFutureVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))

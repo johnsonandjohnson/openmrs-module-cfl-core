@@ -1,5 +1,10 @@
 package org.openmrs.module.cfl.web.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -29,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +43,7 @@ import static java.util.Collections.singletonList;
 /**
  * The AdHocMessageController Class.
  */
+@Api(value = "Ad hoc message", tags = {"REST API for ad hoc message"})
 @Controller("${rootrootArtifactId}.AdHocMessageController")
 @RequestMapping(value = "module/cfl/adHocMessage.form")
 public class AdHocMessageController {
@@ -62,6 +69,11 @@ public class AdHocMessageController {
         binder.registerCustomEditor(Location.class, new LocationEditor());
     }
 
+    @ApiOperation(value = "Get an empty ad hoc message", notes = "Get an empty ad hoc message")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting an empty ad hoc message"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure getting an empty ad hoc message"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting an empty ad hoc message")})
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView onGet() {
         final AdHocMessageControllerModel emptyModel = new AdHocMessageControllerModel();
@@ -69,8 +81,15 @@ public class AdHocMessageController {
         return new ModelAndView(VIEW, MODEL_NAME, emptyModel);
     }
 
+    @ApiOperation(value = "Send ad hoc message", notes = "Send ad hoc message")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful sending ad hoc message"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure sending ad hoc message"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error sending ad hoc message")})
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView onPost(HttpServletRequest servletRequest, AdHocMessageControllerModel model) {
+    public ModelAndView onPost(
+            @ApiParam(name = "servletRequest", value = "Servlet request") HttpServletRequest servletRequest,
+            @ApiParam(name = "model", value = "Ad hoc message model") AdHocMessageControllerModel model) {
         if (servletRequest.getParameter(FILTER_ACTION) != null) {
             return onFilterAction(model);
         } else if (servletRequest.getParameter(SEND_ACTION) != null) {
@@ -97,7 +116,7 @@ public class AdHocMessageController {
 
     private ModelAndView onSendAction(HttpServletRequest servletRequest, AdHocMessageControllerModel model) {
         final List<Condition> allPatientConditions = getAllPatientConditions(model.getMessageRequest());
-        final List<Patient> recipients = patientAdvancedDao.getPatients(0, PATIENT_OVERVIEW_MAX_SIZE,
+        final List<Patient> recipients = patientAdvancedDao.getPatients(0, -1,
                 QueryCriteria.fromConditions(Patient.class, allPatientConditions));
 
         final AdHocMessageSummary summary =

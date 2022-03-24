@@ -19,6 +19,7 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.Constant;
+import org.openmrs.module.cfl.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cfl.api.contract.CountrySettingBuilder;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
@@ -102,7 +103,7 @@ public class RegisteringPeopleListenerTest {
       throws JMSException {
     // Given
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -143,7 +144,7 @@ public class RegisteringPeopleListenerTest {
     patient = PatientHelper.createPatient(person, location);
 
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -244,7 +245,7 @@ public class RegisteringPeopleListenerTest {
       throws JMSException {
     // Given
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
     shouldCreateFirstVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -283,7 +284,7 @@ public class RegisteringPeopleListenerTest {
     patient = PatientHelper.createPatient(person, location);
 
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountrySettingBuilder.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))

@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cfl</artifactId>
-    <version>1.8.2</version>
+    <version>1.9.0</version>
     <packaging>pom</packaging>
     <name>CFL Module</name>
     <description>
@@ -22,7 +22,7 @@
         <connection>scm:git:https://github.com/ConnectForLife/openmrs-cfl-module.git</connection>
         <developerConnection>scm:git:https://github.com/ConnectForLife/openmrs-cfl-module.git</developerConnection>
         <url>https://github.com/ConnectForLife/openmrs-cfl-module.git</url>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
@@ -56,7 +56,6 @@
         <uicommonsVersion>2.6.1</uicommonsVersion>
         <eventVersion>2.8.0</eventVersion>
         <metadatadeployVersion>1.10.0</metadatadeployVersion>
-        <referenceapplication>2.10.0</referenceapplication>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <metadatasharingVersion>1.6.0</metadatasharingVersion>
         <gsonVersion>2.8.5</gsonVersion>
@@ -67,19 +66,13 @@
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
         <javax.servlet.version>3.0.1</javax.servlet.version>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
+        <swaggerCoreVersion>1.6.2</swaggerCoreVersion>
         <!-- CfL modules -->
-        <messagesVersion>1.5.3</messagesVersion>
+        <messagesVersion>1.5.5</messagesVersion>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.openmrs.distro</groupId>
-                <artifactId>referenceapplication</artifactId>
-                <version>${referenceapplication}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>uiframework-api</artifactId>
@@ -270,12 +263,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.openmrs.module</groupId>
-                <artifactId>referenceapplication-omod</artifactId>
-                <version>${referenceapplication}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
@@ -347,6 +334,27 @@
                 <artifactId>locationbasedaccess-api</artifactId>
                 <version>${locationbasedaccessVersion}</version>
                 <scope>provided</scope>
+            </dependency>
+            <!-- Swagger dependencies-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
+                <scope>provided</scope>
+                <version>${swaggerCoreVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

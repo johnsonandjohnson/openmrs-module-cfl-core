@@ -47,12 +47,6 @@ public final class CFLConstants {
           + " override the patient's coreapps dashboard by redirecting to CFLm person dashboard. Default value: false "
           + "(true in CfL-only distribution)";
 
-  public static final String CFL_LOGIN_REDIRECT_GLOBAL_PROPERTY_NAME = "cfl.redirectToCfLLogin";
-  public static final String CFL_LOGIN_REDIRECT_DEFAULT_VALUE = "false";
-  public static final String CFL_LOGIN_REDIRECT_DESCRIPTION =
-      "true/false flag that decides if CFL module can"
-          + " override the OpenMRS reference login page. Default: false (true if CfL-only distribution)";
-
   public static final String LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME =
       "locationbasedaccess.locationAttributeUuid";
 
@@ -151,6 +145,11 @@ public final class CFLConstants {
   public static final String VACCINATION_PROGRAM_DEFAULT_VALUE = "";
   public static final String VACCINATION_PROGRAM_DESCRIPTION =
       "Stores information about vaccination programs";
+
+  public static final String ENVIRONMENT_KEY = "cfl.environment";
+  public static final String ENVIRONMENT_DEFAULT_VALUE = "";
+  public static final String ENVIRONMENT_DESCRIPTION =
+      "Set the value to 'Staging' to hide the Logo";
 
   public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
   public static final String DOSING_VISIT_TYPE_NAME = "Dosing";

@@ -6,7 +6,7 @@ delPerson.deletePersonCreationDialog = null;
  * Functions used to Delete a Person
  */
 
-delPerson.returnUrl = "/cfl/findPerson.page?app=cfl.findPerson";
+delPerson.returnUrl = "/owa/cfl-ui/index.html#/find-caregiver";
 
 delPerson.createDeletePersonCreationDialog = function() {
     emr.loadMessages([

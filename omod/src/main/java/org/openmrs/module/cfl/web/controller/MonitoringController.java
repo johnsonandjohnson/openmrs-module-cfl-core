@@ -1,5 +1,10 @@
 package org.openmrs.module.cfl.web.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.module.cfl.api.monitor.AllMonitoredStatusData;
 import org.openmrs.module.cfl.api.monitor.MonitoringStatus;
@@ -16,19 +21,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.HttpURLConnection;
+
 /**
  * The CFL Monitoring REST Controller.
  */
+@Api(value = "CFL Monitoring", tags = {"REST API to Monitor CFL"})
 @Controller("cfl.monitoringController")
 public class MonitoringController extends BaseCflModuleRestController {
 
     @Autowired
     private MonitoringService monitoringService;
 
+    @ApiOperation(value = "Get system status", notes = "Get system status")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting system status"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to get system status"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting system status")})
     @RequestMapping(value = "/monitoring", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<SystemStatusResponseBody> getSystemStatus(
+            @ApiParam(name = "statusOnly", value = "Status only flag")
             @RequestParam(value = "statusOnly", required = false) String statusOnlyRaw,
+            @ApiParam(name = "component", value = "Component")
             @RequestParam(value = "component", required = false) String component) {
         final boolean statusOnly = Boolean.parseBoolean(statusOnlyRaw);
         final AllMonitoredStatusData statusData;
