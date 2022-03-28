@@ -2,6 +2,7 @@ package org.openmrs.module.cfl.web.controller;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.api.dto.AddressDataDTO;
+import org.openmrs.module.cfl.api.dto.ImportDataResultDTO;
 import org.openmrs.module.cfl.api.service.CFLAddressHierarchyService;
 import org.openmrs.module.cfl.web.model.PageableParams;
 import org.slf4j.Logger;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /** The CFL Address Data REST Controller */
 @Controller("cfl.addressDataController")
@@ -40,7 +39,7 @@ public class AddressDataController {
 
   @RequestMapping(value = "/upload", method = RequestMethod.POST)
   @ResponseBody
-  public ResponseEntity<List<String>> uploadFile(
+  public ResponseEntity<ImportDataResultDTO> uploadFile(
       @RequestParam(value = "file") MultipartFile file,
       @RequestParam(value = "delimiter", defaultValue = DEFAULT_DELIMITER) String delimiter,
       @RequestParam(value = "userGeneratedIdDelimiter", required = false)
@@ -48,7 +47,7 @@ public class AddressDataController {
       @RequestParam(value = "overwrite", required = false) Boolean overwrite) {
 
     try {
-      List<String> result =
+      ImportDataResultDTO result =
           Context.getService(CFLAddressHierarchyService.class)
               .importAddressHierarchyEntriesAndReturnInvalidRows(
                   file.getInputStream(), delimiter, overwrite);
@@ -56,8 +55,7 @@ public class AddressDataController {
       return new ResponseEntity<>(result, HttpStatus.OK);
     } catch (IOException ex) {
       LOGGER.error("Unable to import file. " + ex.getMessage());
-
-      return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(new ImportDataResultDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

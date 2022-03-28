@@ -1,8 +1,8 @@
 package org.openmrs.module.cfl.api.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * AddressDataContent class - represents results data used in {@link
@@ -13,9 +13,7 @@ public class AddressDataContent {
   private List<String> results;
 
   public AddressDataContent(Object[] objects) {
-    List<String> list = new ArrayList<>();
-    Arrays.stream(objects).forEach(o -> list.add((String) o));
-    this.results = list;
+    this.results = Arrays.stream(objects).map(o -> (String) o).collect(Collectors.toList());
   }
 
   public List<String> getContent() {

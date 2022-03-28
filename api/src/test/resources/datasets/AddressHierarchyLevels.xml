@@ -28,4 +28,11 @@
             parent_level_id="4"
             uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86006"
             required="0" />
+
+    <address_hierarchy_entry
+            address_hierarchy_entry_id="165"
+            level_id="1"
+            name="Poland"
+            uuid="e78d0c5f-4aeb-4b40-8619-70f3159a7001"/>
+
 </dataset>

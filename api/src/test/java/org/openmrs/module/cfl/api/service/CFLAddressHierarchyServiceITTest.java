@@ -2,13 +2,19 @@ package org.openmrs.module.cfl.api.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
+import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
+import org.openmrs.module.addresshierarchy.db.AddressHierarchyDAO;
 import org.openmrs.module.cfl.api.dto.AddressDataDTO;
+import org.openmrs.module.cfl.api.dto.ImportDataResultDTO;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,6 +38,8 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
 
   private static final Integer DEFAULT_PAGE_SIZE = 50;
 
+  @Autowired private AddressHierarchyDAO addressHierarchyDAO;
+
   @Before
   public void setUp() throws Exception {
     executeDataSet("datasets/AddressHierarchyLevels.xml");
@@ -41,15 +49,21 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
   public void shouldCreateAddressEntriesAndReturnInvalidRows() throws IOException {
     InputStream stream = getInputStreamFromFile(MAIN_ADDRESS_DATA);
 
-    List<String> result =
+    final ImportDataResultDTO result =
         cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
             stream, DEFAULT_DELIMITER, true);
 
     assertNotNull(result);
-    assertEquals(3, result.size());
-    assertEquals("First,,Invalid,Row", result.get(0));
-    assertEquals(",,Second,Invalid,,Row", result.get(1));
-    assertEquals("Third,Invalid,Row,Too,Many,Fields,In,One,Row", result.get(2));
+    assertEquals(3, result.getNumberOfInvalidRecords());
+    assertEquals(
+        "First,,Invalid,Row\t-> Reason: The line has empty cells.",
+        result.getInvalidRecords().get(0));
+    assertEquals(
+        ",,Second,Invalid,,Row\t-> Reason: Too much fields. The allowed number of fields is 5. The line has empty cells.",
+        result.getInvalidRecords().get(1));
+    assertEquals(
+        "Third,Invalid,Row,Too,Many,Fields,In,One,Row\t-> Reason: Too much fields. The allowed number of fields is 5.",
+        result.getInvalidRecords().get(2));
   }
 
   @Test
@@ -57,7 +71,7 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
         getInputStreamFromFile(MAIN_ADDRESS_DATA), DEFAULT_DELIMITER, true);
 
-    AddressDataDTO result =
+    final AddressDataDTO result =
         cflAddressHierarchyService.getAddressDataResults(
             DEFAULT_START_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
 
@@ -76,9 +90,10 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
         getInputStreamFromFile(ADDITIONAL_ADDRESS_DATA), DEFAULT_DELIMITER, false);
 
-    AddressDataDTO result =
+    final AddressDataDTO result =
         cflAddressHierarchyService.getAddressDataResults(
             DEFAULT_START_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(50, result.getPageSize());
@@ -92,7 +107,7 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
         getInputStreamFromFile(MAIN_ADDRESS_DATA), DEFAULT_DELIMITER, true);
 
-    AddressDataDTO result = cflAddressHierarchyService.getAddressDataResults(1, 5);
+    final AddressDataDTO result = cflAddressHierarchyService.getAddressDataResults(1, 5);
 
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
@@ -100,6 +115,19 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertEquals(10, result.getTotalCount());
     assertTrue(result.isNextPage());
     assertEquals(5, result.getContent().size());
+  }
+
+  @Test
+  public void shouldNotCreateNewEntryIfAlreadyExist() throws IOException {
+    final InputStream stream = new ByteArrayInputStream("Poland".getBytes(StandardCharsets.UTF_8));
+
+    cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
+        stream, DEFAULT_DELIMITER, false);
+    final AddressHierarchyLevel level = addressHierarchyDAO.getAddressHierarchyLevel(1);
+    final List<AddressHierarchyEntry> countryEntries =
+        addressHierarchyDAO.getAddressHierarchyEntriesByLevel(level);
+
+    assertEquals(1, countryEntries.size());
   }
 
   private InputStream getInputStreamFromFile(String fileName) {

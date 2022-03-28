@@ -10,25 +10,25 @@ import org.openmrs.module.cfl.api.model.AddressDataContent;
 import org.openmrs.module.cfl.db.ExtendedAddressHierarchyDAO;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /** The default implementation of {@link ExtendedAddressHierarchyDAO}. */
 public class ExtendedAddressHierarchyDAOImpl
     extends HibernateOpenmrsObjectDAO<AddressHierarchyEntry>
     implements ExtendedAddressHierarchyDAO {
 
-  private static final String REMOVE_PARENTS_SQL =
+  private static final String REMOVE_PARENTS_QUERY =
       "UPDATE AddressHierarchyEntry e SET parent = null";
 
   private static final String DELETE_ALL_SQL = "DELETE FROM AddressHierarchyEntry e";
 
-  private static final String REMOVE_LEVEL_PARENTS_SQL =
+  private static final String REMOVE_LEVEL_PARENTS_QUERY =
       "UPDATE AddressHierarchyLevel ahl SET parent = null";
 
-  private static final String REMOVE_ALL_LEVELS_SQL = "DELETE FROM AddressHierarchyLevel ahl";
+  private static final String REMOVE_ALL_LEVELS_QUERY = "DELETE FROM AddressHierarchyLevel ahl";
 
-  private static final String GET_ADDRESS_DATA_SQL =
+  private static final String GET_ADDRESS_DATA_QUERY =
       "SELECT ahe1.name AS level1, ahe2.name AS level2, ahe3.name AS level3, ahe4.name AS level4, ahe5.name AS level5\n"
           + "FROM address_hierarchy_entry AS ahe1\n"
           + "LEFT JOIN address_hierarchy_entry AS ahe2 ON ahe2.parent_id = ahe1.address_hierarchy_entry_id\n"
@@ -47,7 +47,7 @@ public class ExtendedAddressHierarchyDAOImpl
   public void deleteAllAddressHierarchyEntriesSafely() {
     final Session session = this.sessionFactory.getCurrentSession();
 
-    session.createQuery(REMOVE_PARENTS_SQL).executeUpdate();
+    session.createQuery(REMOVE_PARENTS_QUERY).executeUpdate();
     session.createQuery(DELETE_ALL_SQL).executeUpdate();
   }
 
@@ -55,39 +55,35 @@ public class ExtendedAddressHierarchyDAOImpl
   public void deleteAllAddressHierarchyLevels() {
     final Session session = this.sessionFactory.getCurrentSession();
 
-    session.createQuery(REMOVE_LEVEL_PARENTS_SQL).executeUpdate();
-    session.createQuery(REMOVE_ALL_LEVELS_SQL).executeUpdate();
+    session.createQuery(REMOVE_LEVEL_PARENTS_QUERY).executeUpdate();
+    session.createQuery(REMOVE_ALL_LEVELS_QUERY).executeUpdate();
   }
 
   @Override
   public AddressDataDTO getAddressData(Integer pageNumber, Integer pageSize) {
-    SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(GET_ADDRESS_DATA_SQL);
-    query.setFirstResult(pageNumber - 1);
-    query.setMaxResults(pageSize);
+    int totalCount = getCountAllAddressData();
+    int page = pageNumber == null ? 1 : pageNumber;
+    int size = pageSize == null ? totalCount : pageSize;
+
+    SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(GET_ADDRESS_DATA_QUERY);
+    query.setFirstResult(page - 1);
+    query.setMaxResults(size);
     List<Object[]> results = query.list();
 
-    int totalCount = getCountAllAddressData();
     return new AddressDataDTO(
-        pageNumber,
-        pageSize,
-        totalCount,
-        pageNumber * pageSize < totalCount,
-        mapQueryResults(results));
+        page, size, totalCount, page * size < totalCount, mapQueryResults(results));
   }
 
   @Override
   public int getCountAllAddressData() {
-    String sqlQuery = "SELECT COUNT(*) FROM (" + GET_ADDRESS_DATA_SQL + ") results";
+    String sqlQuery = "SELECT COUNT(*) FROM (" + GET_ADDRESS_DATA_QUERY + ") results";
 
     return ((BigInteger) sessionFactory.getCurrentSession().createSQLQuery(sqlQuery).uniqueResult())
         .intValue();
   }
 
   private List<AddressDataContent> mapQueryResults(List<Object[]> results) {
-    List<AddressDataContent> addressDataContents = new ArrayList<>();
-    results.forEach(objects -> addressDataContents.add(new AddressDataContent(objects)));
-
-    return addressDataContents;
+    return results.stream().map(AddressDataContent::new).collect(Collectors.toList());
   }
 
   public AddressHierarchyDAO getAddressHierarchyDAO() {

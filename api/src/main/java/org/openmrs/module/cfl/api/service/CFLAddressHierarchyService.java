@@ -4,6 +4,7 @@ import org.openmrs.annotation.Authorized;
 import org.openmrs.module.addresshierarchy.AddressHierarchyEntry;
 import org.openmrs.module.addresshierarchy.service.AddressHierarchyService;
 import org.openmrs.module.cfl.api.dto.AddressDataDTO;
+import org.openmrs.module.cfl.api.dto.ImportDataResultDTO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,8 @@ public interface CFLAddressHierarchyService {
   void safeDeleteAllAddressHierarchyEntries();
 
   /**
-   * Imports all Address Hierarchy Entries from file and returns invalid lines
+   * Imports all Address Hierarchy Entries from file and returns DTO object containing required data
+   * to display on FE
    *
    * @param inputStream stream of input resource
    * @param delimiter delimiter character that separates the fields in each line of file
@@ -31,7 +33,7 @@ public interface CFLAddressHierarchyService {
    * @return list of invalid lines
    * @throws IOException thrown when an error occurred while reading the file
    */
-  List<String> importAddressHierarchyEntriesAndReturnInvalidRows(
+  ImportDataResultDTO importAddressHierarchyEntriesAndReturnInvalidRows(
       InputStream inputStream, String delimiter, boolean overwriteData) throws IOException;
 
   /**
