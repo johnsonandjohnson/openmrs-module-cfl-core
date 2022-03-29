@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /** The default implementation of CFLAddressHierarchyService. */
 public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
@@ -37,6 +38,14 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
   private static final Integer NUMBER_OF_ADDRESS_HIERARCHY_LEVELS = 5;
 
   private static final Integer BATCH_SIZE = 100;
+
+  private static final AddressField[] ADDRESS_FIELDS = {
+    AddressField.COUNTRY,
+    AddressField.STATE_PROVINCE,
+    AddressField.COUNTY_DISTRICT,
+    AddressField.CITY_VILLAGE,
+    AddressField.POSTAL_CODE
+  };
 
   private ExtendedAddressHierarchyDAO extendedAddressHierarchyDAO;
 
@@ -76,13 +85,12 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     List<AddressHierarchyLevel> levels = new ArrayList<>();
     AddressHierarchyService addressHierarchyService =
         Context.getService(AddressHierarchyService.class);
-    List<AddressField> addressFields = buildAddressFieldList();
     for (int i = 0; i < NUMBER_OF_ADDRESS_HIERARCHY_LEVELS; i++) {
       AddressHierarchyLevel parent = null;
       if (i != 0) {
         parent = levels.get(i - 1);
       }
-      AddressHierarchyLevel level = buildAddressHierarchyLevel(parent, addressFields.get(i));
+      AddressHierarchyLevel level = buildAddressHierarchyLevel(parent, ADDRESS_FIELDS[i]);
       addressHierarchyService.saveAddressHierarchyLevel(level);
       levels.add(level);
     }
@@ -111,6 +119,11 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     }
   }
 
+  public void setExtendedAddressHierarchyDAO(
+      ExtendedAddressHierarchyDAO extendedAddressHierarchyDAO) {
+    this.extendedAddressHierarchyDAO = extendedAddressHierarchyDAO;
+  }
+
   private void clearOldData() {
     extendedAddressHierarchyDAO.deleteAllAddressHierarchyEntriesSafely();
     recreateAddressHierarchyLevels();
@@ -129,14 +142,16 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     List<String> alreadyProcessedLines = new ArrayList<>();
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-      while (reader.ready()) {
-        String line = reader.readLine();
-        String validatedLine = getValidatedLine(line, delimiter, alreadyProcessedLines);
-        if (StringUtils.isBlank(validatedLine)) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String lineToValidate =
+            new AddressDataValidator(line, delimiter, alreadyProcessedLines)
+                .getErrorMessageOfValidatedLine();
+        if (isValidLine(lineToValidate)) {
           List<String> splitFields = Arrays.asList(line.split(delimiter, -1));
           processLine(splitFields, entriesToCreate, levels, levelsEntriesMap, overwriteData);
         } else {
-          failedRecords.add(validatedLine);
+          failedRecords.add(lineToValidate);
           LOGGER.warn(String.format("Line: %s is duplicated or has an invalid format", line));
         }
         alreadyProcessedLines.add(line);
@@ -147,6 +162,10 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
 
     return new ImportDataResultDTO(
         alreadyProcessedLines.size(), failedRecords.size(), failedRecords);
+  }
+
+  private boolean isValidLine(String line) {
+    return StringUtils.isBlank(line);
   }
 
   private Map<AddressHierarchyLevel, List<AddressHierarchyEntry>> getAddressLevelsEntriesMap(
@@ -171,26 +190,26 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     for (int i = 0; i < splitFields.size(); i++) {
       String currentField = splitFields.get(i);
       AddressHierarchyLevel currentLevel = levels.get(i);
-      List<AddressHierarchyEntry> listToSearch = new ArrayList<>(entriesToCreate);
+      List<AddressHierarchyEntry> listToSearchCurrentEntry = new ArrayList<>(entriesToCreate);
 
       if (!overwriteData) {
-        listToSearch.addAll(levelsEntriesMap.get(levels.get(i)));
+        listToSearchCurrentEntry.addAll(levelsEntriesMap.get(levels.get(i)));
       }
 
-      if (isHierarchyEntryAlreadyExists(listToSearch, currentField, currentLevel)) {
+      if (isHierarchyEntryAlreadyExists(listToSearchCurrentEntry, currentField, currentLevel)) {
         continue;
       }
 
       AddressHierarchyEntry parent = null;
       if (i > 0) {
+        List<AddressHierarchyEntry> listToSearchParentEntry = new ArrayList<>(entriesToCreate);
+        AddressHierarchyLevel parentLevel = levels.get(i - 1);
         if (!overwriteData) {
-          listToSearch.clear();
-          listToSearch.addAll(entriesToCreate);
-          listToSearch.addAll(levelsEntriesMap.get(levels.get(i - 1)));
+          listToSearchParentEntry.addAll(levelsEntriesMap.get(parentLevel));
         }
         parent =
             findAddressHierarchyByNameAndLevel(
-                listToSearch, splitFields.get(i - 1), levels.get(i - 1));
+                listToSearchParentEntry, splitFields.get(i - 1), parentLevel);
       }
 
       entriesToCreate.add(buildAddressHierarchyEntry(currentField, currentLevel, parent));
@@ -223,34 +242,6 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     return addressHierarchyEntry;
   }
 
-  private String getValidatedLine(
-      String line, String delimiter, List<String> alreadyProcessedLines) {
-    boolean isValidLine = true;
-    String result = "";
-    List<String> splitFields = Arrays.asList(line.split(delimiter, -1));
-    String messagePrefix = line + "\t-> Reason:";
-
-    if (splitFields.size() > NUMBER_OF_ADDRESS_HIERARCHY_LEVELS) {
-      result +=
-          " Too much fields. The allowed number of fields is "
-              + NUMBER_OF_ADDRESS_HIERARCHY_LEVELS
-              + ".";
-      isValidLine = false;
-    }
-
-    if (splitFields.stream().anyMatch(StringUtils::isBlank)) {
-      result += " The line has empty cells.";
-      isValidLine = false;
-    }
-
-    if (alreadyProcessedLines.contains(line)) {
-      result += " Duplicated record.";
-      isValidLine = false;
-    }
-
-    return isValidLine ? result : messagePrefix + result;
-  }
-
   private AddressHierarchyLevel buildAddressHierarchyLevel(
       AddressHierarchyLevel parent, AddressField addressField) {
     AddressHierarchyLevel addressHierarchyLevel = new AddressHierarchyLevel();
@@ -260,19 +251,39 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     return addressHierarchyLevel;
   }
 
-  private List<AddressField> buildAddressFieldList() {
-    List<AddressField> addressFields = new ArrayList<>();
-    addressFields.add(AddressField.COUNTRY);
-    addressFields.add(AddressField.STATE_PROVINCE);
-    addressFields.add(AddressField.COUNTY_DISTRICT);
-    addressFields.add(AddressField.CITY_VILLAGE);
-    addressFields.add(AddressField.POSTAL_CODE);
+  /** Internal helper class to validate lines obtained from file */
+  private static class AddressDataValidator {
+    private String line;
+    private String delimiter;
+    private List<String> processedLines;
 
-    return addressFields;
-  }
+    public AddressDataValidator(String line, String delimiter, List<String> processedLines) {
+      this.line = line;
+      this.delimiter = delimiter;
+      this.processedLines = processedLines;
+    }
 
-  public void setExtendedAddressHierarchyDAO(
-      ExtendedAddressHierarchyDAO extendedAddressHierarchyDAO) {
-    this.extendedAddressHierarchyDAO = extendedAddressHierarchyDAO;
+    private String getErrorMessageOfValidatedLine() {
+      StringJoiner joiner = new StringJoiner(" ", line + delimiter + "-> Reason: ", "");
+      joiner.setEmptyValue("");
+      List<String> splitFields = Arrays.asList(line.split(delimiter, -1));
+
+      if (splitFields.size() > NUMBER_OF_ADDRESS_HIERARCHY_LEVELS) {
+        joiner.add(
+            "Too much fields. The allowed number of fields is "
+                + NUMBER_OF_ADDRESS_HIERARCHY_LEVELS
+                + ".");
+      }
+
+      if (splitFields.stream().anyMatch(StringUtils::isBlank)) {
+        joiner.add("The line has empty cells.");
+      }
+
+      if (processedLines.contains(line)) {
+        joiner.add("Duplicated record.");
+      }
+
+      return joiner.toString();
+    }
   }
 }

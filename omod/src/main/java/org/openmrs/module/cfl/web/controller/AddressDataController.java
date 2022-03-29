@@ -55,7 +55,7 @@ public class AddressDataController {
       return new ResponseEntity<>(result, HttpStatus.OK);
     } catch (IOException ex) {
       LOGGER.error("Unable to import file. " + ex.getMessage());
-      return new ResponseEntity<>(new ImportDataResultDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

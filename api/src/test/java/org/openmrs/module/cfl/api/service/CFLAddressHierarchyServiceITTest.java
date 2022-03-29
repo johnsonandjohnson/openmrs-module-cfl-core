@@ -56,13 +56,13 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertNotNull(result);
     assertEquals(3, result.getNumberOfInvalidRecords());
     assertEquals(
-        "First,,Invalid,Row\t-> Reason: The line has empty cells.",
+        "First,,Invalid,Row,-> Reason: The line has empty cells.",
         result.getInvalidRecords().get(0));
     assertEquals(
-        ",,Second,Invalid,,Row\t-> Reason: Too much fields. The allowed number of fields is 5. The line has empty cells.",
+        ",,Second,Invalid,,Row,-> Reason: Too much fields. The allowed number of fields is 5. The line has empty cells.",
         result.getInvalidRecords().get(1));
     assertEquals(
-        "Third,Invalid,Row,Too,Many,Fields,In,One,Row\t-> Reason: Too much fields. The allowed number of fields is 5.",
+        "Third,Invalid,Row,Too,Many,Fields,In,One,Row,-> Reason: Too much fields. The allowed number of fields is 5.",
         result.getInvalidRecords().get(2));
   }
 
