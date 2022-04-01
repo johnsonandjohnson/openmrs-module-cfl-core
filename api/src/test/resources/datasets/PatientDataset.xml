@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <person
+            person_id="154"
+            gender="W"
+            dead="0"
+            creator="1"
+            date_created="2010-11-16 15:57:09"
+            voided="0"
+            uuid="89396481e9e3465080f324ad3c2c8119"/>
+
+    <patient
+            patient_id="154"
+            creator="1"
+            date_created="2019-11-16 15:57:09"
+            voided="0"/>
+
+    <patient_identifier_type
+            patient_identifier_type_id="6"
+            name="Test Identifier Type"
+            description="Test description"
+            creator="1"
+            date_created="2010-11-16 15:57:09"
+            required="false"
+            retired="false"
+            uuid="41e81bef-5847-4222-8e0b-8917a5f613d8"/>
+
+    <patient_identifier
+            patient_identifier_id="6"
+            patient_id="154"
+            identifier="1234"
+            identifier_type="6"
+            preferred="1"
+            location_id="1"
+            creator="1"
+            date_created="2010-11-16 15:57:09"
+            voided="false"
+            uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa9f"/>
+
+    <location
+            location_id="1"
+            name="Test name"
+            date_created="2010-11-16 15:57:09"
+            retired="0"
+            uuid="1ac98ec8-e9d9-4626-998c-c795c2f0aa14"/>
+
+    <person_attribute_type
+            person_attribute_type_id="9"
+            name="personLanguage"
+            description="Attribute used to store information about patient language"
+            format="java.lang.String"
+            creator="1"
+            sort_weight="1"
+            searchable="0"
+            retired="0"
+            date_created="2010-11-16"
+            uuid="2a8ad9aa-bd0e-48c0-826d-fa628f1db644"/>
+
+    <person_attribute_type
+            person_attribute_type_id="15"
+            name="Telephone Number"
+            description="The telephone number for the person"
+            format="java.lang.String"
+            creator="1"
+            sort_weight="1"
+            searchable="0"
+            retired="0"
+            date_created="2010-11-16"
+            uuid="14d4f066-15f5-102d-96e4-000c29c2a5d7"/>
+
+    <person_attribute
+            person_attribute_id="218"
+            person_id="154"
+            value="en"
+            person_attribute_type_id="9"
+            creator="1"
+            date_created="2010-11-16 15:57:09"
+            voided="0"
+            uuid="c7480fd6-ccc9-445c-bbd2-8fb3718ebb2b"/>
+
+    <person_attribute
+            person_attribute_id="219"
+            person_id="154"
+            value="1111111111"
+            person_attribute_type_id="15"
+            creator="1"
+            date_created="2010-11-16 15:57:09"
+            voided="0"
+            uuid="10685312-59a7-4691-bdb4-137048c90b2b"/>
+
+</dataset>

@@ -3,16 +3,14 @@ package org.openmrs.module.cfl.api.service.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
-import org.openmrs.api.PatientService;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cfl.api.service.IrisPatientService;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPatientService {
 
-    private PatientService patientService;
-
+    private DbSessionFactory dbSessionFactory;
+    private EntitySaveTransactionalWrapperService entitySaveTransactionalWrapperService;
     private final Log log;
 
     /**
@@ -34,18 +32,30 @@ public class IrisPatientServiceImpl extends BaseOpenmrsService implements IrisPa
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Patient savePatient(Patient patient) {
-        return patientService.savePatient(patient);
+    public Patient saveOrUpdatePatient(Patient patient) {
+        if (patient.getId() == null) {
+            log.debug("New patient will be saved");
+        } else {
+            log.debug("Patient with id: " + patient.getId() + " will be updated");
+        }
+        try {
+            entitySaveTransactionalWrapperService.saveOrUpdatePatientInNewTransaction(patient);
+        } finally {
+            // It was either saved or not in #saveOrUpdatePatientInNewTransaction, we don't want any
+            // following attempts to save it again in Db
+            if (patient.getId() != null) {
+                dbSessionFactory.getCurrentSession().evict(patient);
+            }
+        }
+        return (Patient) dbSessionFactory.getCurrentSession().get(Patient.class, patient.getId());
     }
 
-    @Override
-    public Patient updatePatient(Patient patient) {
-        log.info("Patient with uuid: " + patient.getUuid() + " has not been updated. Update feature is not supported yet.");
-        return patient;
+    public void setEntitySaveTransactionalWrapperService(
+            EntitySaveTransactionalWrapperService entitySaveTransactionalWrapperService) {
+        this.entitySaveTransactionalWrapperService = entitySaveTransactionalWrapperService;
     }
 
-    public void setPatientService(PatientService patientService) {
-        this.patientService = patientService;
+    public void setDbSessionFactory(DbSessionFactory dbSessionFactory) {
+        this.dbSessionFactory = dbSessionFactory;
     }
 }

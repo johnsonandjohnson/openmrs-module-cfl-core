@@ -15,6 +15,11 @@
         <constructor-arg value="org.openmrs.scheduler.SchedulerService"/>
     </bean>
 
+    <bean id="irisPatientServiceImplITTestHelper"
+          class="org.openmrs.module.cfl.api.service.impl.IrisPatientServiceImplITTestHelper">
+        <property name="irisPatientService" ref="cfl.irisPatientService"/>
+    </bean>
+
     <!-- Workaround for missing support for DrugOrderTagHandler in 2.* -->
     <bean id="testOnlyDrugOrderTagHandlerSupport" class="org.mockito.Mockito" factory-method="mock" primary="true">
         <constructor-arg value="org.openmrs.module.htmlformentry.handler.DrugOrderTagHandlerSupport"/>
