@@ -8,18 +8,6 @@ import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 /** The metadata package which adds entries to OrderFrequency for CIEL Frequency Concepts. */
 public class OrderFrequencyMetadata extends VersionedMetadataBundle {
 
-  private static OrderFrequency orderFrequency(
-      String conceptUuid, String uuid, Double frequencyPerDay) {
-    final Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
-    final OrderFrequency obj = new OrderFrequency();
-
-    obj.setConcept(concept);
-    obj.setUuid(uuid);
-    obj.setFrequencyPerDay(frequencyPerDay);
-
-    return obj;
-  }
-
   @Override
   public int getVersion() {
     return 2;
@@ -75,31 +63,43 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
             CIELConcepts.THRICE_DAILY_WITH_MEALS, OrderFrequencies.THRICE_DAILY_WITH_MEALS, 3.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES__DAILY_WITH_MEALS,
-            OrderFrequencies.FOUR_TIMES__DAILY_WITH_MEALS,
+            CIELConcepts.FOUR_TIMES_DAILY_WITH_MEALS,
+            OrderFrequencies.FOUR_TIMES_DAILY_WITH_MEALS,
             4.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES__AFTER_WITH_MEALS_BEDTIME,
-            OrderFrequencies.FOUR_TIMES__AFTER_WITH_MEALS_BEDTIME,
+            CIELConcepts.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
+            OrderFrequencies.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
             4.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES__BEFORE_WITH_MEALS_BEDTIME,
-            OrderFrequencies.FOUR_TIMES__BEFORE_WITH_MEALS_BEDTIME,
+            CIELConcepts.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
+            OrderFrequencies.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
             4.0));
     install(orderFrequency(CIELConcepts.EVERY_48_HOURS, OrderFrequencies.EVERY_48_HOURS, 0.5));
     install(
         orderFrequency(
-            CIELConcepts.EVERY_36_HOURS, OrderFrequencies.EVERY_36_HOURS, (1 / 36) * 24.0));
+            CIELConcepts.EVERY_36_HOURS, OrderFrequencies.EVERY_36_HOURS, (1 / 36.0) * 24.0));
     install(
         orderFrequency(
-            CIELConcepts.EVERY_72_HOURS, OrderFrequencies.EVERY_72_HOURS, (1 / 72) * 24.0));
+            CIELConcepts.EVERY_72_HOURS, OrderFrequencies.EVERY_72_HOURS, (1 / 72.0) * 24.0));
     install(
         orderFrequency(
             CIELConcepts.MONDAY_WEDNESDAY_FRIDAY,
             OrderFrequencies.MONDAY_WEDNESDAY_FRIDAY,
-            (3 / 168) * 24.0));
+            (3 / 168.0) * 24.0));
+  }
+
+  private static OrderFrequency orderFrequency(
+      String conceptUuid, String uuid, Double frequencyPerDay) {
+    final Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
+    final OrderFrequency obj = new OrderFrequency();
+
+    obj.setConcept(concept);
+    obj.setUuid(uuid);
+    obj.setFrequencyPerDay(frequencyPerDay);
+
+    return obj;
   }
 
   private static class OrderFrequencies {
@@ -116,9 +116,9 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
     static final String THRICE_DAILY_AFTER_MEALS = "160867OFAAAAAAAAAAAAAAA";
     static final String THRICE_DAILY_BEFORE_MEALS = "160868OFAAAAAAAAAAAAAAA";
     static final String THRICE_DAILY_WITH_MEALS = "160869OFAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__DAILY_WITH_MEALS = "160870OFAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__AFTER_WITH_MEALS_BEDTIME = "160871OFAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__BEFORE_WITH_MEALS_BEDTIME = "160872OFAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_DAILY_WITH_MEALS = "160870OFAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME = "160871OFAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME = "160872OFAAAAAAAAAAAAAAA";
     static final String EVERY_30_MINS = "162243OFAAAAAAAAAAAAAAA";
     static final String EVERY_HOUR = "162244OFAAAAAAAAAAAAAAA";
     static final String EVERY_TWO_HOURS = "162245OFAAAAAAAAAAAAAAA";
@@ -149,9 +149,9 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
     static final String THRICE_DAILY_AFTER_MEALS = "160867AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String THRICE_DAILY_BEFORE_MEALS = "160868AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String THRICE_DAILY_WITH_MEALS = "160869AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__DAILY_WITH_MEALS = "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__AFTER_WITH_MEALS_BEDTIME = "160871AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    static final String FOUR_TIMES__BEFORE_WITH_MEALS_BEDTIME = "160872AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_DAILY_WITH_MEALS = "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME = "160871AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    static final String FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME = "160872AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String EVERY_30_MINS = "162243AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String EVERY_HOUR = "162244AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String EVERY_TWO_HOURS = "162245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";

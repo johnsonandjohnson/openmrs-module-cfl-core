@@ -98,8 +98,7 @@ public class ConfigurePatientDashboardAppsActivatorStep implements ModuleActivat
 
   @Override
   public void startup(Log log) {
-    final AdministrationService administrationService =
-        Context.getService(AdministrationService.class);
+    final AdministrationService administrationService = Context.getAdministrationService();
     final AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
 
     disableUnusedExtensions(appFrameworkService);

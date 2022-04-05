@@ -23,9 +23,10 @@ public class AdminProviderMetadata extends VersionedMetadataBundle {
   protected void installNewVersion() {
     final ProviderService providerService = Context.getProviderService();
     final Person adminPerson = Context.getPersonService().getPerson(1);
-    final Collection<Provider> possibleProvider = providerService.getProvidersByPerson(adminPerson);
+    final Collection<Provider> possibleProviders =
+        providerService.getProvidersByPerson(adminPerson);
 
-    if (possibleProvider.isEmpty()) {
+    if (possibleProviders.isEmpty()) {
       final List<Provider> providers = providerService.getAllProviders(false);
 
       final Provider provider;
