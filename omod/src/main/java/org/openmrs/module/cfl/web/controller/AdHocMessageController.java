@@ -97,7 +97,7 @@ public class AdHocMessageController {
 
     private ModelAndView onSendAction(HttpServletRequest servletRequest, AdHocMessageControllerModel model) {
         final List<Condition> allPatientConditions = getAllPatientConditions(model.getMessageRequest());
-        final List<Patient> recipients = patientAdvancedDao.getPatients(0, PATIENT_OVERVIEW_MAX_SIZE,
+        final List<Patient> recipients = patientAdvancedDao.getPatients(0, -1,
                 QueryCriteria.fromConditions(Patient.class, allPatientConditions));
 
         final AdHocMessageSummary summary =
