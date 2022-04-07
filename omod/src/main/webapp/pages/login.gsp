@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <% ui.includeCss("appui", "bootstrap.min.css") %>
     <% ui.includeCss("cfldistribution", "login.css") %>
+    <% ui.includeCss("cfldistribution", "cflLogin.css") %>
     ${ui.resourceLinks()}
 </head>
 
