@@ -25,12 +25,12 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>RedirectReferenceapplicationCSSFilter</filter-name>
-        <filter-class>org.openmrs.module.cfldistribution.filter.RedirectReferenceapplicationCSSFilter</filter-class>
+        <filter-name>RedirectReferenceapplicationRequestsFilter</filter-name>
+        <filter-class>org.openmrs.module.cfldistribution.filter.RedirectReferenceapplicationRequestsFilter</filter-class>
     </filter>
 
     <filter-mapping>
-        <filter-name>RedirectReferenceapplicationCSSFilter</filter-name>
+        <filter-name>RedirectReferenceapplicationRequestsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
