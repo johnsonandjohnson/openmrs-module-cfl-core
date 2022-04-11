@@ -120,12 +120,14 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
             <header class="header">
                 <div class="logo">
+                <% if (showCflLogo) { %>
                     <a href="${ui.pageLink("referenceapplication", "home")}">
                         <div>
                             <img src="${ui.resourceLink("cfldistribution", "images/logo/connect_for_life.png")}"/>
                         </div>
                     </a>
-                </div>
+               <% } %>
+               </div>
             </header>
         </div>
     </div>

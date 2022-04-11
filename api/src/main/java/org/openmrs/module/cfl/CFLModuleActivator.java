@@ -213,6 +213,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
+    createGlobalSettingIfNotExists(
+        CFLConstants.ENVIRONMENT_KEY,
+        CFLConstants.ENVIRONMENT_VALUE,
+        CFLConstants.ENVIRONMENT_DESCRIPTION);
     createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
     createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID);
