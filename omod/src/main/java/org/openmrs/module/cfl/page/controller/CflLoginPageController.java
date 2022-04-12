@@ -67,7 +67,7 @@ public class CflLoginPageController {
 
     private static final Log LOGGER = LogFactory.getLog(CflLoginPageController.class);
 
-    private static final String CFL_CONSTANT = "Staging";
+    private static final String STAGING = "Staging";
 
     /**
      * @should redirect the user to the home page if they are already authenticated
@@ -154,13 +154,12 @@ public class CflLoginPageController {
         model.addAttribute("showSessionLocations", showSessionLocations);
         model.addAttribute("selectLocation", selectLocation);
         model.addAttribute("lastSessionLocation", lastSessionLocation);
+        model.addAttribute("isStagingEnvironment", isStagingEnvironment());
+    }
 
-        boolean showCflLogo = true;
+    private boolean isStagingEnvironment() {
         String cflEnvironment = Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
-        if (cflEnvironment!= null && cflEnvironment.equals(CFL_CONSTANT)) {
-            showCflLogo = false;
-        }
-        model.addAttribute("showCflLogo", showCflLogo);
+        return cflEnvironment != null && StringUtils.equalsIgnoreCase(cflEnvironment, STAGING);
     }
 
     private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {

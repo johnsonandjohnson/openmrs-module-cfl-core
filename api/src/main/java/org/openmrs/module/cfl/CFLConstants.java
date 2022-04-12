@@ -153,7 +153,7 @@ public final class CFLConstants {
       "Stores information about vaccination programs";
 
   public static final String ENVIRONMENT_KEY = "cfl.environment";
-  public static final String ENVIRONMENT_VALUE = "";
+  public static final String ENVIRONMENT_DEFAULT_VALUE = "";
   public static final String ENVIRONMENT_DESCRIPTION =
       "Set the value to 'Staging' to hide the Logo";
 
