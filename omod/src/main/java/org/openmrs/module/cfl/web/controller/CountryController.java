@@ -1,5 +1,10 @@
 package org.openmrs.module.cfl.web.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import liquibase.util.file.FilenameUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +39,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** The CountryController class */
+@Api(value = "Country", tags = {"REST API to handle Country data"})
 @Controller("cfl.countryController")
 @RequestMapping(value = "module/cfl")
 public class CountryController {
@@ -60,6 +67,11 @@ public class CountryController {
   @Qualifier("cfl.countryService")
   private CountryService countryService;
 
+  @ApiOperation(value = "Get country list", notes = "Get country list")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting country list"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to get country list"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting country list")})
   @RequestMapping(value = "/countryList.form", method = RequestMethod.GET)
   public ModelAndView getCountryList() {
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
@@ -75,20 +87,37 @@ public class CountryController {
         new CountryControllerModel(sortCountriesAlphabetically(conceptMap)));
   }
 
+  @ApiOperation(value = "Get country form", notes = "Get country form")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting country form"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to get country form"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting country form")})
   @RequestMapping(value = "/countryForm.form", method = RequestMethod.GET)
   public ModelAndView getCountryForm() {
     return new ModelAndView(ADD_COUNTRY_VIEW, MODEL, new CountryControllerModel());
   }
 
+  @ApiOperation(value = "Add country", notes = "add country")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful adding country"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to add country"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error adding country")})
   @RequestMapping(value = "/countryForm.form", method = RequestMethod.POST)
   public ModelAndView addCountry(
-      HttpServletRequest httpServletRequest, CountryControllerModel model) {
+          @ApiParam(name = "httpServletRequest", value = "Servlet request") HttpServletRequest httpServletRequest,
+          @ApiParam(name = "model", value = "Country model") CountryControllerModel model) {
     Concept countryConcept = conceptService.getConceptByName(COUNTRY_CONCEPT_NAME);
     return createOrUpdateCountryConcept(httpServletRequest, countryConcept, model);
   }
 
+  @ApiOperation(value = "Get edit country page", notes = "Get edit country page")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting edit country page"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to get edit country page"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting edit country page")})
   @RequestMapping(value = "/editCountryForm.form", method = RequestMethod.GET)
-  public ModelAndView getEditCountryPage(@RequestParam(value = "conceptId") Integer conceptId) {
+  public ModelAndView getEditCountryPage(
+          @ApiParam(name = "conceptId", value = "Concept Id") @RequestParam(value = "conceptId") Integer conceptId) {
     Concept concept = conceptService.getConcept(conceptId);
     String clusterMembers = getClusterMembersByCountry(concept);
 
@@ -96,11 +125,16 @@ public class CountryController {
         EDIT_COUNTRY_VIEW, MODEL, new CountryControllerModel(concept, clusterMembers));
   }
 
+  @ApiOperation(value = "Edit country page", notes = "Edit country page")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful editing country page"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to edit country page"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in editing country page")})
   @RequestMapping(value = "/editCountryForm.form", method = RequestMethod.POST)
   public ModelAndView editCountry(
-      @RequestParam(value = "conceptId") Integer conceptId,
-      HttpServletRequest httpServletRequest,
-      CountryControllerModel model) {
+          @ApiParam(name = "conceptId", value = "Concept Id") @RequestParam(value = "conceptId") Integer conceptId,
+          @ApiParam(name = "httpServletRequest", value = "Servlet request") HttpServletRequest httpServletRequest,
+          @ApiParam(name = "model", value = "Country model") CountryControllerModel model) {
     Concept countryConcept = conceptService.getConcept(conceptId);
 
     List<String> previousClusterMembersNames = getPreviousClusterMembersNames(countryConcept);
@@ -116,14 +150,26 @@ public class CountryController {
     return new ModelAndView(new RedirectView(COUNTRIES_LIST_REDIRECT_VIEW));
   }
 
+  @ApiOperation(value = "Country import form", notes = "Country import form")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful getting Country import form"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to get Country import form"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in getting Country import form")})
   @RequestMapping(value = "/countryImport.form", method = RequestMethod.GET)
   public ModelAndView getCountryImportForm() {
     return new ModelAndView();
   }
 
+  @ApiOperation(value = "Import Country", notes = "Import Country")
+  @ApiResponses(value = {
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful importing Country"),
+          @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to import Country"),
+          @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in importing Country")})
   @RequestMapping(value = "/countryImport.form", method = RequestMethod.POST)
   public ModelAndView importCountriesFromFile(
-      HttpServletRequest httpServletRequest, @RequestParam(value = "file") MultipartFile file) {
+          @ApiParam(name = "httpServletRequest", value = "Servlet request") HttpServletRequest httpServletRequest,
+          @ApiParam(name = "file", value = "File containing country details")
+          @RequestParam(value = "file") MultipartFile file) {
     String returnViewName;
     List<String> duplicatedCountriesNames;
     try {
