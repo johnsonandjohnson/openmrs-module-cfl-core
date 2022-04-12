@@ -33,6 +33,7 @@ public class AdminList extends AdministrationSectionExt {
         final Map<String, String> map = new HashMap<>();
         map.put("module/cfl/adHocMessage.form", "cfl.adHocMessage.title");
         map.put("module/cfl/countryList.form", "cfl.manageCountries.title");
+        map.put("/ms/uiframework/resource/cfl/swagger/index.html", "cfl.restApi.title");
         return map;
     }
 

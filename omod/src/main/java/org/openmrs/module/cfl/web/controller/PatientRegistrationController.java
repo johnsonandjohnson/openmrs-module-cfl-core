@@ -1,5 +1,10 @@
 package org.openmrs.module.cfl.web.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PersonAttribute;
@@ -27,9 +32,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Optional;
 
+@Api(value = "Patient registration", tags = {"REST API for Patient registration"})
 @Controller("cfl.patientRegistrationController")
 public class PatientRegistrationController extends BaseCflModuleRestController {
 
@@ -52,10 +59,17 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
     @Autowired
     private UiUtils uiUtils;
 
+    @ApiOperation(value = "Patient registration", notes = "Patient registration")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful registration of Patient"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to register Patient"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in registration of Patient")})
     @RequestMapping(value = "/patientRegistration", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> registerPatient(final ServletRequest registrationRequest,
-                                                  final @RequestBody SimpleObject registrationRequestBody) {
+    public ResponseEntity<String> registerPatient(
+            @ApiParam(name = "registrationRequest", value = "Request") final ServletRequest registrationRequest,
+            @ApiParam(name = "registrationRequestBody", value = "Request body")
+            final @RequestBody SimpleObject registrationRequestBody) {
         final PropertyValues registrationProperties = new MutablePropertyValues(registrationRequestBody);
         final Patient patient = cflRegistrationUiService.createOrUpdatePatient(registrationProperties);
 
@@ -91,9 +105,16 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
         registrationRequest.setAttribute("emr.toastMessage", "true");
     }
 
+    @ApiOperation(value = "Update Patient", notes = "Update Patient")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful updating Patient"),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failure to update Patient"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Error in updating Patient")})
     @RequestMapping(value = "/patientRegistration", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<String> updatePatient(final @RequestBody SimpleObject registrationRequestBody) {
+    public ResponseEntity<String> updatePatient(
+            @ApiParam(name = "registrationRequestBody", value = "Request body")
+            final @RequestBody SimpleObject registrationRequestBody) {
         final Object patientUuidRaw = registrationRequestBody.get("uuid");
 
         if (!(patientUuidRaw instanceof String)) {

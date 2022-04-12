@@ -67,6 +67,7 @@
         <addressHierarchyVersion>2.10.0</addressHierarchyVersion>
         <javax.servlet.version>3.0.1</javax.servlet.version>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
+        <swaggerCoreVersion>1.6.2</swaggerCoreVersion>
         <!-- CfL modules -->
         <messagesVersion>1.5.0</messagesVersion>
     </properties>
@@ -347,6 +348,27 @@
                 <artifactId>locationbasedaccess-api</artifactId>
                 <version>${locationbasedaccessVersion}</version>
                 <scope>provided</scope>
+            </dependency>
+            <!-- Swagger dependencies-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
+                <scope>provided</scope>
+                <version>${swaggerCoreVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
