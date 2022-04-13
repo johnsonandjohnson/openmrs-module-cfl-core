@@ -120,12 +120,14 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
             <header class="header">
                 <div class="logo">
+                <% if (!isStagingEnvironment) { %>
                     <a href="${ui.pageLink("referenceapplication", "home")}">
                         <div>
                             <img src="${ui.resourceLink("cfldistribution", "images/logo/connect_for_life.png")}"/>
                         </div>
                     </a>
-                </div>
+               <% } %>
+               </div>
             </header>
         </div>
     </div>
@@ -138,7 +140,11 @@
                         <form id="login-form" method="post" autocomplete="off">
                             <fieldset class="p-2 field-set-wrapper">
                                 <div id="title">
+                                 <% if (isStagingEnvironment) { %>
+                                    <span>${ui.message("cfl.staging.loginPage.title")}</span>
+                                 <% } else { %>
                                     <span>${ui.message("cfl.loginPage.title")}</span>
+                                 <% } %>
                                 </div>
 
                                 <div id="log-in-wrapper">
