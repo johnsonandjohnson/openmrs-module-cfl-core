@@ -33,8 +33,15 @@ public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
   }
 
   private void updateGlobalProperties() {
+    updateCoreProperties();
     updateCFLProperties();
     updateOrderEntryProperties();
+  }
+
+  private void updateCoreProperties() {
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GLOBAL_PROPERTY_PERSON_ATTRIBUTE_SEARCH_MATCH_MODE,
+        OpenmrsConstants.GLOBAL_PROPERTY_PERSON_ATTRIBUTE_SEARCH_MATCH_ANYWHERE);
   }
 
   private void updateCFLProperties() {
