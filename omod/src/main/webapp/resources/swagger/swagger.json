@@ -790,12 +790,6 @@
         "authType" : {
           "type" : "string"
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
         "headerNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -836,6 +830,15 @@
           "type" : "boolean",
           "default" : false
         },
+        "method" : {
+          "type" : "string"
+        },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
+        },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
         },
@@ -848,14 +851,8 @@
         "contextPath" : {
           "type" : "string"
         },
-        "method" : {
-          "type" : "string"
-        },
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
-        },
-        "serverName" : {
-          "type" : "string"
         },
         "serverPort" : {
           "type" : "integer",
@@ -867,26 +864,20 @@
         "remoteHost" : {
           "type" : "string"
         },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "remotePort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "localAddr" : {
           "type" : "string"
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "characterEncoding" : {
           "type" : "string"
         },
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
@@ -898,7 +889,17 @@
         "contentType" : {
           "type" : "string"
         },
-        "localName" : {
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "scheme" : {
+          "type" : "string"
+        },
+        "inputStream" : {
+          "$ref" : "#/definitions/ServletInputStream"
+        },
+        "protocol" : {
           "type" : "string"
         },
         "attributeNames" : {
@@ -910,29 +911,39 @@
             "type" : "object"
           }
         },
+        "remotePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
         },
-        "scheme" : {
-          "type" : "string"
-        },
-        "inputStream" : {
-          "$ref" : "#/definitions/ServletInputStream"
-        },
-        "protocol" : {
-          "type" : "string"
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         }
       }
     },
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
         "maxInactiveInterval" : {
           "type" : "integer",
           "format" : "int32"
         },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
+        },
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
+        },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
         },
         "valueNames" : {
           "type" : "array",
@@ -940,26 +951,15 @@
             "type" : "string"
           }
         },
-        "new" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "creationTime" : {
           "type" : "integer",
           "format" : "int64"
         },
-        "attributeNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
         "id" : {
           "type" : "string"
+        },
+        "attributeNames" : {
+          "$ref" : "#/definitions/Enumeration"
         }
       }
     },
@@ -1073,11 +1073,11 @@
         "viewName" : {
           "type" : "string"
         },
-        "reference" : {
+        "empty" : {
           "type" : "boolean",
           "default" : false
         },
-        "empty" : {
+        "reference" : {
           "type" : "boolean",
           "default" : false
         }
@@ -1238,9 +1238,6 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "serverName" : {
-          "type" : "string"
-        },
         "serverPort" : {
           "type" : "integer",
           "format" : "int32"
@@ -1251,26 +1248,20 @@
         "remoteHost" : {
           "type" : "string"
         },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "remotePort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "localAddr" : {
           "type" : "string"
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "characterEncoding" : {
           "type" : "string"
         },
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
@@ -1282,7 +1273,17 @@
         "contentType" : {
           "type" : "string"
         },
-        "localName" : {
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "scheme" : {
+          "type" : "string"
+        },
+        "inputStream" : {
+          "$ref" : "#/definitions/ServletInputStream"
+        },
+        "protocol" : {
           "type" : "string"
         },
         "attributeNames" : {
@@ -1294,17 +1295,16 @@
             "type" : "object"
           }
         },
+        "remotePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
         },
-        "scheme" : {
-          "type" : "string"
-        },
-        "inputStream" : {
-          "$ref" : "#/definitions/ServletInputStream"
-        },
-        "protocol" : {
-          "type" : "string"
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         }
       }
     },
