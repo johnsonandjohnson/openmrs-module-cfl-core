@@ -1,5 +1,6 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
@@ -35,6 +36,8 @@ public class WelcomeServiceImpl implements WelcomeService {
     private static final String PATIENT_ACTOR_TYPE = "patient";
     private static final String PATIENT_PARAM = "patient";
     private static final String SMS_CONFIG_KEY = "config";
+    private static final TypeToken STRING_TO_OBJECT_MAP = new TypeToken<Map<String, Object>>() {
+    };
 
     @Override
     public void sendWelcomeMessages(Person person) {
@@ -57,11 +60,11 @@ public class WelcomeServiceImpl implements WelcomeService {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
 
-        Map<String, String> templateMap = JsonUtil.toMap(getParsedTemplate(param), JsonUtil.STRING_TO_STRING_MAP);
-        String message = templateMap.get(SmsEventParamConstants.MESSAGE);
+        Map<String, Object> templateMap = JsonUtil.toMap(getParsedTemplate(param), STRING_TO_OBJECT_MAP);
+        String message = (String) templateMap.get(SmsEventParamConstants.MESSAGE);
 
-        Map<String, String> smsServiceParameters = new HashMap<String, String>();
-        for (Map.Entry<String, String> entry : templateMap.entrySet()) {
+        Map<String, Object> smsServiceParameters = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : templateMap.entrySet()) {
             String key = entry.getKey();
             if (!key.equals(SmsEventParamConstants.MESSAGE)) {
                 smsServiceParameters.put(key, entry.getValue());
@@ -78,7 +81,7 @@ public class WelcomeServiceImpl implements WelcomeService {
 
     private String getParsedTemplate(Map<String, Object> param) {
         return Context.getRegisteredComponent(VELOCITY_NOTIFICATION_TEMPLATE_SERVICE_BEAN_NAME,
-                VelocityNotificationTemplateServiceImpl.class)
+                        VelocityNotificationTemplateServiceImpl.class)
                 .buildMessageByGlobalProperty(param, CFLConstants.SMS_MESSAGE_AFTER_REGISTRATION_KEY);
     }
 
