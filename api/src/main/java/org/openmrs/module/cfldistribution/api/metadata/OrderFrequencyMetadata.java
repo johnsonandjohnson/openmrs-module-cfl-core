@@ -18,75 +18,75 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
 
   @Override
   protected void installNewVersion() {
-    install(orderFrequency(CIELConcepts.ONCE, OrderFrequencies.ONCE, 1.0));
-    install(orderFrequency(CIELConcepts.EVERY_30_MINS, OrderFrequencies.EVERY_30_MINS, 48.0));
-    install(orderFrequency(CIELConcepts.EVERY_HOUR, OrderFrequencies.EVERY_HOUR, 24.0));
-    install(orderFrequency(CIELConcepts.EVERY_TWO_HOURS, OrderFrequencies.EVERY_TWO_HOURS, 12.0));
+    install(orderFrequency(CIELConceptsConstants.ONCE, OrderFrequenciesConstants.ONCE, 1.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_30_MINS, OrderFrequenciesConstants.EVERY_30_MINS, 48.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_HOUR, OrderFrequenciesConstants.EVERY_HOUR, 24.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_TWO_HOURS, OrderFrequenciesConstants.EVERY_TWO_HOURS, 12.0));
     install(
-        orderFrequency(CIELConcepts.EVERY_THREE_HOURS, OrderFrequencies.EVERY_THREE_HOURS, 8.0));
-    install(orderFrequency(CIELConcepts.EVERY_FOUR_HOURS, OrderFrequencies.EVERY_FOUR_HOURS, 6.0));
-    install(orderFrequency(CIELConcepts.EVERY_FIVE_HOURS, OrderFrequencies.EVERY_FIVE_HOURS, 4.8));
-    install(orderFrequency(CIELConcepts.EVERY_SIX_HOURS, OrderFrequencies.EVERY_SIX_HOURS, 4.0));
+        orderFrequency(CIELConceptsConstants.EVERY_THREE_HOURS, OrderFrequenciesConstants.EVERY_THREE_HOURS, 8.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_FOUR_HOURS, OrderFrequenciesConstants.EVERY_FOUR_HOURS, 6.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_FIVE_HOURS, OrderFrequenciesConstants.EVERY_FIVE_HOURS, 4.8));
+    install(orderFrequency(CIELConceptsConstants.EVERY_SIX_HOURS, OrderFrequenciesConstants.EVERY_SIX_HOURS, 4.0));
     install(
-        orderFrequency(CIELConcepts.EVERY_EIGHT_HOURS, OrderFrequencies.EVERY_EIGHT_HOURS, 3.0));
+        orderFrequency(CIELConceptsConstants.EVERY_EIGHT_HOURS, OrderFrequenciesConstants.EVERY_EIGHT_HOURS, 3.0));
     install(
-        orderFrequency(CIELConcepts.EVERY_TWELVE_HOURS, OrderFrequencies.EVERY_TWELVE_HOURS, 2.0));
-    install(orderFrequency(CIELConcepts.TWICE_DAILY, OrderFrequencies.TWICE_DAILY, 2.0));
-    install(
-        orderFrequency(
-            CIELConcepts.TWICE_DAILY_BEFORE_MEALS, OrderFrequencies.TWICE_DAILY_BEFORE_MEALS, 2.0));
+        orderFrequency(CIELConceptsConstants.EVERY_TWELVE_HOURS, OrderFrequenciesConstants.EVERY_TWELVE_HOURS, 2.0));
+    install(orderFrequency(CIELConceptsConstants.TWICE_DAILY, OrderFrequenciesConstants.TWICE_DAILY, 2.0));
     install(
         orderFrequency(
-            CIELConcepts.TWICE_DAILY_AFTER_MEALS, OrderFrequencies.TWICE_DAILY_AFTER_MEALS, 2.0));
+            CIELConceptsConstants.TWICE_DAILY_BEFORE_MEALS, OrderFrequenciesConstants.TWICE_DAILY_BEFORE_MEALS, 2.0));
     install(
         orderFrequency(
-            CIELConcepts.TWICE_DAILY_WITH_MEALS, OrderFrequencies.TWICE_DAILY_WITH_MEALS, 2.0));
-    install(orderFrequency(CIELConcepts.EVERY_24_HOURS, OrderFrequencies.EVERY_24_HOURS, 1.0));
-    install(orderFrequency(CIELConcepts.ONCE_DAILY, OrderFrequencies.ONCE_DAILY, 1.0));
-    install(
-        orderFrequency(CIELConcepts.ONCE_DAILY_BEDTIME, OrderFrequencies.ONCE_DAILY_BEDTIME, 1.0));
-    install(
-        orderFrequency(CIELConcepts.ONCE_DAILY_EVENING, OrderFrequencies.ONCE_DAILY_EVENING, 1.0));
-    install(
-        orderFrequency(CIELConcepts.ONCE_DAILY_MORNING, OrderFrequencies.ONCE_DAILY_MORNING, 1.0));
-    install(orderFrequency(CIELConcepts.THRICE_DAILY, OrderFrequencies.THRICE_DAILY, 3.0));
+            CIELConceptsConstants.TWICE_DAILY_AFTER_MEALS, OrderFrequenciesConstants.TWICE_DAILY_AFTER_MEALS, 2.0));
     install(
         orderFrequency(
-            CIELConcepts.THRICE_DAILY_AFTER_MEALS, OrderFrequencies.THRICE_DAILY_AFTER_MEALS, 3.0));
+            CIELConceptsConstants.TWICE_DAILY_WITH_MEALS, OrderFrequenciesConstants.TWICE_DAILY_WITH_MEALS, 2.0));
+    install(orderFrequency(CIELConceptsConstants.EVERY_24_HOURS, OrderFrequenciesConstants.EVERY_24_HOURS, 1.0));
+    install(orderFrequency(CIELConceptsConstants.ONCE_DAILY, OrderFrequenciesConstants.ONCE_DAILY, 1.0));
+    install(
+        orderFrequency(CIELConceptsConstants.ONCE_DAILY_BEDTIME, OrderFrequenciesConstants.ONCE_DAILY_BEDTIME, 1.0));
+    install(
+        orderFrequency(CIELConceptsConstants.ONCE_DAILY_EVENING, OrderFrequenciesConstants.ONCE_DAILY_EVENING, 1.0));
+    install(
+        orderFrequency(CIELConceptsConstants.ONCE_DAILY_MORNING, OrderFrequenciesConstants.ONCE_DAILY_MORNING, 1.0));
+    install(orderFrequency(CIELConceptsConstants.THRICE_DAILY, OrderFrequenciesConstants.THRICE_DAILY, 3.0));
     install(
         orderFrequency(
-            CIELConcepts.THRICE_DAILY_BEFORE_MEALS,
-            OrderFrequencies.THRICE_DAILY_BEFORE_MEALS,
+            CIELConceptsConstants.THRICE_DAILY_AFTER_MEALS, OrderFrequenciesConstants.THRICE_DAILY_AFTER_MEALS, 3.0));
+    install(
+        orderFrequency(
+            CIELConceptsConstants.THRICE_DAILY_BEFORE_MEALS,
+            OrderFrequenciesConstants.THRICE_DAILY_BEFORE_MEALS,
             3.0));
     install(
         orderFrequency(
-            CIELConcepts.THRICE_DAILY_WITH_MEALS, OrderFrequencies.THRICE_DAILY_WITH_MEALS, 3.0));
+            CIELConceptsConstants.THRICE_DAILY_WITH_MEALS, OrderFrequenciesConstants.THRICE_DAILY_WITH_MEALS, 3.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES_DAILY_WITH_MEALS,
-            OrderFrequencies.FOUR_TIMES_DAILY_WITH_MEALS,
+            CIELConceptsConstants.FOUR_TIMES_DAILY_WITH_MEALS,
+            OrderFrequenciesConstants.FOUR_TIMES_DAILY_WITH_MEALS,
             4.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
-            OrderFrequencies.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
+            CIELConceptsConstants.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
+            OrderFrequenciesConstants.FOUR_TIMES_AFTER_WITH_MEALS_BEDTIME,
             4.0));
     install(
         orderFrequency(
-            CIELConcepts.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
-            OrderFrequencies.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
+            CIELConceptsConstants.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
+            OrderFrequenciesConstants.FOUR_TIMES_BEFORE_WITH_MEALS_BEDTIME,
             4.0));
-    install(orderFrequency(CIELConcepts.EVERY_48_HOURS, OrderFrequencies.EVERY_48_HOURS, 0.5));
+    install(orderFrequency(CIELConceptsConstants.EVERY_48_HOURS, OrderFrequenciesConstants.EVERY_48_HOURS, 0.5));
     install(
         orderFrequency(
-            CIELConcepts.EVERY_36_HOURS, OrderFrequencies.EVERY_36_HOURS, (1 / 36.0) * 24.0));
+            CIELConceptsConstants.EVERY_36_HOURS, OrderFrequenciesConstants.EVERY_36_HOURS, (1 / 36.0) * 24.0));
     install(
         orderFrequency(
-            CIELConcepts.EVERY_72_HOURS, OrderFrequencies.EVERY_72_HOURS, (1 / 72.0) * 24.0));
+            CIELConceptsConstants.EVERY_72_HOURS, OrderFrequenciesConstants.EVERY_72_HOURS, (1 / 72.0) * 24.0));
     install(
         orderFrequency(
-            CIELConcepts.MONDAY_WEDNESDAY_FRIDAY,
-            OrderFrequencies.MONDAY_WEDNESDAY_FRIDAY,
+            CIELConceptsConstants.MONDAY_WEDNESDAY_FRIDAY,
+            OrderFrequenciesConstants.MONDAY_WEDNESDAY_FRIDAY,
             (3 / 168.0) * 24.0));
   }
 
@@ -102,7 +102,7 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
     return obj;
   }
 
-  private static class OrderFrequencies {
+  private static class OrderFrequenciesConstants {
     static final String ONCE = "162135OFAAAAAAAAAAAAAAA";
     static final String TWICE_DAILY = "160858OFAAAAAAAAAAAAAAA";
     static final String TWICE_DAILY_BEFORE_MEALS = "160859OFAAAAAAAAAAAAAAA";
@@ -135,7 +135,7 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
     static final String MONDAY_WEDNESDAY_FRIDAY = "162256OFAAAAAAAAAAAAAAA";
   }
 
-  private static class CIELConcepts {
+  private static class CIELConceptsConstants {
     static final String ONCE = "162135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String TWICE_DAILY = "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     static final String TWICE_DAILY_BEFORE_MEALS = "160859AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
