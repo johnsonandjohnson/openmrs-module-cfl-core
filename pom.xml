@@ -68,7 +68,7 @@
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <swaggerCoreVersion>1.6.2</swaggerCoreVersion>
         <!-- CfL modules -->
-        <messagesVersion>1.5.4-SNAPSHOT</messagesVersion>
+        <messagesVersion>1.5.5-SNAPSHOT</messagesVersion>
     </properties>
 
     <dependencyManagement>
