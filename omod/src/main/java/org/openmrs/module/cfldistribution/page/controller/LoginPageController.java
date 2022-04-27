@@ -12,6 +12,7 @@ import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.AppUiConstants;
 import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfldistribution.CfldistributionWebConstants;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.utils.GeneralUtils;
@@ -47,6 +48,8 @@ public class LoginPageController {
   private static final String VIEW_LOCATIONS = "View Locations";
 
   private static final Log LOGGER = LogFactory.getLog(LoginPageController.class);
+
+  private static final String STAGING = "Staging";
 
   @RequestMapping("/login.htm")
   public String overrideLoginPage() {
@@ -162,6 +165,12 @@ public class LoginPageController {
     model.addAttribute("showSessionLocations", showSessionLocations);
     model.addAttribute("selectLocation", selectLocation);
     model.addAttribute("lastSessionLocation", lastSessionLocation);
+    model.addAttribute("isStagingEnvironment", isStagingEnvironment());
+  }
+
+  private boolean isStagingEnvironment() {
+    String cflEnvironment = Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
+    return cflEnvironment != null && StringUtils.equalsIgnoreCase(cflEnvironment, STAGING);
   }
 
   private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {
