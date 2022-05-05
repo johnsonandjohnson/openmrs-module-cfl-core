@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>cfldistribution</artifactId>
-        <version>1.2.8</version>
+        <version>1.2.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>cfldistribution-omod</artifactId>
