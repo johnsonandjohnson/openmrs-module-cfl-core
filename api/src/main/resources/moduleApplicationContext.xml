@@ -88,4 +88,8 @@
             <ref bean="dbSessionFactory"/>
         </constructor-arg>
     </bean>
+    <bean id="cflSuperAdminRoleMetadata"
+          class="org.openmrs.module.cfldistribution.api.metadata.SuperAdminRoleMetadata">
+        <property name="userService" ref="userService"/>
+    </bean>
 </beans>
