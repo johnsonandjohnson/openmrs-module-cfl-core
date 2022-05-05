@@ -13,26 +13,18 @@ import static java.lang.Boolean.parseBoolean;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSet;
 
-public class CountrySettingBuilder {
-  public static final String PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME =
-      "messages.patientNotificationTimeWindowFrom";
-  public static final String PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME =
-      "messages.patientNotificationTimeWindowTo";
-  public static final String SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME =
-      "messages.shouldSendReminderViaSms";
-  public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME =
-      "messages.performCallOnPatientRegistration";
-  public static final String SMS_CONFIG_PROP_NAME = "messages.smsConfig";
-  public static final String CALL_CONFIG_PROP_NAME = "messages.callConfig";
-  public static final String SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME =
-      "messages.sendSmsOnPatientRegistration";
-  public static final String SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME =
-      "messages.shouldSendReminderViaCall";
-  public static final String SHOULD_CREATE_FIRST_VISIT_PROP_NAME =
-      "visits.shouldCreateFirstVisit";
-  public static final String SHOULD_CREATE_FUTURE_VISIT_PROP_NAME =
-      "visits.shouldCreateFutureVisit";
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME;
 
+public class CountrySettingBuilder {
   public static final Set<String> ALL_PROP_NAMES =
       unmodifiableSet(
           new HashSet<>(

@@ -28,7 +28,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.openmrs.api.context.Context.getRegisteredComponent;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_DESC;
+import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_NAME;
 import static org.openmrs.module.cfl.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
+import static org.openmrs.module.messages.api.util.CountryPropertyUtils.createDefaultCountrySettingIfNotExists;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -48,6 +69,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
       // These 3 are Global Properties
       createPersonOverviewConfig();
       createGlobalSettings();
+      createCountrySettings();
 
       CflEventListenerHelper.registerEventListeners();
 
@@ -144,10 +166,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
     createGlobalSettingIfNotExists(
-        CFLConstants.CFL_LOGIN_REDIRECT_GLOBAL_PROPERTY_NAME,
-        CFLConstants.CFL_LOGIN_REDIRECT_DEFAULT_VALUE,
-        CFLConstants.CFL_LOGIN_REDIRECT_DESCRIPTION);
-    createGlobalSettingIfNotExists(
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
@@ -222,6 +240,45 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID);
     createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID);
+  }
+
+  private void createCountrySettings() {
+    createDefaultCountrySettingIfNotExists(
+        PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
+        "10:00",
+        PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
+        "18:00",
+        PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
+        Boolean.FALSE.toString(),
+        SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
+        Boolean.FALSE.toString(),
+        PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SMS_CONFIG_PROP_NAME, "defaultSmS", SMS_CONFIG_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        CALL_CONFIG_PROP_NAME, "defaultCall", CALL_CONFIG_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
+        Boolean.FALSE.toString(),
+        SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
+        Boolean.FALSE.toString(),
+        SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
+        Boolean.FALSE.toString(),
+        SHOULD_CREATE_FIRST_VISIT_PROP_DESC);
+    createDefaultCountrySettingIfNotExists(
+        SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
+        Boolean.FALSE.toString(),
+        SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
   }
 
   private void createPersonOverviewConfig() {
