@@ -7,8 +7,6 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:component-scan base-package="org.openmrs.module.cfldistribution.web.controller"/>
-
     <bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
         <property name="moduleId" value="${project.parent.artifactId}"/>
     </bean>
@@ -16,6 +14,12 @@
     <bean class="org.openmrs.ui.framework.page.GlobalResourceIncluder">
         <property name="resources">
             <list>
+                <bean class="org.openmrs.ui.framework.resource.Resource">
+                    <property name="category" value="css" />
+                    <property name="providerName" value="${project.parent.artifactId}" />
+                    <property name="resourcePath" value="styles/referenceapplication.css" />
+                    <property name="priority" value="-100" />
+                </bean>
                 <bean class="org.openmrs.ui.framework.resource.Resource">
                     <property name="category" value="css"/>
                     <property name="providerName" value="${project.parent.artifactId}"/>

@@ -59,10 +59,6 @@ public final class PatientDashboardAppsConstants {
 
     public static final String COREAPPS_MARK_PATIENT_DECEASED_EXT = "org.openmrs.module.coreapps.markPatientDead";
 
-    public static final String REFAPP_REGISTER_PATIENT_APP = "referenceapplication.registrationapp.registerPatient";
-
-    public static final String REFAPP_CAPTURE_VITALS_APP = "referenceapplication.vitals";
-
     public static final String COREAPPS_DATA_MANAGEMENT_APP = "coreapps.dataManagementApp";
 
     public static final String REGISTRATION_APP_EDIT_PATIENT_DASHBOARD_EXT =

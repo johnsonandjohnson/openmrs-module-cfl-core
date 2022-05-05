@@ -7,6 +7,7 @@ import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cfldistribution.CfldistributionGlobalParameterConstants;
 import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
+import org.openmrs.util.OpenmrsConstants;
 
 /**
  * Updates Global Parameter values, it's responsible for updating Global Properties to CFL
@@ -18,64 +19,54 @@ import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
   @Override
   public int getVersion() {
-    return 3;
+    return 4;
   }
 
   @Override
-  protected void installEveryTime() throws Exception {
+  protected void installEveryTime() {
     // nothing to do
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
+  protected void installNewVersion() {
     updateGlobalProperties();
   }
 
   private void updateGlobalProperties() {
+    updateCoreProperties();
+    updateCFLProperties();
+    updateOrderEntryProperties();
+  }
+
+  private void updateCoreProperties() {
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GLOBAL_PROPERTY_PERSON_ATTRIBUTE_SEARCH_MATCH_MODE,
+        OpenmrsConstants.GLOBAL_PROPERTY_PERSON_ATTRIBUTE_SEARCH_MATCH_ANYWHERE);
+  }
+
+  private void updateCFLProperties() {
     // Enable and keep enabled patient dashboard redirection
     updateGlobalPropertyIfExists(
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME, Boolean.TRUE.toString());
-    updateGlobalPropertyIfExists(
-        CFLConstants.CFL_LOGIN_REDIRECT_GLOBAL_PROPERTY_NAME, Boolean.TRUE.toString());
-    updateGlobalPropertyIfExists(
-        GlobalPropertiesConstants.VISIT_FORM_URIS.getKey(),
-        "{\n"
-            + //
-            "  \"Medicine refill\": {\n"
-            + //
-            "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}"
-            + //
-            "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-medicine-refill.xml\"\n"
-            + //
-            "  },\n"
-            + //
-            "  \"Sputum collection\": {\n"
-            + //
-            "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}"
-            + //
-            "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-sputum-visit-note.xml\"\n"
-            + //
-            "  },\n"
-            + //
-            "  \"default\": {\n"
-            + //
-            "    \"create\": \"/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}"
-            + //
-            "&visitId={{visitId}}&definitionUiResource=cfldistribution:htmlforms/cfl-visit-note.xml\",\n"
-            + //
-            "    \"edit\": \"/htmlformentryui/htmlform/editHtmlFormWithStandardUi.page?patientId={{patientId}}"
-            + //
-            "&encounterId={{encounterId}}\"\n"
-            + //
-            "  }\n"
-            + //
-            "}");
     updateGlobalPropertyIfExists(
         GlobalPropertiesConstants.TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID.getKey(),
         CfldistributionGlobalParameterConstants.CFL_TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID);
     updateGlobalPropertyIfExists(
         GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID.getKey(),
         CfldistributionGlobalParameterConstants.CFL_EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID);
+  }
+
+  private void updateOrderEntryProperties() {
+    // Updates to CIEL Concepts Sets as default values
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GP_DRUG_DISPENSING_UNITS_CONCEPT_UUID,
+        "162402AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GP_DRUG_DOSING_UNITS_CONCEPT_UUID, "162384AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GP_DRUG_ROUTES_CONCEPT_UUID, "162394AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    updateGlobalPropertyIfExists(
+        OpenmrsConstants.GP_DURATION_UNITS_CONCEPT_UUID, "1732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   }
 
   private void updateGlobalPropertyIfExists(String property, String value) {

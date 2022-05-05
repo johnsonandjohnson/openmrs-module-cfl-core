@@ -23,9 +23,31 @@ public class MetadataSQLScriptRunner {
     }
   }
 
+  /**
+   * Get textual content of resource under {@code resourcesPath}.
+   * <b>The class loader of this class will be used to obtain a resource.</b>
+   *
+   * @param resourcesPath the resource path, not null
+   * @return the resource content, null if empty
+   * @throws IOException if there was error during reading a resource
+   */
   public String getQueryFromResource(String resourcesPath) throws IOException {
+    return getQueryFromResource(resourcesPath, this.getClass().getClassLoader());
+  }
+
+  /**
+   * Get textual content of resource under {@code resourcesPath}.
+   * <b>The class loader of this class will be used to obtain a resource.</b>
+   *
+   * @param resourcesPath the resource path, not null
+   * @param classLoader the ClassLoader to use when searching for the resource, not null
+   * @return the resource content, null if empty
+   * @throws IOException if there was error during reading a resource
+   */
+  public String getQueryFromResource(String resourcesPath, ClassLoader classLoader)
+      throws IOException {
     String query = null;
-    InputStream in = this.getClass().getClassLoader().getResourceAsStream(resourcesPath);
+    InputStream in = classLoader.getResourceAsStream(resourcesPath);
     if (in != null) {
       query = IOUtils.toString(in);
     }
