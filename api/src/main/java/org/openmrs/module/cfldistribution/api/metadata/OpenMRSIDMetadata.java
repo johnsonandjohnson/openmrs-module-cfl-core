@@ -97,7 +97,7 @@ public class OpenMRSIDMetadata extends VersionedMetadataBundle {
     sequentialIdentifierGenerator.setUuid(OPENMRS_ID_GENERATOR_UUID);
     sequentialIdentifierGenerator.setBaseCharacterSet(
         new LuhnMod30IdentifierValidator().getBaseCharacters());
-    sequentialIdentifierGenerator.setMinLength(6);
+    sequentialIdentifierGenerator.setMinLength(5);
     sequentialIdentifierGenerator.setFirstIdentifierBase("10000");
 
     return identifierSourceService.saveIdentifierSource(sequentialIdentifierGenerator);
