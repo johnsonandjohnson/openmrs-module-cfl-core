@@ -47,4 +47,10 @@
           class="org.openmrs.module.cfldistribution.api.metadata.SuperAdminRoleMetadata">
         <property name="userService" ref="userService"/>
     </bean>
+    <bean id="cflDoctorUserMetadata" class="org.openmrs.module.cfldistribution.api.metadata.DoctorUserMetadata">
+        <property name="userService" ref="userService"/>
+        <property name="personService" ref="personService"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="providerService" ref="providerService"/>
+    </bean>
 </beans>
