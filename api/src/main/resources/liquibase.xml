@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
  
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
@@ -13,7 +23,7 @@
         for a list of supported elements and attributes
     -->
 
-    <changeSet id="cfl-20190827-15:50" author="Arkadiusz Lalo">
+    <changeSet id="cfl-20190827-15:50" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="relationship_type" />
             <sqlCheck expectedResult="0">
@@ -35,7 +45,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="cfl-20200318-07:50" author="Arkadiusz Lalo">
+    <changeSet id="cfl-20200318-07:50" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="relationship_type" />
             <sqlCheck expectedResult="1">
@@ -57,7 +67,7 @@
         </update>
     </changeSet>
 
-    <changeSet id="cfl-20200526-15:43" author="Arkadiusz Lalo">
+    <changeSet id="cfl-20200526-15:43" author="Connect for Life">
         <preConditions  onFail="MARK_RAN">
             <tableExists tableName="person_attribute_type"/>
             <sqlCheck expectedResult="1">
@@ -73,7 +83,7 @@
         </update>
     </changeSet>
 
-    <changeSet id="cfl-20200526-16:43" author="Arkadiusz Lalo">
+    <changeSet id="cfl-20200526-16:43" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="person_attribute_type"/>
             <sqlCheck expectedResult="1">
@@ -89,7 +99,7 @@
         </update>
     </changeSet>
 
-    <changeSet id="cfl-20210316-12:00-Set-PersonAttributeType-sortWeight" author="Piotr Wargulak">
+    <changeSet id="cfl-20210316-12:00-Set-PersonAttributeType-sortWeight" author="Connect for Life">
         <comment>
             Set PersonAttributeType.sortWeight for entities where this not-null field was not set.
             The sortWeight is set to the ID of an entity to reflect the creation order.
@@ -104,7 +114,7 @@
         ]]></sql>
     </changeSet>
 
-    <changeSet id="cfl-Add-Welcome-Message-template" author="Piotr Wargulak">
+    <changeSet id="cfl-Add-Welcome-Message-template" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM messages_template WHERE uuid='494c3feb-1935-425c-b42d-eba81a561acd'
@@ -142,16 +152,7 @@ ORDER BY 1 DESC;"/>
         </insert>
     </changeSet>
 
-    <changeSet id="cfl-reset-cfl.countrySettingsMap-gp" author="Piotr Wargulak">
-        <comment>
-            Drops the value of cfl.countrySettingsMap global property to force it to be recreated with default value.
-        </comment>
-        <delete tableName="global_property">
-            <where>property = 'cfl.countrySettingsMap'</where>
-        </delete>
-    </changeSet>
-
-    <changeSet id="cfl-Add-adhoc-message-template" author="Piotr Wargulak">
+    <changeSet id="cfl-Add-adhoc-message-template" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM messages_template WHERE uuid='901f8de3-c87b-49d0-b19e-2de4e8f0da8f'
@@ -189,7 +190,7 @@ ORDER BY 1 DESC;"/>
         </insert>
     </changeSet>
 
-    <changeSet id="cfl-global-property-history-resources" author="Dawid Ruchniewicz">
+    <changeSet id="cfl-global-property-history-resources" author="Connect for Life">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <not><tableExists tableName="global_property_history"/></not>
