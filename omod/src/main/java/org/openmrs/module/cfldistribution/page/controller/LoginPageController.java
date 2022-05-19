@@ -285,7 +285,6 @@ public class LoginPageController {
     Location sessionLocation = null;
     if (sessionLocationId != null) {
       try {
-        // TODO as above, grant this privilege to Anonymous instead of using a proxy privilege
         Context.addProxyPrivilege(VIEW_LOCATIONS);
         Context.addProxyPrivilege(GET_LOCATIONS);
         sessionLocation = locationService.getLocation(sessionLocationId);
@@ -405,8 +404,6 @@ public class LoginPageController {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Sending user back to login page");
     }
-
-    // TODO limit login attempts by IP Address
 
     pageRequest
         .getSession()

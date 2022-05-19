@@ -7,7 +7,7 @@
     <name>${project.parent.name}</name>
     <version>${project.parent.version}</version>
     <package>org.openmrs.module.cfldistribution</package>
-    <author>Soldevelo</author>
+    <author>Connect for Life</author>
     <description>
         ${project.parent.description}
     </description>
@@ -55,19 +55,18 @@
     </messages>
     <!-- /Internationalization -->
 
-    <!-- TODO: Verify -->
     <privilege>
-        <name>App: referenceapplication.legacyAdmin</name>
+        <name>App: cfldistribution.legacyAdmin</name>
         <description>Able to access the advanced administration app</description>
     </privilege>
 
     <privilege>
-        <name>App: referenceapplication.styleGuide</name>
+        <name>App: cfldistribution.styleGuide</name>
         <description>Able to access the style guide app</description>
     </privilege>
 
     <privilege>
-        <name>App: referenceapplication.manageApps</name>
+        <name>App: cfldistribution.manageApps</name>
         <description>Able to manage app definitions</description>
     </privilege>
 
