@@ -1,6 +1,7 @@
 package org.openmrs.module.cfl.web.service.impl;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Attributable;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
@@ -252,6 +253,11 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
                 registrationProperties.getPropertyValue(patientIdentifierType.getName());
         final Object identifierValueRaw = valueOf(identifierPropertyValue);
         final String identifierValue = ObjectUtils.toString(identifierValueRaw, null);
+
+        if (StringUtils.isBlank(identifierValue)) {
+            voidPatientIdentifiers(patient, patientIdentifierType);
+            return;
+        }
 
         final PatientIdentifier newIdentifier = new PatientIdentifier();
         newIdentifier.setIdentifier(identifierValue);
