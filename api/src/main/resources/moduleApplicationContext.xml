@@ -53,4 +53,8 @@
         <property name="locationService" ref="locationService"/>
         <property name="providerService" ref="providerService"/>
     </bean>
+    <bean id="GetUserService"
+          class="org.openmrs.module.cfldistribution.api.service.impl.GetUserServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 </beans>

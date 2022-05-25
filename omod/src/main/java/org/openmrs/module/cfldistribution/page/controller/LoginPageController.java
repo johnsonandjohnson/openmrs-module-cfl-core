@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
@@ -14,6 +15,8 @@ import org.openmrs.module.appui.AppUiConstants;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfldistribution.CfldistributionWebConstants;
+import org.openmrs.module.cfldistribution.api.service.GetUserService;
+import org.openmrs.module.cfldistribution.api.service.impl.GetUserServiceImpl;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.ui.framework.UiUtils;
@@ -399,7 +402,7 @@ public class LoginPageController {
           .getSession()
           .setAttribute(
               CfldistributionWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-              ui.message(CfldistributionWebConstants.MODULE_ID + ".error.login.fail"));
+              ui.message(isUserLocked(username)));
     }
 
     if (LOGGER.isDebugEnabled()) {
@@ -489,5 +492,20 @@ public class LoginPageController {
       return aUrl;
     }
     return null;
+  }
+
+  public String isUserLocked(String username) {
+    GetUserService cflGetUserService = new GetUserServiceImpl();
+    User user = cflGetUserService.getUser(username);
+    String lockoutTimestamp = null;
+    if(user != null) {
+      lockoutTimestamp = user.getUserProperty("lockoutTimestamp");
+    }
+    if(StringUtils.isNotBlank(lockoutTimestamp)){
+      return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
+    }
+    else {
+      return CfldistributionWebConstants.MODULE_ID + ".error.login.fail";
+    }
   }
 }
