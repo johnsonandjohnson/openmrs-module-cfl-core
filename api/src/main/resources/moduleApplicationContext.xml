@@ -63,8 +63,16 @@
         <property name="locationService" ref="locationService"/>
         <property name="providerService" ref="providerService"/>
     </bean>
-    <bean id="GetUserService"
-          class="org.openmrs.module.cfldistribution.api.service.impl.GetUserServiceImpl">
+    <bean id="cflUserNotAuthorizedService"
+          class="org.openmrs.module.cfldistribution.api.service.impl.UserNotAuthorizedServiceImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfldistribution.api.service.UserNotAuthorizedService</value>
+                <ref local="cflUserNotAuthorizedService"/>
+            </list>
+        </property>
     </bean>
 </beans>

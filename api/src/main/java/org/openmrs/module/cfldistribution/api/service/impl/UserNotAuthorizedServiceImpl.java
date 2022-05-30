@@ -5,10 +5,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.User;
-import org.openmrs.module.cfldistribution.api.service.GetUserService;
+import org.openmrs.module.cfldistribution.api.service.UserNotAuthorizedService;
 import org.springframework.transaction.annotation.Transactional;
 
-public class GetUserServiceImpl implements GetUserService {
+public class UserNotAuthorizedServiceImpl implements UserNotAuthorizedService {
 
 	private static SessionFactory sessionFactory;
 

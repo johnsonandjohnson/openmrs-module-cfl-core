@@ -25,8 +25,7 @@ import org.openmrs.module.appui.AppUiConstants;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfldistribution.CfldistributionWebConstants;
-import org.openmrs.module.cfldistribution.api.service.GetUserService;
-import org.openmrs.module.cfldistribution.api.service.impl.GetUserServiceImpl;
+import org.openmrs.module.cfldistribution.api.service.UserNotAuthorizedService;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.ui.framework.UiUtils;
@@ -411,7 +410,7 @@ public class LoginPageController {
           .getSession()
           .setAttribute(
               CfldistributionWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-              ui.message(isUserLocked(username)));
+              ui.message(getAuthenticationErrorMessage(username)));
     }
 
     if (LOGGER.isDebugEnabled()) {
@@ -501,18 +500,20 @@ public class LoginPageController {
     return null;
   }
 
-  public String isUserLocked(String username) {
-    GetUserService cflGetUserService = new GetUserServiceImpl();
-    User user = cflGetUserService.getUser(username);
-    String lockoutTimestamp = null;
-    if(user != null) {
-      lockoutTimestamp = user.getUserProperty("lockoutTimestamp");
+  public String getAuthenticationErrorMessage(String username) {
+    User user = Context.getService(UserNotAuthorizedService.class).getUser(username);
+    if (user != null) {
+      if (isLockoutTimestampSet(user)) {
+        return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
+      }
     }
-    if(StringUtils.isNotBlank(lockoutTimestamp)){
-      return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
-    }
-    else {
-      return CfldistributionWebConstants.MODULE_ID + ".error.login.fail";
-    }
+    return CfldistributionWebConstants.MODULE_ID + ".error.login.fail";
+  }
+  
+  public Boolean isLockoutTimestampSet(User user) {
+      if (StringUtils.isNotBlank(user.getUserProperty("lockoutTimestamp"))) {
+        return Boolean.TRUE;
+      }
+    return Boolean.FALSE;
   }
 }
