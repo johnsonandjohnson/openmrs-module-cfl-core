@@ -181,7 +181,8 @@ public class LoginPageController {
   }
 
   private boolean isStagingEnvironment() {
-    String cflEnvironment = Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
+    String cflEnvironment =
+        Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
     return cflEnvironment != null && StringUtils.equalsIgnoreCase(cflEnvironment, STAGING);
   }
 
@@ -501,19 +502,17 @@ public class LoginPageController {
   }
 
   public String getAuthenticationErrorMessage(String username) {
-    User user = Context.getService(UserNotAuthorizedService.class).getUser(username);
-    if (user != null) {
-      if (isLockoutTimestampSet(user)) {
-        return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
-      }
+    if (isLockoutTimestampSet(username)) {
+      return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
     }
     return CfldistributionWebConstants.MODULE_ID + ".error.login.fail";
   }
-  
-  public Boolean isLockoutTimestampSet(User user) {
-      if (StringUtils.isNotBlank(user.getUserProperty("lockoutTimestamp"))) {
-        return Boolean.TRUE;
-      }
-    return Boolean.FALSE;
+
+  public boolean isLockoutTimestampSet(String username) {
+    User user = Context.getService(UserNotAuthorizedService.class).getUser(username);
+    if (user != null) {
+      return StringUtils.isNotBlank(user.getUserProperty("lockoutTimestamp"));
+    }
+    return false;
   }
 }

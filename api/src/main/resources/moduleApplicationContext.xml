@@ -36,16 +36,19 @@
         <property name="appFrameworkService" ref="appFrameworkService"/>
     </bean>
     <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.HtmlFormsMetadata"/>
-    <bean id="cflEncounterTypesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
+    <bean id="cflEncounterTypesMetadata"
+          class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
     <bean id="cflUpdateGlobalParametersActivatorStep"
           class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
-    <bean id="cflPersonAttributesMetadata" class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata"/>
+    <bean id="cflPersonAttributesMetadata"
+          class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata"/>
     <bean id="cflOpenMRSIDMetadata" class="org.openmrs.module.cfldistribution.api.metadata.OpenMRSIDMetadata">
         <property name="metadataMappingService" ref="metadatamapping.MetadataMappingService"/>
         <property name="identifierSourceService" ref="baseIdentifierSourceService"/>
     </bean>
     <bean id="cflLocationMetadata" class="org.openmrs.module.cfldistribution.api.metadata.LocationMetadata"/>
-    <bean id="cflOrderFrequencyMetadata" class="org.openmrs.module.cfldistribution.api.metadata.OrderFrequencyMetadata"/>
+    <bean id="cflOrderFrequencyMetadata"
+          class="org.openmrs.module.cfldistribution.api.metadata.OrderFrequencyMetadata"/>
     <bean id="cflAdminProviderMetadata" class="org.openmrs.module.cfldistribution.api.metadata.AdminProviderMetadata"/>
     <bean id="cflDbViewsMetadata"
           class="org.openmrs.module.cfldistribution.api.metadata.views.DbViewsMetadata">
