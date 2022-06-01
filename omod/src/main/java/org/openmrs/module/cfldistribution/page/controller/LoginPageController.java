@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
@@ -24,6 +25,7 @@ import org.openmrs.module.appui.AppUiConstants;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfldistribution.CfldistributionWebConstants;
+import org.openmrs.module.cfldistribution.api.service.UserNotAuthorizedService;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.ui.framework.UiUtils;
@@ -179,7 +181,8 @@ public class LoginPageController {
   }
 
   private boolean isStagingEnvironment() {
-    String cflEnvironment = Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
+    String cflEnvironment =
+        Context.getAdministrationService().getGlobalProperty(CFLConstants.ENVIRONMENT_KEY);
     return cflEnvironment != null && StringUtils.equalsIgnoreCase(cflEnvironment, STAGING);
   }
 
@@ -408,7 +411,7 @@ public class LoginPageController {
           .getSession()
           .setAttribute(
               CfldistributionWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-              ui.message(CfldistributionWebConstants.MODULE_ID + ".error.login.fail"));
+              ui.message(getAuthenticationErrorMessage(username)));
     }
 
     if (LOGGER.isDebugEnabled()) {
@@ -496,5 +499,20 @@ public class LoginPageController {
       return aUrl;
     }
     return null;
+  }
+
+  public String getAuthenticationErrorMessage(String username) {
+    if (isLockoutTimestampSet(username)) {
+      return CfldistributionWebConstants.MODULE_ID + ".user.lockout.message";
+    }
+    return CfldistributionWebConstants.MODULE_ID + ".error.login.fail";
+  }
+
+  public boolean isLockoutTimestampSet(String username) {
+    User user = Context.getService(UserNotAuthorizedService.class).getUser(username);
+    if (user != null) {
+      return StringUtils.isNotBlank(user.getUserProperty("lockoutTimestamp"));
+    }
+    return false;
   }
 }
