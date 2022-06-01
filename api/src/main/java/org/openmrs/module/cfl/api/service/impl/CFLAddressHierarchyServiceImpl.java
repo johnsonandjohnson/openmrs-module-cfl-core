@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -154,16 +155,16 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
         new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String lineToValidate =
-            new AddressDataValidator(line, delimiter, alreadyProcessedLines)
-                .getErrorMessageOfValidatedLine();
-        if (isValidLine(lineToValidate)) {
-          List<String> splitFields = Arrays.asList(line.split(delimiter, -1));
-          processLine(splitFields, entriesToCreate, levels, levelsEntriesMap, overwriteData);
+        ValidatorResult validatedLine =
+            new AddressDataValidator(line, delimiter, alreadyProcessedLines).validate();
+
+        if (isValidLine(validatedLine.getErrorMessage())) {
+          processLine(validatedLine.getLine(), entriesToCreate, levels, levelsEntriesMap, overwriteData);
         } else {
-          failedRecords.add(lineToValidate);
-          LOGGER.warn(String.format("Line: %s is duplicated or has an invalid format", line));
+          failedRecords.add(validatedLine.getErrorMessage());
+          LOGGER.warn("Line: {} is duplicated or has an invalid format", line);
         }
+
         alreadyProcessedLines.add(line);
       }
     }
@@ -262,21 +263,21 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
   }
 
   /** Internal helper class to validate lines obtained from file */
-  private static class AddressDataValidator {
+  static class AddressDataValidator {
     private String line;
     private String delimiter;
     private List<String> processedLines;
 
-    public AddressDataValidator(String line, String delimiter, List<String> processedLines) {
+    AddressDataValidator(String line, String delimiter, List<String> processedLines) {
       this.line = line;
       this.delimiter = delimiter;
       this.processedLines = processedLines;
     }
 
-    private String getErrorMessageOfValidatedLine() {
+    ValidatorResult validate() {
       StringJoiner joiner = new StringJoiner(" ", line + delimiter + "-> Reason: ", "");
       joiner.setEmptyValue("");
-      List<String> splitFields = Arrays.asList(line.split(delimiter, -1));
+      List<String> splitFields = getSplitFieldsWithEmptyTrim();
 
       if (splitFields.size() > NUMBER_OF_ADDRESS_HIERARCHY_LEVELS) {
         joiner.add(
@@ -293,7 +294,42 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
         joiner.add("Duplicated record.");
       }
 
-      return joiner.toString();
+      return new ValidatorResult(splitFields, joiner.toString());
+    }
+
+    private List<String> getSplitFieldsWithEmptyTrim() {
+      final List<String> splitLine = new ArrayList<>(Arrays.asList(line.split(delimiter, -1)));
+
+      final ListIterator<String> splitLineIterator = splitLine.listIterator(splitLine.size());
+      while (splitLineIterator.hasPrevious()) {
+        final String currentCell = splitLineIterator.previous();
+
+        if (StringUtils.isBlank(currentCell)) {
+          splitLineIterator.remove();
+        } else {
+          break;
+        }
+      }
+
+      return splitLine;
+    }
+  }
+
+  static class ValidatorResult {
+    final List<String> line;
+    final String errorMessage;
+
+    ValidatorResult(List<String> line, String errorMessage) {
+      this.line = line;
+      this.errorMessage = errorMessage;
+    }
+
+    List<String> getLine() {
+      return line;
+    }
+
+    String getErrorMessage() {
+      return errorMessage;
     }
   }
 }
