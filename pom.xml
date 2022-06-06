@@ -496,12 +496,6 @@
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>${jacocoVersion}</version>
-                        <configuration>
-                            <excludes>
-                                <exclude>org/openmrs/module/cfl/**/*Constants.class</exclude>
-                                <exclude>org/openmrs/module/cfl/**/*Activator.class</exclude>
-                            </excludes>
-                        </configuration>
                         <executions>
                             <!-- Off line instrumentation is needed to compute coverage for Power Mock tests -->
                             <execution>
