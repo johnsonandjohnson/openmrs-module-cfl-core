@@ -24,42 +24,21 @@ import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
+import org.openmrs.module.cfl.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cfl.api.event.CflEventListenerHelper;
 import org.openmrs.module.cfl.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cfl.api.htmlformentry.tag.RegimenHandler;
 import org.openmrs.module.cfl.api.util.GlobalPropertiesConstants;
+import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
+import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.openmrs.api.context.Context.getRegisteredComponent;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_DESC;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_NAME;
-import static org.openmrs.module.cfl.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
-import static org.openmrs.module.messages.api.util.CountryPropertyUtils.createDefaultCountrySettingIfNotExists;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -171,133 +150,137 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
   }
 
   private void createGlobalSettings() {
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DEFAULT_VALUE,
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_KEY,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DEFAULT_VALUE,
         CFLConstants.POSSIBLE_RELATIONSHIP_TYPES_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.SUPPORTED_ACTOR_TYPE,
         CFLConstants.SUPPORTED_ACTOR_TYPE_DEFAULT_VALUE,
         CFLConstants.SUPPORTED_ACTOR_TYPE_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION,
         CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DEFAULT_VALUE,
         CFLConstants.SUPPORTED_ACTOR_TYPE_DIRECTION_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_KEY,
         CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DEFAULT_VALUE,
         CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PERSON_IDENTIFIER_SOURCE_KEY,
         CFLConstants.PERSON_IDENTIFIER_SOURCE_DEFAULT_VALUE,
         CFLConstants.PERSON_IDENTIFIER_SOURCE_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_KEY,
         CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DEFAULT_VALUE,
         CFLConstants.PERSON_HEADER_IDENTIFIER_LABEL_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY,
         CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE,
         CFLConstants.PERSON_LOCATION_ATTRIBUTE_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.CONDITION_LIST_CLASSES_KEY,
         CFLConstants.CONDITION_LIST_CLASSES_DEFAULT_VALUE,
         CFLConstants.CONDITION_LIST_CLASSES_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY,
         CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE,
         CFLConstants.PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.VACCINATION_PROGRAM_KEY,
         CFLConstants.VACCINATION_PROGRAM_DEFAULT_VALUE,
         CFLConstants.VACCINATION_PROGRAM_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY,
         CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DEFAULT_VALUE,
         CFLConstants.VACCINATION_INFORMATION_ENABLED_KEY_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.ACTOR_TYPES_KEY, CFLConstants.CAREGIVER_RELATIONSHIP_UUID);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE,
         CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_VALUE,
         CFLConstants.NOTIFICATION_TEMPLATE_WELCOME_MESSAGE_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY,
         CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DEFAULT_VALUE,
         CFLConstants.AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_KEY,
         CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DEFAULT_VALUE,
         CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.VACCINATION_LISTENER_KEY,
         CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME,
         CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DEFAULT_VALUE,
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_DESCRIPTION);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.ENVIRONMENT_KEY,
         CFLConstants.ENVIRONMENT_DEFAULT_VALUE,
         CFLConstants.ENVIRONMENT_DESCRIPTION);
-    createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(GlobalPropertiesConstants.VISIT_FORM_URIS);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID);
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID);
   }
 
   private void createCountrySettings() {
-    createDefaultCountrySettingIfNotExists(
-        PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
         "10:00",
-        PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
         "18:00",
-        PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
         Boolean.FALSE.toString(),
-        SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
         Boolean.FALSE.toString(),
-        PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SMS_CONFIG_PROP_NAME, "defaultSmS", SMS_CONFIG_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        CALL_CONFIG_PROP_NAME, "defaultCall", CALL_CONFIG_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
+        CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
+        "defaultSmS",
+        CountryPropertyConstants.SMS_CONFIG_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
+        "defaultCall",
+        CountryPropertyConstants.CALL_CONFIG_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
         Boolean.FALSE.toString(),
-        SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
+        CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
         Boolean.FALSE.toString(),
-        SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
-        SHOULD_CREATE_FIRST_VISIT_PROP_DESC);
-    createDefaultCountrySettingIfNotExists(
-        SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
+        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
-        SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
   }
 
   private void createPersonOverviewConfig() {
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         ConfigConstants.FIND_PERSON_FILTER_STRATEGY_KEY,
         ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DEFAULT_VALUE,
         ConfigConstants.FIND_PERSON_FILTER_STRATEGY_DESCRIPTION);
 
-    createGlobalSettingIfNotExists(
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
         ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_KEY,
         ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DEFAULT_VALUE,
         ConfigConstants.LAST_VIEWED_PATIENT_SIZE_LIMIT_DESCRIPTION);
@@ -329,7 +312,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
   private void installMetadataBundles() {
     final MetadataDeployService service =
-        getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
+        Context.getRegisteredComponent("metadataDeployService", MetadataDeployService.class);
     final List<MetadataBundle> cflBundles =
         Context.getRegisteredComponents(MetadataBundle.class).stream()
             .filter(

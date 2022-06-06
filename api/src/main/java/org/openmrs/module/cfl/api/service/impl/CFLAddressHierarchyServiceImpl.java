@@ -159,7 +159,8 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
             new AddressDataValidator(line, delimiter, alreadyProcessedLines).validate();
 
         if (isValidLine(validatedLine.getErrorMessage())) {
-          processLine(validatedLine.getLine(), entriesToCreate, levels, levelsEntriesMap, overwriteData);
+          processLine(
+              validatedLine.getLine(), entriesToCreate, levels, levelsEntriesMap, overwriteData);
         } else {
           failedRecords.add(validatedLine.getErrorMessage());
           LOGGER.warn("Line: {} is duplicated or has an invalid format", line);
@@ -264,41 +265,20 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
 
   /** Internal helper class to validate lines obtained from file */
   static class AddressDataValidator {
-    private String line;
-    private String delimiter;
-    private List<String> processedLines;
+    private final String rawLine;
+    private final String delimiter;
+    private final List<String> processedLines;
+    private final List<String> splitFieldsWithEmptyTrim;
 
-    AddressDataValidator(String line, String delimiter, List<String> processedLines) {
-      this.line = line;
+    AddressDataValidator(String rawLine, String delimiter, List<String> processedLines) {
+      this.rawLine = rawLine;
       this.delimiter = delimiter;
       this.processedLines = processedLines;
+      this.splitFieldsWithEmptyTrim = getSplitFieldsWithEmptyTrim(rawLine, delimiter);
     }
 
-    ValidatorResult validate() {
-      StringJoiner joiner = new StringJoiner(" ", line + delimiter + "-> Reason: ", "");
-      joiner.setEmptyValue("");
-      List<String> splitFields = getSplitFieldsWithEmptyTrim();
-
-      if (splitFields.size() > NUMBER_OF_ADDRESS_HIERARCHY_LEVELS) {
-        joiner.add(
-            "Too much fields. The allowed number of fields is "
-                + NUMBER_OF_ADDRESS_HIERARCHY_LEVELS
-                + ".");
-      }
-
-      if (splitFields.stream().anyMatch(StringUtils::isBlank)) {
-        joiner.add("The line has empty cells.");
-      }
-
-      if (processedLines.contains(line)) {
-        joiner.add("Duplicated record.");
-      }
-
-      return new ValidatorResult(splitFields, joiner.toString());
-    }
-
-    private List<String> getSplitFieldsWithEmptyTrim() {
-      final List<String> splitLine = new ArrayList<>(Arrays.asList(line.split(delimiter, -1)));
+    private static List<String> getSplitFieldsWithEmptyTrim(String rawLine, String delimiter) {
+      final List<String> splitLine = new ArrayList<>(Arrays.asList(rawLine.split(delimiter, -1)));
 
       final ListIterator<String> splitLineIterator = splitLine.listIterator(splitLine.size());
       while (splitLineIterator.hasPrevious()) {
@@ -312,6 +292,28 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
       }
 
       return splitLine;
+    }
+
+    ValidatorResult validate() {
+      StringJoiner joiner = new StringJoiner(" ", rawLine + delimiter + "-> Reason: ", "");
+      joiner.setEmptyValue("");
+
+      if (splitFieldsWithEmptyTrim.size() > NUMBER_OF_ADDRESS_HIERARCHY_LEVELS) {
+        joiner.add(
+            "Too much fields. The allowed number of fields is "
+                + NUMBER_OF_ADDRESS_HIERARCHY_LEVELS
+                + ".");
+      }
+
+      if (splitFieldsWithEmptyTrim.stream().anyMatch(StringUtils::isBlank)) {
+        joiner.add("The line has empty cells.");
+      }
+
+      if (processedLines.contains(rawLine)) {
+        joiner.add("Duplicated record.");
+      }
+
+      return new ValidatorResult(splitFieldsWithEmptyTrim, joiner.toString());
     }
   }
 

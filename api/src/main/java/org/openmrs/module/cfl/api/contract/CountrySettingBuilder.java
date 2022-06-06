@@ -10,6 +10,7 @@
 
 package org.openmrs.module.cfl.api.contract;
 
+import org.openmrs.module.cfl.api.constant.CountryPropertyConstants;
 import org.openmrs.module.messages.api.model.CountryProperty;
 
 import java.util.Collections;
@@ -23,32 +24,21 @@ import static java.lang.Boolean.parseBoolean;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSet;
 
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SMS_CONFIG_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.CALL_CONFIG_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME;
-import static org.openmrs.module.cfl.api.constant.CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME;
-
 public class CountrySettingBuilder {
   public static final Set<String> ALL_PROP_NAMES =
       unmodifiableSet(
           new HashSet<>(
               asList(
-                  PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
-                  PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
-                  SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
-                  PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
-                  SMS_CONFIG_PROP_NAME,
-                  CALL_CONFIG_PROP_NAME,
-                  SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
-                  SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
-                  SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
-                  SHOULD_CREATE_FUTURE_VISIT_PROP_NAME)));
+                  CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
+                  CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
+                  CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
+                  CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
+                  CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
+                  CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
+                  CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
+                  CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
+                  CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
+                  CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME)));
 
   private static final Map<String, BiConsumer<CountrySettingBuilder, String>>
       PROPERTY_SETTERS_MAPPING;
@@ -56,27 +46,31 @@ public class CountrySettingBuilder {
   static {
     final Map<String, BiConsumer<CountrySettingBuilder, String>> tmp = new HashMap<>();
     tmp.put(
-        PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
         CountrySettingBuilder::setPatientNotificationTimeWindowFrom);
     tmp.put(
-        PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
+        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
         CountrySettingBuilder::setPatientNotificationTimeWindowTo);
     tmp.put(
-        SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME, CountrySettingBuilder::setShouldSendReminderViaSms);
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
+        CountrySettingBuilder::setShouldSendReminderViaSms);
     tmp.put(
-        PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
+        CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
         CountrySettingBuilder::setPerformCallOnPatientRegistration);
-    tmp.put(SMS_CONFIG_PROP_NAME, CountrySettingBuilder::setSms);
-    tmp.put(CALL_CONFIG_PROP_NAME, CountrySettingBuilder::setCall);
+    tmp.put(CountryPropertyConstants.SMS_CONFIG_PROP_NAME, CountrySettingBuilder::setSms);
+    tmp.put(CountryPropertyConstants.CALL_CONFIG_PROP_NAME, CountrySettingBuilder::setCall);
     tmp.put(
-        SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
+        CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
         CountrySettingBuilder::setSendSmsOnPatientRegistration);
     tmp.put(
-        SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
         CountrySettingBuilder::setShouldSendReminderViaCall);
-    tmp.put(SHOULD_CREATE_FIRST_VISIT_PROP_NAME, CountrySettingBuilder::setShouldCreateFirstVisit);
     tmp.put(
-        SHOULD_CREATE_FUTURE_VISIT_PROP_NAME, CountrySettingBuilder::setShouldCreateFutureVisit);
+        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
+        CountrySettingBuilder::setShouldCreateFirstVisit);
+    tmp.put(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
+        CountrySettingBuilder::setShouldCreateFutureVisit);
     PROPERTY_SETTERS_MAPPING = Collections.unmodifiableMap(tmp);
   }
 
