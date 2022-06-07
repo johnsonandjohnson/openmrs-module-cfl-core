@@ -34,9 +34,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /** The default implementation of CFLAddressHierarchyService. */
@@ -267,13 +269,13 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
   static class AddressDataValidator {
     private final String rawLine;
     private final String delimiter;
-    private final List<String> processedLines;
+    private final Set<String> processedLines;
     private final List<String> splitFieldsWithEmptyTrim;
 
     AddressDataValidator(String rawLine, String delimiter, List<String> processedLines) {
       this.rawLine = rawLine;
       this.delimiter = delimiter;
-      this.processedLines = processedLines;
+      this.processedLines = new HashSet<>(processedLines);
       this.splitFieldsWithEmptyTrim = getSplitFieldsWithEmptyTrim(rawLine, delimiter);
     }
 
