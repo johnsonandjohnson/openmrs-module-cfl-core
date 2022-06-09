@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.openmrs.Concept;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.Visit;
@@ -24,21 +25,26 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.Constant;
 import org.openmrs.module.cfl.api.constant.CountryPropertyConstants;
-import org.openmrs.module.cfl.api.contract.CountrySetting;
-import org.openmrs.module.cfl.api.contract.CountrySettingBuilder;
 import org.openmrs.module.cfl.api.contract.Randomization;
+import org.openmrs.module.cfl.api.contract.Vaccination;
+import org.openmrs.module.cfl.api.contract.VisitInformation;
 import org.openmrs.module.cfl.api.exception.CflRuntimeException;
 import org.openmrs.module.cfl.api.helper.VisitHelper;
+import org.openmrs.module.cfl.api.service.VaccinationService;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
@@ -46,6 +52,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -62,6 +69,8 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
 
   @InjectMocks private UpdatingVisitListener updatingVisitListener;
 
+  private List<Visit> allVisits = new ArrayList<>();
+
   @Before
   public void setEncounterService() {
     when(Context.getService(CountryPropertyService.class)).thenReturn(countryPropertyService);
@@ -70,39 +79,47 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
   }
 
   @Test
+  public void performAction_updateFromMultipleThreadsSafetyTest() throws JMSException, InterruptedException {
+    // Given
+    setupDataForFutureVisitCreation();
+
+    final VaccinationService vaccinationServiceSpy = Mockito.spy(vaccinationService);
+    when(Context.getService(VaccinationService.class)).thenReturn(vaccinationServiceSpy);
+
+    doAnswer(
+            invocationOnMock -> {
+              final Visit visit = (Visit) invocationOnMock.getArguments()[0];
+              visit
+                  .getActiveAttributes()
+                  .iterator()
+                  .next()
+                  .setValueReferenceInternal(Constant.VISIT_STATUS_OCCURRED);
+              return invocationOnMock.callRealMethod();
+            })
+        .when(vaccinationServiceSpy)
+        .createFutureVisits(any(Visit.class), any(Date.class));
+
+    // When
+    Runnable processMessage = () -> updatingVisitListener.performAction(message);
+    Thread performActionFirstThread = new Thread(processMessage);
+    Thread performActionSecondThread = new Thread(processMessage);
+
+    performActionFirstThread.start();
+    performActionSecondThread.start();
+
+    performActionFirstThread.join();
+    performActionSecondThread.join();
+
+    // Then
+    ArgumentCaptor<Visit> saveVisitArgumentCaptor = ArgumentCaptor.forClass(Visit.class);
+    verify(visitService, times(2)).saveVisit(saveVisitArgumentCaptor.capture());
+    assertThat(saveVisitArgumentCaptor.getAllValues().size(), is(2));
+  }
+
+  @Test
   public void performAction_shouldCreateFutureVisits() throws JMSException {
     // Given
-    visit =
-        VisitHelper.createVisit(
-            1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_OCCURRED, visitStartDate);
-
-    CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
-    shouldCreateFutureVisitProp.setValue("true");
-
-    when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
-        .thenReturn(Optional.of(shouldCreateFutureVisitProp));
-    when(configService.isVaccinationInfoIsEnabled()).thenReturn(true);
-    when(configService.getRandomizationGlobalProperty()).thenReturn(createRandomization());
-    when(configService.getVaccinationProgram(visit.getPatient()))
-        .thenReturn(vaccinations[0].getName());
-    when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME))
-        .thenReturn(true);
-
-    when(visitService.getVisitByUuid(visit.getUuid())).thenReturn(visit);
-    when(visitService.getVisitsByPatient(patient)).thenReturn(VisitHelper.getVisits(visit));
-    when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
-
-    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
-        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
-
-    when(patientService.getPatient(person.getPersonId())).thenReturn(patient);
-
-    when(locationService.getLocationAttributeTypeByName(
-            CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME))
-        .thenReturn(new LocationAttributeType());
-
-    when(message.getString(CFLConstants.UUID_KEY)).thenReturn(visit.getUuid());
+    setupDataForFutureVisitCreation();
 
     // When
     updatingVisitListener.performAction(message);
@@ -125,6 +142,59 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         containsInAnyOrder(
             hasProperty("startDatetime", is(expectedSecondVisit)),
             hasProperty("startDatetime", is(expectedThirdVisit))));
+  }
+
+  private void setupDataForFutureVisitCreation() throws JMSException {
+    visit =
+        VisitHelper.createVisit(
+            1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_OCCURRED, visitStartDate);
+    allVisits.add(visit);
+
+    CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
+    shouldCreateFutureVisitProp.setName(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setValue("true");
+
+    when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
+        .thenReturn(Optional.of(shouldCreateFutureVisitProp));
+    when(configService.isVaccinationInfoIsEnabled()).thenReturn(true);
+    when(configService.getRandomizationGlobalProperty()).thenReturn(createRandomization());
+    when(configService.getVaccinationProgram(visit.getPatient()))
+        .thenReturn(vaccinations[0].getName());
+    when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME))
+        .thenReturn(true);
+
+    when(visitService.getAllVisitTypes())
+        .thenReturn(
+            Arrays.stream(vaccinations)
+                .map(Vaccination::getVisits)
+                .flatMap(Collection::stream)
+                .map(VisitInformation::getNameOfDose)
+                .map(VisitHelper::createVisitType)
+                .collect(Collectors.toList()));
+
+    when(visitService.getVisitByUuid(visit.getUuid())).thenReturn(visit);
+    when(visitService.saveVisit(any(Visit.class)))
+        .thenAnswer(
+            invocationOnMock -> {
+              final Visit savedVisit = (Visit) invocationOnMock.getArguments()[0];
+              allVisits.add(savedVisit);
+              return savedVisit;
+            });
+    when(visitService.getVisitsByPatient(patient)).thenReturn(allVisits);
+
+    when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
+
+    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
+        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
+
+    when(patientService.getPatient(person.getPersonId())).thenReturn(patient);
+
+    when(locationService.getLocationAttributeTypeByName(
+            CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME))
+        .thenReturn(new LocationAttributeType());
+
+    when(message.getString(CFLConstants.UUID_KEY)).thenReturn(visit.getUuid());
   }
 
   @Test
@@ -221,7 +291,8 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
             1, patient, Constant.VISIT_TYPE_DOSING, Constant.VISIT_STATUS_OCCURRED);
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setName(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
     shouldCreateFutureVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))

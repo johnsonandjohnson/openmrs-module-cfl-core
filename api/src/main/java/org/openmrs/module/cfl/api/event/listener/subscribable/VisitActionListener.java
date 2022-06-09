@@ -33,14 +33,12 @@ public abstract class VisitActionListener extends BaseActionListener {
         return list;
     }
 
-    protected Visit extractVisit(Message message) {
-        LOGGER.trace("Handle extractVisit");
-        String visitUuid = getMessagePropertyValue(message, CFLConstants.UUID_KEY);
-        return getVisit(visitUuid);
+    protected String getVisitUuid(Message message) {
+        return getMessagePropertyValue(message, CFLConstants.UUID_KEY);
     }
 
-    private Visit getVisit(String visitUuid) {
-        LOGGER.debug(String.format("Handle getVisit for %s uuid", visitUuid));
+    protected Visit getVisit(String visitUuid) {
+        LOGGER.debug("Handle getVisit for {} uuid", visitUuid);
         Visit visit = Context.getVisitService().getVisitByUuid(visitUuid);
         if (visit == null) {
             throw new CflRuntimeException(String.format("Unable to retrieve visit by uuid: %s", visitUuid));
