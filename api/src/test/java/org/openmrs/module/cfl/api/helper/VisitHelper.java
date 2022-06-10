@@ -54,7 +54,7 @@ public final class VisitHelper {
         return visit;
     }
 
-    private static VisitType createVisitType(String visitTypeName) {
+    public static VisitType createVisitType(String visitTypeName) {
         VisitType visitType = new VisitType();
         visitType.setId(1);
         visitType.setName(visitTypeName);
