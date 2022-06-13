@@ -55,6 +55,8 @@
         <webservices.restVersion>2.16</webservices.restVersion>
         <uicommonsVersion>2.12.0</uicommonsVersion>
         <idgenVersion>4.5.0</idgenVersion>
+        <jacocoVersion>0.8.2</jacocoVersion>
+        <surefireVersion>2.17</surefireVersion>
         <!-- Upgraded version compared to referenceapplication -->
         <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
@@ -427,6 +429,68 @@
                                 <phase>none</phase>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>code-coverage</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>org.jacoco.agent</artifactId>
+                    <classifier>runtime</classifier>
+                    <version>${jacocoVersion}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacocoVersion}</version>
+                        <executions>
+                            <!-- Off line instrumentation is needed to compute coverage for Power Mock tests -->
+                            <execution>
+                                <id>default-instrument</id>
+                                <goals>
+                                    <goal>instrument</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-restore-instrumented-classes</id>
+                                <goals>
+                                    <goal>restore-instrumented-classes</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefireVersion}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>${surefireVersion}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <!-- Workaround to https://code.google.com/p/powermock/issues/detail?id=504 -->
+                            <argLine>-XX:-UseSplitVerifier</argLine>
+                            <systemPropertyVariables>
+                                <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                            </systemPropertyVariables>
+                            <reuseForks>false</reuseForks>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
