@@ -57,6 +57,11 @@
         <aware_of_module>org.openmrs.module.locationbasedaccess</aware_of_module>
     </aware_of_modules>
 
+    <advice>
+        <point>org.openmrs.api.LocationService</point>
+        <class>org.openmrs.module.cfldistribution.advice.DefaultLocationPropertiesAdvice</class>
+    </advice>
+
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->
     <messages>

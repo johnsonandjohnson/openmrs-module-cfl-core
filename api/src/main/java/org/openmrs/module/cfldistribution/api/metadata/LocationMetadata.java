@@ -25,10 +25,10 @@ import java.util.Optional;
 import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.locationTag;
 
 public class LocationMetadata extends VersionedMetadataBundle {
+  public static final String LOGIN_LOCATION_TAG_NAME = "Login Location";
+  public static final String VISIT_LOCATION_TAG_NAME = "Visit Location";
   private static final String LOCATION_UUID_PROPERTY_NAME = "locationUuid";
   private static final String UNKNOWN_LOCATION_UUID = "8d6c993e-c2cc-11de-8d13-0010c6dffd0f";
-  private static final String LOGIN_LOCATION_TAG_NAME = "Login Location";
-  private static final String VISIT_LOCATION_TAG_NAME = "Visit Location";
   private static final String VISIT_LOCATION_UUID = "37dd4458-dc9e-4ae6-a1f1-789c1162d37b";
 
   @Override
