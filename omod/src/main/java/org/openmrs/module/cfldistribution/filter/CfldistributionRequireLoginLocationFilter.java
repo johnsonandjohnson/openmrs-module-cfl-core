@@ -40,6 +40,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Intercepts authenticated requests to check if the logged in user has selected a location and will
@@ -92,11 +93,18 @@ public class CfldistributionRequireLoginLocationFilter implements Filter {
 			//The user needs to select a login location
 			HttpServletResponse resp = ((HttpServletResponse) response);
 			resp.setStatus(HttpStatus.OK.value());
-			resp.sendRedirect(loginRequestUri);
+			if (isRedirectURLTrusted(loginRequestUri)) {
+				resp.sendRedirect(loginRequestUri);
+			}
+
 			return;
 		}
 
 		chain.doFilter(request, response);
+	}
+
+	private boolean isRedirectURLTrusted(String uri) {
+		return Arrays.asList(allowedRequestURIs).contains(uri);
 	}
 	
 	/**

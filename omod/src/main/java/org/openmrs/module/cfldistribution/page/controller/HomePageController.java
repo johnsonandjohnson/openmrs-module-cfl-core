@@ -34,6 +34,7 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Spring MVC controller that takes over /index.htm and processes requests to show the home page so
@@ -44,7 +45,7 @@ public class HomePageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@RequestMapping("/index.htm")
+	@RequestMapping(value = "/index.htm", method = RequestMethod.GET)
 	public String overrideHomepage() {
 		return "forward:/" + CfldistributionWebConstants.MODULE_ID + "/home.page";
 	}
