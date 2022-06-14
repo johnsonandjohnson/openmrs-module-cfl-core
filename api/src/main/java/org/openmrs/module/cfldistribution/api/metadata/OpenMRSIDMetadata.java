@@ -70,7 +70,7 @@ public class OpenMRSIDMetadata extends VersionedMetadataBundle {
     final PatientIdentifierType openmrsIdType = new PatientIdentifierType();
     openmrsIdType.setName(OPENMRS_ID_NAME);
     openmrsIdType.setDescription(OPENMRS_ID_DESCRIPION);
-    openmrsIdType.setRequired(true);
+    openmrsIdType.setRequired(Boolean.TRUE);
     openmrsIdType.setValidator(LuhnMod30IdentifierValidator.class.getName());
     openmrsIdType.setUuid(OPENMRS_ID_UUID);
 

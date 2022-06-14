@@ -36,12 +36,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
 public class ManageAppsPageController {
-	List<String> appsThatCannotBeStopped = Arrays.asList("coreapps.systemAdministrationApp");
+	List<String> appsThatCannotBeStopped = Collections.singletonList("coreapps.systemAdministrationApp");
 	
 	public void get(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService service) {
 		addModelAttributes(model, service);
@@ -76,9 +76,10 @@ public class ManageAppsPageController {
 	private void addModelAttributes(PageModel model, AppFrameworkService service) {
 		List<AppDescriptor> allApps = service.getAllApps();
 		List<AppDescriptor> enabledApps = service.getAllEnabledApps();
-		List<String> userAppIds = new ArrayList<String>();
-		List<AppModel> apps = new ArrayList<AppModel>();
-		for (UserApp userApp : service.getUserApps()) {
+		List<UserApp> userApps = service.getUserApps();
+		List<String> userAppIds = new ArrayList<>(userApps.size());
+		List<AppModel> apps = new ArrayList<>();
+		for (UserApp userApp : userApps) {
 			userAppIds.add(userApp.getAppId());
 		}
 		for (AppDescriptor ad : allApps) {
@@ -90,9 +91,9 @@ public class ManageAppsPageController {
 	public class AppModel {
 		
 		private String id;
-		
+
 		private boolean enabled;
-		
+
 		private boolean builtIn;
 
 		private boolean cannotBeStopped;
@@ -103,6 +104,37 @@ public class ManageAppsPageController {
 			this.builtIn = builtIn;
 			this.cannotBeStopped = appsThatCannotBeStopped.contains(this.id) ? Boolean.TRUE : Boolean.FALSE;
 		}
-		
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
+
+		public boolean isBuiltIn() {
+			return builtIn;
+		}
+
+		public void setBuiltIn(boolean builtIn) {
+			this.builtIn = builtIn;
+		}
+
+		public boolean isCannotBeStopped() {
+			return cannotBeStopped;
+		}
+
+		public void setCannotBeStopped(boolean cannotBeStopped) {
+			this.cannotBeStopped = cannotBeStopped;
+		}
 	}
 }

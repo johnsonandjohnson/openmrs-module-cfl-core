@@ -10,6 +10,7 @@
 
 package org.openmrs.module.cfldistribution.filter;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.ui.framework.WebConstants;
 
 import javax.servlet.Filter;
@@ -96,7 +97,18 @@ public class RedirectReferenceapplicationRequestsFilter implements Filter {
       throws IOException {
     final String cflStyleLocation =
         "/" + WebConstants.CONTEXT_PATH + redirectMapping.contextRelativeRedirectPath;
-    httpServletResponse.sendRedirect(cflStyleLocation);
+    if (isRedirectURLTrusted(cflStyleLocation)) {
+      httpServletResponse.sendRedirect(cflStyleLocation);
+    }
+  }
+
+  private boolean isRedirectURLTrusted(String uri) {
+    return REDIRECTS.stream()
+        .anyMatch(
+            redirectMapping ->
+                StringUtils.equalsIgnoreCase(
+                    "/" + WebConstants.CONTEXT_PATH + redirectMapping.contextRelativeRedirectPath,
+                    uri));
   }
 
   private static class RedirectMapping {

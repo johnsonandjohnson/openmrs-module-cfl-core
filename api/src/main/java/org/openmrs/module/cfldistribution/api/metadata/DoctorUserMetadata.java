@@ -43,7 +43,6 @@ public class DoctorUserMetadata extends VersionedMetadataBundle {
   private static final String PHONE_NUMBER_VALUE = "+15555551234";
   private static final String USERNAME = "cfldoctor1";
   private static final String PASSWORD = "Cfldoctor1";
-  private static final String FORCE_PASSWORD_PROPERTY_NAME = "forcePassword";
   private static final String LOCATION_UUID_PROPERTY_NAME = "locationUuid";
   private static final String DOCTOR_ROLE = "Privilege Level: Doctor";
   private static final String LOCATION_NAME = "CFL Clinic";
@@ -158,7 +157,7 @@ public class DoctorUserMetadata extends VersionedMetadataBundle {
 
   private Map<String, String> createUserProperties() {
     Map<String, String> userProperties = new HashMap<>();
-    userProperties.put(FORCE_PASSWORD_PROPERTY_NAME, "false");
+    userProperties.put("forcePassword", "false");
     userProperties.put(LOCATION_UUID_PROPERTY_NAME, getDoctorLocation().getUuid());
 
     return userProperties;

@@ -37,6 +37,7 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -92,15 +93,15 @@ public class UserAppPageController {
   }
 
   @ResponseBody
-  @RequestMapping("/cfldistribution/verifyJson")
+  @RequestMapping(value = "/cfldistribution/verifyJson", method = RequestMethod.GET)
   public SimpleObject verifyJson(@RequestParam("json") String json) {
     SimpleObject so = new SimpleObject();
     try {
       mapper.readValue(json, AppDescriptor.class);
-      so.add("isValid", true);
+      so.add("isValid", Boolean.TRUE);
     } catch (Exception e) {
       log.warn("Invalid json:", e);
-      so.add("isValid", false);
+      so.add("isValid", Boolean.FALSE);
     }
 
     return so;
