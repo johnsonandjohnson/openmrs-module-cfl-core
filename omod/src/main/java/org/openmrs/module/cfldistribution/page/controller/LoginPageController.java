@@ -43,6 +43,8 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -518,7 +520,7 @@ public class LoginPageController {
   private String getRelativeUrl(String url, PageRequest pageRequest) {
     String aUrl = url;
     if (aUrl == null) {
-      return null;
+      return "";
     }
 
     if ((!aUrl.isEmpty() && aUrl.charAt(0) == '/')
@@ -539,7 +541,7 @@ public class LoginPageController {
 
       return aUrl;
     }
-    return null;
+    return "";
   }
 
   public String getAuthenticationErrorMessage(String username) {
@@ -558,6 +560,13 @@ public class LoginPageController {
   }
 
   private boolean isRedirectURLTrusted(String url) {
-    return url.startsWith("/openmrs");
+    try {
+      URI uri = new URI(url);
+      return uri.getPath().startsWith("/openmrs");
+    } catch (URISyntaxException ex) {
+      LOGGER.error("URL string cannot be parsed as a URI reference");
+    }
+
+    return false;
   }
 }
