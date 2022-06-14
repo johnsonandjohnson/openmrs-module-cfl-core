@@ -45,7 +45,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,12 +63,6 @@ public class LoginPageController {
   private static final Log LOGGER = LogFactory.getLog(LoginPageController.class);
 
   private static final String STAGING = "Staging";
-
-  private static final List<String> ALLOWED_REDIRECT_URLS =
-      Arrays.asList(
-          "/openmrs/cfldistribution/home.page",
-          "/openmrs/cfldistribution/login.page",
-          "/openmrs/login.htm");
 
   @RequestMapping(
       value = "/login.htm",
@@ -130,12 +123,12 @@ public class LoginPageController {
       String redirectUrl, PageRequest pageRequest, UiUtils ui) {
     if (StringUtils.isNotBlank(redirectUrl)) {
       String url = getRelativeUrl(redirectUrl, pageRequest);
-      if (isRedirectURLTrusted(url)) {
-        return "redirect:" + url;
+      if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
+          return "redirect:" + url;
       }
     }
     String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "home");
-    if (isRedirectURLTrusted(url)) {
+    if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
       return "redirect:" + url;
     }
 
@@ -283,7 +276,7 @@ public class LoginPageController {
       return redirectUrl;
     }
 
-    return null;
+    return "";
   }
 
   /**
@@ -350,7 +343,7 @@ public class LoginPageController {
             sessionLocation = accessibleLocations.get(0);
           } else if (accessibleLocations.size() > 1) {
             String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
-            if (isRedirectURLTrusted(url)) {
+            if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
               return "redirect:" + url;
             }
           }
@@ -367,7 +360,7 @@ public class LoginPageController {
             sessionLocationId = sessionLocation.getLocationId();
           } else {
             String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
-            if (isRedirectURLTrusted(url)) {
+            if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
               return "redirect:" + url;
             }
           }
@@ -415,9 +408,9 @@ public class LoginPageController {
             if (isUrlWithinOpenmrs(pageRequest, redirectUrl)) {
               if (!redirectUrl.contains("login.") && isSameUser(pageRequest, username)) {
                 if (LOGGER.isDebugEnabled()) {
-                  LOGGER.debug("Redirecting user to " + redirectUrl);
+                  LOGGER.debug("Redirecting user to " + redirectUrl.replaceAll("[\r\n]",""));
                 }
-                if (isRedirectURLTrusted(redirectUrl)) {
+                if (StringUtils.isNotBlank(redirectUrl) && isRedirectURLTrusted(redirectUrl)) {
                   return "redirect:" + redirectUrl;
                 }
               } else {
@@ -428,7 +421,7 @@ public class LoginPageController {
             }
           }
           String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "home");
-          if (isRedirectURLTrusted(url)) {
+          if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
             return "redirect:" + url;
           }
         }
@@ -468,7 +461,7 @@ public class LoginPageController {
     // Since the user is already authenticated without location, need to logout before redirecting
     Context.logout();
     String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
-    if (isRedirectURLTrusted(url)) {
+    if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
       return "redirect:" + url;
     }
     return "";
@@ -542,7 +535,7 @@ public class LoginPageController {
     int indexOfContextPath = aUrl.indexOf(pageRequest.getRequest().getContextPath());
     if (indexOfContextPath >= 0) {
       aUrl = aUrl.substring(indexOfContextPath);
-      LOGGER.debug("Relative redirect:" + aUrl);
+      LOGGER.debug("Relative redirect:" + aUrl.replaceAll("[\r\n]",""));
 
       return aUrl;
     }
@@ -564,7 +557,7 @@ public class LoginPageController {
     return false;
   }
 
-  private boolean isRedirectURLTrusted(String uri) {
-    return ALLOWED_REDIRECT_URLS.contains(uri);
+  private boolean isRedirectURLTrusted(String url) {
+    return url.startsWith("/openmrs");
   }
 }
