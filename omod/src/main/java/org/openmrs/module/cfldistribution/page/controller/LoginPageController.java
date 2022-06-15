@@ -66,10 +66,13 @@ public class LoginPageController {
 
   private static final String STAGING = "Staging";
 
-  @RequestMapping(
-      value = "/login.htm",
-      method = {RequestMethod.GET, RequestMethod.POST})
-  public String overrideLoginPage() {
+  @RequestMapping(value = "/login.htm", method = RequestMethod.GET)
+  public String overrideLoginPageGet() {
+    return "forward:/" + CfldistributionWebConstants.MODULE_ID + "/login.page";
+  }
+
+  @RequestMapping(value = "/login.htm", method = RequestMethod.POST)
+  public String overrideLoginPagePost() {
     return "forward:/" + CfldistributionWebConstants.MODULE_ID + "/login.page";
   }
 
@@ -121,6 +124,7 @@ public class LoginPageController {
     return methodResult;
   }
 
+  @SuppressWarnings("findsecbugs:SPRING_UNVALIDATED_REDIRECT")
   private String getRedirectForAuthenticated(
       String redirectUrl, PageRequest pageRequest, UiUtils ui) {
     if (StringUtils.isNotBlank(redirectUrl)) {
@@ -297,6 +301,7 @@ public class LoginPageController {
    * @should send the user back to the login page if an invalid location is selected
    * @should send the user back to the login page when authentication fails
    */
+
   @SuppressWarnings({
     "checkstyle:ParameterNumber",
     "checkstyle:ParameterAssignment",
@@ -307,7 +312,8 @@ public class LoginPageController {
     "PMD.CyclomaticComplexity",
     "PMD.NPathComplexity",
     "PMD.AvoidReassigningParameters",
-    "PMD.CollapsibleIfStatements"
+    "PMD.CollapsibleIfStatements",
+    "findsecbugs:SPRING_UNVALIDATED_REDIRECT"
   })
   public String post(
       @RequestParam(value = "username", required = false) String username,
@@ -514,7 +520,7 @@ public class LoginPageController {
   private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {
     Object attributeValue = request.getSession().getAttribute(attributeName);
     request.getSession().removeAttribute(attributeName);
-    return attributeValue != null ? attributeValue.toString() : null;
+    return attributeValue != null ? attributeValue.toString() : "";
   }
 
   private String getRelativeUrl(String url, PageRequest pageRequest) {

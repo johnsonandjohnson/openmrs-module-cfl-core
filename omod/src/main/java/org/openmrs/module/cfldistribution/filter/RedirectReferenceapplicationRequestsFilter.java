@@ -93,6 +93,7 @@ public class RedirectReferenceapplicationRequestsFilter implements Filter {
         .endsWith(redirectMapping.resourceToRedirectPath);
   }
 
+  @SuppressWarnings("findsecbugs:UNVALIDATED_REDIRECT")
   private void redirect(RedirectMapping redirectMapping, HttpServletResponse httpServletResponse)
       throws IOException {
     final String cflStyleLocation =

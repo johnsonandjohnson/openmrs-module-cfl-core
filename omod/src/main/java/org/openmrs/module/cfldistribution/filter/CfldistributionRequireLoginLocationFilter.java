@@ -70,6 +70,7 @@ public class CfldistributionRequireLoginLocationFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
+	@SuppressWarnings("findsecbugs:UNVALIDATED_REDIRECT")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 	    throws IOException, ServletException {
