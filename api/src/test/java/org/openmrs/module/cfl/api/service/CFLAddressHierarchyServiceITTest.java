@@ -17,6 +17,7 @@ import org.openmrs.module.addresshierarchy.AddressHierarchyLevel;
 import org.openmrs.module.addresshierarchy.db.AddressHierarchyDAO;
 import org.openmrs.module.cfl.api.dto.AddressDataDTO;
 import org.openmrs.module.cfl.api.dto.ImportDataResultDTO;
+import org.openmrs.module.cfl.api.model.AddressDataContent;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,7 +67,7 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertNotNull(result);
     assertEquals(3, result.getNumberOfInvalidRecords());
     assertEquals(
-        "First,,Invalid,Row,-> Reason: The line has empty cells.",
+        "First,,Invalid_Row,-> Reason: The line has empty cells.",
         result.getInvalidRecords().get(0));
     assertEquals(
         ",,Second,Invalid,,Row,-> Reason: Too much fields. The allowed number of fields is 5. The line has empty cells.",
@@ -74,6 +75,27 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertEquals(
         "Third,Invalid,Row,Too,Many,Fields,In,One,Row,-> Reason: Too much fields. The allowed number of fields is 5.",
         result.getInvalidRecords().get(2));
+  }
+
+  @Test
+  public void shouldReturnTwoCitiesWithEqualNameButDifferentState() throws IOException {
+    cflAddressHierarchyService.importAddressHierarchyEntriesAndReturnInvalidRows(
+            getInputStreamFromFile(MAIN_ADDRESS_DATA), DEFAULT_DELIMITER, true);
+
+    final AddressDataDTO result =
+            cflAddressHierarchyService.getAddressDataResults(
+                    DEFAULT_START_PAGE_NUMBER, DEFAULT_PAGE_SIZE);
+
+    assertNotNull(result);
+    final List<AddressDataContent> resultContent = result.getContent();
+    assertTrue(
+            "Should contain data for line: KrajA,DystryktA,MiastoA",
+            resultContent.contains(
+                    new AddressDataContent(new String[]{"KrajA", "DystryktA", "MiastoA", null, null})));
+    assertTrue(
+            "Should contain data for line: KrajA,DystryktB,MiastoA",
+            resultContent.contains(
+                    new AddressDataContent(new String[]{"KrajA", "DystryktB", "MiastoA", null, null})));
   }
 
   @Test
