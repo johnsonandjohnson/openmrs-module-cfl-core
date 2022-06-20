@@ -35,6 +35,8 @@ import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
 import org.openmrs.module.messages.api.util.BestContactTimeHelper;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -121,25 +123,32 @@ public class ConfigServiceImpl implements ConfigService {
         return getGp(CFLConstants.DEFAULT_USER_TIME_ZONE_GP_NAME, DateUtil.DEFAULT_SYSTEM_TIME_ZONE.getID());
     }
 
-    @Override
-    public Date getSafeMessageDeliveryDate(Patient patient, Date requestedDeliveryTime, CountrySetting countrySetting) {
-        final TimeZone defaultUserTimezone = DateUtil.getDefaultUserTimezone();
-        final Date allowedTimeWindowFrom =
-                DateUtil.getDateWithTimeOfDay(requestedDeliveryTime, countrySetting.getPatientNotificationTimeWindowFrom(),
-                        defaultUserTimezone);
-        final Date allowedTimeWindowTo =
-                DateUtil.getDateWithTimeOfDay(requestedDeliveryTime, countrySetting.getPatientNotificationTimeWindowTo(),
-                        defaultUserTimezone);
+  @Override
+  public Date getSafeMessageDeliveryDate(
+      Patient patient, Date requestedDeliveryTime, CountrySetting countrySetting) {
+    final TimeZone defaultUserTimezone = DateUtil.getDefaultUserTimezone();
+    final ZonedDateTime requestedDeliveryZonedDateTime =
+        ZonedDateTime.ofInstant(requestedDeliveryTime.toInstant(), defaultUserTimezone.toZoneId());
+    final ZonedDateTime allowedTimeWindowFrom =
+        ZonedDateTime.of(
+            requestedDeliveryZonedDateTime.toLocalDate(),
+            LocalTime.parse(countrySetting.getPatientNotificationTimeWindowFrom()),
+            requestedDeliveryZonedDateTime.getZone());
+    final ZonedDateTime allowedTimeWindowTo =
+        ZonedDateTime.of(
+            requestedDeliveryZonedDateTime.toLocalDate(),
+            LocalTime.parse(countrySetting.getPatientNotificationTimeWindowTo()),
+            requestedDeliveryZonedDateTime.getZone());
+    final Date safeDeliveryDate;
 
-        final Date safeDeliveryDate;
-
-        if (requestedDeliveryTime.before(allowedTimeWindowFrom)) {
+    if (requestedDeliveryZonedDateTime.isBefore(allowedTimeWindowFrom)) {
             // Get best contact time for the same day
             safeDeliveryDate = getBestContactTimeAt(requestedDeliveryTime, patient, defaultUserTimezone);
-        } else if (requestedDeliveryTime.after(allowedTimeWindowTo)) {
-            // Get best contact time for the next day
-            safeDeliveryDate =
-                    getBestContactTimeAt(DateUtil.addDaysToDate(requestedDeliveryTime, 1), patient, defaultUserTimezone);
+    } else if (requestedDeliveryZonedDateTime.isAfter(allowedTimeWindowTo)) {
+      // Get best contact time for the next day
+      safeDeliveryDate =
+          getBestContactTimeAt(
+              DateUtil.addDaysToDate(requestedDeliveryTime, 1), patient, defaultUserTimezone);
         } else {
             // delivery date fits allowed time window
             safeDeliveryDate = requestedDeliveryTime;
