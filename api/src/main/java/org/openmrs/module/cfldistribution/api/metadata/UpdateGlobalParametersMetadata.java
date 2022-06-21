@@ -38,7 +38,7 @@ public class UpdateGlobalParametersMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     updateGlobalProperties();
   }
 

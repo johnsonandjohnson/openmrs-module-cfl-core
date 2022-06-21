@@ -30,7 +30,7 @@ public class AdminProviderMetadata extends VersionedMetadataBundle {
   protected void installEveryTime() {}
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     final ProviderService providerService = Context.getProviderService();
     final Person adminPerson = Context.getPersonService().getPerson(1);
     final Collection<Provider> possibleProviders =

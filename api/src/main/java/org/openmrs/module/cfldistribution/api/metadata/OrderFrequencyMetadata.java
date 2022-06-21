@@ -27,7 +27,7 @@ public class OrderFrequencyMetadata extends VersionedMetadataBundle {
   protected void installEveryTime() {}
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     install(orderFrequency(CIELConceptsConstants.ONCE, OrderFrequenciesConstants.ONCE, 1.0));
     install(orderFrequency(CIELConceptsConstants.EVERY_30_MINS, OrderFrequenciesConstants.EVERY_30_MINS, 48.0));
     install(orderFrequency(CIELConceptsConstants.EVERY_HOUR, OrderFrequenciesConstants.EVERY_HOUR, 24.0));

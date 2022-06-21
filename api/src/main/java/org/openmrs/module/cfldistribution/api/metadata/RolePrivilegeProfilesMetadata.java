@@ -12,6 +12,7 @@ package org.openmrs.module.cfldistribution.api.metadata;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
@@ -333,18 +334,18 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     installAnalystRole();
     installDoctorRole();
   }
 
   private void installAnalystRole() {
-    install(
-        role(
+    Role role = role(
             ANALYST_PRIVILEGE_LEVEL,
             ANALYST_PRIVILEGE_LEVEL_DESCRIPTION,
             idSet(),
-            filterOutAndLogMissingPrivileges(ANALYST_PRIVILEGES)));
+            filterOutAndLogMissingPrivileges(ANALYST_PRIVILEGES));
+    install(role);
   }
 
   private void installDoctorRole() {

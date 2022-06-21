@@ -40,7 +40,7 @@ public class LocationMetadata extends VersionedMetadataBundle {
   protected void installEveryTime() {}
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     install(locationTag(VISIT_LOCATION_TAG_NAME, "", VISIT_LOCATION_UUID));
 
     updateAdminLocationToCFLClinic();
