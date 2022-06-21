@@ -12,6 +12,7 @@ package org.openmrs.module.cfl.api.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -32,5 +33,22 @@ public class AddressDataContent {
 
   public void setContent(List<String> results) {
     this.results = results;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AddressDataContent that = (AddressDataContent) o;
+    return Objects.equals(results, that.results);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(results);
   }
 }

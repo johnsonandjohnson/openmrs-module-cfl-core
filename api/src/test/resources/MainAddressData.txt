@@ -1,13 +1,15 @@
-US,Los Angeles
-US,Boston
-First,,Invalid,Row
-US,New York
-Poland,Warsaw
+US,California,Los Angeles
+US,Massachusetts,Boston
+First,,Invalid_Row
+US,New York,New York
+Poland,Masovian,Warsaw
 ,,Second,Invalid,,Row
-Poland,Cracow
-Belgium,Brussels
+Poland,Lesser Poland,Cracow
+Belgium,Brussels,Brussels
 Third,Invalid,Row,Too,Many,Fields,In,One,Row
-Belgium,Antwerp
-India,Mumbai
-India,Bengaluru
-India,New Delhi
+Belgium,Flemish,Antwerp
+India,Maharashtra,Mumbai
+India,Karnataka,Bengaluru
+India,Delhi,New Delhi
+KrajA,DystryktA,MiastoA
+KrajA,DystryktB,MiastoA
