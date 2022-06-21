@@ -51,11 +51,11 @@ public class CfldistributionRequireLoginLocationFilter implements Filter {
 	private static final Logger logger = LoggerFactory.getLogger(
       CfldistributionRequireLoginLocationFilter.class);
 	
-	private static String loginRequestUri;
+	private String loginRequestUri;
 	
-	private static String logoutRequestUri;
+	private String logoutRequestUri;
 	
-	private static String[] allowedRequestURIs;
+	private String[] allowedRequestURIs;
 	
 	/**
 	 * @see Filter#init(FilterConfig)

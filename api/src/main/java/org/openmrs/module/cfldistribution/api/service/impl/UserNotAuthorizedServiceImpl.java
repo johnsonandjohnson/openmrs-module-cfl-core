@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class UserNotAuthorizedServiceImpl implements UserNotAuthorizedService {
 
-  private static SessionFactory sessionFactory;
+  private SessionFactory sessionFactory;
 
   @Transactional(readOnly = true)
   @Override
@@ -24,7 +24,7 @@ public class UserNotAuthorizedServiceImpl implements UserNotAuthorizedService {
     this.sessionFactory = sessionFactory;
   }
 
-  private static Session getSession() {
+  private Session getSession() {
     return sessionFactory.getCurrentSession();
   }
 }

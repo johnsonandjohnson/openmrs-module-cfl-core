@@ -37,7 +37,9 @@ public class LocationMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installEveryTime() {}
+  protected void installEveryTime() {
+    // needs to be overwritten, do nothing
+  }
 
   @Override
   public void installNewVersion() {
