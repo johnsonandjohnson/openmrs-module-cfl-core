@@ -61,7 +61,9 @@ public class RedirectReferenceapplicationRequestsFilter implements Filter {
           new RedirectMapping(REFERENCEAPPLICATION_HOME_PAGE, CFL_HOME_PAGE_CONTEXT_RELATIVE));
 
   @Override
-  public void init(FilterConfig filterConfig) {}
+  public void init(FilterConfig filterConfig) {
+    // needs to be overwritten, do nothing
+  }
 
   @Override
   public void doFilter(
@@ -84,7 +86,9 @@ public class RedirectReferenceapplicationRequestsFilter implements Filter {
   }
 
   @Override
-  public void destroy() {}
+  public void destroy() {
+    // needs to be overwritten, do nothing
+  }
 
   private boolean shouldRedirect(
       RedirectMapping redirectMapping, HttpServletRequest httpServletRequest) {

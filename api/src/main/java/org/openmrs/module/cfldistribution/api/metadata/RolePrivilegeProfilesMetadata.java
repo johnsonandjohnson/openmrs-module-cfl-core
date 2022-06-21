@@ -12,6 +12,7 @@ package org.openmrs.module.cfldistribution.api.metadata;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Role;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
@@ -176,7 +177,7 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
           "Get Relationship Types",
           "Get Relationships",
           "Get Roles",
-          "Get Users",
+          GET_USERS,
           "Get Visit Attribute Types",
           "Get Visit Types",
           "Get Visits",
@@ -227,9 +228,9 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
           "Manage Providers",
           "Manage Relationship Types",
           "Manage Relationships",
-          "Manage Reports",
+          MANAGE_REPORTS,
           "Manage RESTWS",
-          "Manage Scheduled Report Tasks",
+          MANAGE_SCHEDULED_REPORT_TASKS,
           "Manage Search Index",
           "Manage Token Registrations",
           "Manage Visit Attribute Types",
@@ -257,7 +258,7 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
           "Remove Allergies",
           "Remove Problems",
           "Request Appointments",
-          "Run Reports",
+          RUN_REPORTS,
           "SMS module Privilege",
           "Task: coreapps.createRetrospectiveVisit",
           "Task: coreapps.createVisit",
@@ -311,8 +312,8 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
           "View Programs",
           "View Relationship Types",
           "View Relationships",
-          "View Report Objects",
-          "View Reports",
+          VIEW_REPORT_OBJECTS,
+          VIEW_REPORTS,
           "View RESTWS",
           "View Token Registrations",
           "View Unpublished Forms");
@@ -333,18 +334,18 @@ public class RolePrivilegeProfilesMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installNewVersion() {
+  public void installNewVersion() {
     installAnalystRole();
     installDoctorRole();
   }
 
   private void installAnalystRole() {
-    install(
-        role(
+    Role role = role(
             ANALYST_PRIVILEGE_LEVEL,
             ANALYST_PRIVILEGE_LEVEL_DESCRIPTION,
             idSet(),
-            filterOutAndLogMissingPrivileges(ANALYST_PRIVILEGES)));
+            filterOutAndLogMissingPrivileges(ANALYST_PRIVILEGES));
+    install(role);
   }
 
   private void installDoctorRole() {

@@ -54,7 +54,7 @@ public class OpenMRSIDMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
+  public void installNewVersion() throws Exception {
     final PatientIdentifierType openmrsIdType = installPatientIdentifierType();
     installSequentialIdentifierGenerator(openmrsIdType);
     final IdentifierSource openmrsIdGenerator = installSequentialIdentifierGenerator(openmrsIdType);

@@ -15,6 +15,9 @@ import org.openmrs.module.metadatadeploy.bundle.VersionedMetadataBundle;
 
 /** Adds Person Attributes. */
 public class PersonAttributesMetadata extends VersionedMetadataBundle {
+
+  private static final String PERSON_ATTRIBUTE_TYPE_DESCRIPTION =
+      "Used on CfL Patient registration form.";
   private double sortWeightGen = 0;
 
   @Override
@@ -42,43 +45,39 @@ public class PersonAttributesMetadata extends VersionedMetadataBundle {
     install(
         newPersonAttributeType(
             "Gender Identity",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "603bc838-ed52-4de5-b7c7-57a47de7a2ff"));
     install(
         newPersonAttributeType(
             "Nationality",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "1cf8b660-65a7-4335-b56d-672722182bc2"));
     install(
         newPersonAttributeType(
             "City of current residence",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "66119d21-4eda-466a-ac19-cadab568cf25"));
     install(
         newPersonAttributeType(
             "City of origin",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "03acac42-9c29-4007-9253-5226ac3e2b6d"));
     install(
         newPersonAttributeType(
             "Civil status",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "8d4a881a-e2fd-495c-b04f-d73f8a6e6146"));
     install(
         newPersonAttributeType(
             "Education degree",
-            "Used on CfL Patient registration form.",
+            PERSON_ATTRIBUTE_TYPE_DESCRIPTION,
             "af032e9f-721e-4d2d-833a-5fc452e79e05"));
     install(
         newPersonAttributeType(
-            "Sector",
-            "Used on CfL Patient registration form.",
-            "83208670-f43c-476f-a519-10a131d03c2d"));
+            "Sector", PERSON_ATTRIBUTE_TYPE_DESCRIPTION, "83208670-f43c-476f-a519-10a131d03c2d"));
     install(
         newPersonAttributeType(
-            "Job",
-            "Used on CfL Patient registration form.",
-            "8dc7d8a5-3061-4894-8651-a7d35da3a8aa"));
+            "Job", PERSON_ATTRIBUTE_TYPE_DESCRIPTION, "8dc7d8a5-3061-4894-8651-a7d35da3a8aa"));
   }
 
   private PersonAttributeType newPersonAttributeType(String name, String description, String uuid) {

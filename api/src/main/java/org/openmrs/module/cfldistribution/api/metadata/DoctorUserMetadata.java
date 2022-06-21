@@ -81,7 +81,7 @@ public class DoctorUserMetadata extends VersionedMetadataBundle {
   }
 
   @Override
-  protected void installNewVersion() throws Exception {
+  public void installNewVersion() throws Exception {
     if (isDoctorUserDoesNotExist()) {
       setUpDoctorUser();
     }

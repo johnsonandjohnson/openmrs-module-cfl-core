@@ -56,6 +56,14 @@ import java.util.Locale;
 @Controller
 public class LoginPageController {
 
+  private static final String REDIRECT_PREFIX = "redirect:";
+
+  private static final String HTTP_PREFIX = "http://";
+
+  private static final String HTTPS_PREFIX = "https://";
+
+  private static final String LOGIN_PAGE_NAME = "login";
+
   // see TRUNK-4536 for details why we need this
   private static final String GET_LOCATIONS = "Get Locations";
 
@@ -130,12 +138,12 @@ public class LoginPageController {
     if (StringUtils.isNotBlank(redirectUrl)) {
       String url = getRelativeUrl(redirectUrl, pageRequest);
       if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-          return "redirect:" + url;
+          return REDIRECT_PREFIX + url;
       }
     }
     String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "home");
     if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-      return "redirect:" + url;
+      return REDIRECT_PREFIX + url;
     }
 
     return "";
@@ -213,7 +221,7 @@ public class LoginPageController {
 
   private boolean isUrlWithinOpenmrs(PageRequest pageRequest, String redirectUrl) {
     if (StringUtils.isNotBlank(redirectUrl)) {
-      if (redirectUrl.startsWith("http://") || redirectUrl.startsWith("https://")) {
+      if (redirectUrl.startsWith(HTTP_PREFIX) || redirectUrl.startsWith(HTTPS_PREFIX)) {
         try {
           URL url = new URL(redirectUrl);
           String urlPath = url.getFile();
@@ -313,7 +321,8 @@ public class LoginPageController {
     "PMD.NPathComplexity",
     "PMD.AvoidReassigningParameters",
     "PMD.CollapsibleIfStatements",
-    "findsecbugs:SPRING_UNVALIDATED_REDIRECT"
+    "findsecbugs:SPRING_UNVALIDATED_REDIRECT",
+    "java:S3776"
   })
   public String post(
       @RequestParam(value = "username", required = false) String username,
@@ -350,9 +359,9 @@ public class LoginPageController {
           if (accessibleLocations.size() == 1) {
             sessionLocation = accessibleLocations.get(0);
           } else if (accessibleLocations.size() > 1) {
-            String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
+            String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, LOGIN_PAGE_NAME);
             if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-              return "redirect:" + url;
+              return REDIRECT_PREFIX + url;
             }
           }
 
@@ -367,9 +376,9 @@ public class LoginPageController {
           if (sessionLocation != null) {
             sessionLocationId = sessionLocation.getLocationId();
           } else {
-            String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
+            String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, LOGIN_PAGE_NAME);
             if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-              return "redirect:" + url;
+              return REDIRECT_PREFIX + url;
             }
           }
         }
@@ -419,7 +428,7 @@ public class LoginPageController {
                   LOGGER.debug("Redirecting user to " + redirectUrl.replaceAll("[\r\n]",""));
                 }
                 if (StringUtils.isNotBlank(redirectUrl) && isRedirectURLTrusted(redirectUrl)) {
-                  return "redirect:" + redirectUrl;
+                  return REDIRECT_PREFIX + redirectUrl;
                 }
               } else {
                 if (LOGGER.isDebugEnabled()) {
@@ -430,7 +439,7 @@ public class LoginPageController {
           }
           String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "home");
           if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-            return "redirect:" + url;
+            return REDIRECT_PREFIX + url;
           }
         }
       } else if (sessionLocation == null) {
@@ -468,9 +477,9 @@ public class LoginPageController {
         .setAttribute(CfldistributionWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL, redirectUrl);
     // Since the user is already authenticated without location, need to logout before redirecting
     Context.logout();
-    String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, "login");
+    String url = ui.pageLink(CfldistributionWebConstants.MODULE_ID, LOGIN_PAGE_NAME);
     if (StringUtils.isNotBlank(url) && isRedirectURLTrusted(url)) {
-      return "redirect:" + url;
+      return REDIRECT_PREFIX + url;
     }
     return "";
   }
@@ -530,15 +539,15 @@ public class LoginPageController {
     }
 
     if ((!aUrl.isEmpty() && aUrl.charAt(0) == '/')
-        || (!aUrl.startsWith("http://") && !aUrl.startsWith("https://"))) {
+        || (!aUrl.startsWith(HTTP_PREFIX) && !aUrl.startsWith(HTTPS_PREFIX))) {
       return aUrl;
     }
 
     // This is an absolute url, discard the protocal, domain name/host and port section
-    if (aUrl.startsWith("http://")) {
-      aUrl = StringUtils.removeStart(aUrl, "http://");
-    } else if (aUrl.startsWith("https://")) {
-      aUrl = StringUtils.removeStart(aUrl, "https://");
+    if (aUrl.startsWith(HTTP_PREFIX)) {
+      aUrl = StringUtils.removeStart(aUrl, HTTP_PREFIX);
+    } else if (aUrl.startsWith(HTTPS_PREFIX)) {
+      aUrl = StringUtils.removeStart(aUrl, HTTPS_PREFIX);
     }
     int indexOfContextPath = aUrl.indexOf(pageRequest.getRequest().getContextPath());
     if (indexOfContextPath >= 0) {
