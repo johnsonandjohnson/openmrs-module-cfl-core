@@ -35,9 +35,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -225,19 +227,19 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
           List<AddressHierarchyEntry> entriesToCreate,
           List<AddressHierarchyLevel> levels,
           List<String> splitFields,
-          int i,
+          int fieldIndex,
           Map<AddressHierarchyLevel, List<AddressHierarchyEntry>> levelsEntriesMap,
           boolean overwriteData){
     AddressHierarchyEntry parent = null;
-    if (i > 0) {
+    if (fieldIndex > 0) {
       List<AddressHierarchyEntry> listToSearchParentEntry = new ArrayList<>(entriesToCreate);
-      AddressHierarchyLevel parentLevel = levels.get(i - 1);
+      AddressHierarchyLevel parentLevel = levels.get(fieldIndex - 1);
       if (!overwriteData) {
         listToSearchParentEntry.addAll(levelsEntriesMap.get(parentLevel));
       }
       parent =
               findParentAddressHierarchyEntry(
-                      listToSearchParentEntry, splitFields.get(i - 1), parentLevel, splitFields.subList(0, i - 1));
+                      listToSearchParentEntry, splitFields.get(fieldIndex - 1), parentLevel, splitFields.subList(0, fieldIndex - 1));
     }
     return parent;
   }
@@ -251,7 +253,7 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
             .filter(entry -> checkParents(entry, currentParentList))
             .collect(Collectors.toList());
     if (addressHierarchyEntryList.size() > 1) {
-      new CflRuntimeException("Ambiguous parent for " + currentParentList + " Field::" + field);
+      throw new CflRuntimeException("Ambiguous parent for " + currentParentList + " Field::" + field);
     }
     return addressHierarchyEntryList.isEmpty() ? null : addressHierarchyEntryList.get(0);
   }
@@ -299,13 +301,13 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
   static class AddressDataValidator {
     private final String rawLine;
     private final String delimiter;
-    private final List<String> processedLines;
+    private final Set<String> processedLines;
     private final List<String> splitFieldsWithEmptyTrim;
 
     AddressDataValidator(String rawLine, String delimiter, List<String> processedLines) {
       this.rawLine = rawLine;
       this.delimiter = delimiter;
-      this.processedLines = processedLines;
+      this.processedLines = new HashSet<>(processedLines);
       this.splitFieldsWithEmptyTrim = getSplitFieldsWithEmptyTrim(rawLine, delimiter);
     }
 
