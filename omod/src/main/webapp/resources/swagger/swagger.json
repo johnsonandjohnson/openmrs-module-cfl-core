@@ -673,16 +673,16 @@
             "$ref" : "#/definitions/AdHocMessagePatientFilterDTO"
           }
         },
-        "properties" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "string"
-          }
-        },
         "channels" : {
           "type" : "array",
           "uniqueItems" : true,
           "items" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
             "type" : "string"
           }
         }
@@ -787,10 +787,56 @@
     "HttpServletRequest" : {
       "type" : "object",
       "properties" : {
-        "method" : {
+        "requestedSessionIdFromCookie" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "authType" : {
           "type" : "string"
         },
-        "queryString" : {
+        "requestedSessionIdFromURL" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
+        "remoteUser" : {
+          "type" : "string"
+        },
+        "requestedSessionId" : {
+          "type" : "string"
+        },
+        "requestURI" : {
+          "type" : "string"
+        },
+        "requestURL" : {
+          "$ref" : "#/definitions/StringBuffer"
+        },
+        "servletPath" : {
+          "type" : "string"
+        },
+        "requestedSessionIdValid" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "requestedSessionIdFromUrl" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
+        },
+        "method" : {
           "type" : "string"
         },
         "session" : {
@@ -799,57 +845,47 @@
         "userPrincipal" : {
           "$ref" : "#/definitions/Principal"
         },
-        "requestedSessionIdValid" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "requestedSessionIdFromURL" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "requestedSessionIdFromUrl" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "pathTranslated" : {
+        "queryString" : {
           "type" : "string"
-        },
-        "requestedSessionId" : {
-          "type" : "string"
-        },
-        "requestedSessionIdFromCookie" : {
-          "type" : "boolean",
-          "default" : false
         },
         "contextPath" : {
           "type" : "string"
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
-        "servletPath" : {
-          "type" : "string"
-        },
-        "remoteUser" : {
-          "type" : "string"
-        },
-        "requestURI" : {
-          "type" : "string"
-        },
-        "authType" : {
-          "type" : "string"
-        },
-        "headerNames" : {
+        "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "pathInfo" : {
+        "characterEncoding" : {
           "type" : "string"
         },
-        "requestURL" : {
-          "$ref" : "#/definitions/StringBuffer"
+        "parameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
+        },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "remotePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "localAddr" : {
+          "type" : "string"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "scheme" : {
           "type" : "string"
@@ -867,11 +903,12 @@
         "contentType" : {
           "type" : "string"
         },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
-          "type" : "string"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -884,49 +921,36 @@
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
-        },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "serverName" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "remotePort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "localAddr" : {
-          "type" : "string"
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "remoteAddr" : {
-          "type" : "string"
         }
       }
     },
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "valueNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
+        "maxInactiveInterval" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sessionContext" : {
+          "$ref" : "#/definitions/HttpSessionContext"
+        },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
+        },
         "id" : {
           "type" : "string"
         },
@@ -936,30 +960,6 @@
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
-        },
-        "new" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "valueNames" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "maxInactiveInterval" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "sessionContext" : {
-          "$ref" : "#/definitions/HttpSessionContext"
         }
       }
     },
@@ -999,22 +999,13 @@
         "language" : {
           "type" : "string"
         },
+        "script" : {
+          "type" : "string"
+        },
         "country" : {
           "type" : "string"
         },
-        "displayCountry" : {
-          "type" : "string"
-        },
-        "displayLanguage" : {
-          "type" : "string"
-        },
-        "displayName" : {
-          "type" : "string"
-        },
-        "displayScript" : {
-          "type" : "string"
-        },
-        "displayVariant" : {
+        "variant" : {
           "type" : "string"
         },
         "extensionKeys" : {
@@ -1023,15 +1014,6 @@
           "items" : {
             "type" : "string"
           }
-        },
-        "iso3Country" : {
-          "type" : "string"
-        },
-        "iso3Language" : {
-          "type" : "string"
-        },
-        "script" : {
-          "type" : "string"
         },
         "unicodeLocaleAttributes" : {
           "type" : "array",
@@ -1047,7 +1029,25 @@
             "type" : "string"
           }
         },
-        "variant" : {
+        "iso3Language" : {
+          "type" : "string"
+        },
+        "iso3Country" : {
+          "type" : "string"
+        },
+        "displayLanguage" : {
+          "type" : "string"
+        },
+        "displayScript" : {
+          "type" : "string"
+        },
+        "displayCountry" : {
+          "type" : "string"
+        },
+        "displayVariant" : {
+          "type" : "string"
+        },
+        "displayName" : {
           "type" : "string"
         }
       }
@@ -1064,6 +1064,15 @@
             "type" : "object"
           }
         },
+        "modelMap" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "object"
+          }
+        },
+        "viewName" : {
+          "type" : "string"
+        },
         "empty" : {
           "type" : "boolean",
           "default" : false
@@ -1071,23 +1080,21 @@
         "reference" : {
           "type" : "boolean",
           "default" : false
-        },
-        "viewName" : {
-          "type" : "string"
-        },
-        "modelMap" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "object"
-          }
         }
       }
     },
     "MultipartFile" : {
       "type" : "object",
       "properties" : {
+        "originalFilename" : {
+          "type" : "string"
+        },
         "name" : {
           "type" : "string"
+        },
+        "empty" : {
+          "type" : "boolean",
+          "default" : false
         },
         "bytes" : {
           "type" : "array",
@@ -1095,10 +1102,6 @@
             "type" : "string",
             "format" : "byte"
           }
-        },
-        "empty" : {
-          "type" : "boolean",
-          "default" : false
         },
         "size" : {
           "type" : "integer",
@@ -1108,9 +1111,6 @@
           "$ref" : "#/definitions/InputStream"
         },
         "contentType" : {
-          "type" : "string"
-        },
-        "originalFilename" : {
           "type" : "string"
         }
       }
@@ -1198,33 +1198,33 @@
     "ServletContext" : {
       "type" : "object",
       "properties" : {
-        "minorVersion" : {
-          "type" : "integer",
-          "format" : "int32"
+        "servletContextName" : {
+          "type" : "string"
         },
-        "majorVersion" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "attributeNames" : {
+        "servlets" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "contextPath" : {
+        "servletNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "serverInfo" : {
           "type" : "string"
         },
         "initParameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "servletContextName" : {
-          "type" : "string"
-        },
-        "servletNames" : {
+        "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "servlets" : {
-          "$ref" : "#/definitions/Enumeration"
+        "majorVersion" : {
+          "type" : "integer",
+          "format" : "int32"
         },
-        "serverInfo" : {
+        "minorVersion" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "contextPath" : {
           "type" : "string"
         }
       }
@@ -1235,6 +1235,42 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
+        },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "remotePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "localAddr" : {
+          "type" : "string"
+        },
+        "localName" : {
+          "type" : "string"
+        },
         "scheme" : {
           "type" : "string"
         },
@@ -1251,11 +1287,12 @@
         "contentType" : {
           "type" : "string"
         },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
-          "type" : "string"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1268,43 +1305,6 @@
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
-        },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "serverName" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "remotePort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "localAddr" : {
-          "type" : "string"
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "remoteAddr" : {
-          "type" : "string"
         }
       }
     },

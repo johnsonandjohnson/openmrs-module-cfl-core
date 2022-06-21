@@ -33,6 +33,7 @@ public class PersonFamilyWidgetFragmentController {
     private static final String PATIENT = "patient";
     
     private static final String PATIENT_ID = "patientId";
+    private static final String MAX_RECORDS_PROP = "maxRecords";
     
     private static final Integer DEFAULT_MAX_RECORDS = 15;
     
@@ -43,14 +44,14 @@ public class PersonFamilyWidgetFragmentController {
         FamilyWidgetDTO familyWidgetDTO = new FamilyWidgetDTO();
         List<PersonDTO> relatedPeople = familyWidgetDTO.buildPeopleDTOs(relationships, person);
 
-        int maxRecords = (StringUtils.isNotBlank((String) config.get("maxRecords")))
-                ? Integer.parseInt((String) config.get("maxRecords")) : DEFAULT_MAX_RECORDS;
+        int maxRecords = (StringUtils.isNotBlank((String) config.get(MAX_RECORDS_PROP)))
+                ? Integer.parseInt((String) config.get(MAX_RECORDS_PROP)) : DEFAULT_MAX_RECORDS;
 
         PersonDTOBuilder personDTOBuilder = new PersonDTOBuilder();
 
         model.addAttribute("currentPersonLocation", personDTOBuilder.getPersonLocation(person.getPersonId()));
         model.addAttribute("relatedPeople", relatedPeople);
-        model.addAttribute("maxRecords", maxRecords);
+        model.addAttribute(MAX_RECORDS_PROP, maxRecords);
     }
 
     private Person getPerson(FragmentConfiguration config) {
