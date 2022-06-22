@@ -37,7 +37,7 @@ import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.event.ApplicationEventService;
+import org.openmrs.module.cfl.api.event.ExtendedApplicationEventService;
 import org.openmrs.module.cfl.extension.builder.PersonExtensionBuilder;
 import org.openmrs.module.cfl.extension.domain.PersonDomainWrapper;
 import org.openmrs.module.coreapps.CoreAppsConstants;
@@ -78,7 +78,7 @@ public class PersonPageController {
                                  @InjectBeans PersonDomainWrapper personDomainWrapper,
                                  @SpringBean("adtService") AdtService adtService,
                                  @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
-                                 @SpringBean("cfl.applicationEventService") ApplicationEventService appEventService,
+                                 @SpringBean("cfl.applicationEventService") ExtendedApplicationEventService appEventService,
                                  @SpringBean("coreAppsProperties") CoreAppsProperties coreAppsProperties,
                                  @SpringBean("patientService") PatientService patientService,
                                  PageModel model,
@@ -235,13 +235,13 @@ public class PersonPageController {
     private class SpringBeans {
         private AdtService adtService;
         private AppFrameworkService appFrameworkService;
-        private ApplicationEventService applicationEventService;
+        private ExtendedApplicationEventService applicationEventService;
         private CoreAppsProperties coreAppsProperties;
         private PatientService patientService;
 
         SpringBeans(AdtService adtService, AppFrameworkService appFrameworkService,
-                           ApplicationEventService applicationEventService, CoreAppsProperties coreAppsProperties,
-                           PatientService patientService) {
+                    ExtendedApplicationEventService applicationEventService, CoreAppsProperties coreAppsProperties,
+                    PatientService patientService) {
             this.adtService = adtService;
             this.appFrameworkService = appFrameworkService;
             this.applicationEventService = applicationEventService;

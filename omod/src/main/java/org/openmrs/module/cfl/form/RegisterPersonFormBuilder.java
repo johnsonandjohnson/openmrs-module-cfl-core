@@ -58,151 +58,174 @@ import static org.openmrs.module.cfl.CFLRegisterPersonConstants.PROVIDER_NAME;
 import static org.openmrs.module.cfl.CFLRegisterPersonConstants.SECTIONS;
 
 /**
- * Builds a registration form structure from the app configuration.
- * Based on openmrs-module-registrationapp v1.13.0
+ * Builds a registration form structure from the app configuration. Based on
+ * openmrs-module-registrationapp v1.13.0
  * omod/src/main/java/org/openmrs/module/registrationapp/form/RegisterPatientFormBuilder.java
  */
 public final class RegisterPersonFormBuilder {
 
-    private static final Log LOGGER = LogFactory.getLog(RegisterPersonFormBuilder.class);
-    private static final String MULTI_VALUES_WARN =
-            "Multiple values for a single person attribute type not supported, ignoring extra values";
+  private static final Log LOGGER = LogFactory.getLog(RegisterPersonFormBuilder.class);
+  private static final String MULTI_VALUES_WARN =
+      "Multiple values for a single person attribute type not supported, ignoring extra values";
 
-    private RegisterPersonFormBuilder() {
+  private RegisterPersonFormBuilder() {}
+
+  /**
+   * Builds the navigable form structure for the specified app descriptor
+   *
+   * @param app the app descriptor
+   * @return the form structure
+   */
+  public static NavigableFormStructure buildFormStructure(AppDescriptor app) {
+    NavigableFormStructure formStructure = new NavigableFormStructure();
+
+    // Get the ordered list of sections out of the configuration
+    Map<String, Section> configuredSections = new LinkedHashMap<>();
+    ArrayNode sections = (ArrayNode) app.getConfig().get(SECTIONS);
+    for (JsonNode sectionJsonNode : sections) {
+      final Section section = buildSection(sectionJsonNode);
+      configuredSections.put(section.getId(), section);
     }
 
-    /**
-     * Builds the navigable form structure for the specified app descriptor
-     *
-     * @param app the app descriptor
-     * @return the form structure
-     */
-    public static NavigableFormStructure buildFormStructure(AppDescriptor app) {
-        NavigableFormStructure formStructure = new NavigableFormStructure();
+    for (Section section : configuredSections.values()) {
+      formStructure.addSection(section);
+    }
+    return formStructure;
+  }
 
-        // Get the ordered list of sections out of the configuration
-        Map<String, Section> configuredSections = new LinkedHashMap<>();
-        ArrayNode sections = (ArrayNode) app.getConfig().get(SECTIONS);
-        for (JsonNode sectionJsonNode : sections) {
-            ObjectNode sectionConfig = (ObjectNode) sectionJsonNode;
+  private static Section buildSection(JsonNode sectionJsonNode) {
+    ObjectNode sectionConfig = (ObjectNode) sectionJsonNode;
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            Section section = objectMapper.convertValue(sectionConfig, Section.class);
+    ObjectMapper objectMapper = new ObjectMapper();
+    Section section = objectMapper.convertValue(sectionConfig, Section.class);
 
-            if (section.getQuestions() != null) {
-                for (Question question : section.getQuestions()) {
-                    if (question.getFields() != null) {
-                        for (Field field : question.getFields()) {
-                            ObjectNode widget = field.getWidget();
-                            String providerName = widget.get(PROVIDER_NAME).getTextValue();
-                            String fragmentId = widget.get(FRAGMENT_ID).getTextValue();
-                            JsonNode fieldConfig = widget.get(CONFIG);
-                            //Groovy doesn't know how to handle ArrayNode and ObjectNode therefore we need to convert
-                            //them to List and Map respectively. Also TextNode.toString() includes quotes, we need
-                            //to extract the actual text value excluding the quotes
-                            FragmentConfiguration fragConfig = new FragmentConfiguration((Map) flatten(fieldConfig));
-                            FragmentRequest fragmentRequest = new FragmentRequest(providerName, fragmentId, fragConfig);
-                            field.setFragmentRequest(fragmentRequest);
-                        }
-                    }
-                }
-            }
-
-            configuredSections.put(section.getId(), section);
-        }
-
-        for (Section section : configuredSections.values()) {
-            formStructure.addSection(section);
-        }
-        return formStructure;
+    if (section.getQuestions() != null) {
+      buildQuestions(section);
     }
 
-    /**
-     * A utility method that converts the specified JsonNode to a value that we can be used in
-     * groovy. If it's a TextNode it extracts the actual text and if it's an ArrayNode or ObjectNode
-     * it gets converted to a List or Map respectively. Note that the method returns the same value
-     * for other node types and recursively applies the same logic to nested arrays and objects.
-     *
-     * @param node a JsonNode to flatten
-     * @return the flattened value
-     */
-    private static Object flatten(JsonNode node) {
-        if (node == null) {
-            return null;
-        }
+    return section;
+  }
 
-        final Object obj;
+  private static void buildQuestions(Section section) {
+    for (Question question : section.getQuestions()) {
+      if (question.getFields() == null) {
+        continue;
+      }
 
-        if (node.isTextual()) {
-            obj = node.getTextValue();
-        } else if (node.isBoolean()) {
-            obj = node.getBooleanValue();
-        } else if (node.isNumber()) {
-            obj = node.getNumberValue();
-        } else if (node.isArray()) {
-            obj = flattenArrayNode(node);
-        } else if (node.isObject()) {
-            obj = flattenObjectNode(node);
-        } else {
-            obj = node;
-        }
+      for (Field field : question.getFields()) {
+        ObjectNode widget = field.getWidget();
+        String providerName = widget.get(PROVIDER_NAME).getTextValue();
+        String fragmentId = widget.get(FRAGMENT_ID).getTextValue();
+        JsonNode fieldConfig = widget.get(CONFIG);
+        // Groovy doesn't know how to handle ArrayNode and ObjectNode therefore we need to
+        // convert
+        // them to List and Map respectively. Also TextNode.toString() includes quotes, we need
+        // to extract the actual text value excluding the quotes
+        FragmentConfiguration fragConfig = new FragmentConfiguration((Map) flatten(fieldConfig));
+        FragmentRequest fragmentRequest = new FragmentRequest(providerName, fragmentId, fragConfig);
+        field.setFragmentRequest(fragmentRequest);
+      }
+    }
+  }
 
-        return obj;
+  /**
+   * A utility method that converts the specified JsonNode to a value that we can be used in groovy.
+   * If it's a TextNode it extracts the actual text and if it's an ArrayNode or ObjectNode it gets
+   * converted to a List or Map respectively. Note that the method returns the same value for other
+   * node types and recursively applies the same logic to nested arrays and objects.
+   *
+   * @param node a JsonNode to flatten
+   * @return the flattened value
+   */
+  private static Object flatten(JsonNode node) {
+    if (node == null) {
+      return null;
     }
 
-    private static Object flattenArrayNode(JsonNode node) {
-        final List<Object> list = new ArrayList<>();
-        final Iterator<JsonNode> itemIterator = node.getElements();
+    final Object obj;
 
-        for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
-            list.add(flatten(itemIterator.next()));
-        }
-
-        if (itemIterator.hasNext()) {
-            throw new IllegalArgumentException(
-                    "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json array!");
-        }
-
-        return list;
+    if (node.isTextual()) {
+      obj = node.getTextValue();
+    } else if (node.isBoolean()) {
+      obj = node.getBooleanValue();
+    } else if (node.isNumber()) {
+      obj = node.getNumberValue();
+    } else if (node.isArray()) {
+      obj = flattenArrayNode(node);
+    } else if (node.isObject()) {
+      obj = flattenObjectNode(node);
+    } else {
+      obj = node;
     }
 
-    private static Object flattenObjectNode(JsonNode node) {
-        final Map<String, Object> map = new HashMap<>();
-        final Iterator<String> fieldNameIterator = node.getFieldNames();
+    return obj;
+  }
 
-        for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {
-            final String fName = fieldNameIterator.next();
-            map.put(fName, flatten(node.get(fName)));
-        }
+  private static Object flattenArrayNode(JsonNode node) {
+    final List<Object> list = new ArrayList<>();
+    final Iterator<JsonNode> itemIterator = node.getElements();
 
-        if (fieldNameIterator.hasNext()) {
-            throw new IllegalArgumentException(
-                    "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json object!");
-        }
-
-        return map;
+    for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && itemIterator.hasNext(); ++nodeIdx) {
+      list.add(flatten(itemIterator.next()));
     }
 
-    public static void resolvePersonAttributeFields(NavigableFormStructure form, Person person,
-                                                    Map<String, String[]> parameterMap) {
-        for (Field field : form.getFields()) {
-            if (StringUtils.equals(field.getType(), PERSON_ATTRIBUTE_PROP)) {
-                String[] parameterValues = parameterMap.get(field.getFormFieldName());
-                if (parameterValues != null && parameterValues.length > 0) {
-                    if (parameterValues.length > 1) {
-                        LOGGER.warn(MULTI_VALUES_WARN);
-                    }
-                    String parameterValue = parameterValues[0];
-                    if (parameterValue != null) {
-                        PersonAttributeType attributeType =
-                                Context.getPersonService().getPersonAttributeTypeByUuid(field.getUuid());
-                        if (attributeType != null) {
-                            PersonAttribute attribute = new PersonAttribute(attributeType, parameterValue);
-                            person.addAttribute(attribute);
-                        }
-                    }
-                }
-            }
-        }
+    if (itemIterator.hasNext()) {
+      throw new IllegalArgumentException(
+          "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json array!");
     }
+
+    return list;
+  }
+
+  private static Object flattenObjectNode(JsonNode node) {
+    final Map<String, Object> map = new HashMap<>();
+    final Iterator<String> fieldNameIterator = node.getFieldNames();
+
+    for (int nodeIdx = 0; nodeIdx < JSON_NODES_LIMIT && fieldNameIterator.hasNext(); ++nodeIdx) {
+      final String fName = fieldNameIterator.next();
+      map.put(fName, flatten(node.get(fName)));
+    }
+
+    if (fieldNameIterator.hasNext()) {
+      throw new IllegalArgumentException(
+          "The JsonNode of the RegisterPersonFormBuilder#flatten was a too big Json object!");
+    }
+
+    return map;
+  }
+
+  public static void resolvePersonAttributeFields(
+      NavigableFormStructure form, Person person, Map<String, String[]> parameterMap) {
+    for (Field field : form.getFields()) {
+      if (StringUtils.equals(field.getType(), PERSON_ATTRIBUTE_PROP)) {
+        resolvePersonAttributeField(person, parameterMap, field);
+      }
+    }
+  }
+
+  private static void resolvePersonAttributeField(
+      Person person, Map<String, String[]> parameterMap, Field field) {
+    String[] parameterValues = parameterMap.get(field.getFormFieldName());
+    if (parameterValues != null && parameterValues.length > 0) {
+      if (parameterValues.length > 1) {
+        LOGGER.warn(MULTI_VALUES_WARN);
+      }
+
+      String parameterValue = parameterValues[0];
+      if (parameterValue != null) {
+        createPersonAttribute(person, parameterValue, field.getUuid());
+      }
+    }
+  }
+
+  private static void createPersonAttribute(
+      Person person, String parameterValue, String attributeTypeUuid) {
+    PersonAttributeType attributeType =
+        Context.getPersonService().getPersonAttributeTypeByUuid(attributeTypeUuid);
+
+    if (attributeType != null) {
+      PersonAttribute attribute = new PersonAttribute(attributeType, parameterValue);
+      person.addAttribute(attribute);
+    }
+  }
 }

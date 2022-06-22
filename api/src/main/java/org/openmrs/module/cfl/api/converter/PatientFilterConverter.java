@@ -39,5 +39,6 @@ public interface PatientFilterConverter {
      * @return the list of Conditions which represent the filtering defined by {@code dto}
      * @throws IllegalStateException if this converter object was not initialed
      */
+    @SuppressWarnings("java:S1452")
     List<Condition<?, ?>> convert(AdHocMessagePatientFilterDTO dto);
 }

@@ -16,7 +16,7 @@ import org.openmrs.User;
 /**
  * Public API for Application level events
  */
-public interface ApplicationEventService extends org.openmrs.module.emrapi.event.ApplicationEventService {
+public interface ExtendedApplicationEventService extends org.openmrs.module.emrapi.event.ApplicationEventService {
 
     /**
      * Fires an application level event that the specified person has been viewed by the specified

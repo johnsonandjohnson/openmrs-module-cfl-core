@@ -12,12 +12,11 @@ package org.openmrs.module.cfl.api.contract;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.openmrs.module.cfl.api.converter.PatientFilterConverter;
+import org.openmrs.module.cfl.api.converter.PatientFilterConverterFactory;
 
 import java.util.Map;
 
 public class PatientFilterConfiguration {
-    private static final String CONVERTER_PACKAGE_PREFIX = "org.openmrs.module.cfl.api.converter.";
-
     private String label;
     private InputType inputType;
     private PatientFilterConverter filterConverter;
@@ -52,10 +51,8 @@ public class PatientFilterConfiguration {
     }
 
     @JsonSetter("converter")
-    public void setFilterConverterByName(String converterName)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        this.filterConverter =
-                (PatientFilterConverter) Class.forName(CONVERTER_PACKAGE_PREFIX + converterName).newInstance();
+    public void setFilterConverterByName(String converterName) {
+        this.filterConverter = PatientFilterConverterFactory.getPatientFilterConverter(converterName);
     }
 
     public enum InputType {

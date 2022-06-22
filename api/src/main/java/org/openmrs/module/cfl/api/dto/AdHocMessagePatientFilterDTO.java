@@ -60,8 +60,8 @@ public class AdHocMessagePatientFilterDTO {
 
                 if (option instanceof Map) {
                     final Map<String, Object> optionMap = (Map<String, Object>) option;
-                    optionLabel = (String) optionMap.get(Option.LABEL);
-                    optionValue = optionMap.get(Option.VALUE);
+                    optionLabel = (String) optionMap.get(Option.LABEL_PROP);
+                    optionValue = optionMap.get(Option.VALUE_PROP);
                 } else {
                     optionLabel = option.toString();
                     optionValue = option;
@@ -147,8 +147,8 @@ public class AdHocMessagePatientFilterDTO {
     }
 
     public static class Option {
-        static final String LABEL = "label";
-        static final String VALUE = "value";
+        static final String LABEL_PROP = "label";
+        static final String VALUE_PROP = "value";
 
         private final String label;
         private final Object value;

@@ -18,7 +18,7 @@ import org.openmrs.event.Event;
 import org.openmrs.event.EventMessage;
 import org.openmrs.module.cfl.CFLConstants;
 
-public class ApplicationEventServiceImpl extends BaseOpenmrsService implements ApplicationEventService {
+public class ApplicationEventServiceImpl extends BaseOpenmrsService implements ExtendedApplicationEventService {
 
     private org.openmrs.module.emrapi.event.ApplicationEventService emrapiAppEventService;
 

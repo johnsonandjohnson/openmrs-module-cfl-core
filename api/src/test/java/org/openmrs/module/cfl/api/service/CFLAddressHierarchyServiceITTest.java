@@ -110,9 +110,9 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(50, result.getPageSize());
-    assertEquals(10, result.getTotalCount());
+    assertEquals(12, result.getTotalCount());
     assertFalse(result.isNextPage());
-    assertEquals(10, result.getContent().size());
+    assertEquals(12, result.getContent().size());
   }
 
   @Test
@@ -129,9 +129,9 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(50, result.getPageSize());
-    assertEquals(13, result.getTotalCount());
+    assertEquals(15, result.getTotalCount());
     assertFalse(result.isNextPage());
-    assertEquals(13, result.getContent().size());
+    assertEquals(15, result.getContent().size());
   }
 
   @Test
@@ -144,7 +144,7 @@ public class CFLAddressHierarchyServiceITTest extends BaseModuleContextSensitive
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(5, result.getPageSize());
-    assertEquals(10, result.getTotalCount());
+    assertEquals(12, result.getTotalCount());
     assertTrue(result.isNextPage());
     assertEquals(5, result.getContent().size());
   }

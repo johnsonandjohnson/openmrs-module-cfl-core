@@ -55,6 +55,7 @@ public abstract class AbstractFieldValueConverter implements PatientFilterConver
         return fieldPath;
     }
 
+    @SuppressWarnings("java:S1452")
     protected abstract List<Condition<?, ?>> createConditions(AdHocMessagePatientFilterDTO dto);
 
     protected boolean isConfigurationInvalid() {

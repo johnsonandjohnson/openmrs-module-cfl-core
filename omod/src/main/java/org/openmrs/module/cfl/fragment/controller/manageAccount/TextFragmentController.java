@@ -31,64 +31,72 @@ import java.util.List;
 import java.util.Map;
 
 public class TextFragmentController {
+  private static final String FORM_FIELD_NAME_PARAM = "formFieldName";
+  private static final String PERSON_ATTRIBUTE_UUID_PARAM = "personAttributeUuid";
 
-    public void controller(FragmentModel model,
-                           HttpSession session,
-                           FragmentConfiguration config,
-                           @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
-                           @RequestParam(value = "userId", required = false) User user,
-                           @RequestParam(value = "personId", required = false) Person person) {
+  public void controller(
+      FragmentModel model,
+      HttpSession session,
+      FragmentConfiguration config,
+      @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
+      @RequestParam(value = "userId", required = false) User user,
+      @RequestParam(value = "personId", required = false) Person person) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<Extension> customPersonAttributeEditFragments = getAllExtensions(appFrameworkService);
-        model.addAttribute("customPersonAttributeEditFragments", customPersonAttributeEditFragments);
-        SimpleObject so = createCustomPersonAttributeJson(config, person, customPersonAttributeEditFragments);
-        try {
-            model.addAttribute("customPersonAttributeJson", mapper.writeValueAsString(so));
-        } catch (IOException e) {
-            model.addAttribute("customPersonAttributeJson", "{}");
+    ObjectMapper mapper = new ObjectMapper();
+    List<Extension> customPersonAttributeEditFragments = getAllExtensions(appFrameworkService);
+    model.addAttribute("customPersonAttributeEditFragments", customPersonAttributeEditFragments);
+    SimpleObject so =
+        createCustomPersonAttributeJson(config, person, customPersonAttributeEditFragments);
+    try {
+      model.addAttribute("customPersonAttributeJson", mapper.writeValueAsString(so));
+    } catch (IOException e) {
+      model.addAttribute("customPersonAttributeJson", "{}");
+    }
+  }
+
+  @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
+  private SimpleObject createCustomPersonAttributeJson(
+      FragmentConfiguration config,
+      Person person,
+      List<Extension> customPersonAttributeEditFragments) {
+    SimpleObject so = new SimpleObject();
+    for (Extension ext : customPersonAttributeEditFragments) {
+      Object type = ext.getExtensionParams().get("type");
+      Object personAttributeTypeUuid = ext.getExtensionParams().get("uuid");
+      if (type.toString().equals("personAttribute")) {
+        String formFieldName = ext.getExtensionParams().get(FORM_FIELD_NAME_PARAM).toString();
+        if (person != null && type != null && personAttributeTypeUuid != null) {
+          PersonAttribute personAttribute =
+              person.getAttribute(
+                  Context.getPersonService()
+                      .getPersonAttributeTypeByUuid(personAttributeTypeUuid.toString()));
+          if (personAttribute == null) {
+            PersonAttributeType personAttributeType =
+                Context.getPersonService()
+                    .getPersonAttributeTypeByUuid(personAttributeTypeUuid.toString());
+            personAttribute = new PersonAttribute(personAttributeType, ".");
+            person.getAttributes().add(personAttribute);
+            Context.getPersonService().savePerson(person);
+          }
+          String personAttributeUuid = personAttribute.getUuid();
+          SimpleObject personAttributeInfo = new SimpleObject();
+          personAttributeInfo.put(FORM_FIELD_NAME_PARAM, formFieldName);
+          personAttributeInfo.put(PERSON_ATTRIBUTE_UUID_PARAM, personAttributeUuid);
+          so.put("personAttributeInfo" + formFieldName, personAttributeInfo);
         }
-    }
-
-    @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
-    private SimpleObject createCustomPersonAttributeJson(FragmentConfiguration config, Person person,
-                                                         List<Extension> customPersonAttributeEditFragments) {
-        SimpleObject so = new SimpleObject();
-        for (Extension ext : customPersonAttributeEditFragments) {
-            Object type = ext.getExtensionParams().get("type");
-            Object personAttributeTypeUuid = ext.getExtensionParams().get("uuid");
-            if (type.toString().equals("personAttribute")) {
-                String formFieldName = ext.getExtensionParams().get("formFieldName").toString();
-                if (person != null && type != null && personAttributeTypeUuid != null) {
-                    PersonAttribute personAttribute = person.getAttribute(Context.getPersonService()
-                            .getPersonAttributeTypeByUuid(personAttributeTypeUuid.toString()));
-                    if (personAttribute == null) {
-                        PersonAttributeType personAttributeType = Context.getPersonService()
-                                .getPersonAttributeTypeByUuid(personAttributeTypeUuid.toString());
-                        personAttribute = new PersonAttribute(personAttributeType, ".");
-                        person.getAttributes().add(personAttribute);
-                        Context.getPersonService().savePerson(person);
-                    }
-                    String personAttributeUuid = personAttribute.getUuid();
-                    SimpleObject personAttributeInfo = new SimpleObject();
-                    personAttributeInfo.put("formFieldName", formFieldName);
-                    personAttributeInfo.put("personAttributeUuid", personAttributeUuid);
-                    so.put("personAttributeInfo" + formFieldName, personAttributeInfo);
-                }
-                if (formFieldName.equals(config.getAttribute("formFieldName"))
-                        && ext.getExtensionParams().containsKey("config")) {
-                    config.putAll((Map<? extends String, ?>) ext.getExtensionParams().get("config"));
-                }
-            }
+        if (formFieldName.equals(config.getAttribute(FORM_FIELD_NAME_PARAM))
+            && ext.getExtensionParams().containsKey("config")) {
+          config.putAll((Map<? extends String, ?>) ext.getExtensionParams().get("config"));
         }
-        return so;
+      }
     }
+    return so;
+  }
 
-    private List<Extension> getAllExtensions(AppFrameworkService appFrameworkService) {
-        List<Extension> customPersonAttributeEditFragments =
-                appFrameworkService.getExtensionsForCurrentUser("userAccount.personAttributeEditFragment");
-        Collections.sort(customPersonAttributeEditFragments);
-        return customPersonAttributeEditFragments;
-    }
-
+  private List<Extension> getAllExtensions(AppFrameworkService appFrameworkService) {
+    List<Extension> customPersonAttributeEditFragments =
+        appFrameworkService.getExtensionsForCurrentUser("userAccount.personAttributeEditFragment");
+    Collections.sort(customPersonAttributeEditFragments);
+    return customPersonAttributeEditFragments;
+  }
 }
