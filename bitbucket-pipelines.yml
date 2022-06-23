@@ -43,7 +43,7 @@ pipelines:
             - git config --global user.name $PIPELINES_GIT_NAME
             # commit the new module
             - git add .
-            - git commit -m "Automated openmrs-cfl-module module update"
+            - git commit -m "Automated openmrs-module-cfl-core module update"
             # push to the repository
             - git push origin dev
 

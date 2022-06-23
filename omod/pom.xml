@@ -2,11 +2,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.openmrs.module</groupId>
-        <artifactId>cfl</artifactId>
+        <artifactId>cflcore</artifactId>
         <version>1.9.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cfl-omod</artifactId>
+    <artifactId>cflcore-omod</artifactId>
     <packaging>jar</packaging>
     <name>CFL Module OMOD</name>
     <description>Omod submodule for CFL Module</description>
@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>cfl-api</artifactId>
+            <artifactId>cflcore-api</artifactId>
             <version>1.9.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -168,7 +168,7 @@
                     <apiSources>
                         <apiSource>
                             <springmvc>true</springmvc>
-                            <locations>org.openmrs.module.cfl.web</locations>
+                            <locations>org.openmrs.module.cflcore.web</locations>
                             <basePath>/openmrs/ws</basePath>
                             <info>
                                 <title>CFL Module REST API</title>

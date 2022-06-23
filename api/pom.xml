@@ -2,11 +2,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>cfl</artifactId>
+		<artifactId>cflcore</artifactId>
 		<version>1.9.1-SNAPSHOT</version>
 	</parent>
 
-    <artifactId>cfl-api</artifactId>
+    <artifactId>cflcore-api</artifactId>
     <packaging>jar</packaging>
     <name>CFL Module API</name>
     <description>API project for CFL Module</description>

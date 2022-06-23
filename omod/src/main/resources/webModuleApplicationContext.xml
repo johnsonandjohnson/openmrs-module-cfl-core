@@ -30,13 +30,13 @@
             http://www.springframework.org/schema/util
             http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-    <context:component-scan base-package="org.openmrs.module.cfl.web.controller" />
+    <context:component-scan base-package="org.openmrs.module.cflcore.web.controller" />
 
     <bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
         <property name="moduleId" value="${project.parent.artifactId}"/>
     </bean>
 
-    <bean class="org.openmrs.module.cfl.web.service.impl.CFLRegistrationUiServiceImpl">
+    <bean class="org.openmrs.module.cflcore.web.service.impl.CFLRegistrationUiServiceImpl">
         <property name="personService" ref="personService" />
         <property name="conversionService" ref="conversionService" />
         <property name="patientService" ref="patientService" />

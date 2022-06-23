@@ -787,16 +787,14 @@
     "HttpServletRequest" : {
       "type" : "object",
       "properties" : {
-        "requestedSessionIdFromCookie" : {
-          "type" : "boolean",
-          "default" : false
-        },
         "authType" : {
           "type" : "string"
         },
-        "requestedSessionIdFromURL" : {
-          "type" : "boolean",
-          "default" : false
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
         },
         "headerNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -826,18 +824,17 @@
           "type" : "boolean",
           "default" : false
         },
-        "requestedSessionIdFromUrl" : {
+        "requestedSessionIdFromCookie" : {
           "type" : "boolean",
           "default" : false
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
+        "requestedSessionIdFromURL" : {
+          "type" : "boolean",
+          "default" : false
         },
-        "method" : {
-          "type" : "string"
+        "requestedSessionIdFromUrl" : {
+          "type" : "boolean",
+          "default" : false
         },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
@@ -849,6 +846,9 @@
           "type" : "string"
         },
         "contextPath" : {
+          "type" : "string"
+        },
+        "method" : {
           "type" : "string"
         },
         "locales" : {
@@ -884,16 +884,10 @@
         "localAddr" : {
           "type" : "string"
         },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
         "localName" : {
-          "type" : "string"
-        },
-        "scheme" : {
-          "type" : "string"
-        },
-        "inputStream" : {
-          "$ref" : "#/definitions/ServletInputStream"
-        },
-        "protocol" : {
           "type" : "string"
         },
         "contentLength" : {
@@ -907,9 +901,6 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -921,18 +912,21 @@
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
+        },
+        "scheme" : {
+          "type" : "string"
+        },
+        "inputStream" : {
+          "$ref" : "#/definitions/ServletInputStream"
+        },
+        "protocol" : {
+          "type" : "string"
         }
       }
     },
     "HttpSession" : {
       "type" : "object",
       "properties" : {
-        "valueNames" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
         "lastAccessedTime" : {
           "type" : "integer",
           "format" : "int64"
@@ -947,12 +941,15 @@
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
+        "valueNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
         "new" : {
           "type" : "boolean",
           "default" : false
-        },
-        "id" : {
-          "type" : "string"
         },
         "creationTime" : {
           "type" : "integer",
@@ -960,6 +957,9 @@
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "id" : {
+          "type" : "string"
         }
       }
     },
@@ -1073,11 +1073,11 @@
         "viewName" : {
           "type" : "string"
         },
-        "empty" : {
+        "reference" : {
           "type" : "boolean",
           "default" : false
         },
-        "reference" : {
+        "empty" : {
           "type" : "boolean",
           "default" : false
         }
@@ -1087,6 +1087,9 @@
       "type" : "object",
       "properties" : {
         "originalFilename" : {
+          "type" : "string"
+        },
+        "contentType" : {
           "type" : "string"
         },
         "name" : {
@@ -1109,9 +1112,6 @@
         },
         "inputStream" : {
           "$ref" : "#/definitions/InputStream"
-        },
-        "contentType" : {
-          "type" : "string"
         }
       }
     },
@@ -1198,9 +1198,6 @@
     "ServletContext" : {
       "type" : "object",
       "properties" : {
-        "servletContextName" : {
-          "type" : "string"
-        },
         "servlets" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -1212,6 +1209,9 @@
         },
         "initParameterNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "servletContextName" : {
+          "type" : "string"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1268,16 +1268,10 @@
         "localAddr" : {
           "type" : "string"
         },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
         "localName" : {
-          "type" : "string"
-        },
-        "scheme" : {
-          "type" : "string"
-        },
-        "inputStream" : {
-          "$ref" : "#/definitions/ServletInputStream"
-        },
-        "protocol" : {
           "type" : "string"
         },
         "contentLength" : {
@@ -1291,9 +1285,6 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -1305,6 +1296,15 @@
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
+        },
+        "scheme" : {
+          "type" : "string"
+        },
+        "inputStream" : {
+          "$ref" : "#/definitions/ServletInputStream"
+        },
+        "protocol" : {
+          "type" : "string"
         }
       }
     },

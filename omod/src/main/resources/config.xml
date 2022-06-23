@@ -16,13 +16,13 @@
     <id>${project.parent.artifactId}</id>
     <name>${project.parent.name}</name>
     <version>${project.parent.version}</version>
-    <package>org.openmrs.module.cfl</package>
+    <package>org.openmrs.module.cflcore</package>
     <author>Connect for Life</author>
     <description>
         ${project.parent.description}
     </description>
 
-    <activator>org.openmrs.module.cfl.CFLModuleActivator</activator>
+    <activator>org.openmrs.module.cflcore.CFLModuleActivator</activator>
 
     <!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
     <!-- /Base Module Properties -->
@@ -86,27 +86,27 @@
     <!-- Extensions -->
     <extension>
         <point>org.openmrs.admin.list</point>
-        <class>org.openmrs.module.cfl.extension.html.AdminList</class>
+        <class>org.openmrs.module.cflcore.extension.html.AdminList</class>
     </extension>
 
     <advice>
         <point>org.openmrs.module.addresshierarchy.service.AddressHierarchyService</point>
-        <class>org.openmrs.module.cfl.advice.DeleteAllAddressHierarchyEntriesAdvice</class>
+        <class>org.openmrs.module.cflcore.advice.DeleteAllAddressHierarchyEntriesAdvice</class>
     </advice>
 
     <advice>
         <point>org.openmrs.module.appframework.service.AppFrameworkService</point>
-        <class>org.openmrs.module.cfl.advice.SaveUserAppAdvice</class>
+        <class>org.openmrs.module.cflcore.advice.SaveUserAppAdvice</class>
     </advice>
 
     <advice>
         <point>org.openmrs.api.ConceptService</point>
-        <class>org.openmrs.module.cfl.advice.PurgeConceptAdvice</class>
+        <class>org.openmrs.module.cflcore.advice.PurgeConceptAdvice</class>
     </advice>
 
     <advice>
         <point>org.openmrs.api.PatientService</point>
-        <class>org.openmrs.module.cfl.advice.PatientCountAdvisor</class>
+        <class>org.openmrs.module.cflcore.advice.PatientCountAdvisor</class>
     </advice>
 
     <!-- Internationalization -->
