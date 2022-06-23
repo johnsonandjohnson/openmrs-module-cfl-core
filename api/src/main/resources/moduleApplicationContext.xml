@@ -19,61 +19,61 @@
 
     <!-- START ModuleActivatorStep -->
     <bean id="cfl-CreateGlobalParametersActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.CreateGlobalParametersActivatorStep"/>
+          class="org.openmrs.module.cfl.api.activator.impl.CreateGlobalParametersActivatorStep"/>
     <bean id="cfl-FixRiskFactorForHIVConceptsActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.FixRiskFactorForHIVConceptsActivatorStep"/>
+          class="org.openmrs.module.cfl.api.activator.impl.FixRiskFactorForHIVConceptsActivatorStep"/>
     <bean id="cfl-InstallMetadataPackagesActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.InstallMetadataPackagesActivatorStep"/>
+          class="org.openmrs.module.cfl.api.activator.impl.InstallMetadataPackagesActivatorStep"/>
     <bean id="cfl-ConfigurePatientDashboardAppsActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.ConfigurePatientDashboardAppsActivatorStep"/>
+          class="org.openmrs.module.cfl.api.activator.impl.ConfigurePatientDashboardAppsActivatorStep"/>
     <bean id="cfl-InstallMetadataBundleActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.activator.impl.InstallMetadataBundleActivatorStep"/>
+          class="org.openmrs.module.cfl.api.activator.impl.InstallMetadataBundleActivatorStep"/>
     <!-- END ModuleActivatorStep -->
 
     <bean id="cflRolePrivilegeProfiles"
-          class="org.openmrs.module.cfldistribution.api.metadata.RolePrivilegeProfilesMetadata"/>
-    <bean id="cflDisableBuildInApps" class="org.openmrs.module.cfldistribution.api.metadata.DisableBuildInAppsMetadata">
+          class="org.openmrs.module.cfl.api.metadata.RolePrivilegeProfilesMetadata"/>
+    <bean id="cflDisableBuildInApps" class="org.openmrs.module.cfl.api.metadata.DisableBuildInAppsMetadata">
         <property name="appFrameworkService" ref="appFrameworkService"/>
     </bean>
-    <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfldistribution.api.metadata.HtmlFormsMetadata"/>
+    <bean id="cflHtmlFormsMetadata" class="org.openmrs.module.cfl.api.metadata.HtmlFormsMetadata"/>
     <bean id="cflEncounterTypesMetadata"
-          class="org.openmrs.module.cfldistribution.api.metadata.EncounterTypesMetadata"/>
+          class="org.openmrs.module.cfl.api.metadata.EncounterTypesMetadata"/>
     <bean id="cflUpdateGlobalParametersActivatorStep"
-          class="org.openmrs.module.cfldistribution.api.metadata.UpdateGlobalParametersMetadata"/>
+          class="org.openmrs.module.cfl.api.metadata.UpdateGlobalParametersMetadata"/>
     <bean id="cflPersonAttributesMetadata"
-          class="org.openmrs.module.cfldistribution.api.metadata.PersonAttributesMetadata"/>
-    <bean id="cflOpenMRSIDMetadata" class="org.openmrs.module.cfldistribution.api.metadata.OpenMRSIDMetadata">
+          class="org.openmrs.module.cfl.api.metadata.PersonAttributesMetadata"/>
+    <bean id="cflOpenMRSIDMetadata" class="org.openmrs.module.cfl.api.metadata.OpenMRSIDMetadata">
         <property name="metadataMappingService" ref="metadatamapping.MetadataMappingService"/>
         <property name="identifierSourceService" ref="baseIdentifierSourceService"/>
     </bean>
-    <bean id="cflLocationMetadata" class="org.openmrs.module.cfldistribution.api.metadata.LocationMetadata"/>
+    <bean id="cflLocationMetadata" class="org.openmrs.module.cfl.api.metadata.LocationMetadata"/>
     <bean id="cflOrderFrequencyMetadata"
-          class="org.openmrs.module.cfldistribution.api.metadata.OrderFrequencyMetadata"/>
-    <bean id="cflAdminProviderMetadata" class="org.openmrs.module.cfldistribution.api.metadata.AdminProviderMetadata"/>
+          class="org.openmrs.module.cfl.api.metadata.OrderFrequencyMetadata"/>
+    <bean id="cflAdminProviderMetadata" class="org.openmrs.module.cfl.api.metadata.AdminProviderMetadata"/>
     <bean id="cflDbViewsMetadata"
-          class="org.openmrs.module.cfldistribution.api.metadata.views.DbViewsMetadata">
+          class="org.openmrs.module.cfl.api.metadata.views.DbViewsMetadata">
         <constructor-arg>
             <ref bean="dbSessionFactory"/>
         </constructor-arg>
     </bean>
     <bean id="cflSuperAdminRoleMetadata"
-          class="org.openmrs.module.cfldistribution.api.metadata.SuperAdminRoleMetadata">
+          class="org.openmrs.module.cfl.api.metadata.SuperAdminRoleMetadata">
         <property name="userService" ref="userService"/>
     </bean>
-    <bean id="cflDoctorUserMetadata" class="org.openmrs.module.cfldistribution.api.metadata.DoctorUserMetadata">
+    <bean id="cflDoctorUserMetadata" class="org.openmrs.module.cfl.api.metadata.DoctorUserMetadata">
         <property name="userService" ref="userService"/>
         <property name="personService" ref="personService"/>
         <property name="locationService" ref="locationService"/>
         <property name="providerService" ref="providerService"/>
     </bean>
     <bean id="cflUserNotAuthorizedService"
-          class="org.openmrs.module.cfldistribution.api.service.impl.UserNotAuthorizedServiceImpl">
+          class="org.openmrs.module.cfl.api.service.impl.UserNotAuthorizedServiceImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>org.openmrs.module.cfldistribution.api.service.UserNotAuthorizedService</value>
+                <value>org.openmrs.module.cfl.api.service.UserNotAuthorizedService</value>
                 <ref local="cflUserNotAuthorizedService"/>
             </list>
         </property>

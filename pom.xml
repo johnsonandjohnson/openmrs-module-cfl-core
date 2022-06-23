@@ -8,17 +8,16 @@
     </parent>
 
     <groupId>org.openmrs.module</groupId>
-    <artifactId>cfldistribution</artifactId>
+    <artifactId>cfl</artifactId>
     <version>1.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>CFL Distribution Module</name>
+    <name>CFL Config Module</name>
     <description>The module contains metadata and various customizations distinct for the CFL Distribution.</description>
 
     <scm>
-        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</connection>
-        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git
-        </developerConnection>
-        <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-cfldistribution-module.git</url>
+        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</connection>
+        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</developerConnection>
+        <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -61,8 +60,8 @@
         <appframeworkVersion>2.15.0</appframeworkVersion>
         <locationbasedaccessVersion>0.2.0</locationbasedaccessVersion>
         <!-- CfL modules -->
-        <cflVersion>1.9.0</cflVersion>
-        <messagesVersion>1.5.0</messagesVersion>
+        <cflCoreVersion>1.9.1-SNAPSHOT</cflCoreVersion>
+        <messagesVersion>1.5.7-SNAPSHOT</messagesVersion>
     </properties>
 
     <dependencyManagement>
@@ -75,8 +74,8 @@
             </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
-                <artifactId>cfl-api</artifactId>
-                <version>${cflVersion}</version>
+                <artifactId>cflcore-api</artifactId>
+                <version>${cflCoreVersion}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>

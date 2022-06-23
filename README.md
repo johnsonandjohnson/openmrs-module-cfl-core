@@ -1,4 +1,4 @@
-openmrs-cfldistribution-module
+openmrs-module-cfl
 ==========================
 
 The module which contains metadata, customizations and anything which is required by the CFL Distribution and is not or

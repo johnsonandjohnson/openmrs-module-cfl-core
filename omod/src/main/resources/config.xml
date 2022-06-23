@@ -16,7 +16,7 @@
     <id>${project.parent.artifactId}</id>
     <name>${project.parent.name}</name>
     <version>${project.parent.version}</version>
-    <package>org.openmrs.module.cfldistribution</package>
+    <package>org.openmrs.module.cfl</package>
     <author>Connect for Life</author>
     <description>
         ${project.parent.description}
@@ -26,7 +26,7 @@
 
     <filter>
         <filter-name>CfldistributionRequireLoginLocationFilter</filter-name>
-        <filter-class>org.openmrs.module.cfldistribution.filter.CfldistributionRequireLoginLocationFilter</filter-class>
+        <filter-class>org.openmrs.module.cfl.filter.CfldistributionRequireLoginLocationFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -36,7 +36,7 @@
 
     <filter>
         <filter-name>RedirectReferenceapplicationRequestsFilter</filter-name>
-        <filter-class>org.openmrs.module.cfldistribution.filter.RedirectReferenceapplicationRequestsFilter</filter-class>
+        <filter-class>org.openmrs.module.cfl.filter.RedirectReferenceapplicationRequestsFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -59,7 +59,7 @@
 
     <advice>
         <point>org.openmrs.api.LocationService</point>
-        <class>org.openmrs.module.cfldistribution.advice.DefaultLocationPropertiesAdvice</class>
+        <class>org.openmrs.module.cfl.advice.DefaultLocationPropertiesAdvice</class>
     </advice>
 
     <!-- Internationalization -->
