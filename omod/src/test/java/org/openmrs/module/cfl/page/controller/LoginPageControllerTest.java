@@ -25,7 +25,7 @@ import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.api.context.UserContext;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
-import org.openmrs.module.cfl.CfldistributionWebConstants;
+import org.openmrs.module.cfl.CflWebConstants;
 import org.openmrs.module.cfl.api.service.UserNotAuthorizedService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
@@ -114,14 +114,14 @@ public class LoginPageControllerTest {
   public void get_shouldOverrideLoginPage() {
     String actual = controller.overrideLoginPageGet();
 
-    assertEquals("forward:/cfldistribution/login.page", actual);
+    assertEquals("forward:/cfl/login.page", actual);
   }
 
   @Test
   public void post_shouldOverrideLoginPage() {
     String actual = controller.overrideLoginPagePost();
 
-    assertEquals("forward:/cfldistribution/login.page", actual);
+    assertEquals("forward:/cfl/login.page", actual);
   }
 
   @Test
@@ -154,7 +154,7 @@ public class LoginPageControllerTest {
     when(httpServletRequest.getContextPath()).thenReturn("/openmrs");
     when(Context.isAuthenticated()).thenReturn(true);
     when(httpServletRequest.getParameter(
-            CfldistributionWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL))
+            CflWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL))
         .thenReturn("http://host/openmrs/login.htm");
 
     String actual =

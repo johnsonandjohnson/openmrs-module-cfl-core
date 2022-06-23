@@ -65,6 +65,6 @@ public class HomePageControllerTest {
     String actual = controller.overrideHomepage();
 
     assertNotNull(actual);
-    assertEquals("forward:/cfldistribution/home.page", actual);
+    assertEquals("forward:/cfl/home.page", actual);
   }
 }

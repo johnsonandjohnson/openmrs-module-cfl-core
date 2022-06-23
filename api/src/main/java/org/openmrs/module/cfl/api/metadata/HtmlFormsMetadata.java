@@ -42,8 +42,8 @@ public class HtmlFormsMetadata extends VersionedMetadataBundle {
 
     final List<String> htmlforms =
         Arrays.asList(
-            "cfldistribution:htmlforms/discontinue-program.xml",
-            "cfldistribution:htmlforms/program-form.xml");
+            "cfl:htmlforms/discontinue-program.xml",
+            "cfl:htmlforms/program-form.xml");
 
     for (String htmlform : htmlforms) {
       HtmlFormUtil.getHtmlFormFromUiResource(

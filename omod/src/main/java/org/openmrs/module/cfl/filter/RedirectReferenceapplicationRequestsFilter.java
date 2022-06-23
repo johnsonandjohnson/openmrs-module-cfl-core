@@ -41,7 +41,7 @@ import static java.util.Arrays.asList;
  *   <li>resource/referenceapplication/styles/referenceapplication.css resource to
  *       referenceapplication.css located in this project. Added because of the Admin View OWA uses
  *       CSS from OpenMRS reference application.
- *   <li>referenceapplication/home.page to cfldistribution/home.page. Added because of the Admin
+ *   <li>referenceapplication/home.page to cfl/home.page. Added because of the Admin
  *       View OWA uses hard-codes URL in the "go home" button.
  * </ul>
  */
@@ -49,10 +49,10 @@ public class RedirectReferenceapplicationRequestsFilter implements Filter {
   private static final String REFERENCEAPPLICATION_CSS_RESOURCE =
       "resource/referenceapplication/styles/referenceapplication.css";
   private static final String CFL_STYLE_RESOURCE_CONTEXT_RELATIVE =
-      "/ms/uiframework/resource/cfldistribution/styles/referenceapplication.css";
+      "/ms/uiframework/resource/cfl/styles/referenceapplication.css";
 
   private static final String REFERENCEAPPLICATION_HOME_PAGE = "referenceapplication/home.page";
-  private static final String CFL_HOME_PAGE_CONTEXT_RELATIVE = "/cfldistribution/home.page";
+  private static final String CFL_HOME_PAGE_CONTEXT_RELATIVE = "/cfl/home.page";
 
   private static final List<RedirectMapping> REDIRECTS =
       asList(

@@ -10,9 +10,9 @@
 
 package org.openmrs.module.cfl;
 
-public final class CfldistributionWebConstants {
+public final class CflWebConstants {
 
-  public static final String MODULE_ID = "cfldistribution";
+  public static final String MODULE_ID = "cfl";
 
   /**
    * The name of Global Property with a name of User Property where user's location UUID is saved.
@@ -22,7 +22,7 @@ public final class CfldistributionWebConstants {
       "referenceapplication.locationUserPropertyName";
 
   public static final String HOME_PAGE_EXTENSION_POINT_ID =
-      "org.openmrs.cfldistribution.homepageLink";
+      "org.openmrs.cfl.homepageLink";
 
   public static final String SESSION_ATTRIBUTE_INFO_MESSAGE =
       "_REFERENCE_APPLICATION_INFO_MESSAGE_";
@@ -36,7 +36,7 @@ public final class CfldistributionWebConstants {
   public static final String REQUEST_PARAMETER_NAME_REDIRECT_URL = "redirectUrl";
 
   public static final String COOKIE_NAME_LAST_SESSION_LOCATION =
-      "cfldistribution.lastSessionLocation";
+      "cfl.lastSessionLocation";
 
   public static final String COOKIE_NAME_LAST_USER = "_REFERENCE_APPLICATION_LAST_USER_";
 }

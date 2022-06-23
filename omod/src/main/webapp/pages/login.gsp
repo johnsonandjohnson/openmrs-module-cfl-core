@@ -16,14 +16,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${ui.message("cfldistribution.login.title")}</title>
+    <title>${ui.message("cfl.login.title")}</title>
     <link rel="shortcut icon" type="image/ico" href="/${ui.contextPath()}/images/openmrs-favicon.ico"/>
     <link rel="icon" type="image/png\" href="/${ui.contextPath()}/images/openmrs-favicon.png"/>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <% ui.includeCss("appui", "bootstrap.min.css") %>
-    <% ui.includeCss("cfldistribution", "login.css") %>
-    <% ui.includeCss("cfldistribution", "cflLogin.css") %>
+    <% ui.includeCss("cfl", "login.css") %>
+    <% ui.includeCss("cfl", "cflLogin.css") %>
     ${ui.resourceLinks()}
 </head>
 
@@ -121,7 +121,7 @@
 <div id="content" class="container-fluid">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-            ${ui.includeFragment("cfldistribution", "infoAndErrorMessages")}
+            ${ui.includeFragment("cfl", "infoAndErrorMessages")}
         </div>
     </div>
 
@@ -130,9 +130,9 @@
             <header class="header">
                 <div class="logo">
                 <% if (!isStagingEnvironment) { %>
-                    <a href="${ui.pageLink("cfldistribution", "home")}">
+                    <a href="${ui.pageLink("cfl", "home")}">
                         <div>
-                            <img src="${ui.resourceLink("cfldistribution", "images/logo/connect_for_life.png")}"/>
+                            <img src="${ui.resourceLink("cfl", "images/logo/connect_for_life.png")}"/>
                         </div>
                     </a>
                 <% } %>
@@ -164,7 +164,7 @@
                                     <% if (!selectLocation) { %>
                                     <p class="left username-block">
                                         <label for="username" class="credential-label">
-                                            ${ui.message("cfldistribution.login.username")}:
+                                            ${ui.message("cfl.login.username")}:
                                         </label>
                                         <input class="form-control form-control-sm form-control-lg form-control-md credential-input"
                                                id="username" type="text" name="username"/>
@@ -172,7 +172,7 @@
 
                                     <p class="left">
                                         <label for="password" class="credential-label">
-                                            ${ui.message("cfldistribution.login.password")}:
+                                            ${ui.message("cfl.login.password")}:
                                         </label>
                                         <input class="form-control form-control-sm form-control-lg form-control-md credential-input"
                                                id="password" type="password" name="password"/>
@@ -183,9 +183,9 @@
                                     <p class="clear">
                                         <label for="sessionLocation">
                                             <% if (!selectLocation) { %>${
-                                                    ui.message("cfldistribution.login.sessionLocation")}: <% } %><span
+                                                    ui.message("cfl.login.sessionLocation")}: <% } %><span
                                                 class="location-error" id="sessionLocationError" style="display: none">${
-                                                    ui.message("cfldistribution.login.error.locationRequired")}</span>
+                                                    ui.message("cfl.login.error.locationRequired")}</span>
                                         </label>
                                     <ul id="sessionLocation" class="select">
                                         <% locations.sort { ui.format(it) }.each { %>
@@ -209,12 +209,12 @@
                                         <input id="loginButton"
                                                class="btn ${ui.message(selectLocation ? "confirm" : "btn-success")} login-input"
                                                type="submit"
-                                               value="${ui.message(selectLocation ? "general.done" : "cfldistribution.login.button")}"/>
+                                               value="${ui.message(selectLocation ? "general.done" : "cfl.login.button")}"/>
                                     </p>
                                     <% if (!selectLocation) { %>
                                     <p>
                                         <a id="cantLogin" href="javascript:void(0)">
-                                            ${ui.message("cfldistribution.login.cannotLogin")}
+                                            ${ui.message("cfl.login.cannotLogin")}
                                         </a>
                                     </p>
                                     <% } %>
@@ -235,13 +235,13 @@
                 <div class="dialog-header">
                     <i class="icon-info-sign"></i>
 
-                    <h3>${ui.message("cfldistribution.login.cannotLogin")}</h3>
+                    <h3>${ui.message("cfl.login.cannotLogin")}</h3>
                 </div>
 
                 <div class="dialog-content">
-                    <p class="dialog-instructions">${ui.message("cfldistribution.login.cannotLoginInstructions")}</p>
+                    <p class="dialog-instructions">${ui.message("cfl.login.cannotLoginInstructions")}</p>
 
-                    <button class="confirm">${ui.message("cfldistribution.okay")}</button>
+                    <button class="confirm">${ui.message("cfl.okay")}</button>
                 </div>
             </div>
         </div>

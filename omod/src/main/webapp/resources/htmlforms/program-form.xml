@@ -10,7 +10,7 @@
 
 <htmlform formUuid="ad796f8c-b966-11eb-9ad8-0242ac120002" formName="Program Form"
           formEncounterType="b3af129b-90c9-4f84-966e-f4f9515083e6" formVersion="1.0">
-    <uiInclude provider="cfldistribution" css="htmlForm.css"/>
+    <uiInclude provider="cfl" css="htmlForm.css"/>
     <style type="text/css">
         #htmlform {
             border: 0;
@@ -115,11 +115,11 @@
         </span>
         <!-- Delete Treatment Confirmation Modal -->
         <div id="js-delete-treatment-confirmation-modal" class="display-none">
-            <uimessage code="cfldistribution.programForm.deleteTreatmentConfirmation"/>
+            <uimessage code="cfl.programForm.deleteTreatmentConfirmation"/>
         </div>
         <!-- Save Program Modal -->
         <div id="js-save-program-confirmation-modal" class="display-none">
-            <uimessage code="cfldistribution.programForm.saveProgramConfirmation"/>
+            <uimessage code="cfl.programForm.saveProgramConfirmation"/>
         </div>
         <!-- Submit Form (Save Program) button - click event is triggered by "Confirm" button in Save Program Modal -->
         <div id="submit-form" class="display-none">
@@ -659,7 +659,7 @@
     </script>
 
     <h2 id="title">
-        <uimessage code="cfldistribution.programForm.title"/>
+        <uimessage code="cfl.programForm.title"/>
     </h2>
     <!-- Spinner -->
     <i id="form-content-spinner" class="icon-spinner icon-spin icon-2x"/>
@@ -668,24 +668,24 @@
         <div class="section">
             <div class="flex-row justify-content-between mb-3">
                 <h3>
-                    <uimessage code="cfldistribution.programForm.currentTreatment"/>
+                    <uimessage code="cfl.programForm.currentTreatment"/>
                 </h3>
                 <div id="js-current-treatment-buttons" class="display-flex align-self-center justify-content-end p-0" style="display: none">
                     <button type="button" id="js-delete-current-treatment" class="confirm">
-                        <uimessage code="cfldistribution.programForm.button.delete"/>
+                        <uimessage code="cfl.programForm.button.delete"/>
                     </button>
                     <button type="button" id="js-stop-current-treatment" class="transparent" style="display: none">
-                        <uimessage code="cfldistribution.programForm.button.stop"/>
+                        <uimessage code="cfl.programForm.button.stop"/>
                     </button>
                 </div>
             </div>
             <!-- Empty Current Treatment -->
             <div id="js-empty-current-treatment" class="flex-column">
                 <h4>
-                    <uimessage code="cfldistribution.programForm.emptyCurrentTreatment"/>
+                    <uimessage code="cfl.programForm.emptyCurrentTreatment"/>
                 </h4>
                 <button type="button" id="js-add-current-treatment">
-                    <uimessage code="cfldistribution.programForm.button.addCurrentTreatment"/>
+                    <uimessage code="cfl.programForm.button.addCurrentTreatment"/>
                 </button>
             </div>
             <!-- Current Treatment -->
@@ -695,18 +695,18 @@
         <div class="section">
             <div class="flex-row justify-content-between mb-3">
                 <h3 class="mb-4">
-                    <uimessage code="cfldistribution.programForm.historicalTreatments"/>
+                    <uimessage code="cfl.programForm.historicalTreatments"/>
                 </h3>
                 <div class="display-flex align-self-center justify-content-end">
                     <button type="button" id="js-expand-all-historical-treatments" class="transparent">
-                        <uimessage code="cfldistribution.programForm.button.expandAll"/>
+                        <uimessage code="cfl.programForm.button.expandAll"/>
                     </button>
                 </div>
             </div>
             <!-- Empty Historical Treatment -->
             <div id="js-empty-historical-treatment" class="flex-column">
                 <h4>
-                    <uimessage code="cfldistribution.programForm.emptyHistoricalTreatments"/>
+                    <uimessage code="cfl.programForm.emptyHistoricalTreatments"/>
                 </h4>
             </div>
             <!-- Historical Treatments -->
@@ -721,7 +721,7 @@
                                     <div id="{n}-js-treatment-data" class="js-treatment-data flex-row">
                                         <div>
                                             <span>
-                                                <uimessage code="cfldistribution.programForm.regimenName"/>
+                                                <uimessage code="cfl.programForm.regimenName"/>
                                                 <span class="color-red">*</span>
                                             </span>
                                             <span id="{n}-js-regimen-name">
@@ -730,21 +730,21 @@
                                         </div>
                                         <div>
                                             <span>
-                                                <uimessage code="cfldistribution.programForm.reasonForTreatment"/>
+                                                <uimessage code="cfl.programForm.reasonForTreatment"/>
                                                 <span class="color-red">*</span>
                                             </span>
                                             <obs id="{n}-js-treatment-reason" conceptId="324f28ab-cfa7-46ac-99f3-c7d928ba5e79" defaultObsDatetime="now"/>
                                         </div>
                                         <div>
                                             <span>
-                                                <uimessage code="cfldistribution.programForm.treatmentDateStarted"/>
+                                                <uimessage code="cfl.programForm.treatmentDateStarted"/>
                                                 <span class="color-red">*</span>
                                             </span>
                                             <obs id="{n}-js-treatment-date-started" conceptId="ddfdf4fa-1d0a-40ca-8930-ad914bd07b23" allowFutureDates="true" allowTime="false" defaultObsDatetime="now" />
                                         </div>
                                         <div>
                                             <span>
-                                                <uimessage code="cfldistribution.programForm.treatmentDateStopped"/>
+                                                <uimessage code="cfl.programForm.treatmentDateStopped"/>
                                                 <span id="{n}-js-treatment-date-stopped-mandatory-asterisk" class="color-red">*</span>
                                             </span>
                                             <obs id="{n}-js-treatment-date-stopped" conceptId="806195ad-9f5c-42f0-ad9f-736a21a1dac1" allowFutureDates="true" allowTime="false" defaultObsDatetime="now" />
@@ -756,16 +756,16 @@
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        <uimessage code="cfldistribution.programForm.drugName"/>
+                                                        <uimessage code="cfl.programForm.drugName"/>
                                                     </th>
                                                     <th>
-                                                        <uimessage code="cfldistribution.programForm.doseUnit"/>
+                                                        <uimessage code="cfl.programForm.doseUnit"/>
                                                     </th>
                                                     <th>
-                                                        <uimessage code="cfldistribution.programForm.numberOfUnits"/>
+                                                        <uimessage code="cfl.programForm.numberOfUnits"/>
                                                     </th>
                                                     <th>
-                                                        <uimessage code="cfldistribution.programForm.frequency"/>
+                                                        <uimessage code="cfl.programForm.frequency"/>
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -774,7 +774,7 @@
                                         <!-- Interruptions -->
                                         <div class="mt-4">
                                             <h3>
-                                                <uimessage code="cfldistribution.programForm.treatmentInterruptions"/>
+                                                <uimessage code="cfl.programForm.treatmentInterruptions"/>
                                             </h3>
                                             <button type="button" id="{n}-js-add-first-interruption" class="js-add-interruption icon-button mb-2">
                                                 <i class="icon-plus"/>
@@ -783,20 +783,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-0-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-0-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-0-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -815,20 +815,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-1-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-1-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-1-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -847,20 +847,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-2-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-2-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-2-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -879,20 +879,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-3-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-3-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-3-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -911,20 +911,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-4-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-4-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-4-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -943,20 +943,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-5-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-5-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-5-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -975,20 +975,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-6-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-6-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-6-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -1007,20 +1007,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-7-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-7-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-7-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -1039,20 +1039,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-8-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-8-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-8-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -1071,20 +1071,20 @@
                                                 <obsgroup groupingConceptId="f2b32e5c-3e18-47af-b84d-8d2994361eb5">
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.date"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.date"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-9-js-interruption-date" conceptId="dca99985-a303-4418-a440-d2af44f62c4b" allowFutureDates="false" allowTime="false" />
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.reason"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.reason"/>
                                                         </span>
                                                         <obs id="{n}-9-js-interruption-reason" conceptId="30d09891-6bae-492c-b45b-ebe142837497"/>
                                                     </div>
                                                     <div>
                                                         <span>
-                                                            <uimessage code="cfldistribution.programForm.treatmentInterruption.restartDate"/>
+                                                            <uimessage code="cfl.programForm.treatmentInterruption.restartDate"/>
                                                             <span class="color-red">*</span>
                                                         </span>
                                                         <obs id="{n}-9-js-interruption-restart-date" conceptId="d9cd2810-d600-47c4-b29c-234c72514b9e" allowFutureDates="false" allowTime="false"/>
@@ -1103,7 +1103,7 @@
                             <div id="{n}-js-historical-treatment-buttons" class="js-historical-treatment-buttons pt-4">
                                 <div class="display-flex align-self-center m-0">
                                     <button type="button" id="{n}-js-delete-treatment">
-                                        <uimessage code="cfldistribution.programForm.button.delete"/>
+                                        <uimessage code="cfl.programForm.button.delete"/>
                                     </button>
                                     <button type="button" id="{n}-js-toggle-historical-treatment" class="icon-button">
                                         <i id="{n}-js-collapse-treatment-expandable-data" class="js-collapse-treatment-expandable-data icon-resize-small" style="display: none"/>
@@ -1127,7 +1127,7 @@
             </div>
             <div class="flex-row justify-content-end">
                 <button type="button" id="js-add-historical-treatment" class="mt-3">
-                    <uimessage code="cfldistribution.programForm.button.addHistoricalTreatment"/>
+                    <uimessage code="cfl.programForm.button.addHistoricalTreatment"/>
                 </button>
             </div>
         </div>
@@ -1139,13 +1139,13 @@
         <!-- Save and Return Buttons -->
         <div id="buttons">
             <button id="save" type="button" class="confirm right" style="display: flex">
-                <uimessage code="cfldistribution.programForm.button.save"/>
+                <uimessage code="cfl.programForm.button.save"/>
                 <div id="save-program-spinner" class="ml-2 display-none">
                     <i class="icon-spinner icon-spin icon-2x"/>
                 </div>
             </button>
             <button id="return" type="button" class="cancel">
-                <uimessage code="cfldistribution.programForm.button.return"/>
+                <uimessage code="cfl.programForm.button.return"/>
             </button>
         </div>
         <postSubmissionAction class="org.openmrs.module.cflcore.api.htmlformentry.action.RemoveEncounterAction"/>

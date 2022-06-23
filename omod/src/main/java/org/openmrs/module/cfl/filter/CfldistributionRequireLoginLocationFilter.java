@@ -77,7 +77,7 @@ public class CfldistributionRequireLoginLocationFilter implements Filter {
 		
 		if (loginRequestUri == null) {
 			UiUtils uiUtils = Context.getRegisteredComponent("uiUtils", UiUtils.class);
-			loginRequestUri = uiUtils.pageLink("cfldistribution", "login");
+			loginRequestUri = uiUtils.pageLink("cfl", "login");
 		}
 		if (logoutRequestUri == null) {
 			logoutRequestUri = "/" + WebConstants.CONTEXT_PATH + "/logout";

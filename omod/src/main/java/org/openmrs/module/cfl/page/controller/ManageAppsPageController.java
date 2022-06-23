@@ -49,8 +49,8 @@ public class ManageAppsPageController {
 	
 	public String post(PageModel model, @RequestParam("id") String id, @RequestParam("action") String action,
                      @SpringBean("appFrameworkService") AppFrameworkService service, HttpSession session, UiUtils ui) {
-		String successMsgCode = "cfldistribution.app.manageApps." + action + ".success";
-		String failMessageCode = "cfldistribution.app.manageApps." + action + ".fail";
+		String successMsgCode = "cfl.app.manageApps." + action + ".success";
+		String failMessageCode = "cfl.app.manageApps." + action + ".fail";
 		try {
 			if ("enable".equals(action)) {
 				service.enableApp(id);
@@ -62,7 +62,7 @@ public class ManageAppsPageController {
 			
 			InfoErrorMessageUtil.flashInfoMessage(session, ui.message(successMsgCode, id));
 
-			return "redirect:cfldistribution/manageApps.page";
+			return "redirect:cfl/manageApps.page";
 		}
 		catch (Exception e) {
 			session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, ui.message(failMessageCode, id));

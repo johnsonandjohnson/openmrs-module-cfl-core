@@ -23,7 +23,7 @@
  */
 package org.openmrs.module.cfl.fragment.controller;
 
-import org.openmrs.module.cfl.CfldistributionWebConstants;
+import org.openmrs.module.cfl.CflWebConstants;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +34,10 @@ public class InfoAndErrorMessagesFragmentController {
 	public void controller(HttpServletRequest request, FragmentModel fragmentModel) {
 		HttpSession session = request.getSession();
 		String errorMessage = (String) session
-		        .getAttribute(CfldistributionWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE);
-		String infoMessage = (String) session.getAttribute(CfldistributionWebConstants.SESSION_ATTRIBUTE_INFO_MESSAGE);
-		session.setAttribute(CfldistributionWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, null);
-		session.setAttribute(CfldistributionWebConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, null);
+		        .getAttribute(CflWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE);
+		String infoMessage = (String) session.getAttribute(CflWebConstants.SESSION_ATTRIBUTE_INFO_MESSAGE);
+		session.setAttribute(CflWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, null);
+		session.setAttribute(CflWebConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, null);
 		fragmentModel.addAttribute("errorMessage", errorMessage);
 		fragmentModel.addAttribute("infoMessage", infoMessage);
 	}

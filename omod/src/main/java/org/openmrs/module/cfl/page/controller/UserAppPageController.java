@@ -68,23 +68,23 @@ public class UserAppPageController {
       if (!userApp.getAppId().equals(descriptor.getId())) {
         session.setAttribute(
             UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-            ui.message("cfldistribution.app.errors.IdsShouldMatch"));
+            ui.message("cfl.app.errors.IdsShouldMatch"));
       } else if ("add".equals(action) && service.getUserApp(userApp.getAppId()) != null) {
         session.setAttribute(
             UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-            ui.message("cfldistribution.app.errors.duplicateAppId"));
+            ui.message("cfl.app.errors.duplicateAppId"));
       } else {
         service.saveUserApp(userApp);
 
         InfoErrorMessageUtil.flashInfoMessage(
-            session, ui.message("cfldistribution.app.userApp.save.success", userApp.getAppId()));
+            session, ui.message("cfl.app.userApp.save.success", userApp.getAppId()));
 
-        return "redirect:/cfldistribution/manageApps.page";
+        return "redirect:/cfl/manageApps.page";
       }
     } catch (Exception e) {
       session.setAttribute(
           UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-          ui.message("cfldistribution.app.userApp.save.fail", userApp.getAppId()));
+          ui.message("cfl.app.userApp.save.fail", userApp.getAppId()));
     }
 
     model.addAttribute("userApp", userApp);
@@ -93,7 +93,7 @@ public class UserAppPageController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/cfldistribution/verifyJson", method = RequestMethod.POST)
+  @RequestMapping(value = "/cfl/verifyJson", method = RequestMethod.POST)
   public SimpleObject verifyJson(@RequestParam("json") String json) {
     SimpleObject so = new SimpleObject();
     try {

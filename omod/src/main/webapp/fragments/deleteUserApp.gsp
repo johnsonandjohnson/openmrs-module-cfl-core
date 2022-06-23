@@ -12,12 +12,12 @@
 
 <div id="cfldistribution-delete-userApp-dialog-${config.appId}" class="dialog" style="display: none">
     <div class="dialog-header">
-        <h3>${ ui.message("cfldistribution.app.deleteUserAppDefinition") }</h3>
+        <h3>${ ui.message("cfl.app.deleteUserAppDefinition") }</h3>
     </div>
     <div class="dialog-content">
         <ul>
             <li class="info">
-                ${ ui.message("cfldistribution.app.deleteUserApp.message", "<b>"+config.appId+"</b>") }
+                ${ ui.message("cfl.app.deleteUserApp.message", "<b>"+config.appId+"</b>") }
             </li>
         </ul>
         <form method="POST" action="manageApps.page">

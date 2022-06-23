@@ -12,8 +12,8 @@ package org.openmrs.module.cfl;
 
 public final class CfldistributionConstants {
 
-    public static final String MODULE_ID = "cfldistribution";
-    public static final String MODULE_API_PACKAGE = "org.openmrs.module.cfldistribution.api";
+    public static final String MODULE_ID = "cfl";
+    public static final String MODULE_API_PACKAGE = "org.openmrs.module.cfl.api";
 
     /**
      * The ID of ETL Lite module - an optional CfL distribution module.

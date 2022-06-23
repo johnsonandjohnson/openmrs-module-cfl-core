@@ -19,13 +19,13 @@
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>08_Homepage_Apps</filenameBase>
             <groupUuid>67da6de0-c193-4f22-b7d5-95c2a1642ea3</groupUuid>
-            <version>2</version>
+            <version>3</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>09_Visits_Apps</filenameBase>
             <groupUuid>761ba249-42f0-4a9c-ab9d-5b0c42cb6fc1</groupUuid>
-            <version>2</version>
+            <version>3</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
@@ -85,7 +85,7 @@
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>21_OpenMRS_Base_Config_App</filenameBase>
             <groupUuid>1b55cb93-c6a5-4791-a276-9e63761af74b</groupUuid>
-            <version>1</version>
+            <version>2</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>

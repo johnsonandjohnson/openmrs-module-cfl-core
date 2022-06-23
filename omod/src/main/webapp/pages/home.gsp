@@ -7,8 +7,8 @@
 <% /* graphic logo is a trademark of OpenMRS Inc. */ %>
 
 <%
-    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("cfldistribution.home.title") ])
-    ui.includeCss("cfldistribution", "home.css")
+    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("cfl.home.title") ])
+    ui.includeCss("cfl", "home.css")
 
     def htmlSafeId = { extension ->
         "${ extension.id.replace(".", "-") }-${ extension.id.replace(".", "-") }-extension"
@@ -24,11 +24,11 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <% if (authenticatedUser) { %>
             <h4>
-                ${ ui.encodeHtmlContent(ui.message("cfldistribution.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation))) }
+                ${ ui.encodeHtmlContent(ui.message("cfl.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation))) }
             </h4>
         <% } else { %>
             <h4>
-                <a href="login.htm">${ ui.message("cfldistribution.home.logIn") }</a>
+                <a href="login.htm">${ ui.message("cfl.home.logIn") }</a>
             </h4>
         <% } %>
     </div>

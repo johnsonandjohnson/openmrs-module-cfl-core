@@ -47,8 +47,8 @@
     <require_version>${openmrs.platform.version}</require_version>
 
     <require_modules>
-        <require_module version="${cflVersion}">
-            org.openmrs.module.cfl
+        <require_module version="${cflCoreVersion}">
+            org.openmrs.module.cflcore
         </require_module>
     </require_modules>
 
@@ -71,17 +71,17 @@
     <!-- /Internationalization -->
 
     <privilege>
-        <name>App: cfldistribution.legacyAdmin</name>
+        <name>App: cfl.legacyAdmin</name>
         <description>Able to access the advanced administration app</description>
     </privilege>
 
     <privilege>
-        <name>App: cfldistribution.styleGuide</name>
+        <name>App: cfl.styleGuide</name>
         <description>Able to access the style guide app</description>
     </privilege>
 
     <privilege>
-        <name>App: cfldistribution.manageApps</name>
+        <name>App: cfl.manageApps</name>
         <description>Able to manage app definitions</description>
     </privilege>
 

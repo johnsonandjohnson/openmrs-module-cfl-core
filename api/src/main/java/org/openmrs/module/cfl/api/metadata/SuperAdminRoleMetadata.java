@@ -27,10 +27,10 @@ import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.role;
  * The SuperAdminRoleMetadata adds a Super Admin role and makes sure it contains all privileges
  * available in the system.
  *
- * @implNote This metadata bundle runs when cfldistribution module is loaded. Usually it will be the
- *     last module loaded or second to implementation specific module (e.g.: cfldistribution-ship).
+ * @implNote This metadata bundle runs when cfl module is loaded. Usually it will be the
+ *     last module loaded or second to implementation specific module (e.g.: vxnaid).
  *     That means if there are permissions added to the system in a module which is loaded after
- *     cfldistribution, then that module must add that roles to the Super Admin role by itself.
+ *     cfl, then that module must add that roles to the Super Admin role by itself.
  */
 public class SuperAdminRoleMetadata extends AbstractMetadataBundle {
   private static final String SUPER_ADMIN_ROLE_NAME = "Super Admin";

@@ -29,7 +29,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
-import org.openmrs.module.cfl.CfldistributionWebConstants;
+import org.openmrs.module.cfl.CflWebConstants;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class HomePageController {
 	
 	@RequestMapping(value = "/index.htm", method = RequestMethod.GET)
 	public String overrideHomepage() {
-		return "forward:/" + CfldistributionWebConstants.MODULE_ID + "/home.page";
+		return "forward:/" + CflWebConstants.MODULE_ID + "/home.page";
 	}
 
     /**
@@ -60,7 +60,7 @@ public class HomePageController {
         AppContextModel contextModel = sessionContext.generateAppContextModel();
 
         model.addAttribute("extensions",
-                appFrameworkService.getExtensionsForCurrentUser(CfldistributionWebConstants.HOME_PAGE_EXTENSION_POINT_ID, contextModel));
+                appFrameworkService.getExtensionsForCurrentUser(CflWebConstants.HOME_PAGE_EXTENSION_POINT_ID, contextModel));
         model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
 
         return null;

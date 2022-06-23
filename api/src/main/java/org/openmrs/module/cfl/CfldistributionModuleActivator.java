@@ -43,7 +43,7 @@ public class CfldistributionModuleActivator extends BaseModuleActivator {
 
     @Override
     public void started() {
-        log.info("Starting Cfl Distribution Module");
+        log.info("Starting Cfl Module");
         try {
             final List<ModuleActivatorStep> sortedSteps = Context
                     .getRegisteredComponents(ModuleActivatorStep.class)
@@ -55,12 +55,12 @@ public class CfldistributionModuleActivator extends BaseModuleActivator {
                 step.startup(log);
             }
         } catch (Exception e) {
-            throw new ModuleException("Failed to start cfldistribution module.", e);
+            throw new ModuleException("Failed to start Cfl module.", e);
         }
     }
 
     @Override
     public void stopped() {
-        log.info("Shutting down Cfl Distribution Module");
+        log.info("Shutting down Cfl Module");
     }
 }
