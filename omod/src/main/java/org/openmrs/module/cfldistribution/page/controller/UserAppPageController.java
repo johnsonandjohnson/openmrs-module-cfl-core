@@ -93,7 +93,7 @@ public class UserAppPageController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/cfldistribution/verifyJson", method = RequestMethod.GET)
+  @RequestMapping(value = "/cfldistribution/verifyJson", method = RequestMethod.POST)
   public SimpleObject verifyJson(@RequestParam("json") String json) {
     SimpleObject so = new SimpleObject();
     try {
