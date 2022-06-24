@@ -12,8 +12,8 @@
 
     ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     ui.includeCss("coreapps", "patientsearch/patientSearchWidget.css")
-    ui.includeCss("cfl", "personSearch/personSearchWidget.css")
-    ui.includeJavascript("cfl", "personSearch/personSearchWidget.js")
+    ui.includeCss("cflcore", "personSearch/personSearchWidget.css")
+    ui.includeJavascript("cflcore", "personSearch/personSearchWidget.js")
     ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
     ui.includeJavascript("uicommons", "moment-with-locales.min.js")
 %>

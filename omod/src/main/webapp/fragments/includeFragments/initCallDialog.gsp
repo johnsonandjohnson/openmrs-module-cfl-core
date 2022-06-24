@@ -7,7 +7,7 @@
 <% /* graphic logo is a trademark of OpenMRS Inc. */ %>
 
 <%
-    ui.includeJavascript("cfl", "initCall.js")
+    ui.includeJavascript("cflcore", "initCall.js")
 %>
 
 <div id="init-call-dialog" class="dialog" style="display: none">

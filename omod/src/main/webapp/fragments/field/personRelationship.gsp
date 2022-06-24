@@ -12,8 +12,8 @@
     ui.includeJavascript("uicommons", "angular-resource.min.js")
     ui.includeJavascript("uicommons", "angular-ui/ui-bootstrap-tpls-0.6.0.min.js")
     ui.includeJavascript("uicommons", "services/personService.js")
-    ui.includeJavascript("cfl", "field/personRelationship.js")
-    ui.includeJavascript("cfl", "validator/personRelationshipValidator.js")
+    ui.includeJavascript("cflcore", "field/personRelationship.js")
+    ui.includeJavascript("cflcore", "validator/personRelationshipValidator.js")
 %>
 
 <div ng-app="personRelationships" ng-controller="PersonRelationshipController"

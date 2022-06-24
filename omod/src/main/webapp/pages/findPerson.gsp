@@ -22,7 +22,7 @@
         ${ breadcrumbMiddle },
         {
             label: "${ ui.message(label) }",
-            link: "${ ui.pageLink("cfl", "findPerson") }"
+            link: "${ ui.pageLink("cflcore", "findPerson") }"
         }
     ]));
 </script>
@@ -31,13 +31,13 @@
 	${ ui.message(heading) }
 </h2>
 <% if (breadcrumbOverride) { %>
-${ ui.includeFragment("cfl", "personSearch/personSearchWidget",
+${ ui.includeFragment("cflcore", "personSearch/personSearchWidget",
         [ afterSelectedUrl: afterSelectedUrl,
           showLastViewedPatients: showLastViewedPatients,
           breadcrumbOverride: breadcrumbs,
           registrationAppLink: registrationAppLink])}
 <% } else { %>
-${ ui.includeFragment("cfl", "personSearch/personSearchWidget",
+${ ui.includeFragment("cflcore", "personSearch/personSearchWidget",
         [ afterSelectedUrl: afterSelectedUrl,
           showLastViewedPatients: showLastViewedPatients,
           registrationAppLink: registrationAppLink ])}

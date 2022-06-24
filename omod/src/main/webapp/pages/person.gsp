@@ -11,7 +11,7 @@
     ui.decorateWith("appui", "standardEmrPage")
     ui.includeCss("coreapps", "clinicianfacing/patient.css")
     ui.includeJavascript("coreapps", "custom/deletePatient.js")
-    ui.includeJavascript("cfl", "deletePerson.js")
+    ui.includeJavascript("cflcore", "deletePerson.js")
 %>
 
 <script type="text/javascript">
@@ -49,12 +49,12 @@
 } %>
 
 <% if(isPatientDashboard) { %>
-    ${ ui.includeFragment("cfl", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
+    ${ ui.includeFragment("cflcore", "patientHeader", [ patient: patient.patient, activeVisit: activeVisit, appContextModel: appContextModel ]) }
 <% } else { %>
-    ${ ui.includeFragment("cfl", "personHeader", [ person: person.person, appContextModel: appContextModel ]) }
+    ${ ui.includeFragment("cflcore", "personHeader", [ person: person.person, appContextModel: appContextModel ]) }
 <% } %>
 
-${ ui.includeFragment("cfl", "personDashboardRedirection",
+${ ui.includeFragment("cflcore", "personDashboardRedirection",
         [ isPatientDashboard: isPatientDashboard, actorUuid: isPatientDashboard ? patient.patient.uuid : person.person.uuid ]) }
 
 <div class="clear"></div>
