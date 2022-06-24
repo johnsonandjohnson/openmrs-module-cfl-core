@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-const CFL_UI_ROOT = '/openmrs/owa/cfl-ui/';
+const CFL_UI_ROOT = '/openmrs/owa/cfl/';
 
 const head = document.head || document.getElementsByTagName('head')[0];
 
