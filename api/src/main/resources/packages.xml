@@ -55,19 +55,19 @@
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>14_Person_dashboard_actions</filenameBase>
             <groupUuid>b5586ef9-f0ea-44f0-8c98-e5f24407a01e</groupUuid>
-            <version>1</version>
+            <version>2</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>15_Person_dashboard_header</filenameBase>
             <groupUuid>5118cfa4-0557-4126-8c37-a1989ed32c22</groupUuid>
-            <version>1</version>
+            <version>2</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>16_Person_dashboard_widgets</filenameBase>
             <groupUuid>52cd2085-b348-4d3e-9071-4fcc39531b41</groupUuid>
-            <version>1</version>
+            <version>2</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
@@ -79,7 +79,7 @@
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>19_Patient_dashboard_header</filenameBase>
             <groupUuid>2a1dd23a-8099-4c07-ab82-b638dc966967</groupUuid>
-            <version>1</version>
+            <version>2</version>
             <importMode>MIRROR</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
@@ -104,7 +104,7 @@
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
             <filenameBase>20_Program_Form</filenameBase>
             <groupUuid>8ed2b61b-8829-448b-95a1-b468201846e3</groupUuid>
-            <version>2</version>
+            <version>3</version>
             <importMode>PARENT_AND_CHILD</importMode>
         </org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
         <org.openmrs.module.emrapi.metadata.MetadataPackageConfig>
