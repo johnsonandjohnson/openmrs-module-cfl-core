@@ -14,7 +14,7 @@
 
 <openmrs:htmlInclude file="/scripts/timepicker/timepicker.js"/>
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js"/>
-<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/cfl/scripts/adHocMessage.js"/>
+<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/cflcore/scripts/adHocMessage.js"/>
 
 <script type="text/javascript">
     let $sendConfirmationMessage = '<openmrs:message code="cfl.adHocMessage.send.confirm.msg"/>';

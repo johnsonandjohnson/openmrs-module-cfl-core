@@ -11,9 +11,9 @@
     <artifactId>cflcore</artifactId>
     <version>1.9.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>CFL Module</name>
+    <name>CFL Core Module</name>
     <description>
-        CFL module used to customization the CFL distribution
+        CFL core module containing CFL specific functionalities
     </description>
 
     <url>https://wiki.openmrs.org/x/FQ4z</url>

@@ -57,7 +57,7 @@ import static java.util.Collections.singletonList;
 @Controller("${rootrootArtifactId}.AdHocMessageController")
 @RequestMapping(value = "module/cfl/adHocMessage.form")
 public class AdHocMessageController {
-    private static final String VIEW = "/module/cfl/adHocMessage";
+    private static final String VIEW = "/module/cflcore/adHocMessage";
     private static final String MODEL_NAME = "model";
     private static final String FILTER_ACTION = "filter";
     private static final String SEND_ACTION = "send";

@@ -12,7 +12,7 @@
   ~ graphic logo is a trademark of OpenMRS Inc.
   --%>
 
-<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/cfl/scripts/manageCountries.js"/>
+<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/cflcore/scripts/manageCountries.js"/>
 
 <style type="text/css">
 	#enterClusterMembersSpan {

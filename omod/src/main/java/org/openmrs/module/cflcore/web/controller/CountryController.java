@@ -63,11 +63,13 @@ public class CountryController {
   private static final String COUNTRY_IMPORT_FORM_REDIRECT_VIEW =
       "/openmrs/module/cfl/countryImport.form";
 
-  private static final String COUNTRY_LIST_VIEW = "/module/cfl/countryList";
+  private static final String COUNTRY_LIST_VIEW = "/module/cflcore/countryList";
 
-  private static final String ADD_COUNTRY_VIEW = "/module/cfl/countryForm";
+  private static final String ADD_COUNTRY_VIEW = "/module/cflcore/countryForm";
 
-  private static final String EDIT_COUNTRY_VIEW = "/module/cfl/editCountryForm";
+  private static final String EDIT_COUNTRY_VIEW = "/module/cflcore/editCountryForm";
+
+  private static final String COUNTRY_IMPORT_VIEW = "/module/cflcore/countryImport";
 
   private static final String MODEL = "model";
 
@@ -219,7 +221,7 @@ public class CountryController {
       })
   @RequestMapping(value = "/countryImport.form", method = RequestMethod.GET)
   public ModelAndView getCountryImportForm() {
-    return new ModelAndView();
+    return new ModelAndView(COUNTRY_IMPORT_VIEW);
   }
 
   @ApiOperation(value = "Import Country", notes = "Import Country")
