@@ -25,6 +25,7 @@ package org.openmrs.module.cfl.filter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.cfl.CflWebConstants;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.WebConstants;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class CfldistributionRequireLoginLocationFilter implements Filter {
 		
 		if (loginRequestUri == null) {
 			UiUtils uiUtils = Context.getRegisteredComponent("uiUtils", UiUtils.class);
-			loginRequestUri = uiUtils.pageLink("cfl", "login");
+			loginRequestUri = uiUtils.pageLink(CflWebConstants.MODULE_ID, "login");
 		}
 		if (logoutRequestUri == null) {
 			logoutRequestUri = "/" + WebConstants.CONTEXT_PATH + "/logout";
