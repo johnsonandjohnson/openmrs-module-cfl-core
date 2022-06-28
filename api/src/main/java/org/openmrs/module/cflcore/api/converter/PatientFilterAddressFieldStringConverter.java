@@ -21,7 +21,7 @@ public class PatientFilterAddressFieldStringConverter extends AbstractFieldValue
 
     @Override
     protected List<Condition<?, ?>> createConditions(AdHocMessagePatientFilterDTO dto) {
-        return Collections.<Condition<?, ?>>singletonList(
+        return Collections.singletonList(
                 new PersonAddressCondition(getFieldPath(), getOperator(), dto.getValue()));
     }
 }

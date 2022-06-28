@@ -12,8 +12,6 @@ package org.openmrs.module.cflcore.api.dto;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.module.cflcore.api.contract.PatientFilterConfiguration;
-import org.openmrs.module.cflcore.api.converter.PatientFilterConverterWithOptions;
 import org.springframework.util.AutoPopulatingList;
 
 import java.util.ArrayList;
@@ -27,6 +25,8 @@ import java.util.Map;
  * </p>
  */
 public class AdHocMessagePatientFilterDTO {
+    private static final String OPTIONS_PROP = "options";
+
     private String label;
     private String filterTypeName;
 
@@ -37,21 +37,20 @@ public class AdHocMessagePatientFilterDTO {
     private List<String> manyValues;
 
     public AdHocMessagePatientFilterDTO() {
-        this.manyValues = new AutoPopulatingList<String>(String.class);
+        this.manyValues = new AutoPopulatingList<>(String.class);
     }
 
-    public AdHocMessagePatientFilterDTO(final PatientFilterConfiguration configuration) {
+    public AdHocMessagePatientFilterDTO(String label, String filterTypeName, Map<String, Object> configurationProperties) {
         this();
-        this.label = configuration.getLabel();
-        this.filterTypeName = configuration.getInputType().toString();
-
-        this.options = readOptions(configuration.getConfig());
+        this.label = label;
+        this.filterTypeName = filterTypeName;
+        this.options = readOptions(configurationProperties);
     }
 
     private List<Option> readOptions(final Map<String, Object> configurationProperties) {
-        final Object optionsRawValue = configurationProperties.get(PatientFilterConverterWithOptions.OPTIONS_PROP);
+        final Object optionsRawValue = configurationProperties.get(OPTIONS_PROP);
 
-        final List<Option> result = new ArrayList<Option>();
+        final List<Option> result = new ArrayList<>();
 
         if (optionsRawValue instanceof Iterable) {
             for (Object option : (Iterable) optionsRawValue) {
@@ -77,7 +76,7 @@ public class AdHocMessagePatientFilterDTO {
     public void copyValue(AdHocMessagePatientFilterDTO otherDto) {
         this.value = otherDto.getValue();
         this.secondValue = otherDto.getSecondValue();
-        this.manyValues = new AutoPopulatingList<String>(String.class);
+        this.manyValues = new AutoPopulatingList<>(String.class);
 
         if (otherDto.getManyValues() != null) {
             this.manyValues.addAll(otherDto.getManyValues());
