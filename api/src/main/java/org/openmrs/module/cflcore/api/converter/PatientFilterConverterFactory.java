@@ -19,15 +19,23 @@ public class PatientFilterConverterFactory {
 
   static {
     registerConverter(
-        "PatientFilterAddressFieldStringConverter", PatientFilterAddressFieldStringConverter::new);
-    registerConverter("PatientFilterAgeToDateConverter", PatientFilterAgeToDateConverter::new);
+        PatientFilterAddressFieldStringConverter.class.getSimpleName(),
+        PatientFilterAddressFieldStringConverter::new);
     registerConverter(
-        "PatientFilterAttributeStringConverter", PatientFilterAttributeStringConverter::new);
+        PatientFilterAgeToDateConverter.class.getSimpleName(),
+        PatientFilterAgeToDateConverter::new);
     registerConverter(
-        "PatientFilterEntityFieldStringConverter", PatientFilterEntityFieldStringConverter::new);
+        PatientFilterAttributeStringConverter.class.getSimpleName(),
+        PatientFilterAttributeStringConverter::new);
     registerConverter(
-        "PatientFilterReceivedDosagesConverter", PatientFilterReceivedDosagesConverter::new);
-    registerConverter("PatientFilterStringListConverter", PatientFilterStringListConverter::new);
+        PatientFilterEntityFieldStringConverter.class.getSimpleName(),
+        PatientFilterEntityFieldStringConverter::new);
+    registerConverter(
+        PatientFilterReceivedDosagesConverter.class.getSimpleName(),
+        PatientFilterReceivedDosagesConverter::new);
+    registerConverter(
+        PatientFilterStringListConverter.class.getSimpleName(),
+        PatientFilterStringListConverter::new);
   }
 
   private PatientFilterConverterFactory() {}
@@ -35,6 +43,11 @@ public class PatientFilterConverterFactory {
   public static void registerConverter(
       String name, Supplier<PatientFilterConverter> patientFilterConverterSupplier) {
     CONVERTERS.put(name, patientFilterConverterSupplier);
+  }
+
+  public static void unregisterConverter(
+      String name, Supplier<PatientFilterConverter> patientFilterConverterSupplier) {
+    CONVERTERS.remove(name, patientFilterConverterSupplier);
   }
 
   public static PatientFilterConverter getPatientFilterConverter(String name) {

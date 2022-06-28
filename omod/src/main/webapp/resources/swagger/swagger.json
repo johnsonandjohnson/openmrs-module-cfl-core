@@ -888,18 +888,18 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "localName" : {
+          "type" : "string"
+        },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
           "type" : "string"
-        },
-        "localName" : {
-          "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1272,18 +1272,18 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "localName" : {
+          "type" : "string"
+        },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
           "type" : "string"
-        },
-        "localName" : {
-          "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"

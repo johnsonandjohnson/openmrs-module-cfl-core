@@ -83,7 +83,7 @@ public final class RegisterPersonFormBuilder {
     Map<String, Section> configuredSections = new LinkedHashMap<>();
     ArrayNode sections = (ArrayNode) app.getConfig().get(SECTIONS);
     for (JsonNode sectionJsonNode : sections) {
-      final Section section = buildSection(sectionJsonNode);
+      final Section section = buildSection((ObjectNode) sectionJsonNode);
       configuredSections.put(section.getId(), section);
     }
 
@@ -93,11 +93,9 @@ public final class RegisterPersonFormBuilder {
     return formStructure;
   }
 
-  private static Section buildSection(JsonNode sectionJsonNode) {
-    ObjectNode sectionConfig = (ObjectNode) sectionJsonNode;
-
+  private static Section buildSection(ObjectNode sectionJsonNode) {
     ObjectMapper objectMapper = new ObjectMapper();
-    Section section = objectMapper.convertValue(sectionConfig, Section.class);
+    Section section = objectMapper.convertValue(sectionJsonNode, Section.class);
 
     if (section.getQuestions() != null) {
       buildQuestions(section);

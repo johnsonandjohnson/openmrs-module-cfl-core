@@ -162,7 +162,8 @@ public class AdHocMessageController {
         final List<AdHocMessagePatientFilterDTO> configuredFilters = new ArrayList<AdHocMessagePatientFilterDTO>();
 
         for (PatientFilterConfiguration configuration : configService.getAdHocMessagePatientFilterConfigurations()) {
-            configuredFilters.add(new AdHocMessagePatientFilterDTO(configuration));
+            configuredFilters.add(new AdHocMessagePatientFilterDTO(configuration.getLabel(),
+                configuration.getInputType().toString(), configuration.getConfig()));
         }
 
         final AdHocMessageRequestDTO dto = new AdHocMessageRequestDTO();
