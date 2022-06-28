@@ -851,7 +851,10 @@
         "method" : {
           "type" : "string"
         },
-        "locales" : {
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
         "serverName" : {
@@ -878,15 +881,11 @@
         "localAddr" : {
           "type" : "string"
         },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
+        "locales" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
@@ -895,8 +894,9 @@
         "contentType" : {
           "type" : "string"
         },
-        "localName" : {
-          "type" : "string"
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
@@ -927,12 +927,12 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
         "lastAccessedTime" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
         },
         "maxInactiveInterval" : {
           "type" : "integer",
@@ -1235,7 +1235,10 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "locales" : {
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
         "serverName" : {
@@ -1262,15 +1265,11 @@
         "localAddr" : {
           "type" : "string"
         },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
+        "locales" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
@@ -1279,8 +1278,9 @@
         "contentType" : {
           "type" : "string"
         },
-        "localName" : {
-          "type" : "string"
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
