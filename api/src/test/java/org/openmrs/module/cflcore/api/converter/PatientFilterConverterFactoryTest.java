@@ -36,12 +36,12 @@ public class PatientFilterConverterFactoryTest {
 
   @Test
   public void getPatientFilterConverter_shouldReturnConverterForAllDefaultNames() {
-    assertConverterNotNull(PatientFilterAddressFieldStringConverter.class.getSimpleName());
-    assertConverterNotNull(PatientFilterAgeToDateConverter.class.getSimpleName());
-    assertConverterNotNull(PatientFilterAttributeStringConverter.class.getSimpleName());
-    assertConverterNotNull(PatientFilterEntityFieldStringConverter.class.getSimpleName());
-    assertConverterNotNull(PatientFilterReceivedDosagesConverter.class.getSimpleName());
-    assertConverterNotNull(PatientFilterStringListConverter.class.getSimpleName());
+    assertConverterNotNull("PatientFilterAddressFieldStringConverter");
+    assertConverterNotNull("PatientFilterAgeToDateConverter");
+    assertConverterNotNull("PatientFilterAttributeStringConverter");
+    assertConverterNotNull("PatientFilterEntityFieldStringConverter");
+    assertConverterNotNull("PatientFilterReceivedDosagesConverter");
+    assertConverterNotNull("PatientFilterStringListConverter");
   }
 
   private void assertConverterNotNull(String converterName) {

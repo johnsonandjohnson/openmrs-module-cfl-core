@@ -65,7 +65,7 @@ public class TextFragmentController {
       Object personAttributeTypeUuid = ext.getExtensionParams().get("uuid");
       if (type.toString().equals("personAttribute")) {
         String formFieldName = ext.getExtensionParams().get(FORM_FIELD_NAME_PARAM).toString();
-        if (person != null && type != null && personAttributeTypeUuid != null) {
+        if (person != null && personAttributeTypeUuid != null) {
           PersonAttribute personAttribute =
               person.getAttribute(
                   Context.getPersonService()
