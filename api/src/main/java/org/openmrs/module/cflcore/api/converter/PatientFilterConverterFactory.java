@@ -37,6 +37,11 @@ public class PatientFilterConverterFactory {
     CONVERTERS.put(name, patientFilterConverterSupplier);
   }
 
+  public static void unregisterConverter(
+      String name, Supplier<PatientFilterConverter> patientFilterConverterSupplier) {
+    CONVERTERS.remove(name, patientFilterConverterSupplier);
+  }
+
   public static PatientFilterConverter getPatientFilterConverter(String name) {
     final Supplier<PatientFilterConverter> patientFilterConverterSupplier = CONVERTERS.get(name);
 
