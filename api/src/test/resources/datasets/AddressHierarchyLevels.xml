@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
+<dataset>
+    <address_hierarchy_level
+            address_hierarchy_level_id="1"
+            uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86002"
+            required="0" />
+
+    <address_hierarchy_level
+            address_hierarchy_level_id="2"
+            parent_level_id="1"
+            uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86003"
+            required="0" />
+
+    <address_hierarchy_level
+            address_hierarchy_level_id="3"
+            parent_level_id="2"
+            uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86004"
+            required="0" />
+
+    <address_hierarchy_level
+            address_hierarchy_level_id="4"
+            parent_level_id="3"
+            uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86005"
+            required="0" />
+
+    <address_hierarchy_level
+            address_hierarchy_level_id="5"
+            parent_level_id="4"
+            uuid="ef8af31e-ab67-11ec-b5ce-0242c0a86006"
+            required="0" />
+
+    <address_hierarchy_entry
+            address_hierarchy_entry_id="1"
+            level_id="1"
+            name="Poland"
+            uuid="e78d0c5f-4aeb-4b40-8619-70f3159a7001"/>
+
+</dataset>

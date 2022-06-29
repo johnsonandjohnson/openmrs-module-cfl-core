@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
+<!-- Beans to override/add to the test context definition -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- There are many javax.validation.Validator beans in classpath ;( -->
+    <bean id="testOnlyValidationFactory" primary="true"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <bean id="schedulerService" class="org.mockito.Mockito" factory-method="mock" primary="true">
+        <constructor-arg value="org.openmrs.scheduler.SchedulerService"/>
+    </bean>
+
+    <!-- Workaround for missing support for DrugOrderTagHandler in 2.* -->
+    <bean id="testOnlyDrugOrderTagHandlerSupport" class="org.mockito.Mockito" factory-method="mock" primary="true">
+        <constructor-arg value="org.openmrs.module.htmlformentry.handler.DrugOrderTagHandlerSupport"/>
+    </bean>
+    <bean id="testOnlyStandardRegimenTagHandlerSupport" class="org.mockito.Mockito" factory-method="mock"
+          primary="true">
+        <constructor-arg value="org.openmrs.module.htmlformentry.handler.StandardRegimenTagHandlerSupport"/>
+    </bean>
+
+    <bean id="testHibernateAddressHierarchyDAO"
+          class="org.openmrs.module.addresshierarchy.db.hibernate.HibernateAddressHierarchyDAO">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- We need explicitly add address hierarchy entities. -->
+    <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
+        <property name="configLocations">
+            <list>
+                <value>classpath:hibernate.cfg.xml</value>
+                <value>classpath:test-hibernate.cfg.xml</value>
+            </list>
+        </property>
+        <property name="mappingJarLocations" ref="mappingJarResources"/>
+        <property name="packagesToScan">
+            <list>
+                <value>org.openmrs</value>
+            </list>
+        </property>
+        <!--  default properties must be set in the hibernate.default.properties -->
+    </bean>
+</beans>

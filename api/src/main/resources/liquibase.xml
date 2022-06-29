@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+ 
+    <!--
+    	See http://wiki.openmrs.org/display/docs/Module+liquibase+File for
+    	documentation on this file.
+
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+
+    <changeSet id="cfl-20190827-15:50" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="relationship_type" />
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM relationship_type WHERE uuid = "acec590b-825e-45d2-876a-0028f174903d";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Added the caregiver relationship type.
+        </comment>
+        <insert tableName="relationship_type">
+            <column name="a_is_to_b">Caregiver</column>
+            <column name="b_is_to_a">Caretaker</column>
+            <column name="preferred">0</column>
+            <column name="weight">0</column>
+            <column name="description">Caregiver relationship</column>
+            <column name="uuid">acec590b-825e-45d2-876a-0028f174903d</column>
+            <column name="date_created">2019-08-27</column>
+            <column name="creator">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-20200318-07:50" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="relationship_type" />
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM relationship_type WHERE uuid = "acec590b-825e-45d2-876a-0028f174903d" AND b_is_to_a = "Caretaker";
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Updates the caregiver relationship type.
+        </comment>
+        <update tableName="relationship_type">
+            <column name="a_is_to_b">Caregiver</column>
+            <column name="b_is_to_a">Patient</column>
+            <column name="preferred">0</column>
+            <column name="weight">0</column>
+            <column name="description">Relationship type used to represent the relationship between Caregiver and Patient</column>
+            <column name="date_changed">2020-03-18</column>
+            <column name="changed_by">1</column>
+            <where>uuid = "acec590b-825e-45d2-876a-0028f174903d"</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="cfl-20200526-15:43" author="Connect for Life">
+        <preConditions  onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM person_attribute_type WHERE name = "Telephone Number";
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Made changes required to search by telephone number attribute</comment>
+
+        <update tableName="person_attribute_type">
+            <column name="searchable" value="1"/>
+            <where>name = "Telephone Number"</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="cfl-20200526-16:43" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person_attribute_type"/>
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM person_attribute_type WHERE name = "Person identifier";
+            </sqlCheck>
+        </preConditions>
+
+        <comment>Made changes required to search by person identifier attribute</comment>
+
+        <update tableName="person_attribute_type">
+            <column name="searchable" value="1"/>
+            <where>name = "Person identifier"</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="cfl-20210316-12:00-Set-PersonAttributeType-sortWeight" author="Connect for Life">
+        <comment>
+            Set PersonAttributeType.sortWeight for entities where this not-null field was not set.
+            The sortWeight is set to the ID of an entity to reflect the creation order.
+        </comment>
+        <sql><![CDATA[
+            UPDATE
+                person_attribute_type
+            SET
+                sort_weight = person_attribute_type_id
+            WHERE
+                sort_weight is null
+        ]]></sql>
+    </changeSet>
+
+    <changeSet id="cfl-Add-Welcome-Message-template" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM messages_template WHERE uuid='494c3feb-1935-425c-b42d-eba81a561acd'
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Adds Message Template for Welcome Message.
+        </comment>
+        <insert tableName="messages_template">
+            <column name="uuid" value="494c3feb-1935-425c-b42d-eba81a561acd" />
+            <column name="creator" value="1" />
+            <column name="date_created" valueDate="2021-05-07T00:00:00" />
+            <column name="retired" valueBoolean="false" />
+            <column name="name" value="Welcome Message" />
+            <column name="description" value="The special Template for Welcome Messages." />
+            <column name="should_use_optimized_query" valueBoolean="false" />
+            <column name="service_query_type" value="SQL"/>
+            <column name="service_query" value="SELECT 'empty' FROM dual WHERE false;" />
+            <column name="calendar_service_query" value="SELECT
+  mssg.msg_send_time AS EXECUTION_DATE,
+  1 AS MESSAGE_ID,
+  mssg.channel_type AS CHANNEL_ID,
+  mss.status AS STATUS_ID
+FROM messages_scheduled_service mss
+JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
+JOIN messages_template mt on mt.messages_template_id = mpt.template_id
+JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
+WHERE mt.name = 'Welcome Message'
+  AND mpt.patient_id = :patientId
+  AND mpt.actor_id = :actorId
+  AND mssg.patient_id = :patientId
+  AND mssg.msg_send_time &gt;= :startDateTime
+  AND mssg.msg_send_time &lt;= :endDateTime
+ORDER BY 1 DESC;"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-Add-adhoc-message-template" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM messages_template WHERE uuid='901f8de3-c87b-49d0-b19e-2de4e8f0da8f'
+            </sqlCheck>
+        </preConditions>
+        <comment>
+            Adds Message Template for Ad Hoc Message.
+        </comment>
+        <insert tableName="messages_template">
+            <column name="uuid" value="901f8de3-c87b-49d0-b19e-2de4e8f0da8f" />
+            <column name="creator" value="1" />
+            <column name="date_created" valueDate="2021-05-25T00:00:00" />
+            <column name="retired" valueBoolean="false" />
+            <column name="name" value="Ad hoc Message" />
+            <column name="description" value="The special Template for Ad hoc Messages." />
+            <column name="should_use_optimized_query" valueBoolean="false" />
+            <column name="service_query_type" value="SQL"/>
+            <column name="service_query" value="SELECT 'empty' FROM dual WHERE false;" />
+            <column name="calendar_service_query" value="SELECT
+  mssg.msg_send_time AS EXECUTION_DATE,
+  1 AS MESSAGE_ID,
+  mssg.channel_type AS CHANNEL_ID,
+  mss.status AS STATUS_ID
+FROM messages_scheduled_service mss
+JOIN messages_patient_template mpt on mpt.messages_patient_template_id = mss.patient_template_id
+JOIN messages_template mt on mt.messages_template_id = mpt.template_id
+JOIN messages_scheduled_service_group mssg on mssg.messages_scheduled_service_group_id = mss.group_id
+WHERE mt.name = 'Ad hoc Message'
+  AND mpt.patient_id = :patientId
+  AND mpt.actor_id = :actorId
+  AND mssg.patient_id = :patientId
+  AND mssg.msg_send_time &gt;= :startDateTime
+  AND mssg.msg_send_time &lt;= :endDateTime
+ORDER BY 1 DESC;"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="cfl-global-property-history-resources" author="Connect for Life">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="global_property"/>
+            <not><tableExists tableName="global_property_history"/></not>
+        </preConditions>
+        <comment>
+            Adds the table used to store the history of global properties resources and
+            database triggers for updating global properties entities.
+        </comment>
+        <sql>
+            CREATE TABLE global_property_history LIKE global_property;
+
+            ALTER TABLE global_property_history
+            DROP PRIMARY KEY, DROP KEY global_property_uuid_index, DROP KEY global_property_property_index,
+            ENGINE = MyISAM,
+            ADD global_property_history_id INT AUTO_INCREMENT FIRST,
+            ADD action VARCHAR(8) AFTER global_property_history_id,
+            ADD action_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER action,
+            ADD PRIMARY KEY (global_property_history_id);
+
+            CREATE TRIGGER global_property_update_history
+            BEFORE UPDATE ON global_property FOR EACH ROW
+            INSERT INTO global_property_history
+            SELECT NULL, 'UPDATE', NOW(), d.* from global_property AS d WHERE d.property = NEW.property;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

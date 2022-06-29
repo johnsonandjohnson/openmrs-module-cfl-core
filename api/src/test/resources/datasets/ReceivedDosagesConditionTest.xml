@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
+<dataset>
+    <messages_template
+            messages_template_id="701"
+            service_query="SELECT 'empty' FROM dual WHERE false;"
+            calendar_service_query="SELECT 'empty' FROM dual WHERE false;"
+            service_query_type="SQL"
+            name="Ad hoc Message"
+            should_use_optimized_query="false"
+            uuid="901f8de3-c87b-49d0-b19e-2de4e8f0da8f"
+            creator="1"
+            retired="false"
+            date_created="2021-05-25 00:00:00.0"/>
+
+    <location location_id="801"
+              name="AdHocMessageServiceImplTest Location"
+              date_created="2021-05-19 15:00:00.0"
+              creator="1"
+              retired="false"/>
+
+    <patient_identifier_type patient_identifier_type_id="901"
+                             name="Test Identifier"
+                             required="false"
+                             date_created="2021-05-19 15:00:00.0"
+                             creator="1"
+                             retired="false"/>
+
+    <person person_id="1001"
+            gender="M"
+            birthdate="2000-05-01 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001001"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1001"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1001"
+                        patient_id="1001"
+                        identifier="P1001"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <person person_id="1002"
+            gender="F"
+            birthdate="2000-05-02 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001002"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1002"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1002"
+                        patient_id="1002"
+                        identifier="P1002"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <person person_id="1003"
+            gender="O"
+            birthdate="2000-05-03 00:00:00.0"
+            dead="false"
+            uuid="b114f1ca-1000-0000-0000-000000001003"
+            creator="1"
+            date_created="2021-05-19 15:00:00.0"
+            voided="false"/>
+    <patient patient_id="1003"
+             date_created="2021-05-19 15:00:00.0"
+             voided="false"/>
+    <patient_identifier patient_identifier_id="1003"
+                        patient_id="1003"
+                        identifier="P1003"
+                        identifier_type="901"
+                        location_id="801"
+                        date_created="2021-05-19 15:00:00.0"
+                        preferred="true"
+                        voided="false"
+                        creator="1"/>
+
+    <visit_type visit_type_id="2001"
+                name="NO_DOSAGE"
+                uuid="b114f1ca-1000-0000-0000-000000002001"
+                date_created="2021-05-19 15:00:00.0"
+                retired="false"
+                creator="1"/>
+    <visit_type visit_type_id="2002"
+                name="DOSAGE_1"
+                uuid="b114f1ca-1000-0000-0000-000000002002"
+                date_created="2021-05-19 15:00:00.0"
+                retired="false"
+                creator="1"/>
+    <visit_type visit_type_id="2003"
+                name="DOSAGE_2"
+                uuid="b114f1ca-1000-0000-0000-000000002003"
+                date_created="2021-05-19 15:00:00.0"
+                retired="false"
+                creator="1"/>
+    <visit_type visit_type_id="2004"
+                name="NO_DOSAGE_END"
+                uuid="b114f1ca-1000-0000-0000-000000002004"
+                date_created="2021-05-19 15:00:00.0"
+                retired="false"
+                creator="1"/>
+    <visit_attribute_type visit_attribute_type_id="2201"
+                          name="Visit Status"
+                          min_occurs="0"
+                          creator="1"
+                          date_created="2021-05-19 15:00:00.0"
+                          retired="false"/>
+
+    <!-- NO_DOSAGE for all -->
+    <visit visit_id="2101"
+           patient_id="1001"
+           visit_type_id="2001"
+           date_started="2021-05-26 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130002"
+    />
+    <visit_attribute visit_attribute_id="2301"
+                     visit_id="2101"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2102"
+           patient_id="1002"
+           visit_type_id="2001"
+           date_started="2021-05-26 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130003"
+    />
+    <visit_attribute visit_attribute_id="2302"
+                     visit_id="2102"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2103"
+           patient_id="1003"
+           visit_type_id="2001"
+           date_started="2021-05-26 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130004"
+    />
+    <visit_attribute visit_attribute_id="2303"
+                     visit_id="2103"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+
+    <!-- DOSAGE_1 for all -->
+    <visit visit_id="2111"
+           patient_id="1001"
+           visit_type_id="2002"
+           date_started="2021-05-27 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130005"
+    />
+    <visit_attribute visit_attribute_id="2311"
+                     visit_id="2111"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2112"
+           patient_id="1002"
+           visit_type_id="2002"
+           date_started="2021-05-27 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130006"
+    />
+    <visit_attribute visit_attribute_id="2312"
+                     visit_id="2112"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2113"
+           patient_id="1003"
+           visit_type_id="2002"
+           date_started="2021-05-27 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130007"
+    />
+    <visit_attribute visit_attribute_id="2313"
+                     visit_id="2113"
+                     value_reference="SCHEDULED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+
+    <!-- DOSAGE_2 for all -->
+    <visit visit_id="2121"
+           patient_id="1001"
+           visit_type_id="2003"
+           date_started="2021-05-28 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130008"
+    />
+    <visit_attribute visit_attribute_id="2321"
+                     visit_id="2121"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2122"
+           patient_id="1002"
+           visit_type_id="2003"
+           date_started="2021-05-28 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130009"
+    />
+    <visit_attribute visit_attribute_id="2322"
+                     visit_id="2122"
+                     value_reference="SCHEDULED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2123"
+           patient_id="1003"
+           visit_type_id="2003"
+           date_started="2021-05-28 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130010"
+    />
+    <visit_attribute visit_attribute_id="2323"
+                     visit_id="2123"
+                     value_reference="SCHEDULED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+
+    <!-- NO_DOSAGE_END for all -->
+    <visit visit_id="2131"
+           patient_id="1001"
+           visit_type_id="2004"
+           date_started="2021-05-29 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130011"
+    />
+    <visit_attribute visit_attribute_id="2331"
+                     visit_id="2131"
+                     value_reference="OCCURRED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2132"
+           patient_id="1002"
+           visit_type_id="2004"
+           date_started="2021-05-29 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130012"
+    />
+    <visit_attribute visit_attribute_id="2332"
+                     visit_id="2132"
+                     value_reference="SCHEDULED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+    <visit visit_id="2133"
+           patient_id="1003"
+           visit_type_id="2004"
+           date_started="2021-05-29 15:00:00.0"
+           creator="1"
+           date_created="2021-05-19 15:00:00.0"
+           voided="false"
+           uuid="96692cb6-e610-11eb-b924-0242ac130013"
+    />
+    <visit_attribute visit_attribute_id="2333"
+                     visit_id="2133"
+                     value_reference="SCHEDULED"
+                     attribute_type_id="2201"
+                     voided="false"
+                     creator="1"
+                     date_created="2021-05-19 15:00:00.0"/>
+</dataset>

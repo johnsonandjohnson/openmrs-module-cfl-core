@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This Source Code Form is subject to the terms of the Mozilla Public License,
+  ~ v. 2.0. If a copy of the MPL was not distributed with this file, You can
+  ~ obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+  ~ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+  ~ <p>
+  ~ Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+  ~ graphic logo is a trademark of OpenMRS Inc.
+  -->
+
+<dataset>
+
+    <!-- Country concept resources -->
+    <concept concept_id="100" retired="false" datatype_id="4" class_id="10" is_set="true" creator="1"
+             date_created="2021-10-19 00:00:00.0" version="" changed_by="1" date_changed="2021-10-19 00:00:00.0"
+             uuid="b9519af8-30ba-11ec-b627-0242ac120002"/>
+    <concept_name concept_name_id="100" concept_id="100" name="Country" locale="en" creator="1"
+                  date_created="2021-10-19 00:00:00.0" concept_name_type="FULLY_SPECIFIED" voided="false"
+                  uuid="b9519af8-30ba-11ec-b627-0242ac120003" locale_preferred="true"/>
+
+
+    <!-- Poland concept resources -->
+    <concept concept_id="101" retired="false" datatype_id="4" class_id="11" is_set="false" creator="1"
+             date_created="2021-10-19 00:00:00.0" version="" changed_by="1" date_changed="2021-10-19 00:00:00.0"
+             uuid="29d75a6c-30ba-11ec-b627-0242ac120004"/>
+    <concept_name concept_name_id="101" concept_id="101" name="Poland" locale="en" creator="1"
+                  date_created="2021-10-19 00:00:00.0" concept_name_type="FULLY_SPECIFIED" voided="false"
+                  uuid="b9519af8-30ba-11ec-b627-0242ac120005" locale_preferred="true"/>
+
+    <!-- Belgium concept resources -->
+    <concept concept_id="102" retired="false" datatype_id="4" class_id="11" is_set="false" creator="1"
+             date_created="2021-10-19 00:00:00.0" version="" changed_by="1" date_changed="2021-10-19 00:00:00.0"
+             uuid="29d75a6c-30ba-11ec-b627-0242ac120006"/>
+    <concept_name concept_name_id="102" concept_id="102" name="Belgium" locale="en" creator="1"
+                  date_created="2021-10-19 00:00:00.0" concept_name_type="FULLY_SPECIFIED" voided="false"
+                  uuid="b9519af8-30ba-11ec-b627-0242ac120007" locale_preferred="true"/>
+
+    <!-- India concept resources -->
+    <concept concept_id="103" retired="false" datatype_id="4" class_id="11" is_set="false" creator="1"
+             date_created="2021-10-19 00:00:00.0" version="" changed_by="1" date_changed="2021-10-19 00:00:00.0"
+             uuid="29d75a6c-30ba-11ec-b627-0242ac120008"/>
+    <concept_name concept_name_id="103" concept_id="103" name="India" locale="en" creator="1"
+                  date_created="2021-10-19 00:00:00.0" concept_name_type="FULLY_SPECIFIED" voided="false"
+                  uuid="b9519af8-30ba-11ec-b627-0242ac120009" locale_preferred="true"/>
+
+    <!-- Members of country concept -->
+    <concept_set concept_set_id="104" concept_id="101" concept_set="100" sort_weight="1" creator="1"
+                 date_created="2021-10-19 00:00:00.0" uuid="b9519af8-30ba-11ec-b627-0242ac120010"/>
+    <concept_set concept_set_id="105" concept_id="102" concept_set="100" sort_weight="2" creator="1"
+                 date_created="2021-10-19 00:00:00.0" uuid="b9519af8-30ba-11ec-b627-0242ac120011"/>
+    <concept_set concept_set_id="106" concept_id="103" concept_set="100" sort_weight="3" creator="1"
+                 date_created="2021-10-19 00:00:00.0" uuid="b9519af8-30ba-11ec-b627-0242ac120012"/>
+
+</dataset>
