@@ -61,6 +61,10 @@ public class PatientHeaderFragmentController extends HeaderFragment {
     private static final String SHOW_GENDER_PERSON_HEADER = "showGenderPersonHeader";
     private static final String SHOW_AGE_PERSON_HEADER = "showAgePersonHeader";
 
+    private String getShipIdentifier(Patient patient) {
+        return patient.getPatientIdentifier("SHIP ID").getIdentifier();
+    }
+
     @SuppressWarnings({"checkstyle:ParameterNumber", "checkstyle:ParameterAssignment",
             "PMD.ExcessiveParameterList", "PMD.AvoidReassigningParameters"})
     public void controller(FragmentConfiguration config, @SpringBean("emrApiProperties") EmrApiProperties emrApiProperties,
@@ -80,6 +84,7 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         }
         config.addAttribute("patient", wrapper);
         config.addAttribute("patientNames", getNames(wrapper.getPersonName()));
+        config.addAttribute("shipId", getShipIdentifier(wrapper.getPatient()));
         config.addAttribute(TELEPHONE, wrapper.getPatient().getPerson()
                 .getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
 
@@ -160,5 +165,4 @@ public class PatientHeaderFragmentController extends HeaderFragment {
             this.editable = editable;
         }
     }
-
 }

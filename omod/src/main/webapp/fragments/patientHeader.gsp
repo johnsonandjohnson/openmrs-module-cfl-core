@@ -76,8 +76,10 @@
     <div class="demographics">
         <h1 class="name">
             <div style="display: flex; align-items: center;">
-                <% patientNames?.each { %>
-                <span><span class="${ it.key.replace('.', '-') }">${ ui.encodeHtmlContent(it.value) }</span><em>${ui.message(it.key)}</em></span>&nbsp;
+                <% if (config.shipId) { %>
+                    <span id="shipId">
+                		${config.shipId}
+                	</span>
                 <% } %>
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
