@@ -38,6 +38,10 @@ public class CflSecurityHeadersFilter implements Filter {
   private static final String CFL_CONTENT_SECURITY_POLICY =
       "default-src 'self' 'unsafe-inline' 'unsafe-eval'";
 
+  private static final String STRICT_TRANSPORT_SECURITY_HEADER = "Strict-Transport-Security";
+  private static final String STRICT_TRANSPORT_SECURITY_VALUE =
+      "max-age=63072000; includeSubDomains; preload";
+
   @Override
   public void init(FilterConfig filterConfig) {
     // nothing to do
@@ -52,6 +56,9 @@ public class CflSecurityHeadersFilter implements Filter {
       httpServletResponse.addHeader(REFERRER_POLICY_HEADER, REFERRER_STRICT_ORIGIN);
       httpServletResponse.addHeader(PERMISSIONS_POLICY_HEADER, CFL_PERMISSIONS_POLICY);
       httpServletResponse.addHeader(CONTENT_SECURITY_POLICY_HEADER, CFL_CONTENT_SECURITY_POLICY);
+      // Browsers are going to ignore it for HTTP connections
+      httpServletResponse.addHeader(
+          STRICT_TRANSPORT_SECURITY_HEADER, STRICT_TRANSPORT_SECURITY_VALUE);
     }
 
     filterChain.doFilter(servletRequest, servletResponse);
