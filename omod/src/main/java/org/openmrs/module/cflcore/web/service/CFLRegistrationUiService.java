@@ -13,6 +13,7 @@ package org.openmrs.module.cflcore.web.service;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Relationship;
+import org.openmrs.module.registrationcore.RegistrationData;
 import org.springframework.beans.PropertyValues;
 
 import java.util.List;
@@ -29,6 +30,8 @@ import java.util.List;
  * </p>
  */
 public interface CFLRegistrationUiService {
+    RegistrationData preparePatientRegistration(PropertyValues registrationProperties);
+
     Patient createOrUpdatePatient(PropertyValues registrationProperties);
 
     Person createOrUpdatePerson(PropertyValues registrationProperties);
