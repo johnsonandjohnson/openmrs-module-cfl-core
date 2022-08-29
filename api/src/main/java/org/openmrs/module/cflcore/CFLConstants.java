@@ -199,10 +199,14 @@ public final class CFLConstants {
 
   public static final String COMMA_SEPARATOR = ",";
 
-  /** The name of message Template for Welcome Message. */
+  /**
+   * The name of message Template for Welcome Message.
+   */
   public static final String WELCOME_MESSAGE_TEMPLATE = "Welcome Message";
 
-  /** The name of Message Template for general-purpose Ad hoc messages. */
+  /**
+   * The name of Message Template for general-purpose Ad hoc messages.
+   */
   public static final String AD_HOC_MESSAGE_TEMPLATE_NAME = "Ad hoc Message";
 
   public static final String AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY =
@@ -342,5 +346,14 @@ public final class CFLConstants {
 
   public static final String EXTENDED_CONCEPT_SET_DAO_BEAN_NAME = "cfl.extendedConceptSetDAO";
 
-  private CFLConstants() {}
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY = "cfl.creationPatientTemplatesAfterRegistration";
+
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE = "true,SMS";
+
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION =
+      "Determines whether patient templates should be created after patient registration automatically. "
+          + "If yes, channel type needs to be provided. If not, only false value is sufficient. Possible values: true,SMS or true,Call or false";
+
+  private CFLConstants() {
+  }
 }
