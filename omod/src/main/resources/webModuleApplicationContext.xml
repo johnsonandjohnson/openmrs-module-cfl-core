@@ -37,6 +37,8 @@
     </bean>
 
     <bean class="org.openmrs.module.cflcore.web.service.impl.CFLRegistrationUiServiceImpl">
+        <property name="administrationService" ref="adminServiceTarget" />
+        <property name="identifierSourceService" ref="baseIdentifierSourceService" />
         <property name="personService" ref="personService" />
         <property name="conversionService" ref="conversionService" />
         <property name="patientService" ref="patientService" />
