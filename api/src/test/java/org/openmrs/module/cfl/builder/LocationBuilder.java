@@ -11,11 +11,14 @@ public class LocationBuilder extends AbstractBuilder<Location> {
 
     private LocationAttribute locationAttribute;
 
+    private String country;
+
     public LocationBuilder() {
         super();
         id = getInstanceNumber();
         name = "Test name";
         locationAttribute = new LocationAttributeBuilder().build();
+        country = "testCountryName";
     }
 
     @Override
@@ -24,6 +27,7 @@ public class LocationBuilder extends AbstractBuilder<Location> {
         location.setId(id);
         location.setName(name);
         location.setAttribute(locationAttribute);
+        location.setCountry(country);
         return location;
     }
 
@@ -44,6 +48,11 @@ public class LocationBuilder extends AbstractBuilder<Location> {
 
     public LocationBuilder withAttribute(LocationAttribute locationAttribute) {
         this.locationAttribute = locationAttribute;
+        return this;
+    }
+
+    public LocationBuilder withCountry(String country) {
+        this.country = country;
         return this;
     }
 }

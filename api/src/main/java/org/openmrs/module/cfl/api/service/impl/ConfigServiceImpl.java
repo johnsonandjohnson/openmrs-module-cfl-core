@@ -1,14 +1,20 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_KEY;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
 import org.openmrs.module.cfl.api.constant.ConfigConstants;
-import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.cfl.api.contract.countrysettings.CountrySettings;
+import org.openmrs.module.cfl.api.contract.countrysettings.AllCountrySettings;
+import org.openmrs.module.cfl.api.contract.countrysettings.Settings;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.contract.Vaccination;
 import org.openmrs.module.cfl.api.copied.messages.model.RelationshipTypeDirection;
@@ -16,11 +22,6 @@ import org.openmrs.module.cfl.api.service.ConfigService;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 import org.openmrs.module.cfl.api.util.DateUtil;
 import org.openmrs.module.cfl.api.util.GlobalPropertyUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.openmrs.module.cfl.CFLConstants.VACCINATION_PROGRAM_KEY;
 
 public class ConfigServiceImpl implements ConfigService {
 
@@ -73,17 +74,23 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Map<String, CountrySetting> getCountrySettingMap(String globalPropertyName) {
+    public Map<String, Settings> getCountrySettingMap(String globalPropertyName) {
         Gson gson = new Gson();
         String countrySettings = getGp(globalPropertyName);
         JsonArray jsonArray = gson.fromJson(countrySettings, JsonArray.class);
-        Map<String, CountrySetting> countrySettingMap = new HashMap<String, CountrySetting>();
+        Map<String, Settings> countrySettingMap = new HashMap<>();
         for (JsonElement jsonElement : jsonArray) {
             for (Map.Entry<String, JsonElement> en : jsonElement.getAsJsonObject().entrySet()) {
-                countrySettingMap.put(en.getKey(), gson.fromJson(en.getValue().toString(), CountrySetting.class));
+                countrySettingMap.put(en.getKey(), gson.fromJson(en.getValue().toString(), Settings.class));
             }
         }
         return countrySettingMap;
+    }
+
+    @Override
+    public AllCountrySettings getAllCountrySettings() {
+        return new AllCountrySettings(new Gson().fromJson(getGp(CFLConstants.COUNTRY_SETTINGS_MAP_KEY),
+            CountrySettings[].class));
     }
 
     private String getGp(String propertyName) {

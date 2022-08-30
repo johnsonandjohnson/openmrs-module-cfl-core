@@ -10,7 +10,8 @@
 package org.openmrs.module.cfl.api.service;
 
 import org.openmrs.Person;
-import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.cfl.api.contract.countrysettings.AllCountrySettings;
+import org.openmrs.module.cfl.api.contract.countrysettings.Settings;
 import org.openmrs.module.cfl.api.contract.Randomization;
 import org.openmrs.module.cfl.api.strategy.FindPersonFilterStrategy;
 
@@ -55,5 +56,7 @@ public interface ConfigService {
 
     String getDefaultUserTimeZone();
 
-    Map<String, CountrySetting> getCountrySettingMap(String globalPropertyName);
+    Map<String, Settings> getCountrySettingMap(String globalPropertyName);
+
+    AllCountrySettings getAllCountrySettings();
 }

@@ -211,5 +211,7 @@ public final class CFLConstants {
 
     public static final String CFL_DISTRO_BOOTSTRAPPED_KEY = "cfl.distro.bootstrapped";
 
+    public static final String LANGUAGE_ATTRIBUTE_TYPE_NAME = "personLanguage";
+
     private CFLConstants() { }
 }

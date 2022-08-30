@@ -1,12 +1,20 @@
 package org.openmrs.module.cfl.api.service.impl;
 
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
+import static org.openmrs.module.messages.api.event.CallFlowParamConstants.FLOW_NAME;
+
 import com.google.gson.reflect.TypeToken;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cfl.CFLConstants;
-import org.openmrs.module.cfl.api.contract.CountrySetting;
+import org.openmrs.module.cfl.api.contract.countrysettings.Settings;
 import org.openmrs.module.cfl.api.service.WelcomeService;
 import org.openmrs.module.cfl.api.util.CountrySettingUtil;
 import org.openmrs.module.cfl.api.util.PersonUtil;
@@ -17,15 +25,6 @@ import org.openmrs.module.messages.api.event.SmsEventParamConstants;
 import org.openmrs.module.messages.api.service.MessagesEventService;
 import org.openmrs.module.messages.api.service.impl.VelocityNotificationTemplateServiceImpl;
 import org.openmrs.module.messages.api.util.JsonUtil;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.openmrs.module.messages.api.event.CallFlowParamConstants.ADDITIONAL_PARAMS;
-import static org.openmrs.module.messages.api.event.CallFlowParamConstants.CONFIG;
-import static org.openmrs.module.messages.api.event.CallFlowParamConstants.FLOW_NAME;
 
 public class WelcomeServiceImpl implements WelcomeService {
 
@@ -41,29 +40,29 @@ public class WelcomeServiceImpl implements WelcomeService {
 
     @Override
     public void sendWelcomeMessages(Person person) {
-        CountrySetting countrySetting = CountrySettingUtil.getCountrySettingForPatient(person);
+        Settings settings = CountrySettingUtil.getSettingsForPatient(person);
         if (StringUtils.isNotBlank(PersonUtil.getPhoneNumber(person))) {
-            if (countrySetting.isSendSmsOnPatientRegistration()) {
-                sendSms(person, countrySetting.getSms());
+            if (settings.isSendSmsOnPatientRegistration()) {
+                sendSms(person, settings.getSms());
             }
-            if (countrySetting.isPerformCallOnPatientRegistration()) {
-                performCall(person, countrySetting.getCall());
+            if (settings.isPerformCallOnPatientRegistration()) {
+                performCall(person, settings.getCall());
             }
         }
     }
 
     private void sendSms(Person person, String configName) {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(SmsEventParamConstants.RECIPIENTS,
-                new ArrayList<String>(Collections.singletonList(PersonUtil.getPhoneNumber(person))));
+                new ArrayList<>(Collections.singletonList(PersonUtil.getPhoneNumber(person))));
 
-        Map<String, Object> param = new HashMap<String, Object>();
+        Map<String, Object> param = new HashMap<>();
         param.put(PATIENT_PARAM, Context.getPatientService().getPatient(person.getPersonId()));
 
         Map<String, Object> templateMap = JsonUtil.toMap(getParsedTemplate(param), STRING_TO_OBJECT_MAP);
         String message = (String) templateMap.get(SmsEventParamConstants.MESSAGE);
 
-        Map<String, Object> smsServiceParameters = new HashMap<String, Object>();
+        Map<String, Object> smsServiceParameters = new HashMap<>();
         for (Map.Entry<String, Object> entry : templateMap.entrySet()) {
             String key = entry.getKey();
             if (!key.equals(SmsEventParamConstants.MESSAGE)) {
@@ -86,11 +85,11 @@ public class WelcomeServiceImpl implements WelcomeService {
     }
 
     private void performCall(Person person, String configName) {
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put(CONFIG, configName);
         params.put(FLOW_NAME, getCallFlowName());
 
-        Map<String, Object> additionalParams = new HashMap<String, Object>();
+        Map<String, Object> additionalParams = new HashMap<>();
         additionalParams.put(CallFlowParamConstants.ACTOR_TYPE, PATIENT_ACTOR_TYPE);
         additionalParams.put(CallFlowParamConstants.PHONE, PersonUtil.getPhoneNumber(person));
         additionalParams.put(CallFlowParamConstants.ACTOR_ID, person.getPersonId().toString());
