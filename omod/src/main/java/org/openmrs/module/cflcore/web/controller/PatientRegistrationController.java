@@ -56,29 +56,31 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
   @ApiOperation(value = "Patient registration", notes = "Patient registration")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            code = HttpURLConnection.HTTP_OK,
-            message = "On successful registration of Patient"),
-        @ApiResponse(
-            code = HttpURLConnection.HTTP_INTERNAL_ERROR,
-            message = "Failure to register Patient"),
-        @ApiResponse(
-            code = HttpURLConnection.HTTP_BAD_REQUEST,
-            message = "Error in registration of Patient")
+          @ApiResponse(
+              code = HttpURLConnection.HTTP_OK,
+              message = "On successful registration of Patient"),
+          @ApiResponse(
+              code = HttpURLConnection.HTTP_INTERNAL_ERROR,
+              message = "Failure to register Patient"),
+          @ApiResponse(
+              code = HttpURLConnection.HTTP_BAD_REQUEST,
+              message = "Error in registration of Patient")
       })
   @RequestMapping(value = "/patientRegistration", method = RequestMethod.POST)
   @ResponseBody
   public ResponseEntity<String> registerPatient(
       @ApiParam(name = "registrationRequest", value = "Request")
-          final ServletRequest registrationRequest,
+      final ServletRequest registrationRequest,
       @ApiParam(name = "registrationRequestBody", value = "Request body")
-          final @RequestBody SimpleObject registrationRequestBody) {
+      final @RequestBody SimpleObject registrationRequestBody) {
     final PropertyValues registrationProperties =
         new MutablePropertyValues(registrationRequestBody);
 
     final RegistrationData registrationData =
         cflRegistrationUiService.preparePatientRegistration(registrationProperties);
     final Patient registeredPatient = registrationCoreService.registerPatient(registrationData);
+
+    cflRegistrationUiService.createPatientTemplatesIfNeeded(registeredPatient);
 
     flashInfoMessage(registrationRequest, registeredPatient);
 
@@ -96,19 +98,19 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
   @ApiOperation(value = "Update Patient", notes = "Update Patient")
   @ApiResponses(
       value = {
-        @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful updating Patient"),
-        @ApiResponse(
-            code = HttpURLConnection.HTTP_INTERNAL_ERROR,
-            message = "Failure to update Patient"),
-        @ApiResponse(
-            code = HttpURLConnection.HTTP_BAD_REQUEST,
-            message = "Error in updating Patient")
+          @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "On successful updating Patient"),
+          @ApiResponse(
+              code = HttpURLConnection.HTTP_INTERNAL_ERROR,
+              message = "Failure to update Patient"),
+          @ApiResponse(
+              code = HttpURLConnection.HTTP_BAD_REQUEST,
+              message = "Error in updating Patient")
       })
   @RequestMapping(value = "/patientRegistration", method = RequestMethod.PUT)
   @ResponseBody
   public ResponseEntity<String> updatePatient(
       @ApiParam(name = "registrationRequestBody", value = "Request body")
-          final @RequestBody SimpleObject registrationRequestBody) {
+      final @RequestBody SimpleObject registrationRequestBody) {
     final Object patientUuidRaw = registrationRequestBody.get("uuid");
 
     if (!(patientUuidRaw instanceof String)) {

@@ -229,6 +229,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.TELEPHONE_NUMBER_PERSON_ATTRIBUTE_TYPE_UUID);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY,
+        CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE,
+        CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION);
   }
 
   private void createCountrySettings() {
