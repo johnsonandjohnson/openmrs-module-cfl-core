@@ -888,9 +888,6 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "localName" : {
-          "type" : "string"
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
         },
@@ -901,6 +898,12 @@
         "contentType" : {
           "type" : "string"
         },
+        "localName" : {
+          "type" : "string"
+        },
+        "reader" : {
+          "$ref" : "#/definitions/BufferedReader"
+        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -909,9 +912,6 @@
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "reader" : {
-          "$ref" : "#/definitions/BufferedReader"
         },
         "scheme" : {
           "type" : "string"
@@ -1272,9 +1272,6 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "localName" : {
-          "type" : "string"
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
         },
@@ -1285,6 +1282,12 @@
         "contentType" : {
           "type" : "string"
         },
+        "localName" : {
+          "type" : "string"
+        },
+        "reader" : {
+          "$ref" : "#/definitions/BufferedReader"
+        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
@@ -1293,9 +1296,6 @@
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "reader" : {
-          "$ref" : "#/definitions/BufferedReader"
         },
         "scheme" : {
           "type" : "string"

@@ -15,10 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.net.HttpURLConnection;
-import java.util.List;
-import java.util.Optional;
-import javax.servlet.ServletRequest;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PersonAttribute;
@@ -27,14 +23,8 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
-import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.cflcore.web.service.CFLRegistrationUiService;
-import org.openmrs.module.messages.api.constants.MessagesConstants;
-import org.openmrs.module.messages.api.model.PatientTemplate;
-import org.openmrs.module.messages.api.service.DefaultPatientTemplateService;
-import org.openmrs.module.messages.api.service.TemplateFieldValueService;
 import org.openmrs.module.registrationcore.RegistrationData;
 import org.openmrs.module.registrationcore.api.RegistrationCoreService;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -51,13 +41,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+import java.net.HttpURLConnection;
+import java.util.List;
+import java.util.Optional;
+
 @Api(value = "Patient registration", tags = {"REST API for Patient registration"})
 @Controller("cfl.patientRegistrationController")
 public class PatientRegistrationController extends BaseCflModuleRestController {
-
-  private static final Integer SHOULD_CREATE_PATIENT_TEMPLATES_INDEX = 0;
-
-  private static final Integer DEFAULT_PATIENT_TEMPLATES_CHANNEL_TYPE_INDEX = 1;
 
   @Autowired
   private RegistrationCoreService registrationCoreService;
@@ -101,7 +92,7 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
     getLocationFromAttribute(patient).ifPresent(registrationData::setIdentifierLocation);
     final Patient registeredPatient = registrationCoreService.registerPatient(registrationData);
 
-    createPatientTemplatesIfNeeded(patient);
+    cflRegistrationUiService.createPatientTemplatesIfNeeded(patient);
 
     flashInfoMessage(registrationRequest, patient);
 
@@ -156,23 +147,4 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
     return new ResponseEntity<>(patientToUpdate.getUuid(), HttpStatus.OK);
   }
 
-  private void createPatientTemplatesIfNeeded(Patient patient) {
-    String gp = GlobalPropertyUtils.getGlobalProperty(
-        CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY);
-    String[] gpValues = gp.split(",");
-    if (Boolean.parseBoolean(gpValues[SHOULD_CREATE_PATIENT_TEMPLATES_INDEX])) {
-      List<PatientTemplate> patientTemplates = getDefaultPatientTemplateService().generateDefaultPatientTemplates(
-          patient);
-      patientTemplates.forEach(patientTemplate -> Context.getService(
-              TemplateFieldValueService.class)
-          .updateTemplateFieldValue(patientTemplate.getId(),
-              MessagesConstants.CHANNEL_TYPE_PARAM_NAME,
-              gpValues[DEFAULT_PATIENT_TEMPLATES_CHANNEL_TYPE_INDEX]));
-    }
-  }
-
-  private DefaultPatientTemplateService getDefaultPatientTemplateService() {
-    return Context.getRegisteredComponent("messages.defaultPatientTemplateService",
-        DefaultPatientTemplateService.class);
-  }
 }

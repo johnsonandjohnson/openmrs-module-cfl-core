@@ -348,11 +348,11 @@ public final class CFLConstants {
 
   public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY = "cfl.creationPatientTemplatesAfterRegistration";
 
-  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE = "true,SMS";
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE = "SMS";
 
   public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION =
       "Determines whether patient templates should be created after patient registration automatically. "
-          + "If yes, channel type needs to be provided. If not, only false value is sufficient. Possible values: true,SMS or true,Call or false";
+          + "If yes, channel type needs to be provided. If not, empty or false value is sufficient. Possible values: SMS or Call or false or empty value";
 
   private CFLConstants() {
   }
