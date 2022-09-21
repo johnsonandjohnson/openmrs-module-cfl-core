@@ -36,7 +36,7 @@ public class CflSecurityHeadersFilter implements Filter {
    * use 'unsafe-eval', because knockout.js library is used in FE code.
    */
   private static final String CFL_CONTENT_SECURITY_POLICY =
-      "default-src 'self' 'unsafe-inline' 'unsafe-eval'";
+      "default-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src data: 'self'; img-src data: 'self'";
 
   private static final String STRICT_TRANSPORT_SECURITY_HEADER = "Strict-Transport-Security";
   private static final String STRICT_TRANSPORT_SECURITY_VALUE =
