@@ -174,6 +174,10 @@ public final class VisitUtil {
     }
 
     private static void setRequiredVisitAttributes(Visit visit, VisitInformation visitInformation) {
+        if(StringUtils.isNotBlank(visitInformation.getVisitTime())) {
+            visit.setAttribute(createAttribute(CFLConstants.VISIT_TIME_ATTRIBUTE_TYPE_NAME, visitInformation.getVisitTime()));
+        }
+
         visit.setAttribute(
                 createAttribute(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME, CFLConstants.SCHEDULED_VISIT_STATUS));
 
