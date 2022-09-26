@@ -167,6 +167,7 @@ public final class CFLConstants {
   public static final String VISIT_STATUS_ATTRIBUTE_TYPE_UUID =
       "70ca70ac-53fd-49e4-9abe-663d4785fe62";
   public static final String VISIT_STATUS_ATTRIBUTE_TYPE_NAME = "Visit Status";
+  public static final String VISIT_TIME_ATTRIBUTE_TYPE_NAME = "Visit Time";
   public static final String SCHEDULED_VISIT_STATUS = "SCHEDULED";
 
   public static final String CFL_CONFIG_SERVICE_BEAN_NAME = "cfl.configService";
