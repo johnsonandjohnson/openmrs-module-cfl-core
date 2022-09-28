@@ -32,6 +32,15 @@ public final class PersonUtil {
     }
   }
 
+  public static Optional<Location> getPersonLocation(Person person) {
+    Optional<Location> location = getLocationFromAttribute(person);
+    if (location.isPresent()) {
+      return location;
+    } else {
+      return Optional.ofNullable(LocationUtil.getCurrentlyLoggedInUserLocation());
+    }
+  }
+
   public static Optional<Location> getLocationFromAttribute(Person person) {
     final String locationAttributeName =
         Context.getAdministrationService()

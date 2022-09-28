@@ -790,25 +790,7 @@
         "authType" : {
           "type" : "string"
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
-        "pathInfo" : {
-          "type" : "string"
-        },
-        "pathTranslated" : {
-          "type" : "string"
-        },
-        "remoteUser" : {
-          "type" : "string"
-        },
         "requestedSessionId" : {
-          "type" : "string"
-        },
-        "requestURI" : {
           "type" : "string"
         },
         "requestURL" : {
@@ -833,8 +815,26 @@
           "type" : "boolean",
           "default" : false
         },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
+        },
         "headerNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
+        "remoteUser" : {
+          "type" : "string"
+        },
+        "requestURI" : {
+          "type" : "string"
         },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
@@ -851,15 +851,8 @@
         "method" : {
           "type" : "string"
         },
-        "remoteAddr" : {
-          "type" : "string"
-        },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "remotePort" : {
           "type" : "integer",
@@ -885,8 +878,15 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
+        "remoteAddr" : {
+          "type" : "string"
+        },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
@@ -938,18 +938,18 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "valueNames" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
         "new" : {
           "type" : "boolean",
           "default" : false
+        },
+        "valueNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
         },
         "creationTime" : {
           "type" : "integer",
@@ -1064,14 +1064,14 @@
             "type" : "object"
           }
         },
+        "viewName" : {
+          "type" : "string"
+        },
         "modelMap" : {
           "type" : "object",
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "viewName" : {
-          "type" : "string"
         },
         "reference" : {
           "type" : "boolean",
@@ -1235,15 +1235,8 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "remoteAddr" : {
-          "type" : "string"
-        },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "remotePort" : {
           "type" : "integer",
@@ -1269,8 +1262,15 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
+        "remoteAddr" : {
+          "type" : "string"
+        },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"

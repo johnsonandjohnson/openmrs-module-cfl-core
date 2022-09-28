@@ -44,6 +44,7 @@ import org.openmrs.module.cflcore.api.dto.RelationshipDTO;
 import org.openmrs.module.cflcore.api.registration.person.action.AfterPersonCreatedAction;
 import org.openmrs.module.cflcore.api.service.RelationshipService;
 import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
+import org.openmrs.module.cflcore.api.util.LocationUtil;
 import org.openmrs.module.cflcore.api.util.PersonUtil;
 import org.openmrs.module.cflcore.web.dto.CFLRegistrationRelationshipDTO;
 import org.openmrs.module.cflcore.web.service.CFLRegistrationUiService;
@@ -96,7 +97,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     final RegistrationData registrationData = new RegistrationData();
     registrationData.setPatient(patient);
     registrationData.setRelationships(patientRelationships);
-    PersonUtil.getLocationFromAttribute(patient).ifPresent(registrationData::setIdentifierLocation);
+    PersonUtil.getPersonLocation(patient).ifPresent(registrationData::setIdentifierLocation);
     getRegistrationIdentifier(patient)
         .map(PatientIdentifier::getIdentifier)
         .ifPresent(registrationData::setIdentifier);
@@ -116,6 +117,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     addPersonAddress(patient, registrationProperties);
     addPersonAttributes(patient, registrationProperties);
     addPatientIdentifiers(patient, registrationProperties);
+    addPatientLocationIfNotProvided(patient, registrationProperties);
     return patient;
   }
 
@@ -205,8 +207,24 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
         MessagesConstants.CHANNEL_TYPE_PARAM_NAME, gp));
   }
 
+  private void addPatientLocationIfNotProvided(Patient patient,
+      PropertyValues registrationProperties) {
+    final String locationAttributeName = Context.getAdministrationService()
+        .getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY);
+    if (!registrationProperties.contains(locationAttributeName)) {
+      PersonAttributeType locationAttributeType = personService.getPersonAttributeTypeByName(
+          locationAttributeName);
+      String currentUserLocationUuid = LocationUtil.getCurrentlyLoggedInUserLocation().getUuid();
+
+      final PersonAttribute locationAttribute = new PersonAttribute();
+      locationAttribute.setAttributeType(locationAttributeType);
+      locationAttribute.setValue(currentUserLocationUuid);
+      patient.addAttribute(locationAttribute);
+    }
+  }
+
   private boolean isPatientTemplatesShouldNotBeCreated(String gpKey) {
-    return StringUtils.isBlank(gpKey) || Boolean.parseBoolean(gpKey);
+    return StringUtils.isBlank(gpKey) || !Boolean.parseBoolean(gpKey);
   }
 
   private DefaultPatientTemplateService getDefaultPatientTemplateService() {
@@ -393,7 +411,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     final PatientIdentifier newIdentifier = new PatientIdentifier();
     newIdentifier.setIdentifier(identifierValue);
     newIdentifier.setIdentifierType(patientIdentifierType);
-    PersonUtil.getLocationFromAttribute(patient).ifPresent(newIdentifier::setLocation);
+    PersonUtil.getPersonLocation(patient).ifPresent(newIdentifier::setLocation);
 
     final PatientIdentifier currentPatientIdentifier =
         patient.getPatientIdentifier(patientIdentifierType);
