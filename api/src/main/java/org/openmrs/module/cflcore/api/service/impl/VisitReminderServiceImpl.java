@@ -55,6 +55,10 @@ public class VisitReminderServiceImpl implements VisitReminderService {
     private void saveBestContactTimeForPatient(String patientUuid) {
         Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
 
+        if (isPatientAlreadyHasBestContactTime(patient)) {
+            return;
+        }
+
         if (patient != null && patient.getPatientIdentifier() != null) {
             Location patientLocation = patient.getPatientIdentifier().getLocation();
             if (patientLocation != null) {
@@ -70,6 +74,10 @@ public class VisitReminderServiceImpl implements VisitReminderService {
         }
     }
 
+    private boolean isPatientAlreadyHasBestContactTime(Patient patient) {
+        String patientBestContactTime = BestContactTimeHelper.getBestContactTime(patient, null);
+        return StringUtils.isNotBlank(patientBestContactTime);
+    }
     private String getBestContactTimeInProperFormat(String timeZone, Person person) {
         String defaultBestContactTime = BestContactTimeHelper.getBestContactTime(person, null);
         String[] splittedDefaultBestContactTime = defaultBestContactTime.split(HOUR_MINUTES_SEPARATOR);
