@@ -33,6 +33,12 @@ public final class CfldistributionGlobalParameterConstants {
 
     public static final String REGISTRATIONCORE_IDENTIFIER_SOURCE_ID_KEY = "registrationcore.identifierSourceId";
 
+    public static final String CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_KEY = "cfl.showStackTraceInErrorPage";
+    public static final String CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DESCRIPTION = "[true,false] whether the error pages " +
+        "should show exception stack traces. For security reasons, stack traces on error pages should be hidden in " +
+        "productive environments. Default: false";
+    public static final String CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DEFAULT_VALUE = "false";
+
     private CfldistributionGlobalParameterConstants() {
 
     }
