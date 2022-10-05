@@ -11,12 +11,12 @@
 package org.openmrs.module.cfl.api.activator.impl;
 
 import org.apache.commons.logging.Log;
-import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cfl.CfldistributionGlobalParameterConstants;
 import org.openmrs.module.cfl.api.activator.ModuleActivatorStep;
+import org.openmrs.module.cflcore.CFLConstants;
 
-import static org.openmrs.module.cflcore.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
 import static org.openmrs.module.cfl.api.activator.impl.ModuleActivatorStepOrderEnum.CREATE_GLOBAL_PARAMETERS_ACTIVATOR_STEP;
+import static org.openmrs.module.cflcore.api.util.GlobalPropertyUtils.createGlobalSettingIfNotExists;
 
 /**
  * The bean defined in moduleApplicationContext.xml because OpenMRS performance issues with
@@ -41,5 +41,9 @@ public class CreateGlobalParametersActivatorStep implements ModuleActivatorStep 
     createGlobalSettingIfNotExists(
         CFLConstants.LOCATION_ATTRIBUTE_GLOBAL_PROPERTY_NAME,
         CfldistributionGlobalParameterConstants.CFL_LOCATION_ATTRIBUTE_TYPE_UUID);
+    createGlobalSettingIfNotExists(
+        CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_KEY,
+        CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DEFAULT_VALUE,
+        CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DESCRIPTION);
   }
 }
