@@ -64,5 +64,5 @@
         <property name="order" value="100" />
     </bean>
 
-    <bean class="org.openmrs.module.cfl.web.CopyUncaughtExceptionToWebInf" />
+    <bean class="org.openmrs.module.cfl.web.CfLServletConfiguration" />
 </beans>
