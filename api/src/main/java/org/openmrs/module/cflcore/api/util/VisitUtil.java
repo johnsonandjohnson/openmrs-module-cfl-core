@@ -104,19 +104,28 @@ public final class VisitUtil {
 
     VisitInformation previousVaccinationVisit = null;
     for (VisitInformation vaccinationVisit : vaccinationVisits) {
-      if (previousVaccinationVisit != null
-          && previousVaccinationVisit.getDoseNumber() != vaccinationVisit.getDoseNumber()) {
+      if (isNextVaccinationVisitDosing(vaccinationVisit, previousVaccinationVisit)) {
         vaccinationDosingVisits.add(previousVaccinationVisit);
       }
 
       previousVaccinationVisit = vaccinationVisit;
     }
 
-    if (previousVaccinationVisit != null && previousVaccinationVisit.getDoseNumber() > 0) {
+    if (isFirstVaccinationVisitDosing(previousVaccinationVisit)) {
       vaccinationDosingVisits.add(previousVaccinationVisit);
     }
 
     return vaccinationDosingVisits;
+  }
+
+  private static boolean isNextVaccinationVisitDosing(
+      VisitInformation vaccinationVisit, VisitInformation nextVaccinationVisit) {
+    return nextVaccinationVisit != null
+        && nextVaccinationVisit.getDoseNumber() != vaccinationVisit.getDoseNumber();
+  }
+
+  private static boolean isFirstVaccinationVisitDosing(VisitInformation firstVaccinationVisit) {
+    return firstVaccinationVisit != null && firstVaccinationVisit.getDoseNumber() > 0;
   }
 
   private static int getVisitDoseNumber(Visit visit) {
