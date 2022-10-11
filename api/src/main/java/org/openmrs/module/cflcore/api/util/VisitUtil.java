@@ -17,12 +17,16 @@ import org.openmrs.VisitAttribute;
 import org.openmrs.VisitAttributeType;
 import org.openmrs.VisitType;
 import org.openmrs.api.context.Context;
+import org.openmrs.attribute.BaseAttribute;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.contract.Randomization;
 import org.openmrs.module.cflcore.api.contract.Vaccination;
 import org.openmrs.module.cflcore.api.contract.VisitInformation;
 import org.openmrs.module.cflcore.api.service.ConfigService;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -65,23 +69,75 @@ public final class VisitUtil {
   }
 
   public static Visit getLastDosingVisit(Patient patient, Vaccination vaccination) {
-    List<Visit> allPatientVisits = Context.getVisitService().getVisitsByPatient(patient);
+    final List<Visit> patientVisits = getPatientVisitsInReversedStartDateOrder(patient);
+    final List<VisitInformation> vaccinationDosingVisits =
+        getVaccinationVisitsInReversedOrder(vaccination);
 
-    String followUpTypeName = "";
-    Visit lastVisit = null;
-    for (VisitInformation vi : vaccination.getVisits()) {
-      if (isFollowUpVisit(vi)) {
-        followUpTypeName = vi.getNameOfDose();
-      }
-      for (Visit visit : allPatientVisits) {
-        if (StringUtils.equalsIgnoreCase(vi.getNameOfDose(), visit.getVisitType().getName())
-            && !StringUtils.equalsIgnoreCase(visit.getVisitType().getName(), followUpTypeName)) {
-          lastVisit = visit;
-          break;
+    for (Visit patientVisit : patientVisits) {
+      for (VisitInformation vaccinationDosingVisit : vaccinationDosingVisits) {
+        if (StringUtils.equalsIgnoreCase(
+                vaccinationDosingVisit.getNameOfDose(), patientVisit.getVisitType().getName())
+            && vaccinationDosingVisit.getDoseNumber() == getVisitDoseNumber(patientVisit)) {
+          return patientVisit;
         }
       }
     }
-    return lastVisit;
+
+    // If not found, assume the last patient visit is the last dosing visit
+    return patientVisits.get(0);
+  }
+
+  private static List<Visit> getPatientVisitsInReversedStartDateOrder(Patient patient) {
+    final List<Visit> allPatientVisits =
+        new ArrayList<>(Context.getVisitService().getVisitsByPatient(patient));
+    allPatientVisits.sort(Comparator.comparing(Visit::getStartDatetime).reversed());
+    return allPatientVisits;
+  }
+
+  private static List<VisitInformation> getVaccinationVisitsInReversedOrder(
+      Vaccination vaccination) {
+    final List<VisitInformation> vaccinationVisits = new ArrayList<>(vaccination.getVisits());
+    Collections.reverse(vaccinationVisits);
+
+    final List<VisitInformation> vaccinationDosingVisits =
+        new ArrayList<>(vaccinationVisits.size());
+
+    VisitInformation previousVaccinationVisit = null;
+    for (VisitInformation vaccinationVisit : vaccinationVisits) {
+      if (isNextVaccinationVisitDosing(vaccinationVisit, previousVaccinationVisit)) {
+        vaccinationDosingVisits.add(previousVaccinationVisit);
+      }
+
+      previousVaccinationVisit = vaccinationVisit;
+    }
+
+    if (isFirstVaccinationVisitDosing(previousVaccinationVisit)) {
+      vaccinationDosingVisits.add(previousVaccinationVisit);
+    }
+
+    return vaccinationDosingVisits;
+  }
+
+  private static boolean isNextVaccinationVisitDosing(
+      VisitInformation vaccinationVisit, VisitInformation nextVaccinationVisit) {
+    return nextVaccinationVisit != null
+        && nextVaccinationVisit.getDoseNumber() != vaccinationVisit.getDoseNumber();
+  }
+
+  private static boolean isFirstVaccinationVisitDosing(VisitInformation firstVaccinationVisit) {
+    return firstVaccinationVisit != null && firstVaccinationVisit.getDoseNumber() > 0;
+  }
+
+  private static int getVisitDoseNumber(Visit visit) {
+    return visit.getActiveAttributes().stream()
+        .filter(
+            visitAttribute ->
+                CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME.equals(
+                    visitAttribute.getAttributeType().getName()))
+        .findFirst()
+        .map(BaseAttribute::getValueReference)
+        .map(Integer::parseInt)
+        .orElse(0);
   }
 
   public static Visit getLastOccurredDosingVisit(List<Visit> visits) {
@@ -162,14 +218,10 @@ public final class VisitUtil {
         && numberOfDoses == visitInformation.getDoseNumber();
   }
 
-  private static boolean isFollowUpVisit(VisitInformation visitInformation) {
-    return visitInformation.getNumberOfFutureVisit() == 0;
-  }
-
   private static VisitAttributeType getVisitAttributeTypeByName(String name) {
     for (VisitAttributeType visitAttributeType :
         Context.getVisitService().getAllVisitAttributeTypes()) {
-      if (visitAttributeType.getName().toLowerCase().equals(name.toLowerCase())) {
+      if (visitAttributeType.getName().equalsIgnoreCase(name)) {
         return visitAttributeType;
       }
     }
