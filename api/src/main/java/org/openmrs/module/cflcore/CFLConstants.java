@@ -355,6 +355,10 @@ public final class CFLConstants {
       "Determines whether patient templates should be created after patient registration automatically. "
           + "If yes, channel type needs to be provided. If not, empty or false value is sufficient. Possible values: SMS or Call or false or empty value";
 
+  public static final String PERSON_STATUS_ATTRIBUTE_TYPE_NAME = "Person status";
+
+  public static final String OPENMRS_ID_PATIENT_IDENTIFIER_TYPE_NAME = "OpenMRS ID";
+
   private CFLConstants() {
   }
 }
