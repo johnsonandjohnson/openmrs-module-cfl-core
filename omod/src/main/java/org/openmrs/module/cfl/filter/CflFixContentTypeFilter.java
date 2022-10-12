@@ -30,7 +30,7 @@ public class CflFixContentTypeFilter implements Filter {
   private static final Map<String, String[]> CONTENT_TYPES_OVERRIDES;
 
   private static final String JAVASCRIPT_CONTENT_TYPE = "text/javascript;charset=UTF-8";
-  private static final String[] JAVASCRIPT_RESOURCES = {"openmrsmessages.js", "drugOrder.js"};
+  private static final String[] JAVASCRIPT_RESOURCES = {"openmrsmessages.js", "drugOrder.js", "dwr/interface/"};
 
   private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
   private static final String[] JSON_RESOURCES = {"uicommons/messages/get.action"};
