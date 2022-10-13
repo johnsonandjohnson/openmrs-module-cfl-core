@@ -1,3 +1,13 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
 package org.openmrs.module.cflcore.web.controller;
 
 import io.swagger.annotations.Api;
@@ -6,7 +16,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.net.HttpURLConnection;
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
+import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.dto.PatientFlagsOverviewDTO;
 import org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService;
@@ -32,7 +43,7 @@ public class PatientFlagsOverviewController {
   })
   @RequestMapping(value = "/{locationUuid}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<PatientFlagsOverviewDTO>> getPatientsByCriteria(
+  public ResponseEntity<PatientFlagsOverviewDTO> getPatientsByCriteria(
       @ApiParam(name = "locationUuid", value = "locationUuid") @PathVariable("locationUuid") String locationUuid,
       @ApiParam(name = "flagName", value = "flagName") @RequestParam(required = false) String flagName,
       @ApiParam(name = "patientIdentifier", value = "patientIdentifier") @RequestParam(required = false) String patientIdentifier,
@@ -42,11 +53,17 @@ public class PatientFlagsOverviewController {
       @ApiParam(name = "pageNumber", value = "pageNumber") @RequestParam(required = false) Integer pageNumber,
       @ApiParam(name = "pageSize", value = "pageSize") @RequestParam(required = false) Integer pageSize) {
 
+    Location location = Context.getLocationService().getLocationByUuid(locationUuid);
+    if (location == null) {
+      throw new EntityNotFoundException(
+          String.format("Location with uuid: %s does not exist", locationUuid));
+    }
+
     PatientFlagsOverviewCriteria criteria = getFlagsOverviewCriteria(locationUuid, flagName,
         patientIdentifier,
         patientName, phoneNumber, patientStatus);
 
-    List<PatientFlagsOverviewDTO> result = Context.getService(PatientFlagsOverviewService.class)
+    PatientFlagsOverviewDTO result = Context.getService(PatientFlagsOverviewService.class)
         .getPatientsWithFlag(criteria, pageNumber, pageSize);
 
     return new ResponseEntity<>(result, HttpStatus.OK);

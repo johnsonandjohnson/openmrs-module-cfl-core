@@ -8,12 +8,12 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-package org.openmrs.module.cflcore.api.service;
+package org.openmrs.module.cflcore.db;
 
 import org.openmrs.module.cflcore.api.dto.PatientFlagsOverviewDTO;
 import org.openmrs.module.cflcore.domain.criteria.PatientFlagsOverviewCriteria;
 
-public interface PatientFlagsOverviewService {
+public interface PatientFlagsOverviewDAO {
 
   /**
    * Gets paginated results with flagged patients with specific criteria.

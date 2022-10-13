@@ -231,7 +231,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Patients have been successfully fetched"
+            "description" : "Patients have been successfully fetched",
+            "schema" : {
+              "$ref" : "#/definitions/PatientFlagsOverviewDTO"
+            }
           },
           "500" : {
             "description" : "Failed to fetch patients"
@@ -853,6 +856,26 @@
     "Enumeration" : {
       "type" : "object"
     },
+    "FlaggedPatientDTO" : {
+      "type" : "object",
+      "properties" : {
+        "patientIdentifier" : {
+          "type" : "string"
+        },
+        "patientName" : {
+          "type" : "string"
+        },
+        "phoneNumber" : {
+          "type" : "string"
+        },
+        "patientStatus" : {
+          "type" : "string"
+        },
+        "patientUuid" : {
+          "type" : "string"
+        }
+      }
+    },
     "HttpServletRequest" : {
       "type" : "object",
       "properties" : {
@@ -864,9 +887,6 @@
           "items" : {
             "$ref" : "#/definitions/Cookie"
           }
-        },
-        "headerNames" : {
-          "$ref" : "#/definitions/Enumeration"
         },
         "pathInfo" : {
           "type" : "string"
@@ -905,6 +925,9 @@
           "type" : "boolean",
           "default" : false
         },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
         },
@@ -920,15 +943,8 @@
         "method" : {
           "type" : "string"
         },
-        "serverName" : {
-          "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteAddr" : {
-          "type" : "string"
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "remoteHost" : {
           "type" : "string"
@@ -954,20 +970,27 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
-          "type" : "string"
-        },
-        "localName" : {
           "type" : "string"
         },
         "attributeNames" : {
@@ -996,6 +1019,13 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "maxInactiveInterval" : {
           "type" : "integer",
           "format" : "int32"
@@ -1012,13 +1042,6 @@
         "new" : {
           "type" : "boolean",
           "default" : false
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
         },
         "creationTime" : {
           "type" : "integer",
@@ -1133,14 +1156,14 @@
             "type" : "object"
           }
         },
+        "viewName" : {
+          "type" : "string"
+        },
         "modelMap" : {
           "type" : "object",
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "viewName" : {
-          "type" : "string"
         },
         "reference" : {
           "type" : "boolean",
@@ -1205,6 +1228,21 @@
         "page" : {
           "type" : "integer",
           "format" : "int32"
+        }
+      }
+    },
+    "PatientFlagsOverviewDTO" : {
+      "type" : "object",
+      "properties" : {
+        "flaggedPatients" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FlaggedPatientDTO"
+          }
+        },
+        "totalCount" : {
+          "type" : "integer",
+          "format" : "int64"
         }
       }
     },
@@ -1304,15 +1342,8 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "serverName" : {
-          "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteAddr" : {
-          "type" : "string"
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "remoteHost" : {
           "type" : "string"
@@ -1338,20 +1369,27 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
-          "type" : "string"
-        },
-        "localName" : {
           "type" : "string"
         },
         "attributeNames" : {
