@@ -15,6 +15,8 @@
   }, {
     "name" : "REST API for ad hoc message"
   }, {
+    "name" : "REST API for operations related to flagged patients"
+  }, {
     "name" : "REST API to Monitor CFL"
   }, {
     "name" : "REST API to get Person data"
@@ -166,6 +168,76 @@
           },
           "500" : {
             "description" : "Failure to upload file"
+          }
+        }
+      }
+    },
+    "/cfl/patientFlags/{locationUuid}" : {
+      "get" : {
+        "tags" : [ "REST API for operations related to flagged patients" ],
+        "summary" : "None",
+        "description" : "Gets patients by specific criteria",
+        "operationId" : "getPatientsByCriteria",
+        "parameters" : [ {
+          "name" : "locationUuid",
+          "in" : "path",
+          "description" : "locationUuid",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "flagName",
+          "in" : "query",
+          "description" : "flagName",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "patientIdentifier",
+          "in" : "query",
+          "description" : "patientIdentifier",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "patientName",
+          "in" : "query",
+          "description" : "patientName",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "phoneNumber",
+          "in" : "query",
+          "description" : "phoneNumber",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "patientStatus",
+          "in" : "query",
+          "description" : "patientStatus",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "pageNumber",
+          "in" : "query",
+          "description" : "pageNumber",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "pageSize",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Patients have been successfully fetched",
+            "schema" : {
+              "$ref" : "#/definitions/PatientFlagsOverviewDTO"
+            }
+          },
+          "500" : {
+            "description" : "Failed to fetch patients"
           }
         }
       }
@@ -784,13 +856,51 @@
     "Enumeration" : {
       "type" : "object"
     },
+    "FlaggedPatientDTO" : {
+      "type" : "object",
+      "properties" : {
+        "patientIdentifier" : {
+          "type" : "string"
+        },
+        "patientName" : {
+          "type" : "string"
+        },
+        "phoneNumber" : {
+          "type" : "string"
+        },
+        "patientStatus" : {
+          "type" : "string"
+        },
+        "patientUuid" : {
+          "type" : "string"
+        }
+      }
+    },
     "HttpServletRequest" : {
       "type" : "object",
       "properties" : {
         "authType" : {
           "type" : "string"
         },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
+        "remoteUser" : {
+          "type" : "string"
+        },
         "requestedSessionId" : {
+          "type" : "string"
+        },
+        "requestURI" : {
           "type" : "string"
         },
         "requestURL" : {
@@ -815,26 +925,8 @@
           "type" : "boolean",
           "default" : false
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
         "headerNames" : {
           "$ref" : "#/definitions/Enumeration"
-        },
-        "pathInfo" : {
-          "type" : "string"
-        },
-        "pathTranslated" : {
-          "type" : "string"
-        },
-        "remoteUser" : {
-          "type" : "string"
-        },
-        "requestURI" : {
-          "type" : "string"
         },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
@@ -853,6 +945,13 @@
         },
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         },
         "remotePort" : {
           "type" : "integer",
@@ -881,24 +980,17 @@
         "remoteAddr" : {
           "type" : "string"
         },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
-          "type" : "string"
-        },
-        "localName" : {
           "type" : "string"
         },
         "attributeNames" : {
@@ -927,12 +1019,12 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
         "lastAccessedTime" : {
           "type" : "integer",
           "format" : "int64"
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
         },
         "maxInactiveInterval" : {
           "type" : "integer",
@@ -941,15 +1033,15 @@
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
-        "new" : {
-          "type" : "boolean",
-          "default" : false
-        },
         "valueNames" : {
           "type" : "array",
           "items" : {
             "type" : "string"
           }
+        },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
         },
         "creationTime" : {
           "type" : "integer",
@@ -1139,6 +1231,21 @@
         }
       }
     },
+    "PatientFlagsOverviewDTO" : {
+      "type" : "object",
+      "properties" : {
+        "flaggedPatients" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FlaggedPatientDTO"
+          }
+        },
+        "totalCount" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
     "PersonDTO" : {
       "type" : "object",
       "properties" : {
@@ -1238,6 +1345,13 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "remoteHost" : {
+          "type" : "string"
+        },
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
+        },
         "remotePort" : {
           "type" : "integer",
           "format" : "int32"
@@ -1265,24 +1379,17 @@
         "remoteAddr" : {
           "type" : "string"
         },
-        "remoteHost" : {
-          "type" : "string"
-        },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
         },
         "contentType" : {
-          "type" : "string"
-        },
-        "localName" : {
           "type" : "string"
         },
         "attributeNames" : {

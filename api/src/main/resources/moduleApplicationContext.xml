@@ -304,4 +304,22 @@
 
     <bean id="cfl.treatmentsContentProvider"
           class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentDataContentProvider"/>
+
+    <bean id="cfl.patientFlagsOverviewDAO" class="org.openmrs.module.cflcore.db.impl.PatientFlagsOverviewDAOImpl">
+        <property name="dbSessionFactory" ref="dbSessionFactory"/>
+    </bean>
+
+    <bean id="cfl.patientFlagsOverviewService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientFlagsOverviewServiceImpl">
+        <property name="patientFlagsOverviewDAO" ref="cfl.patientFlagsOverviewDAO" />
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService</value>
+                <ref local="cfl.patientFlagsOverviewService"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>

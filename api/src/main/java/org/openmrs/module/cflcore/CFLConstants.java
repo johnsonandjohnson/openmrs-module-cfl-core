@@ -355,6 +355,16 @@ public final class CFLConstants {
       "Determines whether patient templates should be created after patient registration automatically. "
           + "If yes, channel type needs to be provided. If not, empty or false value is sufficient. Possible values: SMS or Call or false or empty value";
 
+  public static final String PERSON_STATUS_ATTRIBUTE_TYPE_NAME = "Person status";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY = "cfl.patientFlagsOverviewIdentifierForSearch";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE = "OpenMRS ID";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DESCRIPTION =
+      "Patient identifier type by which searching "
+          + "for patients on flags overview page can be performed";
+
   private CFLConstants() {
   }
 }
