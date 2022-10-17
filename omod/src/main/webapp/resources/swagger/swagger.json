@@ -191,21 +191,9 @@
           "required" : false,
           "type" : "string"
         }, {
-          "name" : "patientIdentifier",
+          "name" : "query",
           "in" : "query",
-          "description" : "patientIdentifier",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "name" : "patientName",
-          "in" : "query",
-          "description" : "patientName",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "name" : "phoneNumber",
-          "in" : "query",
-          "description" : "phoneNumber",
+          "description" : "query",
           "required" : false,
           "type" : "string"
         }, {
@@ -888,6 +876,9 @@
             "$ref" : "#/definitions/Cookie"
           }
         },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "pathInfo" : {
           "type" : "string"
         },
@@ -925,9 +916,6 @@
           "type" : "boolean",
           "default" : false
         },
-        "headerNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
         },
@@ -945,6 +933,16 @@
         },
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
         },
         "remoteHost" : {
           "type" : "string"
@@ -970,21 +968,8 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "serverName" : {
-          "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteAddr" : {
-          "type" : "string"
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
-          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
@@ -1001,6 +986,9 @@
           "additionalProperties" : {
             "type" : "object"
           }
+        },
+        "localName" : {
+          "type" : "string"
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
@@ -1019,13 +1007,6 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "maxInactiveInterval" : {
           "type" : "integer",
           "format" : "int32"
@@ -1042,6 +1023,13 @@
         "new" : {
           "type" : "boolean",
           "default" : false
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
         },
         "creationTime" : {
           "type" : "integer",
@@ -1345,6 +1333,16 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "remoteAddr" : {
+          "type" : "string"
+        },
         "remoteHost" : {
           "type" : "string"
         },
@@ -1369,21 +1367,8 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "serverName" : {
-          "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "remoteAddr" : {
-          "type" : "string"
-        },
         "locale" : {
           "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
-          "type" : "string"
         },
         "contentLength" : {
           "type" : "integer",
@@ -1400,6 +1385,9 @@
           "additionalProperties" : {
             "type" : "object"
           }
+        },
+        "localName" : {
+          "type" : "string"
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"

@@ -6,25 +6,18 @@ public class PatientFlagsOverviewCriteria {
 
   private String flagName;
 
-  private String patientIdentifier;
-
-  private String patientName;
-
-  private String phoneNumber;
+  private String query;
 
   private String patientStatus;
 
   public PatientFlagsOverviewCriteria() {
   }
 
-  public PatientFlagsOverviewCriteria(String locationUuid, String flagName,
-      String patientIdentifier,
-      String patientName, String phoneNumber, String patientStatus) {
+  public PatientFlagsOverviewCriteria(String locationUuid, String flagName, String query,
+      String patientStatus) {
     this.locationUuid = locationUuid;
     this.flagName = flagName;
-    this.patientIdentifier = patientIdentifier;
-    this.patientName = patientName;
-    this.phoneNumber = phoneNumber;
+    this.query = query;
     this.patientStatus = patientStatus;
   }
 
@@ -44,28 +37,12 @@ public class PatientFlagsOverviewCriteria {
     this.flagName = flagName;
   }
 
-  public String getPatientIdentifier() {
-    return patientIdentifier;
+  public String getQuery() {
+    return query;
   }
 
-  public void setPatientIdentifier(String patientIdentifier) {
-    this.patientIdentifier = patientIdentifier;
-  }
-
-  public String getPatientName() {
-    return patientName;
-  }
-
-  public void setPatientName(String patientName) {
-    this.patientName = patientName;
-  }
-
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public void setQuery(String query) {
+    this.query = query;
   }
 
   public String getPatientStatus() {

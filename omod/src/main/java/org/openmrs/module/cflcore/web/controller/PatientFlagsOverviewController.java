@@ -46,9 +46,7 @@ public class PatientFlagsOverviewController {
   public ResponseEntity<PatientFlagsOverviewDTO> getPatientsByCriteria(
       @ApiParam(name = "locationUuid", value = "locationUuid") @PathVariable("locationUuid") String locationUuid,
       @ApiParam(name = "flagName", value = "flagName") @RequestParam(required = false) String flagName,
-      @ApiParam(name = "patientIdentifier", value = "patientIdentifier") @RequestParam(required = false) String patientIdentifier,
-      @ApiParam(name = "patientName", value = "patientName") @RequestParam(required = false) String patientName,
-      @ApiParam(name = "phoneNumber", value = "phoneNumber") @RequestParam(required = false) String phoneNumber,
+      @ApiParam(name = "query", value = "query") @RequestParam(required = false) String query,
       @ApiParam(name = "patientStatus", value = "patientStatus") @RequestParam(required = false) String patientStatus,
       @ApiParam(name = "pageNumber", value = "pageNumber") @RequestParam(required = false) Integer pageNumber,
       @ApiParam(name = "pageSize", value = "pageSize") @RequestParam(required = false) Integer pageSize) {
@@ -59,9 +57,8 @@ public class PatientFlagsOverviewController {
           String.format("Location with uuid: %s does not exist", locationUuid));
     }
 
-    PatientFlagsOverviewCriteria criteria = getFlagsOverviewCriteria(locationUuid, flagName,
-        patientIdentifier,
-        patientName, phoneNumber, patientStatus);
+    PatientFlagsOverviewCriteria criteria = getFlagsOverviewCriteria(locationUuid, flagName, query,
+        patientStatus);
 
     PatientFlagsOverviewDTO result = Context.getService(PatientFlagsOverviewService.class)
         .getPatientsWithFlag(criteria, pageNumber, pageSize);
@@ -70,9 +67,7 @@ public class PatientFlagsOverviewController {
   }
 
   private PatientFlagsOverviewCriteria getFlagsOverviewCriteria(String locationUuid,
-      String flagName, String patientIdentifier, String patientName, String phoneNumber,
-      String patientStatus) {
-    return new PatientFlagsOverviewCriteria(locationUuid, flagName, patientIdentifier, patientName,
-        phoneNumber, patientStatus);
+      String flagName, String query, String patientStatus) {
+    return new PatientFlagsOverviewCriteria(locationUuid, flagName, query, patientStatus);
   }
 }

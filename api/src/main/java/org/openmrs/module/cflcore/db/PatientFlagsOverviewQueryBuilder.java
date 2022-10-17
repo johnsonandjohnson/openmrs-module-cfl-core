@@ -39,20 +39,21 @@ public class PatientFlagsOverviewQueryBuilder {
           + "LEFT JOIN person_attribute pa1 ON p.patient_id = pa1.person_id "
           + "AND pa1.person_attribute_type_id = "
           + "(select person_attribute_type_id from person_attribute_type where name = (select property_value from global_property where property = '"
-          + CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY + "')) "
+          + CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY + "')) AND pa1.voided = 0 "
           + "LEFT JOIN person_attribute pa2 ON p.patient_id = pa2.person_id "
           + "AND pa2.person_attribute_type_id = "
           + "(select person_attribute_type_id from person_attribute_type where name = '"
-          + CFLConstants.TELEPHONE_ATTRIBUTE_NAME + "') "
+          + CFLConstants.TELEPHONE_ATTRIBUTE_NAME + "') AND pa2.voided = 0 "
           + "LEFT JOIN person_attribute pa3 ON p.patient_id = pa3.person_id "
           + "AND pa3.person_attribute_type_id = "
           + "(select person_attribute_type_id from person_attribute_type where name = '"
-          + CFLConstants.PERSON_STATUS_ATTRIBUTE_TYPE_NAME + "') "
+          + CFLConstants.PERSON_STATUS_ATTRIBUTE_TYPE_NAME + "') AND pa3.voided = 0 "
           + "INNER JOIN patient_identifier pi ON pi.patient_id = p.patient_id "
           + "AND pi.identifier_type = "
           + "(select patient_identifier_type_id from patient_identifier_type where name = (select property_value from global_property where property = '"
-          + CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY + "')) "
-          + "INNER JOIN person_name pn ON pn.person_id = p.patient_id ";
+          + CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY
+          + "')) AND pi.voided = 0 "
+          + "INNER JOIN person_name pn ON pn.person_id = p.patient_id AND pn.voided = 0 ";
 
   private final StringBuilder queryBuilder;
 
@@ -74,10 +75,8 @@ public class PatientFlagsOverviewQueryBuilder {
   public String buildQueryByCriteria(PatientFlagsOverviewCriteria criteria) {
     addLocationRestriction(criteria.getLocationUuid());
     addFlagRestriction(criteria.getFlagName());
-    addPhoneNumberRestriction(criteria.getPhoneNumber());
+    addSearchRestrictions(criteria.getQuery());
     addPatientStatusRestriction(criteria.getPatientStatus());
-    addPatientIdentifierRestriction(criteria.getPatientIdentifier());
-    addPatientNameRestriction(criteria.getPatientName());
     addSortingByName();
 
     return queryBuilder.toString();
@@ -116,11 +115,13 @@ public class PatientFlagsOverviewQueryBuilder {
     return StringUtils.equals(flag.getEvaluator(), SQLFlagEvaluator.class.getName());
   }
 
-  private void addPhoneNumberRestriction(String phoneNumber) {
-    if (StringUtils.isNotBlank(phoneNumber)) {
-      String queryPart = "AND pa2.value like :phoneNumberParam ";
+  private void addSearchRestrictions(String query) {
+    if (StringUtils.isNotBlank(query)) {
+      String queryPart = "AND (pa2.value like :queryParam "
+          + "OR pi.identifier like :queryParam "
+          + "OR concat_ws(' ', pn.given_name, pn.middle_name, pn.family_name) like :queryParam )";
       queryBuilder.append(queryPart);
-      queryParams.put("phoneNumberParam", "%" + phoneNumber + "%");
+      queryParams.put("queryParam", "%" + query + "%");
     }
   }
 
@@ -129,22 +130,6 @@ public class PatientFlagsOverviewQueryBuilder {
       String queryPart = "AND pa3.value = :patientStatusParam ";
       queryBuilder.append(queryPart);
       queryParams.put("patientStatusParam", patientStatus);
-    }
-  }
-
-  private void addPatientIdentifierRestriction(String patientIdentifier) {
-    if (StringUtils.isNotBlank(patientIdentifier)) {
-      String queryPart = "AND pi.identifier like :patientIdentifierParam ";
-      queryBuilder.append(queryPart);
-      queryParams.put("patientIdentifierParam", "%" + patientIdentifier + "%");
-    }
-  }
-
-  private void addPatientNameRestriction(String patientName) {
-    if (StringUtils.isNotBlank(patientName)) {
-      String queryPart = "AND concat_ws(' ', pn.given_name, pn.middle_name, pn.family_name) like :patientNameParam ";
-      queryBuilder.append(queryPart);
-      queryParams.put("patientNameParam", "%" + patientName + "%");
     }
   }
 
