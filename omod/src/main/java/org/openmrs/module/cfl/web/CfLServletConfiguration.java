@@ -46,8 +46,12 @@ public class CfLServletConfiguration implements ServletContextAware {
   }
 
   private void addSecurityFilter(ServletContext servletContext) {
-    servletContext
-        .addFilter("CflSecurityHeadersFilter", new CflSecurityHeadersFilter())
-        .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
+    try {
+      servletContext
+          .addFilter("CflSecurityHeadersFilter", new CflSecurityHeadersFilter())
+          .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
+    } catch (Exception e) {
+      LOGGER.error("Failed to add CflSecurityHeadersFilter", e);
+    }
   }
 }
