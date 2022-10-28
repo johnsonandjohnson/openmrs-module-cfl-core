@@ -66,6 +66,19 @@
         <property name="locationService" ref="locationService"/>
         <property name="providerService" ref="providerService"/>
     </bean>
+    <bean id="cflCaptchaService" class="org.openmrs.module.cfl.api.service.impl.CaptchaServiceImpl">
+        <property name="reCaptchaAttemptService">
+            <bean class="org.openmrs.module.cfl.api.service.impl.ReCaptchaAttemptService" />
+        </property>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfl.api.service.CaptchaService</value>
+                <ref local="cflCaptchaService"/>
+            </list>
+        </property>
+    </bean>
     <bean id="cflUserNotAuthorizedService"
           class="org.openmrs.module.cfl.api.service.impl.UserNotAuthorizedServiceImpl">
         <property name="sessionFactory" ref="sessionFactory"/>

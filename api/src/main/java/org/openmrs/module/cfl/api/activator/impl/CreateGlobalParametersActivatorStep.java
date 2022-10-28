@@ -45,5 +45,17 @@ public class CreateGlobalParametersActivatorStep implements ModuleActivatorStep 
         CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_KEY,
         CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DEFAULT_VALUE,
         CfldistributionGlobalParameterConstants.CFL_SHOW_STACKTRACE_IN_ERROR_PAGE_DESCRIPTION);
+    createGlobalSettingIfNotExists(
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SECRET_KEY,
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SECRET_VALUE,
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SECRET_DESCRIPTION);
+    createGlobalSettingIfNotExists(
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SITE_KEY,
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SITE_VALUE,
+        CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SITE_DESCRIPTION);
+    createGlobalSettingIfNotExists(
+        CfldistributionGlobalParameterConstants.CAPTCHA_ENABLE_KEY,
+        CfldistributionGlobalParameterConstants.CAPTCHA_ENABLED_KEY_DEFAULT_VALUE,
+        CfldistributionGlobalParameterConstants.CAPTCHA_ENABLED_KEY_DESCRIPTION);
   }
 }
