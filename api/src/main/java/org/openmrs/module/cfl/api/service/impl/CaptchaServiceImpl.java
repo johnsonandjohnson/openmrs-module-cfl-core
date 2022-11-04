@@ -1,3 +1,13 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
 package org.openmrs.module.cfl.api.service.impl;
 
 import org.openmrs.api.context.Context;
@@ -15,15 +25,15 @@ import java.util.regex.Pattern;
 
 public class CaptchaServiceImpl implements CaptchaService {
 	
+	private static final Pattern RESPONSE_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaService.class);
+	
+	private static final String RECAPTCHA_URL_TEMPLATE = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s";
+	
 	private RestTemplate restTemplate = new RestTemplate();
 	
 	private ReCaptchaAttemptService reCaptchaAttemptService;
-	
-	private static Pattern RESPONSE_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
-	
-	private final static Logger LOGGER = LoggerFactory.getLogger(CaptchaService.class);
-	
-	protected static final String RECAPTCHA_URL_TEMPLATE = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s";
 	
 	@Override
 	public void processResponse(HttpServletRequest request) {
@@ -56,7 +66,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 		return xfHeader.split(",")[0];
 	}
 	
-	public String getReCaptchaSecret() {
+	private String getReCaptchaSecret() {
 		return Context.getAdministrationService().getGlobalProperty(CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SECRET_KEY);
 	}
 	

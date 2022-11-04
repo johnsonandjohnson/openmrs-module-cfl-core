@@ -26,16 +26,20 @@ public final class CfldistributionGlobalParameterConstants {
                     "appframework_component_state table";
 
     public static final String GOOGLE_RECAPTCHA_SITE_KEY  = "google.recaptcha.site.key";
-    public static final String GOOGLE_RECAPTCHA_SITE_VALUE = "6LfNRXkiAAAAAAsd2w4aFE0sqIZnCOQ0Du6kz7KB";
+    public static final String GOOGLE_RECAPTCHA_SITE_VALUE = "";
     public static final String GOOGLE_RECAPTCHA_SITE_DESCRIPTION = "Used to set Google Recaptcha Site Key";
     
     public static final String GOOGLE_RECAPTCHA_SECRET_KEY  = "google.recaptcha.secret.key";
-    public static final String GOOGLE_RECAPTCHA_SECRET_VALUE = "6LfNRXkiAAAAAEyHAjyFjRQ1ztBox3J34SV9ZWNZ";
+    public static final String GOOGLE_RECAPTCHA_SECRET_VALUE = "";
     public static final String GOOGLE_RECAPTCHA_SECRET_DESCRIPTION = "Used to set Google Recaptcha Secret Key";
     
     public static final String CAPTCHA_ENABLE_KEY = "cfl.captchaEnable";
-    public static final String CAPTCHA_ENABLED_KEY_DEFAULT_VALUE = "false";
-    public static final String CAPTCHA_ENABLED_KEY_DESCRIPTION = "Set to true to Enable Captcha and to false to disable";
+    public static final String CAPTCHA_ENABLED_DEFAULT_VALUE = "false";
+    public static final String CAPTCHA_ENABLED_DESCRIPTION = "Set to true to Enable Captcha and to false to disable";
+    
+    public static final String GOOGLE_RECAPTCHA_MAX_FAILED_ATTEMPTS_KEY = "google.recaptcha.max.failed.attempts";
+    public static final String GOOGLE_RECAPTCHA_MAX_FAILED_ATTEMPTS_DEFAULT_VALUE = "4";
+    public static final String GOOGLE_RECAPTCHA_MAX_FAILED_ATTEMPTS_DESCRIPTION = "Maximum Failed Attempts Allowed Before Captcha Gets Blocked";
     
     public static final String CFL_LOCATION_ATTRIBUTE_TYPE_UUID = "0a93cbc6-5d65-4886-8091-47a25d3df944";
 
