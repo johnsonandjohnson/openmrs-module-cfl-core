@@ -12,15 +12,13 @@ package org.openmrs.module.cfl.api.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * This service is used to get user's response to the reCAPTCHA challenge and validate response.
- */
+/** This service is used to get user's response to the reCAPTCHA challenge and validate response. */
 public interface CaptchaService {
-	
-	/**
-	 * Retrieves and validates response
-	 *
-	 * @param request
-	 */
-	void processResponse(HttpServletRequest request);
+
+  /**
+   * Retrieves and validates response
+   *
+   * @param request
+   */
+  void processResponse(HttpServletRequest request);
 }

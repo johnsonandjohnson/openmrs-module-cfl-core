@@ -13,22 +13,22 @@ package org.openmrs.module.cfl.api.service.impl;
 import org.openmrs.api.APIException;
 
 public final class ReCaptchaInvalidException extends APIException {
-	
-	private static final long serialVersionUID = 5861310537366287163L;
-	
-	public ReCaptchaInvalidException() {
-		super();
-	}
-	
-	public ReCaptchaInvalidException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
-	
-	public ReCaptchaInvalidException(final String message) {
-		super(message);
-	}
-	
-	public ReCaptchaInvalidException(final Throwable cause) {
-		super(cause);
-	}
+
+  private static final long serialVersionUID = 5861310537366287163L;
+
+  public ReCaptchaInvalidException() {
+    super();
+  }
+
+  public ReCaptchaInvalidException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
+
+  public ReCaptchaInvalidException(final String message) {
+    super(message);
+  }
+
+  public ReCaptchaInvalidException(final Throwable cause) {
+    super(cause);
+  }
 }
