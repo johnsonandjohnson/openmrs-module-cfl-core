@@ -78,4 +78,14 @@
             </list>
         </property>
     </bean>
+
+    <bean id="cflCustomUserAppServiceImpl" class="org.openmrs.module.cfl.api.service.impl.CustomUserAppServiceImpl"/>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cfl.api.service.CustomUserAppService</value>
+                <ref local="cflCustomUserAppServiceImpl"/>
+            </list>
+        </property>
+    </bean>
 </beans>
