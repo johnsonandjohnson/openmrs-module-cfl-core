@@ -21,6 +21,7 @@ public final class CFLConstants {
   public static final String MODULE_ID = "cflcore";
   public static final String MODULE_API_PACKAGE = "org.openmrs.module.cflcore.api";
 
+
   public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
   public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";
 
@@ -365,6 +366,15 @@ public final class CFLConstants {
       "Patient identifier type by which searching "
           + "for patients on flags overview page can be performed";
 
+  public static final String CFL_UI_APP_PREFIX = "cflui.";
+
+  public static final String REGISTER_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("registerPatient");
+
+  public static final String REGISTER_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("registerCaregiver");
+
+  public static final String FIND_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("findPatient");
+
+  public static final String FIND_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("findCaregiver");
   private CFLConstants() {
   }
 }
