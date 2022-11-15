@@ -354,7 +354,7 @@ public final class CFLConstants {
 
   public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION =
       "Determines whether patient templates should be created after patient registration automatically. "
-          + "If yes, channel type needs to be provided. If not, empty or false value is sufficient. Possible values: SMS or Call or false or empty value";
+          + "If yes, channel type needs to be provided. If not, leave the empty value";
 
   public static final String PERSON_STATUS_ATTRIBUTE_TYPE_NAME = "Person status";
 
@@ -368,13 +368,16 @@ public final class CFLConstants {
 
   public static final String CFL_UI_APP_PREFIX = "cflui.";
 
-  public static final String REGISTER_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("registerPatient");
+  public static final String REGISTER_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat(
+      "registerPatient");
 
-  public static final String REGISTER_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("registerCaregiver");
+  public static final String REGISTER_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat(
+      "registerCaregiver");
 
   public static final String FIND_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("findPatient");
 
   public static final String FIND_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("findCaregiver");
+
   private CFLConstants() {
   }
 }

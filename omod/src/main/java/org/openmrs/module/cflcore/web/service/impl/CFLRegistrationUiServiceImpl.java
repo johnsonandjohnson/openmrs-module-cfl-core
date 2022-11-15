@@ -224,7 +224,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
   }
 
   private boolean isPatientTemplatesShouldNotBeCreated(String gpKey) {
-    return StringUtils.isBlank(gpKey) || !Boolean.parseBoolean(gpKey);
+    return StringUtils.isBlank(gpKey);
   }
 
   private DefaultPatientTemplateService getDefaultPatientTemplateService() {
