@@ -26,14 +26,11 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.db.hibernate.HibernateOpenmrsDataDAO;
 import org.openmrs.module.cflcore.api.contract.CFLPerson;
 import org.openmrs.module.cflcore.api.service.CFLPersonService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("cflPersonService")
 @Transactional
 public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribute> implements CFLPersonService {
 
@@ -43,10 +40,7 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
 
     private static final String VOIDED_COLUMN_NAME = "voided";
 
-    @Autowired
     private DbSessionFactory sessionFactory;
-
-    @Autowired
     private PersonDAO personDAO;
 
     public CFLPersonServiceImpl() {
@@ -87,6 +81,14 @@ public class CFLPersonServiceImpl extends HibernateOpenmrsDataDAO<PersonAttribut
             person.addAttribute(personAttribute);
             personDAO.savePerson(person);
         }
+    }
+
+    public void setSessionFactory(DbSessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public void setPersonDAO(PersonDAO personDAO) {
+        this.personDAO = personDAO;
     }
 
     private DbSession getSession() {
