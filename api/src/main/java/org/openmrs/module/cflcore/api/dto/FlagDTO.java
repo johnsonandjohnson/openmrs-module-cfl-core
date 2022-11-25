@@ -10,15 +10,21 @@
 
 package org.openmrs.module.cflcore.api.dto;
 
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.module.patientflags.Flag;
+
 public class FlagDTO {
 
   private String name;
 
   private String uuid;
 
-  public FlagDTO(String name, String uuid) {
-    this.name = name;
-    this.uuid = uuid;
+  private String priority;
+
+  public FlagDTO(Flag flag) {
+    this.name = flag.getName();
+    this.uuid = flag.getUuid();
+    this.priority = flag.getPriority() != null ? flag.getPriority().getName() : StringUtils.EMPTY;
   }
 
   public String getName() {
@@ -35,5 +41,13 @@ public class FlagDTO {
 
   public void setUuid(String uuid) {
     this.uuid = uuid;
+  }
+
+  public String getPriority() {
+    return priority;
+  }
+
+  public void setPriority(String priority) {
+    this.priority = priority;
   }
 }

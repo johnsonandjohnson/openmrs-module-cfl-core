@@ -861,6 +861,9 @@
         },
         "patientUuid" : {
           "type" : "string"
+        },
+        "gender" : {
+          "type" : "string"
         }
       }
     },
@@ -934,6 +937,12 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "serverName" : {
           "type" : "string"
         },
@@ -962,17 +971,11 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "localName" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "contentLength" : {
           "type" : "integer",
@@ -1007,6 +1010,13 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
+        },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "maxInactiveInterval" : {
           "type" : "integer",
           "format" : "int32"
@@ -1023,13 +1033,6 @@
         "new" : {
           "type" : "boolean",
           "default" : false
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
         },
         "creationTime" : {
           "type" : "integer",
@@ -1333,6 +1336,12 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "serverName" : {
           "type" : "string"
         },
@@ -1361,17 +1370,11 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "localName" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "contentLength" : {
           "type" : "integer",
