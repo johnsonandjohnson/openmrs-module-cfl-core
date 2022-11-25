@@ -32,8 +32,15 @@ public class PatientFlagsOverviewQueryBuilder {
 
   public static final Integer PATIENT_UUID_RESULT_INDEX = 4;
 
+  public static final Integer PATIENT_GENDER_RESULT_INDEX = 5;
   private static final String BASIC_QUERY =
-      "SELECT pi.identifier AS identifier, concat_ws(' ', pn.given_name, pn.middle_name, pn.family_name) AS patientName, pa2.value AS phoneNumber, pa3.value AS patientStatus, per.uuid AS patientUuid "
+      "SELECT "
+          + "pi.identifier AS identifier, "
+          + "concat_ws(' ', pn.given_name, pn.middle_name, pn.family_name) AS patientName, "
+          + "pa2.value AS phoneNumber, "
+          + "pa3.value AS patientStatus, "
+          + "per.uuid AS patientUuid, "
+          + "per.gender AS gender "
           + "FROM patient p "
           + "INNER JOIN person per on p.patient_id = per.person_id "
           + "LEFT JOIN person_attribute pa1 ON p.patient_id = pa1.person_id "

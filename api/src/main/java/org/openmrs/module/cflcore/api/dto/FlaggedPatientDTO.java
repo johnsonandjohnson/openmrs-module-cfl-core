@@ -10,6 +10,8 @@
 
 package org.openmrs.module.cflcore.api.dto;
 
+import org.apache.commons.lang3.StringUtils;
+import org.openmrs.module.cflcore.api.constant.CFLCoreConstants;
 import org.openmrs.module.cflcore.db.PatientFlagsOverviewQueryBuilder;
 
 public class FlaggedPatientDTO {
@@ -24,12 +26,15 @@ public class FlaggedPatientDTO {
 
   private String patientUuid;
 
+  private String gender;
+
   public FlaggedPatientDTO(Object[] results) {
     this.patientIdentifier = (String) results[PatientFlagsOverviewQueryBuilder.PATIENT_IDENTIFIER_RESULT_INDEX];
     this.patientName = (String) results[PatientFlagsOverviewQueryBuilder.PATIENT_NAME_RESULT_INDEX];
     this.phoneNumber = (String) results[PatientFlagsOverviewQueryBuilder.PHONE_NUMBER_RESULT_INDEX];
     this.patientStatus = (String) results[PatientFlagsOverviewQueryBuilder.PATIENT_STATUS_RESULT_INDEX];
     this.patientUuid = (String) results[PatientFlagsOverviewQueryBuilder.PATIENT_UUID_RESULT_INDEX];
+    this.gender = convertGenderToFullName((String) results[PatientFlagsOverviewQueryBuilder.PATIENT_GENDER_RESULT_INDEX]);
   }
 
   public String getPatientIdentifier() {
@@ -70,5 +75,26 @@ public class FlaggedPatientDTO {
 
   public void setPatientUuid(String patientUuid) {
     this.patientUuid = patientUuid;
+  }
+
+  public String getGender() {
+    return gender;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  private String convertGenderToFullName(String genderShortcut) {
+    String genderFullName = CFLCoreConstants.OTHER_GENDER_FULL_NAME;
+    if (StringUtils.equalsIgnoreCase(genderShortcut, CFLCoreConstants.MALE_GENDER_SHORT_NAME)) {
+      genderFullName = CFLCoreConstants.MALE_GENDER_FULL_NAME;
+    }
+
+    if (StringUtils.equalsIgnoreCase(genderShortcut, CFLCoreConstants.FEMALE_GENDER_SHORT_NAME)) {
+      genderFullName = CFLCoreConstants.FEMALE_GENDER_FULL_NAME;
+    }
+
+    return genderFullName;
   }
 }
