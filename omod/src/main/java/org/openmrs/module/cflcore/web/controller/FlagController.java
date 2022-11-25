@@ -45,7 +45,7 @@ public class FlagController {
     List<FlagDTO> flagDTOs = flagService.getAllFlags().stream()
         .filter(flag -> !flag.getRetired())
         .filter(Flag::getEnabled)
-        .map(flag -> new FlagDTO(flag.getName(), flag.getUuid(), flag.getPriority()))
+        .map(FlagDTO::new)
         .collect(Collectors.toList());
 
     return new ResponseEntity<>(flagDTOs, HttpStatus.OK);
