@@ -82,6 +82,8 @@ public class PersonHeaderFragmentController extends HeaderFragment {
         config.addAttribute(TELEPHONE, wrapper.getPerson().getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
         model.addAttribute(PERSON_IDENTIFIER_LABEL, getIdentifierLabelSetting());
         model.addAttribute(PERSON_IDENTIFIER, getIdentifierValue(wrapper));
+        model.addAttribute("isShowGenderPersonHeader", getShowGenderPersonHeader());
+        model.addAttribute("isShowAgePersonHeader", getShowAgePersonHeader());
 
         if (appContextModel == null) {
             AppContextModel contextModel = sessionContext.generateAppContextModel();
@@ -101,6 +103,20 @@ public class PersonHeaderFragmentController extends HeaderFragment {
 
         config.addAttribute("dashboardUrl", coreAppsProperties.getDashboardUrl());
     }
+
+  private Boolean getShowGenderPersonHeader() {
+    return StringUtils.equalsIgnoreCase(
+        Context.getAdministrationService()
+            .getGlobalProperty(CFLConstants.SHOW_GENDER_PERSON_HEADER_KEY),
+        "true");
+  }
+
+  private Boolean getShowAgePersonHeader() {
+    return StringUtils.equalsIgnoreCase(
+        Context.getAdministrationService()
+            .getGlobalProperty(CFLConstants.SHOW_AGE_PERSON_HEADER_KEY),
+        "true");
+  }
 
     /**
      * Returns the value of global property for identifier label on person header

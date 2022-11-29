@@ -162,6 +162,16 @@ public final class CFLConstants {
   public static final String ENVIRONMENT_DESCRIPTION =
       "Set the value to 'Staging' to hide the Logo";
 
+  public static final String SHOW_AGE_PERSON_HEADER_KEY = "cfl.showAgePersonHeader";
+  public static final String SHOW_AGE_PERSON_HEADER_DEFAULT_VALUE = "true";
+  public static final String SHOW_AGE_PERSON_HEADER_DESCRIPTION =
+      "Set the value to 'true' to show Age in Person Header";
+
+  public static final String SHOW_GENDER_PERSON_HEADER_KEY = "cfl.showGenderPersonHeader";
+  public static final String SHOW_GENDER_PERSON_HEADER_DEFAULT_VALUE = "true";
+  public static final String SHOW_GENDER_PERSON_HEADER_DESCRIPTION =
+      "Set the value to 'true' to show Gender in Person Header";
+
   public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
   public static final String DOSING_VISIT_TYPE_NAME = "Dosing";
 

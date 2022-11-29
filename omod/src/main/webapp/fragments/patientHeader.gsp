@@ -82,22 +82,30 @@
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
                     <span class="gender-age">
-                        <span>${ui.message("coreapps.gender." + ui.encodeHtml(patient.gender))}&nbsp;</span>
-                        <span>
-                            <% if (patient.birthdate) { %>
-                            <% if (patient.age > 0) { %>
-                            ${ui.message("coreapps.ageYears", patient.age)}
-                            <% } else if (patient.ageInMonths > 0) { %>
-                            ${ui.message("coreapps.ageMonths", patient.ageInMonths)}
-                            <% } else { %>
-                            ${ui.message("coreapps.ageDays", patient.ageInDays)}
-                            <% } %>
-                            (<% if (patient.birthdateEstimated) { %>~<% } %>
-                            ${ ui.formatDatePretty(patient.birthdate) })
-                            <% } else { %>
-                            ${ui.message("coreapps.unknownAge")}
-                            <% } %>
-                        </span>
+                        <% if (isShowGenderPersonHeader) { %>
+                            <span>${ui.message("coreapps.gender." + ui.encodeHtml(patient.gender))}&nbsp;</span>
+                        <% } else { %>
+                            <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                        <% } %>
+                        <% if (isShowAgePersonHeader) { %>
+                            <span>
+                                <% if (patient.birthdate) { %>
+                                    <% if (patient.age > 0) { %>
+                                        ${ui.message("coreapps.ageYears", patient.age)}
+                                    <% } else if (patient.ageInMonths > 0) { %>
+                                        ${ui.message("coreapps.ageMonths", patient.ageInMonths)}
+                                    <% } else { %>
+                                        ${ui.message("coreapps.ageDays", patient.ageInDays)}
+                                <% } %>
+                                (<% if (patient.birthdateEstimated) { %>~<% } %>
+                                    ${ ui.formatDatePretty(patient.birthdate) })
+                                <% } else { %>
+                                    ${ui.message("coreapps.unknownAge")}
+                                <% } %>
+                            </span>
+                        <% } else { %>
+                           <span>${ui.message("cfl.personHeader.ageSetFalse")}</span>
+                        <% } %>
                         <span id="edit-patient-demographics" class="edit-info">
                             <small>
                                 <%= ui.includeFragment("appui", "extensionPoint", [ id: "patientHeader.editPatientDemographics", contextModel: appContextModel ]) %>
@@ -168,7 +176,7 @@
             <input type="hidden" name="app" value="coreapps.mergePatients"/>
             <input type="hidden" name="isUnknownPatient" value="true"/>
             <input type="hidden" name="patient1" value="${patient.patient.id}"/>
-            <input type="submit" id="merge-button"
+6            <input type="submit" id="merge-button"
                    value="${ui.message("coreapps.mergePatients.mergeIntoAnotherPatientRecord.button")}"/>
         </form>
     </div>

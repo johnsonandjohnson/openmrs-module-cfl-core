@@ -243,6 +243,14 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY,
         CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE,
         CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.SHOW_AGE_PERSON_HEADER_KEY,
+        CFLConstants.SHOW_AGE_PERSON_HEADER_DEFAULT_VALUE,
+        CFLConstants.SHOW_AGE_PERSON_HEADER_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_KEY,
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_DEFAULT_VALUE,
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_DESCRIPTION);
   }
 
   private void createCountrySettings() {
