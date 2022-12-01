@@ -52,9 +52,7 @@
     <bean id="cflAdminProviderMetadata" class="org.openmrs.module.cfl.api.metadata.AdminProviderMetadata"/>
     <bean id="cflDbViewsMetadata"
           class="org.openmrs.module.cfl.api.metadata.views.DbViewsMetadata">
-        <constructor-arg>
-            <ref bean="dbSessionFactory"/>
-        </constructor-arg>
+        <constructor-arg ref="dbSessionFactory"/>
     </bean>
     <bean id="cflSuperAdminRoleMetadata"
           class="org.openmrs.module.cfl.api.metadata.SuperAdminRoleMetadata">
@@ -75,7 +73,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cfl.api.service.CaptchaService</value>
-                <ref local="cflCaptchaService"/>
+                <ref bean="cflCaptchaService"/>
             </list>
         </property>
     </bean>
@@ -87,7 +85,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cfl.api.service.UserNotAuthorizedService</value>
-                <ref local="cflUserNotAuthorizedService"/>
+                <ref bean="cflUserNotAuthorizedService"/>
             </list>
         </property>
     </bean>
@@ -97,7 +95,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cfl.api.service.CustomUserAppService</value>
-                <ref local="cflCustomUserAppServiceImpl"/>
+                <ref bean="cflCustomUserAppServiceImpl"/>
             </list>
         </property>
     </bean>
