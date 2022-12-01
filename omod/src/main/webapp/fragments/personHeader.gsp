@@ -49,33 +49,33 @@
                 <% } %>
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
-                    <% if (person.gender || person.birthdate) { %>
-                        <span class="gender-age">
-                            <% if (person.gender) { %>
-                                <% if (isShowGenderPersonHeader) { %>
-                                    <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
-                                <% } else { %>
-                                    <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
-                                <% } %>
-                            <% } %>
+                    <% if (isShowGenderPersonHeader) { %>
+                        <% if (person.gender) { %>
+                            <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
+                        <% } else { %>
+                            <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                        <% } %>
+                    <% } else { %>
+                        <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                    <% } %>
+                    <% if (isShowAgePersonHeader) { %>
+                        <span>
                             <% if (person.birthdate) { %>
-                               <% if (isShowAgePersonHeader) { %>
-                                    <span>
-                                        <% if (person.age > 0) { %>
-                                            ${ui.message("coreapps.ageYears", person.age)}
-                                        <% } else if (config.person.ageInMonths > 0) { %>
-                                            ${ui.message("coreapps.ageMonths", config.person.ageInMonths)}
-                                        <% } else { %>
-                                            ${ui.message("coreapps.ageDays", config.person.ageInDays)}
-                                        <% } %>
-                                        (<% if (person.birthdateEstimated) { %>~<% } %>
-                                            ${ ui.formatDatePretty(person.birthdate) })
-                                    </span>
-                               <% } else { %>
-                                    <span>${ui.message("cfl.personHeader.ageSetFalse")}</span>
-                               <% } %>
+                                <% if (person.age > 0) { %>
+                                    ${ui.message("coreapps.ageYears", person.age)}
+                                <% } else if (person.ageInMonths > 0) { %>
+                                    ${ui.message("coreapps.ageMonths", person.ageInMonths)}
+                                <% } else { %>
+                                    ${ui.message("coreapps.ageDays", person.ageInDays)}
+                                <% } %>
+                                (<% if (person.birthdateEstimated) { %>~<% } %>
+                                ${ ui.formatDatePretty(person.birthdate) })
+                            <% } else { %>
+                                ${ui.message("coreapps.unknownAge")}
                             <% } %>
                         </span>
+                    <% } else { %>
+                        <span>${ui.message("coreapps.unknownAge")}</span>
                     <% } %>
                     <% if (telephone) { %>
                         <span class="gender-age">

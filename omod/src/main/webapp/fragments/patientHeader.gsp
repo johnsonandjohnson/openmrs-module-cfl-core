@@ -83,7 +83,11 @@
                 <div style="display: flex; flex-direction: column;">
                     <span class="gender-age">
                         <% if (isShowGenderPersonHeader) { %>
-                            <span>${ui.message("coreapps.gender." + ui.encodeHtml(patient.gender))}&nbsp;</span>
+                            <% if (patient.gender) { %>
+                                <span>${ui.message("coreapps.gender." + ui.encodeHtml(patient.gender))}&nbsp;</span>
+                            <% } else { %>
+                                <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                            <% } %>
                         <% } else { %>
                             <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
                         <% } %>
@@ -96,15 +100,15 @@
                                         ${ui.message("coreapps.ageMonths", patient.ageInMonths)}
                                     <% } else { %>
                                         ${ui.message("coreapps.ageDays", patient.ageInDays)}
-                                <% } %>
-                                (<% if (patient.birthdateEstimated) { %>~<% } %>
+                                    <% } %>
+                                    (<% if (patient.birthdateEstimated) { %>~<% } %>
                                     ${ ui.formatDatePretty(patient.birthdate) })
                                 <% } else { %>
                                     ${ui.message("coreapps.unknownAge")}
                                 <% } %>
                             </span>
                         <% } else { %>
-                           <span>${ui.message("cfl.personHeader.ageSetFalse")}</span>
+                           <span>${ui.message("coreapps.unknownAge")}</span>
                         <% } %>
                         <span id="edit-patient-demographics" class="edit-info">
                             <small>
@@ -176,7 +180,7 @@
             <input type="hidden" name="app" value="coreapps.mergePatients"/>
             <input type="hidden" name="isUnknownPatient" value="true"/>
             <input type="hidden" name="patient1" value="${patient.patient.id}"/>
-6            <input type="submit" id="merge-button"
+            <input type="submit" id="merge-button"
                    value="${ui.message("coreapps.mergePatients.mergeIntoAnotherPatientRecord.button")}"/>
         </form>
     </div>
