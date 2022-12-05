@@ -82,16 +82,16 @@
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
                     <span class="gender-age">
-                        <% if (isShowGenderPersonHeader) { %>
+                        <% if (showGenderPersonHeader) { %>
                             <% if (patient.gender) { %>
                                 <span>${ui.message("coreapps.gender." + ui.encodeHtml(patient.gender))}&nbsp;</span>
                             <% } else { %>
-                                <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                                <span>${ui.message("cfl.personHeader.genderUnknown")}</span>
                             <% } %>
                         <% } else { %>
-                            <span>${ui.message("cfl.personHeader.genderSetFalse")}</span>
+                            <span>${ui.message("cfl.personHeader.genderUnknown")}</span>
                         <% } %>
-                        <% if (isShowAgePersonHeader) { %>
+                        <% if (showAgePersonHeader) { %>
                             <span>
                                 <% if (patient.birthdate) { %>
                                     <% if (patient.age > 0) { %>

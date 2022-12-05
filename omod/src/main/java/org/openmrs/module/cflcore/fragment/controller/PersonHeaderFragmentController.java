@@ -62,6 +62,8 @@ public class PersonHeaderFragmentController extends HeaderFragment {
     private static final String PERSON_IDENTIFIER = "personIdentifier";
     private static final String PERSON_HEADER = "personHeader";
     private static final String APP_CONTEXT_MODEL = "appContextModel";
+    private static final String SHOW_GENDER_PERSON_HEADER = "showGenderPersonHeader";
+    private static final String SHOW_AGE_PERSON_HEADER = "showAgePersonHeader";
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "checkstyle:ParameterAssignment",
             "PMD.ExcessiveParameterList", "PMD.AvoidReassigningParameters"})
@@ -82,8 +84,8 @@ public class PersonHeaderFragmentController extends HeaderFragment {
         config.addAttribute(TELEPHONE, wrapper.getPerson().getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
         model.addAttribute(PERSON_IDENTIFIER_LABEL, getIdentifierLabelSetting());
         model.addAttribute(PERSON_IDENTIFIER, getIdentifierValue(wrapper));
-        model.addAttribute("isShowGenderPersonHeader", getShowGenderPersonHeader());
-        model.addAttribute("isShowAgePersonHeader", getShowAgePersonHeader());
+        model.addAttribute(SHOW_GENDER_PERSON_HEADER, getShowGenderPersonHeader());
+        model.addAttribute(SHOW_AGE_PERSON_HEADER, getShowAgePersonHeader());
 
         if (appContextModel == null) {
             AppContextModel contextModel = sessionContext.generateAppContextModel();

@@ -58,6 +58,8 @@ import java.util.List;
 public class PatientHeaderFragmentController extends HeaderFragment {
 
     private static final String TELEPHONE = "telephone";
+    private static final String SHOW_GENDER_PERSON_HEADER = "showGenderPersonHeader";
+    private static final String SHOW_AGE_PERSON_HEADER = "showAgePersonHeader";
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "checkstyle:ParameterAssignment",
             "PMD.ExcessiveParameterList", "PMD.AvoidReassigningParameters"})
@@ -113,8 +115,8 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         config.addAttribute("extraPatientIdentifiersMappedByType",
                 wrapper.getExtraIdentifiersMappedByType(sessionContext.getSessionLocation()));
         config.addAttribute("dashboardUrl", coreAppsProperties.getDashboardUrl());
-        model.addAttribute("isShowGenderPersonHeader", getShowGenderPersonHeader());
-        model.addAttribute("isShowAgePersonHeader", getShowAgePersonHeader());
+        model.addAttribute(SHOW_GENDER_PERSON_HEADER, getShowGenderPersonHeader());
+        model.addAttribute(SHOW_AGE_PERSON_HEADER, getShowAgePersonHeader());
     }
     
     private Boolean getShowGenderPersonHeader() {
