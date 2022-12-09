@@ -48,12 +48,19 @@ $j(document).ready(function () {
 
 function channelCheckboxClicked(checkbox, channelConfigElementId) {
     const channelConfigElement = document.getElementById(channelConfigElementId);
+    const inputs = Array.from(
+      document.querySelectorAll('input[id=callChannel], input[id=smsChannel]')
+    );
 
     if (checkbox) {
+        inputs.filter(i => i !== checkbox).forEach(i => (i.required = !checkbox.value.length));
+
         if (checkbox.checked) {
             channelConfigElement.style.display = "";
+            inputs.filter(input => input !== checkbox).forEach(otherInput => otherInput.required = false);
         } else {
             channelConfigElement.style.display = "none";
+            inputs.filter(input => input !== checkbox).forEach(otherInput => otherInput.required = true);
         }
     }
 }

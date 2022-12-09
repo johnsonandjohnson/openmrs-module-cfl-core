@@ -58,7 +58,7 @@
                     <spring:bind path="model.messageRequest.callChannel">
                         <input type="hidden" name="_${status.expression}"/>
                         <span>
-                            <input type="checkbox" name="${status.expression}" id="callChannel"
+                            <input required type="checkbox" name="${status.expression}" id="callChannel"
                                    onClick="channelCheckboxClicked(this, 'callConfig')"
                                    <c:if test="${model.messageRequest.callChannel}">checked</c:if> />
                             <openmrs:message code="cfl.channelName.Call"/>
@@ -68,7 +68,7 @@
                     <spring:bind path="model.messageRequest.smsChannel">
                         <input type="hidden" name="_${status.expression}"/>
                         <span>
-                            <input type="checkbox" name="${status.expression}" id="smsChannel"
+                            <input required type="checkbox" name="${status.expression}" id="smsChannel"
                                    onClick="channelCheckboxClicked(this, 'smsConfig')"
                                    <c:if test="${model.messageRequest.smsChannel}">checked</c:if> />
                             <openmrs:message code="cfl.channelName.SMS"/>
