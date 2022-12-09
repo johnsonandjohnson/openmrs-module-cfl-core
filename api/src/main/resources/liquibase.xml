@@ -191,7 +191,7 @@ ORDER BY 1 DESC;"/>
     </changeSet>
 
     <changeSet id="cfl-global-property-history-resources" author="Connect for Life">
-        <validCheckSum>3:ba90ef7b97a2d7d6937ba2a8db19b105</validCheckSum>
+        <validCheckSum>3:396bae0ded5eae7c9ced06873b7e58fa</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <not><tableExists tableName="global_property_history"/></not>
