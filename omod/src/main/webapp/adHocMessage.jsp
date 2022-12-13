@@ -47,7 +47,7 @@
                     <spring:bind path="model.messageRequest.deliveryDateTime">
                         <input required type="text" name="${status.expression}" size="20"
                                value="${status.value}" onfocus="showDateTimePicker(this)"/>
-                        (<openmrs:message code="general.format"/>: <openmrs:dateTimePattern/>)
+                        (Formato: dd/mm/aaaa hh:mm)
                         <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
                     </spring:bind>
                 </td>
@@ -55,16 +55,6 @@
             <tr>
                 <th><openmrs:message code="cfl.adHocMessage.channel"/></th>
                 <td>
-                    <spring:bind path="model.messageRequest.callChannel">
-                        <input type="hidden" name="_${status.expression}"/>
-                        <span>
-                            <input required type="checkbox" name="${status.expression}" id="callChannel"
-                                   onClick="channelCheckboxClicked(this, 'callConfig')"
-                                   <c:if test="${model.messageRequest.callChannel}">checked</c:if> />
-                            <openmrs:message code="cfl.channelName.Call"/>
-                        </span>
-                        <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
-                    </spring:bind>
                     <spring:bind path="model.messageRequest.smsChannel">
                         <input type="hidden" name="_${status.expression}"/>
                         <span>
@@ -73,15 +63,6 @@
                                    <c:if test="${model.messageRequest.smsChannel}">checked</c:if> />
                             <openmrs:message code="cfl.channelName.SMS"/>
                         </span>
-                        <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
-                    </spring:bind>
-                </td>
-            </tr>
-            <tr id="callConfig">
-                <th><openmrs:message code="cfl.adHocMessage.Call.config"/></th>
-                <td>
-                    <spring:bind path="model.messageRequest.callFlowName">
-                        <input type="text" name="${status.expression}" value="${status.value}" size="35"/>
                         <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
                     </spring:bind>
                 </td>

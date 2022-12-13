@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class AdHocMessageRequestDTO {
-    private static final String MESSAGE_TEMPLATE_DEFAULT = "{ \"message\":\"Simple message here.\" }";
+    private static final String MESSAGE_TEMPLATE_DEFAULT = "{ \"mensagem\":\"Mensagem simples aqui.\" }";
 
     private Date deliveryDateTime;
     private Boolean callChannel;
