@@ -114,7 +114,9 @@ public class PatientFlagsOverviewQueryBuilder {
     if (flagQuery.endsWith(";")) {
       flagQuery = StringUtils.chop(flagQuery);
     }
-
+    if (flagQuery.contains(":=")) {
+      flagQuery = flagQuery.replaceAll(":=", "/*'*/:=/*'*/");
+    }
     return flagQuery;
   }
 
