@@ -10,6 +10,8 @@
 
 package org.openmrs.module.cflcore.api.service.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.cflcore.api.dto.PatientFlagsOverviewDTO;
 import org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService;
 import org.openmrs.module.cflcore.db.PatientFlagsOverviewDAO;
@@ -18,14 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class PatientFlagsOverviewServiceImpl implements PatientFlagsOverviewService {
 
+  private static final Log LOGGER = LogFactory.getLog(PatientFlagsOverviewServiceImpl.class);
+  
   private PatientFlagsOverviewDAO patientFlagsOverviewDAO;
 
   @Override
   @Transactional(readOnly = true)
   public PatientFlagsOverviewDTO getPatientsWithFlag(PatientFlagsOverviewCriteria criteria,
       Integer pageNumber, Integer pageSize) {
-
-    return patientFlagsOverviewDAO.getPatientsWithFlag(criteria, pageNumber, pageSize);
+    try {
+      return patientFlagsOverviewDAO.getPatientsWithFlag(criteria, pageNumber, pageSize);
+    } catch (Exception exception) {
+      LOGGER.error("Failed to read flagged patients for flag: " + criteria.getFlagName(),exception);
+      return null;
+    }
   }
 
   public void setPatientFlagsOverviewDAO(

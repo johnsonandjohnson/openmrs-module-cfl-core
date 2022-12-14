@@ -62,7 +62,9 @@ public class PatientFlagsOverviewController {
 
     PatientFlagsOverviewDTO result = Context.getService(PatientFlagsOverviewService.class)
         .getPatientsWithFlag(criteria, pageNumber, pageSize);
-
+    if(result == null) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
