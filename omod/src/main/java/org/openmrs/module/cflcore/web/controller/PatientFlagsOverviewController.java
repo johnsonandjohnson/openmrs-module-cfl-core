@@ -17,10 +17,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.net.HttpURLConnection;
 import javax.persistence.EntityNotFoundException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.dto.PatientFlagsOverviewDTO;
 import org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService;
+import org.openmrs.module.cflcore.api.service.impl.PatientFlagsOverviewServiceImpl;
 import org.openmrs.module.cflcore.domain.criteria.PatientFlagsOverviewCriteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("cfl.patientFlagsOverviewController")
 @RequestMapping(value = "/cfl/patientFlags")
 public class PatientFlagsOverviewController {
+
+  private static final Log LOGGER = LogFactory.getLog(PatientFlagsOverviewServiceImpl.class);
 
   @ApiOperation(value = "None", notes = "Gets patients by specific criteria")
   @ApiResponses(value = {
@@ -60,10 +66,14 @@ public class PatientFlagsOverviewController {
     PatientFlagsOverviewCriteria criteria = getFlagsOverviewCriteria(locationUuid, flagName, query,
         patientStatus);
 
-    PatientFlagsOverviewDTO result = Context.getService(PatientFlagsOverviewService.class)
-        .getPatientsWithFlag(criteria, pageNumber, pageSize);
-
-    return new ResponseEntity<>(result, HttpStatus.OK);
+    try {
+      PatientFlagsOverviewDTO result = Context.getService(PatientFlagsOverviewService.class)
+          .getPatientsWithFlag(criteria, pageNumber, pageSize);
+      return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (Exception exception) {
+      LOGGER.error("Failed to read flagged patients for flag: " + criteria.getFlagName(),exception);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   private PatientFlagsOverviewCriteria getFlagsOverviewCriteria(String locationUuid,

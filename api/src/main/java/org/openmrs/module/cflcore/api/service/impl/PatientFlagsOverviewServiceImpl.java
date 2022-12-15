@@ -17,7 +17,7 @@ import org.openmrs.module.cflcore.domain.criteria.PatientFlagsOverviewCriteria;
 import org.springframework.transaction.annotation.Transactional;
 
 public class PatientFlagsOverviewServiceImpl implements PatientFlagsOverviewService {
-
+  
   private PatientFlagsOverviewDAO patientFlagsOverviewDAO;
 
   @Override
@@ -25,7 +25,7 @@ public class PatientFlagsOverviewServiceImpl implements PatientFlagsOverviewServ
   public PatientFlagsOverviewDTO getPatientsWithFlag(PatientFlagsOverviewCriteria criteria,
       Integer pageNumber, Integer pageSize) {
 
-    return patientFlagsOverviewDAO.getPatientsWithFlag(criteria, pageNumber, pageSize);
+      return patientFlagsOverviewDAO.getPatientsWithFlag(criteria, pageNumber, pageSize);
   }
 
   public void setPatientFlagsOverviewDAO(

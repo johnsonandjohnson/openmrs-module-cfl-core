@@ -62,6 +62,10 @@ public class PatientFlagsOverviewQueryBuilder {
           + "')) AND pi.voided = 0 "
           + "INNER JOIN person_name pn ON pn.person_id = p.patient_id AND pn.voided = 0 ";
 
+  private static final String COLON = ":=";
+  
+  private static final String COLON_ESCAPE = "/*'*/:=/*'*/";
+  
   private final StringBuilder queryBuilder;
 
   private final Map<String, String> queryParams;
@@ -114,7 +118,9 @@ public class PatientFlagsOverviewQueryBuilder {
     if (flagQuery.endsWith(";")) {
       flagQuery = StringUtils.chop(flagQuery);
     }
-
+    if (flagQuery.contains(COLON)) {
+      flagQuery = flagQuery.replaceAll(COLON, COLON_ESCAPE);
+    }
     return flagQuery;
   }
 
