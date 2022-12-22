@@ -218,12 +218,21 @@ public class LoginPageController {
     return StringUtils.equalsIgnoreCase(
         Context.getAdministrationService()
             .getGlobalProperty(CfldistributionGlobalParameterConstants.CAPTCHA_ENABLE_KEY),
-        "true");
+        "true") && captchaKeysAvailable();
+  }
+  
+  private boolean captchaKeysAvailable() {
+    return StringUtils.isNotBlank(getCaptchaSiteKey()) && StringUtils.isNotBlank(getCaptchaSecretKey());
   }
   
   private String getCaptchaSiteKey() {
     return Context.getAdministrationService()
         .getGlobalProperty(CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SITE_KEY);
+  }
+  
+  private String getCaptchaSecretKey() {
+    return Context.getAdministrationService()
+        .getGlobalProperty(CfldistributionGlobalParameterConstants.GOOGLE_RECAPTCHA_SECRET_KEY);
   }
   
   private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {
