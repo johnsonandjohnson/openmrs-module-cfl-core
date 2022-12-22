@@ -218,11 +218,11 @@ public class LoginPageController {
     return StringUtils.equalsIgnoreCase(
         Context.getAdministrationService()
             .getGlobalProperty(CfldistributionGlobalParameterConstants.CAPTCHA_ENABLE_KEY),
-        "true") && captchaKeysNotNull();
+        "true") && captchaKeysAvailable();
   }
   
-  private boolean captchaKeysNotNull() {
-    return (getCaptchaSiteKey() != null && getCaptchaSecretKey() != null);
+  private boolean captchaKeysAvailable() {
+    return StringUtils.isNotBlank(getCaptchaSiteKey()) && StringUtils.isNotBlank(getCaptchaSecretKey());
   }
   
   private String getCaptchaSiteKey() {
