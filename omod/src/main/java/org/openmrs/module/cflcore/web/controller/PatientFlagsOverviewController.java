@@ -24,7 +24,6 @@ import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.dto.PatientFlagsOverviewDTO;
 import org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService;
-import org.openmrs.module.cflcore.api.service.impl.PatientFlagsOverviewServiceImpl;
 import org.openmrs.module.cflcore.domain.criteria.PatientFlagsOverviewCriteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
