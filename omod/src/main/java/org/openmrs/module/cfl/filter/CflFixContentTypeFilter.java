@@ -125,7 +125,7 @@ public class CflFixContentTypeFilter implements Filter {
 
     private ContentTypeOverrideData(String contentType, String[] resourceURLs) {
       this.contentType = contentType;
-      this.resourceURLs = resourceURLs;
+      this.resourceURLs = resourceURLs.clone();
     }
   }
 }
