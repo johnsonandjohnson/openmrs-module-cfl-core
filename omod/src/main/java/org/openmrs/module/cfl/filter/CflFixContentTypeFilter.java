@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,20 +27,18 @@ import java.util.Optional;
  * and d.
  */
 public class CflFixContentTypeFilter implements Filter {
-  private static final Map<String, String[]> CONTENT_TYPES_OVERRIDES;
-
   private static final String JAVASCRIPT_CONTENT_TYPE = "text/javascript;charset=UTF-8";
-  private static final String[] JAVASCRIPT_RESOURCES = {"openmrsmessages.js", "drugOrder.js", "dwr/interface/"};
+  private static final String[] JAVASCRIPT_RESOURCES = {
+    "openmrsmessages.js", "drugOrder.js", "dwr/interface/"
+  };
 
   private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
   private static final String[] JSON_RESOURCES = {"uicommons/messages/get.action"};
 
-  static {
-    final Map<String, String[]> contentTypesOverridesTmp = new HashMap<>();
-    contentTypesOverridesTmp.put(JAVASCRIPT_CONTENT_TYPE, JAVASCRIPT_RESOURCES);
-    contentTypesOverridesTmp.put(JSON_CONTENT_TYPE, JSON_RESOURCES);
-    CONTENT_TYPES_OVERRIDES = contentTypesOverridesTmp;
-  }
+  private static final List<ContentTypeOverrideData> CONTENT_TYPES_OVERRIDES =
+      Arrays.asList(
+          new ContentTypeOverrideData(JAVASCRIPT_CONTENT_TYPE, JAVASCRIPT_RESOURCES),
+          new ContentTypeOverrideData(JSON_CONTENT_TYPE, JSON_RESOURCES));
 
   @Override
   public void init(FilterConfig filterConfig) {
@@ -69,10 +67,10 @@ public class CflFixContentTypeFilter implements Filter {
   private Optional<String> getContentTypeOverride(HttpServletRequest servletRequest) {
     final String requestURI = servletRequest.getRequestURI();
 
-    for (Map.Entry<String, String[]> contentTypeOverride : CONTENT_TYPES_OVERRIDES.entrySet()) {
-      for (String resourceToOverride : contentTypeOverride.getValue()) {
+    for (ContentTypeOverrideData contentTypeOverride : CONTENT_TYPES_OVERRIDES) {
+      for (String resourceToOverride : contentTypeOverride.resourceURLs) {
         if (requestURI.contains(resourceToOverride)) {
-          return Optional.of(contentTypeOverride.getKey());
+          return Optional.of(contentTypeOverride.contentType);
         }
       }
     }
@@ -118,6 +116,16 @@ public class CflFixContentTypeFilter implements Filter {
     @Override
     public void setContentType(String type) {
       super.setContentType(staticContentType);
+    }
+  }
+
+  private static class ContentTypeOverrideData {
+    final String contentType;
+    final String[] resourceURLs;
+
+    private ContentTypeOverrideData(String contentType, String[] resourceURLs) {
+      this.contentType = contentType;
+      this.resourceURLs = resourceURLs;
     }
   }
 }

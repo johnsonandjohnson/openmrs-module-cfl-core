@@ -27,7 +27,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
   private static final Pattern RESPONSE_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaServiceImpl.class);
 
   private static final String RECAPTCHA_URL_TEMPLATE =
       "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s";
@@ -49,7 +49,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     try {
       final GoogleResponse googleResponse =
           restTemplate.getForObject(verifyUri, GoogleResponse.class);
-      LOGGER.debug("Google's response: {} ", googleResponse.toString());
+      LOGGER.debug("Google's response: {} ", googleResponse);
 
       if (!googleResponse.isSuccess()) {
         if (googleResponse.hasClientError()) {
