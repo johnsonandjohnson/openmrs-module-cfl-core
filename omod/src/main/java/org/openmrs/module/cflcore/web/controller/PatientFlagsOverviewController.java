@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/cfl/patientFlags")
 public class PatientFlagsOverviewController {
 
-  private static final Log LOGGER = LogFactory.getLog(PatientFlagsOverviewServiceImpl.class);
+  private static final Log LOGGER = LogFactory.getLog(PatientFlagsOverviewController.class);
 
   @ApiOperation(value = "None", notes = "Gets patients by specific criteria")
   @ApiResponses(value = {
