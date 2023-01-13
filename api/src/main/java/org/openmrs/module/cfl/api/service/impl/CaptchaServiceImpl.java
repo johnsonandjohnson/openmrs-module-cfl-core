@@ -36,6 +36,14 @@ public class CaptchaServiceImpl implements CaptchaService {
 
   private ReCaptchaAttemptService reCaptchaAttemptService;
 
+  public CaptchaServiceImpl() {
+    this(new RestTemplate());
+  }
+
+  CaptchaServiceImpl(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
   @Override
   public void processResponse(HttpServletRequest request) {
 
