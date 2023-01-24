@@ -1,0 +1,105 @@
+{
+  "name": "Dengue",
+  "numberOfDose": 2,
+  "visits": [
+    {
+      "doseNumber": 1,
+      "nameOfDose": "Enrollment",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 10,
+      "lowWindow": 0,
+      "midPointWindow": 0,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 2,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 9,
+      "lowWindow": 0,
+      "midPointWindow": 1,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 3,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 8,
+      "lowWindow": 0,
+      "midPointWindow": 2,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 4,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 7,
+      "lowWindow": 0,
+      "midPointWindow": 4,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 5,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 6,
+      "lowWindow": 0,
+      "midPointWindow": 8,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 6,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 5,
+      "lowWindow": 0,
+      "midPointWindow": 12,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 7,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 4,
+      "lowWindow": 0,
+      "midPointWindow": 16,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 8,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 3,
+      "lowWindow": 0,
+      "midPointWindow": 20,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 9,
+      "nameOfDose": "Prophylactic Dosing",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 2,
+      "lowWindow": 0,
+      "midPointWindow": 24,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 9,
+      "nameOfDose": "Follow-up Visit",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 1,
+      "lowWindow": 0,
+      "midPointWindow": 39,
+      "upWindow": 0
+    },
+    {
+      "doseNumber": 9,
+      "nameOfDose": "Follow-up Visit",
+      "visitTime": "Clinic",
+      "numberOfFutureVisit": 0,
+      "lowWindow": 0,
+      "midPointWindow": 49,
+      "upWindow": 0
+    }
+  ]
+}

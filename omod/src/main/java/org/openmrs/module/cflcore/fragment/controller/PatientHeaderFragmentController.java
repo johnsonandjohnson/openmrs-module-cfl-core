@@ -24,8 +24,10 @@
 
 package org.openmrs.module.cflcore.fragment.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
@@ -56,6 +58,8 @@ import java.util.List;
 public class PatientHeaderFragmentController extends HeaderFragment {
 
     private static final String TELEPHONE = "telephone";
+    private static final String SHOW_GENDER_PERSON_HEADER = "showGenderPersonHeader";
+    private static final String SHOW_AGE_PERSON_HEADER = "showAgePersonHeader";
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "checkstyle:ParameterAssignment",
             "PMD.ExcessiveParameterList", "PMD.AvoidReassigningParameters"})
@@ -111,6 +115,22 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         config.addAttribute("extraPatientIdentifiersMappedByType",
                 wrapper.getExtraIdentifiersMappedByType(sessionContext.getSessionLocation()));
         config.addAttribute("dashboardUrl", coreAppsProperties.getDashboardUrl());
+        model.addAttribute(SHOW_GENDER_PERSON_HEADER, getShowGenderPersonHeader());
+        model.addAttribute(SHOW_AGE_PERSON_HEADER, getShowAgePersonHeader());
+    }
+    
+    private Boolean getShowGenderPersonHeader() {
+        return StringUtils.equalsIgnoreCase(
+            Context.getAdministrationService()
+                .getGlobalProperty(CFLConstants.SHOW_GENDER_PERSON_HEADER_KEY),
+            "true");
+    }
+    
+    private Boolean getShowAgePersonHeader() {
+        return StringUtils.equalsIgnoreCase(
+            Context.getAdministrationService()
+                .getGlobalProperty(CFLConstants.SHOW_AGE_PERSON_HEADER_KEY),
+            "true");
     }
 
     public class ExtraPatientIdentifierType {

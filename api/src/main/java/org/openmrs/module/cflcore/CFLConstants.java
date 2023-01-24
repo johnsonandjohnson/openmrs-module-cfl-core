@@ -21,6 +21,7 @@ public final class CFLConstants {
   public static final String MODULE_ID = "cflcore";
   public static final String MODULE_API_PACKAGE = "org.openmrs.module.cflcore.api";
 
+
   public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
   public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";
 
@@ -161,12 +162,23 @@ public final class CFLConstants {
   public static final String ENVIRONMENT_DESCRIPTION =
       "Set the value to 'Staging' to hide the Logo";
 
+  public static final String SHOW_AGE_PERSON_HEADER_KEY = "cfl.showAgePersonHeader";
+  public static final String SHOW_AGE_PERSON_HEADER_DEFAULT_VALUE = "true";
+  public static final String SHOW_AGE_PERSON_HEADER_DESCRIPTION =
+      "Set the value to 'true' to show Age in Person Header";
+
+  public static final String SHOW_GENDER_PERSON_HEADER_KEY = "cfl.showGenderPersonHeader";
+  public static final String SHOW_GENDER_PERSON_HEADER_DEFAULT_VALUE = "true";
+  public static final String SHOW_GENDER_PERSON_HEADER_DESCRIPTION =
+      "Set the value to 'true' to show Gender in Person Header";
+
   public static final String OTHER_VISIT_TYPE_NAME = "OTHER";
   public static final String DOSING_VISIT_TYPE_NAME = "Dosing";
 
   public static final String VISIT_STATUS_ATTRIBUTE_TYPE_UUID =
       "70ca70ac-53fd-49e4-9abe-663d4785fe62";
   public static final String VISIT_STATUS_ATTRIBUTE_TYPE_NAME = "Visit Status";
+  public static final String VISIT_TIME_ATTRIBUTE_TYPE_NAME = "Visit Time";
   public static final String SCHEDULED_VISIT_STATUS = "SCHEDULED";
 
   public static final String CFL_CONFIG_SERVICE_BEAN_NAME = "cfl.configService";
@@ -352,7 +364,29 @@ public final class CFLConstants {
 
   public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION =
       "Determines whether patient templates should be created after patient registration automatically. "
-          + "If yes, channel type needs to be provided. If not, empty or false value is sufficient. Possible values: SMS or Call or false or empty value";
+          + "If yes, channel type needs to be provided. If not, leave the empty value";
+
+  public static final String PERSON_STATUS_ATTRIBUTE_TYPE_NAME = "Person status";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY = "cfl.patientFlagsOverviewIdentifierForSearch";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE = "OpenMRS ID";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DESCRIPTION =
+      "Patient identifier type by which searching "
+          + "for patients on flags overview page can be performed";
+
+  public static final String CFL_UI_APP_PREFIX = "cflui.";
+
+  public static final String REGISTER_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat(
+      "registerPatient");
+
+  public static final String REGISTER_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat(
+      "registerCaregiver");
+
+  public static final String FIND_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("findPatient");
+
+  public static final String FIND_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("findCaregiver");
 
   private CFLConstants() {
   }

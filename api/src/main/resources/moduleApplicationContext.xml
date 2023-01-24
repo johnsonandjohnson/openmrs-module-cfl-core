@@ -140,22 +140,16 @@
     </bean>
 
     <bean id="cfl.componentStateHandler" class="org.openmrs.module.cflcore.handler.metadatasharing.ComponentStateHandler">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory"/>
-        </property>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
     </bean>
 
     <bean id="cfl.userAppHandler" class="org.openmrs.module.cflcore.handler.metadatasharing.UserAppHandler">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory"/>
-        </property>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
     </bean>
 
     <bean id="cfl.monitoringProvider.Database"
           class="org.openmrs.module.cflcore.api.monitor.impl.DatabaseMonitoringProviderImpl">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory"/>
-        </property>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
     </bean>
     <bean id="cfl.monitoringProvider.Modules"
           class="org.openmrs.module.cflcore.api.monitor.impl.ModulesMonitoringProviderImpl"/>
@@ -168,7 +162,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.MonitoringService</value>
-                <ref local="cfl.monitoringService"/>
+                <ref bean="cfl.monitoringService"/>
             </list>
         </property>
     </bean>
@@ -184,7 +178,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.CFLEncounterService</value>
-                <ref local="cfl.encounterService"/>
+                <ref bean="cfl.encounterService"/>
             </list>
         </property>
     </bean>
@@ -217,31 +211,27 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.AdHocMessageService</value>
-                <ref local="cfl.adHocMessageService"/>
+                <ref bean="cfl.adHocMessageService"/>
             </list>
         </property>
     </bean>
 
     <bean id="cfl.vaccinationService" class="org.openmrs.module.cflcore.api.service.impl.VaccinationServiceImpl">
-        <property name="extendedPatientDataDAO">
-            <ref local="cfl.extendedPatientDataDAO"/>
-        </property>
+        <property name="extendedPatientDataDAO" ref="cfl.extendedPatientDataDAO"/>
     </bean>
 
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.VaccinationService</value>
-                <ref local="cfl.vaccinationService"/>
+                <ref bean="cfl.vaccinationService"/>
             </list>
         </property>
     </bean>
 
     <bean id="cfl.globalPropertyHistoryService"
           class="org.openmrs.module.cflcore.api.service.impl.GlobalPropertyHistoryServiceImpl">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory"/>
-        </property>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
     </bean>
 
     <bean id="cfl.patientService" class="org.openmrs.module.cflcore.api.service.impl.CFLPatientServiceImpl">
@@ -253,7 +243,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.CFLPatientService</value>
-                <ref local="cfl.patientService"/>
+                <ref bean="cfl.patientService"/>
             </list>
         </property>
     </bean>
@@ -281,7 +271,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.CFLAddressHierarchyService</value>
-                <ref local="cfl.CFLAddressHierarchyService"/>
+                <ref bean="cfl.CFLAddressHierarchyService"/>
             </list>
         </property>
     </bean>
@@ -292,7 +282,7 @@
     </bean>
 
     <bean id="cfl.countryService" class="org.openmrs.module.cflcore.api.service.impl.CountryServiceImpl">
-        <property name="conceptService"><ref bean="conceptService"/></property>
+        <property name="conceptService" ref="conceptService"/>
     </bean>
 
     <bean id="cfl.extendedConceptSetDAO" class="org.openmrs.module.cflcore.db.impl.ExtendedConceptSetDAOImpl">
@@ -304,4 +294,34 @@
 
     <bean id="cfl.treatmentsContentProvider"
           class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentDataContentProvider"/>
+
+    <bean id="cfl.patientFlagsOverviewDAO" class="org.openmrs.module.cflcore.db.impl.PatientFlagsOverviewDAOImpl">
+        <property name="dbSessionFactory" ref="dbSessionFactory"/>
+    </bean>
+
+    <bean id="cfl.patientFlagsOverviewService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientFlagsOverviewServiceImpl">
+        <property name="patientFlagsOverviewDAO" ref="cfl.patientFlagsOverviewDAO" />
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientFlagsOverviewService</value>
+                <ref bean="cfl.patientFlagsOverviewService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cflPersonService" class="org.openmrs.module.cflcore.api.service.impl.CFLPersonServiceImpl">
+        <property name="sessionFactory" ref="dbSessionFactory"/>
+        <property name="personDAO" ref="personDAO"/>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.CFLPersonService</value>
+                <ref bean="cflPersonService"/>
+            </list>
+        </property>
+    </bean>
 </beans>

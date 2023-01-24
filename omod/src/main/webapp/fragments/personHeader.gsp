@@ -49,25 +49,33 @@
                 <% } %>
                 &nbsp;
                 <div style="display: flex; flex-direction: column;">
-                    <% if (person.gender || person.birthdate) { %>
-                        <span class="gender-age">
-                            <% if (person.gender) { %>
-                                <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
-                            <% } %>
+                    <% if (showGenderPersonHeader) { %>
+                        <% if (person.gender) { %>
+                            <span>${ui.message("coreapps.gender." + ui.encodeHtml(person.gender))}&nbsp;</span>
+                        <% } else { %>
+                            <span>${ui.message("cfl.personHeader.genderUnknown")}</span>
+                        <% } %>
+                    <% } else { %>
+                        <span>${ui.message("cfl.personHeader.genderUnknown")}</span>
+                    <% } %>
+                    <% if (showAgePersonHeader) { %>
+                        <span>
                             <% if (person.birthdate) { %>
-                                <span>
-                                    <% if (person.age > 0) { %>
+                                <% if (person.age > 0) { %>
                                     ${ui.message("coreapps.ageYears", person.age)}
-                                    <% } else if (config.person.ageInMonths > 0) { %>
-                                    ${ui.message("coreapps.ageMonths", config.person.ageInMonths)}
-                                    <% } else { %>
-                                    ${ui.message("coreapps.ageDays", config.person.ageInDays)}
-                                    <% } %>
-                                    (<% if (person.birthdateEstimated) { %>~<% } %>
-                                    ${ ui.formatDatePretty(person.birthdate) })
-                                </span>
+                                <% } else if (person.ageInMonths > 0) { %>
+                                    ${ui.message("coreapps.ageMonths", person.ageInMonths)}
+                                <% } else { %>
+                                    ${ui.message("coreapps.ageDays", person.ageInDays)}
+                                <% } %>
+                                (<% if (person.birthdateEstimated) { %>~<% } %>
+                                ${ ui.formatDatePretty(person.birthdate) })
+                            <% } else { %>
+                                ${ui.message("coreapps.unknownAge")}
                             <% } %>
                         </span>
+                    <% } else { %>
+                        <span>${ui.message("coreapps.unknownAge")}</span>
                     <% } %>
                     <% if (telephone) { %>
                         <span class="gender-age">

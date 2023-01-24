@@ -37,6 +37,10 @@ public final class LocationUtil {
         return locationAttribute;
     }
 
+    public static Location getCurrentlyLoggedInUserLocation() {
+        return Context.getUserContext().getLocation();
+    }
+
     private LocationUtil() {
     }
 }

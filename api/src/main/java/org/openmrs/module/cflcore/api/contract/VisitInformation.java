@@ -17,6 +17,7 @@ import java.util.Objects;
 public class VisitInformation {
     private int doseNumber;
     private String nameOfDose;
+    private String visitTime;
     private int midPointWindow;
     private int lowWindow;
     private int upWindow;
@@ -36,6 +37,14 @@ public class VisitInformation {
 
     public void setNameOfDose(String nameOfDose) {
         this.nameOfDose = nameOfDose;
+    }
+
+    public String getVisitTime() {
+        return visitTime;
+    }
+
+    public void setVisitTime(String visitTime) {
+        this.visitTime = visitTime;
     }
 
     public int getMidPointWindow() {
@@ -77,6 +86,6 @@ public class VisitInformation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(doseNumber, nameOfDose, midPointWindow, lowWindow, upWindow, numberOfFutureVisit);
+        return Objects.hash(doseNumber, nameOfDose, visitTime, midPointWindow, lowWindow, upWindow, numberOfFutureVisit);
     }
 }

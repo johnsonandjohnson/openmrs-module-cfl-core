@@ -191,6 +191,7 @@ ORDER BY 1 DESC;"/>
     </changeSet>
 
     <changeSet id="cfl-global-property-history-resources" author="Connect for Life">
+        <validCheckSum>3:396bae0ded5eae7c9ced06873b7e58fa</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="global_property"/>
             <not><tableExists tableName="global_property_history"/></not>
@@ -200,11 +201,9 @@ ORDER BY 1 DESC;"/>
             database triggers for updating global properties entities.
         </comment>
         <sql>
-            CREATE TABLE global_property_history LIKE global_property;
+            CREATE TABLE global_property_history SELECT * FROM global_property WHERE 0;
 
             ALTER TABLE global_property_history
-            DROP PRIMARY KEY, DROP KEY global_property_uuid_index, DROP KEY global_property_property_index,
-            ENGINE = MyISAM,
             ADD global_property_history_id INT AUTO_INCREMENT FIRST,
             ADD action VARCHAR(8) AFTER global_property_history_id,
             ADD action_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER action,

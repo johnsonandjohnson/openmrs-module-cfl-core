@@ -47,7 +47,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
   private Log log = LogFactory.getLog(this.getClass());
 
-  /** @see #started() */
+  /**
+   * @see #started()
+   */
   @Override
   public void started() {
     log.info("Started CFL Module");
@@ -74,7 +76,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
   }
 
-  /** @see #stopped() */
+  /**
+   * @see #stopped()
+   */
   @Override
   public void stopped() {
     log.info("Stopped CFL Module");
@@ -112,7 +116,9 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     createPersonIdentifierAttributeType();
   }
 
-  /** Creates person attribute type used to store information about additional person identifier. */
+  /**
+   * Creates person attribute type used to store information about additional person identifier.
+   */
   private void createPersonIdentifierAttributeType() {
     PersonAttributeType attributeType = new PersonAttributeType();
     attributeType.setName(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_NAME);
@@ -233,6 +239,18 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY,
         CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE,
         CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY,
+        CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE,
+        CFLConstants.PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.SHOW_AGE_PERSON_HEADER_KEY,
+        CFLConstants.SHOW_AGE_PERSON_HEADER_DEFAULT_VALUE,
+        CFLConstants.SHOW_AGE_PERSON_HEADER_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_KEY,
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_DEFAULT_VALUE,
+        CFLConstants.SHOW_GENDER_PERSON_HEADER_DESCRIPTION);
   }
 
   private void createCountrySettings() {
