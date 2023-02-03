@@ -24,7 +24,12 @@ public class RegimenContextContentProvider implements VelocityContextContentProv
 
   @Override
   public void populateContext(FormEntrySession formEntrySession, VelocityContext velocityContext) {
-    formEntrySession.addToVelocityContext(REGIMENS_PROPERTY_NAME, getRegimensWithDrugs());
+    try {
+      formEntrySession.addToVelocityContext(
+          REGIMENS_PROPERTY_NAME, new ObjectMapper().writeValueAsString(getRegimensWithDrugs()));
+    } catch (IOException e) {
+      LOGGER.error("Unable to write regimens object into JSON string");
+    }
   }
 
   private List<Regimen> getRegimensWithDrugs() {
