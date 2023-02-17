@@ -10,17 +10,6 @@
 
 package org.openmrs.module.cflcore.web.service.impl;
 
-import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculateBirthdateFromAge;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Attributable;
@@ -43,17 +32,12 @@ import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.dto.RelationshipDTO;
 import org.openmrs.module.cflcore.api.registration.person.action.AfterPersonCreatedAction;
 import org.openmrs.module.cflcore.api.service.RelationshipService;
-import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.cflcore.api.util.LocationUtil;
 import org.openmrs.module.cflcore.api.util.PersonUtil;
 import org.openmrs.module.cflcore.web.dto.CFLRegistrationRelationshipDTO;
 import org.openmrs.module.cflcore.web.service.CFLRegistrationUiService;
 import org.openmrs.module.idgen.IdentifierSource;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
-import org.openmrs.module.messages.api.constants.MessagesConstants;
-import org.openmrs.module.messages.api.model.PatientTemplate;
-import org.openmrs.module.messages.api.service.DefaultPatientTemplateService;
-import org.openmrs.module.messages.api.service.TemplateFieldValueService;
 import org.openmrs.module.registrationcore.RegistrationData;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.springframework.beans.MutablePropertyValues;
@@ -63,6 +47,18 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.openmrs.module.registrationcore.RegistrationCoreUtil.calculateBirthdateFromAge;
 
 /**
  * The default implementation of {@link CFLRegistrationUiService}.
@@ -188,25 +184,6 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     relationshipService.updatedRelationships(newRelationshipDTOs, person);
   }
 
-  @Override
-  @Transactional
-  public void createPatientTemplatesIfNeeded(Patient patient) {
-    String gp = GlobalPropertyUtils.getGlobalProperty(
-        CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY);
-
-    if (isPatientTemplatesShouldNotBeCreated(gp)) {
-      return;
-    }
-
-    List<PatientTemplate> patientTemplates = getDefaultPatientTemplateService().generateDefaultPatientTemplates(
-        patient);
-    TemplateFieldValueService templateFieldValueService = Context.getService(
-        TemplateFieldValueService.class);
-    patientTemplates.forEach(patientTemplate -> templateFieldValueService.updateTemplateFieldValue(
-        patientTemplate.getId(),
-        MessagesConstants.CHANNEL_TYPE_PARAM_NAME, gp));
-  }
-
   private void addPatientLocationIfNotProvided(Patient patient,
       PropertyValues registrationProperties) {
     final String locationAttributeName = Context.getAdministrationService()
@@ -221,15 +198,6 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
       locationAttribute.setValue(currentUserLocationUuid);
       patient.addAttribute(locationAttribute);
     }
-  }
-
-  private boolean isPatientTemplatesShouldNotBeCreated(String gpKey) {
-    return StringUtils.isBlank(gpKey);
-  }
-
-  private DefaultPatientTemplateService getDefaultPatientTemplateService() {
-    return Context.getRegisteredComponent("messages.defaultPatientTemplateService",
-        DefaultPatientTemplateService.class);
   }
 
   public void setAdministrationService(AdministrationService administrationService) {

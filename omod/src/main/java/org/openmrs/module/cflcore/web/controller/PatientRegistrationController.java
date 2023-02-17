@@ -80,8 +80,6 @@ public class PatientRegistrationController extends BaseCflModuleRestController {
         cflRegistrationUiService.preparePatientRegistration(registrationProperties);
     final Patient registeredPatient = registrationCoreService.registerPatient(registrationData);
 
-    cflRegistrationUiService.createPatientTemplatesIfNeeded(registeredPatient);
-
     flashInfoMessage(registrationRequest, registeredPatient);
 
     return new ResponseEntity<>(registeredPatient.getUuid(), HttpStatus.OK);
