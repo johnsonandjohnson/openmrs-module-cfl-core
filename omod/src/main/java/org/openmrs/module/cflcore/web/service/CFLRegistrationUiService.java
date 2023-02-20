@@ -40,15 +40,4 @@ public interface CFLRegistrationUiService {
   List<Relationship> parseRelationships(PropertyValues registrationProperties);
 
   void updateRelationships(Person person, List<Relationship> newRelationships);
-
-  /**
-   * Creates patient templates with channel type set in
-   * {@link
-   * org.openmrs.module.cflcore.CFLConstants.CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY}
-   * global property. If such GP does not exist or is empty or has false value, then patient
-   * templates will not be created.
-   *
-   * @param patient patient for whom the patient templates will be created
-   */
-  void createPatientTemplatesIfNeeded(Patient patient);
 }
