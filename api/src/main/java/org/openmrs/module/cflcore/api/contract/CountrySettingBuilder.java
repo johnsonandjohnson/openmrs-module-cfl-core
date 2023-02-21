@@ -10,8 +10,9 @@
 
 package org.openmrs.module.cflcore.api.contract;
 
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
-import org.openmrs.module.messages.api.model.CountryProperty;
+import static java.lang.Boolean.parseBoolean;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,10 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
-
-import static java.lang.Boolean.parseBoolean;
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableSet;
+import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
+import org.openmrs.module.messages.api.model.CountryProperty;
 
 public class CountrySettingBuilder {
   public static final Set<String> ALL_PROP_NAMES =
@@ -34,9 +33,12 @@ public class CountrySettingBuilder {
                   CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
                   CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
                   CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
+                  CountryPropertyConstants.WHATSAPP_CONFIG_PROP_NAME,
                   CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
                   CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
                   CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
+                  CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+                  CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
                   CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
                   CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME)));
 
@@ -58,6 +60,7 @@ public class CountrySettingBuilder {
         CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
         CountrySettingBuilder::setPerformCallOnPatientRegistration);
     tmp.put(CountryPropertyConstants.SMS_CONFIG_PROP_NAME, CountrySettingBuilder::setSms);
+    tmp.put(CountryPropertyConstants.WHATSAPP_CONFIG_PROP_NAME, CountrySettingBuilder::setWhatsApp);
     tmp.put(CountryPropertyConstants.CALL_CONFIG_PROP_NAME, CountrySettingBuilder::setCall);
     tmp.put(
         CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
@@ -65,6 +68,12 @@ public class CountrySettingBuilder {
     tmp.put(
         CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
         CountrySettingBuilder::setShouldSendReminderViaCall);
+    tmp.put(
+      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+      CountrySettingBuilder::setSendWhatsAppOnPatientRegistration);
+    tmp.put(
+      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+      CountrySettingBuilder::setShouldSendReminderViaWhatsApp);
     tmp.put(
         CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
         CountrySettingBuilder::setShouldCreateFirstVisit);
@@ -76,10 +85,13 @@ public class CountrySettingBuilder {
 
   private String sms;
   private String call;
+  private String whatsApp;
   private boolean performCallOnPatientRegistration = false;
   private boolean sendSmsOnPatientRegistration = false;
   private boolean shouldSendReminderViaCall = false;
   private boolean shouldSendReminderViaSms = false;
+  private boolean sendWhatsAppOnPatientRegistration = false;
+  private boolean shouldSendReminderViaWhatsApp = false;
   private boolean shouldCreateFirstVisit = false;
   private boolean shouldCreateFutureVisit = false;
   private String patientNotificationTimeWindowFrom = "10:00";
@@ -107,11 +119,14 @@ public class CountrySettingBuilder {
   public CountrySetting build() {
     return new CountrySetting(
         sms,
+        whatsApp,
         call,
         performCallOnPatientRegistration,
         sendSmsOnPatientRegistration,
         shouldSendReminderViaCall,
         shouldSendReminderViaSms,
+        sendWhatsAppOnPatientRegistration,
+        shouldSendReminderViaWhatsApp,
         shouldCreateFirstVisit,
         shouldCreateFutureVisit,
         patientNotificationTimeWindowFrom,
@@ -120,6 +135,10 @@ public class CountrySettingBuilder {
 
   private void setSms(String sms) {
     this.sms = sms;
+  }
+
+  private void setWhatsApp(String whatsApp) {
+    this.whatsApp = whatsApp;
   }
 
   private void setCall(String call) {
@@ -140,6 +159,14 @@ public class CountrySettingBuilder {
 
   private void setShouldSendReminderViaSms(String shouldSendReminderViaSms) {
     this.shouldSendReminderViaSms = parseBoolean(shouldSendReminderViaSms);
+  }
+
+  private void setSendWhatsAppOnPatientRegistration(String sendWhatsAppOnPatientRegistration) {
+    this.sendWhatsAppOnPatientRegistration = parseBoolean(sendWhatsAppOnPatientRegistration);
+  }
+
+  private void setShouldSendReminderViaWhatsApp(String shouldSendReminderViaWhatsApp) {
+    this.shouldSendReminderViaWhatsApp = parseBoolean(shouldSendReminderViaWhatsApp);
   }
 
   private void setShouldCreateFirstVisit(String shouldCreateFirstVisit) {

@@ -10,60 +10,80 @@
 
 package org.openmrs.module.cflcore.api.constant;
 
-/** The constants class with Country Properties. */
+/**
+ * The constants class with Country Properties.
+ */
 public final class CountryPropertyConstants {
+
   public static final String PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME =
-      "messages.patientNotificationTimeWindowFrom";
+    "messages.patientNotificationTimeWindowFrom";
   public static final String PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC =
-      "The property configures the beginning of the time window during which system is allowed to send notifications to "
-          + "patients.";
+    "The property configures the beginning of the time window during which system is allowed to send notifications to "
+      + "patients.";
 
   public static final String PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME =
-      "messages.patientNotificationTimeWindowTo";
+    "messages.patientNotificationTimeWindowTo";
   public static final String PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC =
-      "The property configures the end of the time window during which system is allowed to send notifications to "
-          + "patients.";
+    "The property configures the end of the time window during which system is allowed to send notifications to "
+      + "patients.";
 
   public static final String SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME =
-      "messages.shouldSendReminderViaSms";
+    "messages.shouldSendReminderViaSms";
   public static final String SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC =
-      "The property configures whether the system should send Visit reminders via SMS. Value: true/false.";
+    "The property configures whether the system should send Visit reminders via SMS. Value: true/false.";
 
   public static final String SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME =
-      "messages.shouldSendReminderViaCall";
+    "messages.shouldSendReminderViaCall";
   public static final String SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC =
-      "The property configures whether the system should deliver Visit reminders via Call. Value: true/false.";
+    "The property configures whether the system should deliver Visit reminders via Call. Value: true/false.";
 
   public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME =
-      "messages.performCallOnPatientRegistration";
+    "messages.performCallOnPatientRegistration";
   public static final String PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC =
-      "The property configures whether new patients should receive Welcome Message via call after they are register in the"
-          + " system. Value: true/false";
+    "The property configures whether new patients should receive Welcome Message via call after they are register in the"
+      + " system. Value: true/false";
 
   public static final String SMS_CONFIG_PROP_NAME = "messages.smsConfig";
   public static final String SMS_CONFIG_PROP_DESC =
-      "The name of default SMS provider configuration.";
+    "The name of default SMS provider configuration.";
+
+  public static final String WHATSAPP_CONFIG_PROP_NAME = "messages.whatsAppConfig";
+
+  public static final String WHATSAPP_CONFIG_PROP_DESC = "The name of default WhatsApp provider configuration.";
 
   public static final String CALL_CONFIG_PROP_NAME = "messages.callConfig";
   public static final String CALL_CONFIG_PROP_DESC =
-      "The name of default Call provider configuration.";
+    "The name of default Call provider configuration.";
 
   public static final String SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME =
-      "messages.sendSmsOnPatientRegistration";
+    "messages.sendSmsOnPatientRegistration";
   public static final String SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC =
-      "The property configures whether new patients should receive Welcome Message via SMS after they are "
-          + "register in the system. Value: true/false.";
+    "The property configures whether new patients should receive Welcome Message via SMS after they are "
+      + "register in the system. Value: true/false.";
+
+  public static final String SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME = "messages.sendWhatsAppOnPatientRegistration";
+
+  public static final String SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC =
+    "The property configures whether new patients should receive Welcome Message via WhatsApp after they are "
+      + "register in the system. Value: true/false.";
+
+  public static final String SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME = "messages.shouldSendReminderViaWhatsApp";
+
+  public static final String SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC =
+    "The property configures whether new patients should receive Welcome Message via WhatsApp after they are "
+      + "register in the system. Value: true/false.";
 
   public static final String SHOULD_CREATE_FIRST_VISIT_PROP_NAME = "visits.shouldCreateFirstVisit";
   public static final String SHOULD_CREATE_FIRST_VISIT_PROP_DESC =
-      "The property configures whether the system should create first Visit for newly register patients automatically. "
-          + "Value: true/false.";
+    "The property configures whether the system should create first Visit for newly register patients automatically. "
+      + "Value: true/false.";
 
   public static final String SHOULD_CREATE_FUTURE_VISIT_PROP_NAME =
-      "visits.shouldCreateFutureVisit";
+    "visits.shouldCreateFutureVisit";
   public static final String SHOULD_CREATE_FUTURE_VISIT_PROP_DESC =
-      "The property configures whether the system should create a new future Visit after an existing Visit is marked as "
-          + "OCCURRED. Value: true/false.";
+    "The property configures whether the system should create a new future Visit after an existing Visit is marked as "
+      + "OCCURRED. Value: true/false.";
 
-  private CountryPropertyConstants() {}
+  private CountryPropertyConstants() {
+  }
 }

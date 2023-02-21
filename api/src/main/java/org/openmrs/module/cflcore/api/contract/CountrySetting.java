@@ -12,11 +12,14 @@ package org.openmrs.module.cflcore.api.contract;
 
 public class CountrySetting {
   private String sms;
+  private String whatsApp;
   private String call;
   private boolean performCallOnPatientRegistration;
   private boolean sendSmsOnPatientRegistration;
   private boolean shouldSendReminderViaCall;
   private boolean shouldSendReminderViaSms;
+  private boolean sendWhatsAppOnPatientRegistration;
+  private boolean shouldSendReminderViaWhatsApp;
   private boolean shouldCreateFirstVisit;
   private boolean shouldCreateFutureVisit;
   private String patientNotificationTimeWindowFrom;
@@ -27,21 +30,27 @@ public class CountrySetting {
   @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
   CountrySetting(
       String sms,
+      String whatsApp,
       String call,
       boolean performCallOnPatientRegistration,
       boolean sendSmsOnPatientRegistration,
       boolean shouldSendReminderViaCall,
       boolean shouldSendReminderViaSms,
+      boolean sendWhatsAppOnPatientRegistration,
+      boolean shouldSendReminderViaWhatsApp,
       boolean shouldCreateFirstVisit,
       boolean shouldCreateFutureVisit,
       String patientNotificationTimeWindowFrom,
       String patientNotificationTimeWindowTo) {
     this.sms = sms;
+    this.whatsApp = whatsApp;
     this.call = call;
     this.performCallOnPatientRegistration = performCallOnPatientRegistration;
     this.sendSmsOnPatientRegistration = sendSmsOnPatientRegistration;
     this.shouldSendReminderViaCall = shouldSendReminderViaCall;
     this.shouldSendReminderViaSms = shouldSendReminderViaSms;
+    this.sendWhatsAppOnPatientRegistration = sendWhatsAppOnPatientRegistration;
+    this.shouldSendReminderViaWhatsApp = shouldSendReminderViaWhatsApp;
     this.shouldCreateFirstVisit = shouldCreateFirstVisit;
     this.shouldCreateFutureVisit = shouldCreateFutureVisit;
     this.patientNotificationTimeWindowFrom = patientNotificationTimeWindowFrom;
@@ -54,6 +63,14 @@ public class CountrySetting {
 
   public void setSms(String sms) {
     this.sms = sms;
+  }
+
+  public String getWhatsApp() {
+    return whatsApp;
+  }
+
+  public void setWhatsApp(String whatsApp) {
+    this.whatsApp = whatsApp;
   }
 
   public String getCall() {
@@ -94,6 +111,22 @@ public class CountrySetting {
 
   public void setShouldSendReminderViaSms(boolean shouldSendReminderViaSms) {
     this.shouldSendReminderViaSms = shouldSendReminderViaSms;
+  }
+
+  public boolean isSendWhatsAppOnPatientRegistration() {
+    return sendWhatsAppOnPatientRegistration;
+  }
+
+  public void setSendWhatsAppOnPatientRegistration(boolean sendWhatsAppOnPatientRegistration) {
+    this.sendWhatsAppOnPatientRegistration = sendWhatsAppOnPatientRegistration;
+  }
+
+  public boolean isShouldSendReminderViaWhatsApp() {
+    return shouldSendReminderViaWhatsApp;
+  }
+
+  public void setShouldSendReminderViaWhatsApp(boolean shouldSendReminderViaWhatsApp) {
+    this.shouldSendReminderViaWhatsApp = shouldSendReminderViaWhatsApp;
   }
 
   public boolean isShouldCreateFirstVisit() {

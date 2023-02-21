@@ -75,6 +75,16 @@
                         </span>
                         <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
                     </spring:bind>
+                    <spring:bind path="model.messageRequest.whatsAppChannel">
+                        <input type="hidden" name="_${status.expression}"/>
+                        <span>
+                            <input required type="checkbox" name="${status.expression}" id="whatsAppChannel"
+                                   onClick="channelCheckboxClicked(this, 'smsConfig')"
+                                   <c:if test="${model.messageRequest.whatsAppChannel}">checked</c:if> />
+                            <openmrs:message code="cfl.channelName.WhatsApp"/>
+                        </span>
+                        <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
+                    </spring:bind>
                 </td>
             </tr>
             <tr id="callConfig">

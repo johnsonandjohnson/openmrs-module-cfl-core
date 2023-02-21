@@ -10,6 +10,9 @@
 
 package org.openmrs.module.cflcore;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAttributeType;
@@ -35,10 +38,6 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -272,11 +271,15 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
-        "defaultSmS",
+        "-",
         CountryPropertyConstants.SMS_CONFIG_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+        CountryPropertyConstants.WHATSAPP_CONFIG_PROP_NAME,
+        "-",
+        CountryPropertyConstants.WHATSAPP_CONFIG_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
-        "defaultCall",
+        "-",
         CountryPropertyConstants.CALL_CONFIG_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
@@ -286,6 +289,14 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
         Boolean.FALSE.toString(),
         CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+      Boolean.FALSE.toString(),
+      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
+    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
+      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+      Boolean.FALSE.toString(),
+      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
