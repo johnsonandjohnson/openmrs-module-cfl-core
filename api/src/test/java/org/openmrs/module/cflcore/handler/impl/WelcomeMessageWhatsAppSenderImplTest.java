@@ -1,13 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
- * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- * <p>
- * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
- * graphic logo is a trademark of OpenMRS Inc.
- */
-
 package org.openmrs.module.cflcore.handler.impl;
 
 import static org.hamcrest.Matchers.is;
@@ -29,15 +19,15 @@ import org.openmrs.module.cflcore.api.util.DateUtil;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
 import org.openmrs.module.messages.api.service.impl.AbstractTextMessageServiceResultsHandlerService;
 
-public class WelcomeMessageSMSSenderImplTest extends AbstractBaseWelcomeMessageSenderImplTest {
+public class WelcomeMessageWhatsAppSenderImplTest extends AbstractBaseWelcomeMessageSenderImplTest {
 
-  private static final String SMS_CONFIG_NAME = "turnIO";
+  private static final String WHATSAPP_CONFIG_NAME = "nexmo-whatsapp";
 
   @Mock
   private ConfigService configService;
 
   @InjectMocks
-  private WelcomeMessageSMSSenderImpl welcomeMessageSMSSender;
+  private WelcomeMessageWhatsAppSenderImpl welcomeMessageWhatsAppSender;
 
   @Captor
   private ArgumentCaptor<ScheduledExecutionContext> executionContext;
@@ -50,16 +40,16 @@ public class WelcomeMessageSMSSenderImplTest extends AbstractBaseWelcomeMessageS
   @Test
   public void shouldVerifyIfProperExecutionContextParamsAreSent() {
     CountrySetting countrySetting = new CountrySetting();
-    countrySetting.setSendSmsOnPatientRegistration(true);
-    countrySetting.setSms(SMS_CONFIG_NAME);
+    countrySetting.setSendWhatsAppOnPatientRegistration(true);
+    countrySetting.setWhatsApp(WHATSAPP_CONFIG_NAME);
 
-    welcomeMessageSMSSender.send(testPatient, countrySetting);
+    welcomeMessageWhatsAppSender.send(testPatient, countrySetting);
 
     verify(messagesDeliveryService).scheduleDelivery(executionContext.capture());
     Map<String, String> channelConfiguration = executionContext.getValue()
       .getChannelConfiguration();
 
     assertThat(channelConfiguration.get(
-      AbstractTextMessageServiceResultsHandlerService.CONFIG_KEY), is(SMS_CONFIG_NAME));
+      AbstractTextMessageServiceResultsHandlerService.CONFIG_KEY), is(WHATSAPP_CONFIG_NAME));
   }
 }

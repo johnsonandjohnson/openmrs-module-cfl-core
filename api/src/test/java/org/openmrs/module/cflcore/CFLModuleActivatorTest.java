@@ -369,12 +369,12 @@ public class CFLModuleActivatorTest {
     Assert.assertTrue(
         hasCountryPropertyBeenCreated(
             CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
-            "defaultSmS",
+            "-",
             CountryPropertyConstants.SMS_CONFIG_PROP_DESC));
     Assert.assertTrue(
         hasCountryPropertyBeenCreated(
             CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
-            "defaultCall",
+            "-",
             CountryPropertyConstants.CALL_CONFIG_PROP_DESC));
     Assert.assertTrue(
         hasCountryPropertyBeenCreated(
@@ -386,6 +386,16 @@ public class CFLModuleActivatorTest {
             CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
             Boolean.FALSE.toString(),
             CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC));
+    Assert.assertTrue(
+      hasCountryPropertyBeenCreated(
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC));
+    Assert.assertTrue(
+      hasCountryPropertyBeenCreated(
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC));
     Assert.assertTrue(
         hasCountryPropertyBeenCreated(
             CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
