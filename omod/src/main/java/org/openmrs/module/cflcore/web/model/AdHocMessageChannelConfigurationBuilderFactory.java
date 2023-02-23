@@ -14,31 +14,46 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.module.cflcore.api.dto.AdHocMessageRequestDTO;
 import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 public class AdHocMessageChannelConfigurationBuilderFactory {
   private AdHocMessageChannelConfigurationBuilderFactory() {}
 
   public static AdHocMessageChannelConfigurationBuilder builderFor(
       AdministrationService administrationService, AdHocMessageControllerModel model) {
     final AdHocMessageRequestDTO messageRequestDTO = model.getMessageRequest();
+    final List<AdHocMessageChannelConfigurationBuilder> builders = new ArrayList<>();
 
     if (Boolean.TRUE.equals(messageRequestDTO.getCallChannel())) {
-      return new AdHocMessageChannelConfigurationCallBuilder(messageRequestDTO);
-    } else if (Boolean.TRUE.equals(messageRequestDTO.getSmsChannel())) {
-      return new AdHocMessageChannelConfigurationTextBuilder(
-          administrationService,
-          messageRequestDTO,
-          GlobalPropertiesConstants.AD_HOC_SMS_MESSAGE_TEMPLATE.getKey());
-    } else if (Boolean.TRUE.equals(messageRequestDTO.getWhatsAppChannel())) {
-      return new AdHocMessageChannelConfigurationTextBuilder(
-          administrationService,
-          messageRequestDTO,
-          GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE.getKey());
-    } else {
+      builders.add(new AdHocMessageChannelConfigurationCallBuilder(messageRequestDTO));
+    }
+    if (Boolean.TRUE.equals(messageRequestDTO.getSmsChannel())) {
+      builders.add(
+          new AdHocMessageChannelConfigurationTextBuilder(
+              administrationService,
+              messageRequestDTO,
+              GlobalPropertiesConstants.AD_HOC_SMS_MESSAGE_TEMPLATE.getKey()));
+    }
+    if (Boolean.TRUE.equals(messageRequestDTO.getWhatsAppChannel())) {
+      builders.add(
+          new AdHocMessageChannelConfigurationTextBuilder(
+              administrationService,
+              messageRequestDTO,
+              GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE.getKey()));
+    }
+    if (builders.isEmpty()) {
       throw new IllegalStateException(
           String.format(
               "AdHoc message request for delivery datetime '%s' doesn't contain "
                   + "either Callflow, SMS or WhatsApp message.",
-              model.getMessageRequest().getDeliveryDateTime().toString()));
+              Optional.ofNullable(model.getMessageRequest().getDeliveryDateTime())
+                  .map(Date::toString)
+                  .orElse("<not set>")));
     }
+
+    return new AdHocMessageChannelConfigurationListBuilder(builders);
   }
 }
