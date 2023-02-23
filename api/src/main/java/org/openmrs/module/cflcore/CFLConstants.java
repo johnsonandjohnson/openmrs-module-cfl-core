@@ -209,6 +209,8 @@ public final class CFLConstants {
 
   public static final String CALL_CHANNEL_TYPE = "Call";
 
+  public static final String WHATSAPP_CHANNEL_TYPE = "WhatsApp";
+
   public static final String COMMA_SEPARATOR = ",";
 
   /**

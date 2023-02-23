@@ -11,38 +11,34 @@
 package org.openmrs.module.cflcore.api.dto;
 
 import org.openmrs.module.cflcore.CFLConstants;
-import org.openmrs.module.messages.api.service.impl.CallFlowServiceResultsHandlerServiceImpl;
-import org.openmrs.module.messages.api.service.impl.SmsServiceResultsHandlerServiceImpl;
 import org.springframework.util.AutoPopulatingList;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class AdHocMessageRequestDTO {
-    private static final String MESSAGE_TEMPLATE_DEFAULT = "{ \"mensagem\":\"Mensagem simples aqui.\" }";
 
     private Date deliveryDateTime;
     private Boolean callChannel;
     private Boolean smsChannel;
+    private Boolean whatsAppChannel;
     private String callFlowName;
-    private String messageTemplate;
+    private String message;
     private List<AdHocMessagePatientFilterDTO> filters;
 
     public AdHocMessageRequestDTO() {
-        this.messageTemplate = MESSAGE_TEMPLATE_DEFAULT;
-        this.filters = new AutoPopulatingList<AdHocMessagePatientFilterDTO>(AdHocMessagePatientFilterDTO.class);
+        this.filters = new AutoPopulatingList<>(AdHocMessagePatientFilterDTO.class);
     }
 
     public void applyFromOther(AdHocMessageRequestDTO otherDto) {
         setDeliveryDateTime(otherDto.getDeliveryDateTime());
         setCallChannel(otherDto.getCallChannel());
         setSmsChannel(otherDto.getSmsChannel());
+        setWhatsAppChannel(otherDto.getWhatsAppChannel());
         setCallFlowName(otherDto.getCallFlowName());
-        setMessageTemplate(otherDto.getMessageTemplate());
+        setMessage(otherDto.getMessage());
 
         for (int filterIdx = 0; filterIdx < getFilters().size(); ++filterIdx) {
             getFilters().get(filterIdx).copyValue(otherDto.getFilters().get(filterIdx));
@@ -50,25 +46,18 @@ public class AdHocMessageRequestDTO {
     }
 
     public Set<String> getChannels() {
-        final Set<String> result = new HashSet<String>();
+        final Set<String> result = new HashSet<>();
         if (Boolean.TRUE.equals(callChannel)) {
             result.add(CFLConstants.CALL_CHANNEL_TYPE);
         }
         if (Boolean.TRUE.equals(smsChannel)) {
             result.add(CFLConstants.SMS_CHANNEL_TYPE);
         }
-        return result;
-    }
+        if (Boolean.TRUE.equals(whatsAppChannel)) {
+            result.add(CFLConstants.WHATSAPP_CHANNEL_TYPE);
+        }
 
-    public Map<String, String> getProperties() {
-        final Map<String, String> properties = new HashMap<String, String>();
-        if (Boolean.TRUE.equals(callChannel)) {
-            properties.put(CallFlowServiceResultsHandlerServiceImpl.CALL_CHANNEL_CONF_FLOW_NAME, callFlowName);
-        }
-        if (Boolean.TRUE.equals(smsChannel)) {
-            properties.put(SmsServiceResultsHandlerServiceImpl.SMS_CHANNEL_CONF_TEMPLATE_VALUE, messageTemplate);
-        }
-        return properties;
+        return result;
     }
 
     public Date getDeliveryDateTime() {
@@ -95,6 +84,14 @@ public class AdHocMessageRequestDTO {
         this.smsChannel = smsChannel;
     }
 
+    public Boolean getWhatsAppChannel() {
+        return whatsAppChannel;
+    }
+
+    public void setWhatsAppChannel(Boolean whatsAppChannel) {
+        this.whatsAppChannel = whatsAppChannel;
+    }
+
     public String getCallFlowName() {
         return callFlowName;
     }
@@ -103,12 +100,12 @@ public class AdHocMessageRequestDTO {
         this.callFlowName = callFlowName;
     }
 
-    public String getMessageTemplate() {
-        return messageTemplate;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessageTemplate(String messageTemplate) {
-        this.messageTemplate = messageTemplate;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<AdHocMessagePatientFilterDTO> getFilters() {

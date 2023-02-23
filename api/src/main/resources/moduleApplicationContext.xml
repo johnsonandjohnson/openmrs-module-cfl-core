@@ -192,6 +192,15 @@
         <property name="configService" ref="cfl.configService"/>
     </bean>
 
+    <bean id="cfl.welcomeMessageWhatsAppSender" class="org.openmrs.module.cflcore.handler.impl.WelcomeMessageWhatsAppSenderImpl">
+        <property name="messagesDeliveryService" ref="messages.deliveryService"/>
+        <property name="messagingGroupService" ref="messages.messagingGroupService"/>
+        <property name="patientTemplateService" ref="messages.patientTemplateService"/>
+        <property name="templateService" ref="messages.templateService"/>
+        <property name="personService" ref="personService"/>
+        <property name="configService" ref="cfl.configService"/>
+    </bean>
+
     <bean id="cfl.welcomeMessageCallSender" class="org.openmrs.module.cflcore.handler.impl.WelcomeMessageCallSenderImpl">
         <property name="messagesDeliveryService" ref="messages.deliveryService"/>
         <property name="messagingGroupService" ref="messages.messagingGroupService"/>

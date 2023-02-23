@@ -48,8 +48,8 @@ public class WelcomeMessageCallSenderImpl extends BaseWelcomeMessageSenderImpl {
         final boolean enabled = settings.isPerformCallOnPatientRegistration();
 
         if (!enabled) {
-            LOGGER.info("Welcome Message via Call has been disabled. It can be enabled in configuration in Global " +
-                    "Property 'cfl.countrySettingsMap', configuration property 'performCallOnPatientRegistration'");
+            LOGGER.info("Welcome Message via Call has been disabled. It can be enabled via Manage Notification"
+              + "Configuration page or directly in database (messages_country_property table)");
         }
 
         return enabled;

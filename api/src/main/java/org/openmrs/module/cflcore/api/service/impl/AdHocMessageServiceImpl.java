@@ -45,10 +45,10 @@ public class AdHocMessageServiceImpl implements AdHocMessageService {
 
     @Override
     public AdHocMessageSummary scheduleAdHocMessage(final Date deliveryDateTime, final Set<String> channelTypes,
-                                                    final Map<String, String> messageProperties,
+                                                    final Map<String, String> channelConfiguration,
                                                     final Collection<Patient> patients) {
 
-        final ScheduleAdHocContext rootContext = ScheduleAdHocContext.forProperties(messageProperties);
+        final ScheduleAdHocContext rootContext = ScheduleAdHocContext.forChannelConfiguration(channelConfiguration);
 
         for (final Patient patient : patients) {
             final CountrySetting setting = CountrySettingUtil.getCountrySettingForPatient(patient);
@@ -92,7 +92,7 @@ public class AdHocMessageServiceImpl implements AdHocMessageService {
                         context.getDeliverDate(), context.getPatient(), context.getPatient().getId(),
                         MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE, adHocScheduledServiceGroup.getId());
 
-        executionContext.setChannelConfiguration(context.getMessageProperties());
+        executionContext.setChannelConfiguration(context.getChannelConfiguration());
 
         messagesDeliveryService.scheduleDelivery(executionContext);
     }
@@ -104,25 +104,25 @@ public class AdHocMessageServiceImpl implements AdHocMessageService {
         private final Date deliveryDate;
         private final Patient patient;
         private final String channelType;
-        private final Map<String, String> messageProperties;
+        private final Map<String, String> channelConfiguration;
 
-        ScheduleAdHocContext(Date deliveryDate, Patient patient, String channelType, Map<String, String> messageProperties) {
+        ScheduleAdHocContext(Date deliveryDate, Patient patient, String channelType, Map<String, String> channelConfiguration) {
             this.deliveryDate = deliveryDate;
             this.patient = patient;
             this.channelType = channelType;
-            this.messageProperties = messageProperties;
+            this.channelConfiguration = channelConfiguration;
         }
 
-        static ScheduleAdHocContext forProperties(final Map<String, String> messageProperties) {
-            return new ScheduleAdHocContext(null, null, null, messageProperties);
+        static ScheduleAdHocContext forChannelConfiguration(final Map<String, String> channelConfiguration) {
+            return new ScheduleAdHocContext(null, null, null, channelConfiguration);
         }
 
         ScheduleAdHocContext copyWithChannelType(final String newChannelType) {
-            return new ScheduleAdHocContext(getDeliverDate(), getPatient(), newChannelType, getMessageProperties());
+            return new ScheduleAdHocContext(getDeliverDate(), getPatient(), newChannelType, getChannelConfiguration());
         }
 
         ScheduleAdHocContext copyWithPatientAndDate(final Date newDeliveryDate, final Patient newPatient) {
-            return new ScheduleAdHocContext(newDeliveryDate, newPatient, getChannelType(), getMessageProperties());
+            return new ScheduleAdHocContext(newDeliveryDate, newPatient, getChannelType(), getChannelConfiguration());
         }
 
         Date getDeliverDate() {
@@ -137,8 +137,8 @@ public class AdHocMessageServiceImpl implements AdHocMessageService {
             return channelType;
         }
 
-        Map<String, String> getMessageProperties() {
-            return messageProperties;
+        Map<String, String> getChannelConfiguration() {
+            return channelConfiguration;
         }
     }
 }

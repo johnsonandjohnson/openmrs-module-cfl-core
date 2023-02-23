@@ -59,7 +59,7 @@
                         <input type="hidden" name="_${status.expression}"/>
                         <span>
                             <input required type="checkbox" name="${status.expression}" id="smsChannel"
-                                   onClick="channelCheckboxClicked(this, 'smsConfig')"
+                                   onClick="channelCheckboxClicked(this, 'messageConfig')"
                                    <c:if test="${model.messageRequest.smsChannel}">checked</c:if> />
                             <openmrs:message code="cfl.channelName.SMS"/>
                         </span>
@@ -67,10 +67,10 @@
                     </spring:bind>
                 </td>
             </tr>
-            <tr id="smsConfig">
+            <tr id="messageConfig">
                 <th><openmrs:message code="cfl.adHocMessage.SMS.config"/></th>
                 <td>
-                    <spring:bind path="model.messageRequest.messageTemplate">
+                    <spring:bind path="model.messageRequest.message">
                         <textarea name="${status.expression}" rows="10" cols="124">${status.value}</textarea>
                         <c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
                     </spring:bind>
