@@ -21,6 +21,6 @@ import java.util.Set;
 public interface AdHocMessageService {
 
     AdHocMessageSummary scheduleAdHocMessage(final Date deliveryDateTime, final Set<String> channelTypes,
-                                             final Map<String, String> messageProperties,
+                                             final Map<String, String> channelConfiguration,
                                              final Collection<Patient> patients);
 }
