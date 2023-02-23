@@ -13,8 +13,8 @@
  */
 $j(document).ready(function () {
     channelCheckboxClicked(document.getElementById("callChannel"), "callConfig");
-    channelCheckboxClicked(document.getElementById("smsChannel"), "smsConfig");
-    channelCheckboxClicked(document.getElementById("whatsAppChannel"), "smsConfig");
+    channelCheckboxClicked(document.getElementById("smsChannel"), "messageConfig");
+    channelCheckboxClicked(document.getElementById("whatsAppChannel"), "messageConfig");
 
     document.getElementById("send-btn").onclick = function (event) {
         const doSend = confirm($sendConfirmationMessage);

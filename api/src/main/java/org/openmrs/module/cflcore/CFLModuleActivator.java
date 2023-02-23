@@ -154,6 +154,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     }
   }
 
+  @SuppressWarnings("PMD.ExcessiveMethodLength")
   private void createGlobalSettings() {
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.PATIENT_DASHBOARD_REDIRECT_GLOBAL_PROPERTY_NAME,
@@ -250,6 +251,10 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.SHOW_GENDER_PERSON_HEADER_KEY,
         CFLConstants.SHOW_GENDER_PERSON_HEADER_DEFAULT_VALUE,
         CFLConstants.SHOW_GENDER_PERSON_HEADER_DESCRIPTION);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.AD_HOC_SMS_MESSAGE_TEMPLATE);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE);
   }
 
   private void createCountrySettings() {

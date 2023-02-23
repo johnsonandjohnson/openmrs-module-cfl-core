@@ -44,5 +44,21 @@ public final class GlobalPropertiesConstants {
           "",
           "The UUID of person attribute type for an email address");
 
+  public static final GPDefinition AD_HOC_SMS_MESSAGE_TEMPLATE =
+      new GPDefinition(
+          "cfl.notificationTemplate.adhoc.sms",
+          "{ \"message\": ##message## }",
+          "The Velocity template for Ad Hoc SMS message. The optional placeholder ##message## is replaced by a JSON-valid "
+              + "string with a message text provided by Ad Hoc UI user. The template is evaluated with the usual message "
+              + "notification context.");
+
+  public static final GPDefinition AD_HOC_WHATS_APP_MESSAGE_TEMPLATE =
+      new GPDefinition(
+          "cfl.notificationTemplate.adhoc.whatsapp",
+          "{ \"message\": ##message## }",
+          "The Velocity template for Ad Hoc WhatsApp message. The optional placeholder ##message## is replaced by a "
+              + "JSON-valid string with a message text provided by Ad Hoc UI user. The template is evaluated with the usual"
+              + " message notification context.");
+
   private GlobalPropertiesConstants() {}
 }
