@@ -51,8 +51,9 @@ class AdHocMessageChannelConfigurationTextBuilder
     final String templateText = administrationService.getGlobalProperty(templateGPKey);
 
     try {
+      final String messageJSON = objectMapper.writeValueAsString(messageRequestDTO.getMessage());
       return templateText.replace(
-          MESSAGE_PLACEHOLDER, objectMapper.writeValueAsString(messageRequestDTO.getMessage()));
+          MESSAGE_PLACEHOLDER, messageJSON.substring(1, messageJSON.length() - 1));
     } catch (JsonProcessingException e) {
       throw new APIException(
           MessageFormat.format(

@@ -31,7 +31,7 @@ public class AdHocMessageChannelConfigurationBuilderFactoryTest {
 
     Assert.assertNotNull(channelConfiguration);
     Assert.assertEquals(
-        "\"Hello SMS\"",
+        "Hello SMS",
         channelConfiguration.get(
             AbstractTextMessageServiceResultsHandlerService.MESSAGE_CHANNEL_CONF_TEMPLATE_VALUE));
     Assert.assertEquals(
