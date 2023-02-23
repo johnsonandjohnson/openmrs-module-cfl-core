@@ -22,7 +22,7 @@ public class AdHocMessageChannelConfigurationTextBuilderTest {
   @Test
   public void shouldEscapeSpacialCharactersInMessageText() throws JsonProcessingException {
     final String testString = "Hello, \" \n \r \\";
-    final String testStringAsJson = "\"Hello, \\\" \\n \\r \\\\\"";
+    final String testStringAsJson = "Hello, \\\" \\n \\r \\\\";
 
     final AdministrationService administrationServiceMock =
         Mockito.mock(AdministrationService.class);
