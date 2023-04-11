@@ -15,38 +15,40 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.contract.CountrySetting;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
-import org.openmrs.module.messages.api.service.impl.SmsServiceResultsHandlerServiceImpl;
+import org.openmrs.module.messages.api.service.impl.AbstractTextMessageServiceResultsHandlerService;
 
 /**
  * The bean is configured in moduleApplicationContext.xml.
  */
 public class WelcomeMessageSMSSenderImpl extends BaseWelcomeMessageSenderImpl {
-    public static final String NAME = "cfl.welcomeMessageSMSSender";
 
-    private static final Log LOGGER = LogFactory.getLog(WelcomeMessageSMSSenderImpl.class);
+  public static final String NAME = "cfl.welcomeMessageSMSSender";
 
-    public WelcomeMessageSMSSenderImpl() {
-        super(CFLConstants.SMS_CHANNEL_TYPE);
+  private static final Log LOGGER = LogFactory.getLog(WelcomeMessageSMSSenderImpl.class);
+
+  public WelcomeMessageSMSSenderImpl() {
+    super(CFLConstants.SMS_CHANNEL_TYPE);
+  }
+
+  @Override
+  protected ScheduledExecutionContext decorateScheduledExecutionContext(
+    ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
+    scheduledExecutionContext.getChannelConfiguration()
+      .put(AbstractTextMessageServiceResultsHandlerService.CONFIG_KEY, setting.getSms());
+
+    return scheduledExecutionContext;
+  }
+
+  @Override
+  protected boolean isSendOnPatientRegistrationEnabled(CountrySetting settings) {
+    final boolean enabled = settings.isSendSmsOnPatientRegistration();
+
+    if (!enabled) {
+      LOGGER.info(
+        "Welcome Message via SMS has been disabled. It can be enabled via Manage Notification"
+          + "Configuration page or directly in database (messages_country_property table)");
     }
 
-    @Override
-    protected ScheduledExecutionContext decorateScheduledExecutionContext(
-            ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
-        scheduledExecutionContext.getChannelConfiguration()
-                .put(SmsServiceResultsHandlerServiceImpl.SMS_CHANNEL_CONFIG_NAME, setting.getSms());
-
-        return scheduledExecutionContext;
-    }
-
-    @Override
-    protected boolean isSendOnPatientRegistrationEnabled(CountrySetting settings) {
-        final boolean enabled = settings.isSendSmsOnPatientRegistration();
-
-        if (!enabled) {
-            LOGGER.info("Welcome Message via SMS has been disabled. It can be enabled in configuration in Global " +
-                    "Property 'cfl.countrySettingsMap', configuration property 'sendSmsOnPatientRegistration'");
-        }
-
-        return enabled;
-    }
+    return enabled;
+  }
 }

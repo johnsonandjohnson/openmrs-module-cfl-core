@@ -661,10 +661,14 @@
           "type" : "boolean",
           "default" : false
         },
+        "whatsAppChannel" : {
+          "type" : "boolean",
+          "default" : false
+        },
         "callFlowName" : {
           "type" : "string"
         },
-        "messageTemplate" : {
+        "message" : {
           "type" : "string"
         },
         "filters" : {
@@ -677,12 +681,6 @@
           "type" : "array",
           "uniqueItems" : true,
           "items" : {
-            "type" : "string"
-          }
-        },
-        "properties" : {
-          "type" : "object",
-          "additionalProperties" : {
             "type" : "string"
           }
         }
@@ -787,29 +785,11 @@
     "HttpServletRequest" : {
       "type" : "object",
       "properties" : {
-        "authType" : {
-          "type" : "string"
-        },
         "cookies" : {
           "type" : "array",
           "items" : {
             "$ref" : "#/definitions/Cookie"
           }
-        },
-        "headerNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "pathInfo" : {
-          "type" : "string"
-        },
-        "pathTranslated" : {
-          "type" : "string"
-        },
-        "remoteUser" : {
-          "type" : "string"
-        },
-        "requestedSessionId" : {
-          "type" : "string"
         },
         "requestURI" : {
           "type" : "string"
@@ -836,6 +816,24 @@
           "type" : "boolean",
           "default" : false
         },
+        "remoteUser" : {
+          "type" : "string"
+        },
+        "requestedSessionId" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
+        "authType" : {
+          "type" : "string"
+        },
         "session" : {
           "$ref" : "#/definitions/HttpSession"
         },
@@ -852,6 +850,12 @@
           "type" : "string"
         },
         "locales" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
         "serverName" : {
@@ -878,21 +882,11 @@
         "localAddr" : {
           "type" : "string"
         },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "localName" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "contentLength" : {
           "type" : "integer",
@@ -900,6 +894,10 @@
         },
         "contentType" : {
           "type" : "string"
+        },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -927,12 +925,12 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
         "lastAccessedTime" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
         },
         "maxInactiveInterval" : {
           "type" : "integer",
@@ -941,15 +939,15 @@
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
+        },
         "valueNames" : {
           "type" : "array",
           "items" : {
             "type" : "string"
           }
-        },
-        "new" : {
-          "type" : "boolean",
-          "default" : false
         },
         "creationTime" : {
           "type" : "integer",
@@ -1238,6 +1236,12 @@
         "locales" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "characterEncoding" : {
+          "type" : "string"
+        },
+        "parameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "serverName" : {
           "type" : "string"
         },
@@ -1262,21 +1266,11 @@
         "localAddr" : {
           "type" : "string"
         },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
-        "parameterNames" : {
-          "$ref" : "#/definitions/Enumeration"
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "localName" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "contentLength" : {
           "type" : "integer",
@@ -1284,6 +1278,10 @@
         },
         "contentType" : {
           "type" : "string"
+        },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
