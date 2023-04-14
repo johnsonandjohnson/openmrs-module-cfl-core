@@ -9,16 +9,16 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cfl</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.1-1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>CFL Config Module</name>
     <description>The module contains metadata and various customizations distinct for the CFL Distribution.</description>
 
     <scm>
-        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</connection>
-        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</developerConnection>
-        <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-module-cfl.git</url>
-        <tag>1.4.1</tag>
+        <connection>scm:git:https://bitbucket.org/soldevelo/omrs-cfl-distribution.git</connection>
+        <developerConnection>scm:git:https://bitbucket.org/soldevelo/omrs-cfl-distribution.git</developerConnection>
+        <url>https://bitbucket.org/soldevelo/omrs-cfl-distribution.git</url>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
