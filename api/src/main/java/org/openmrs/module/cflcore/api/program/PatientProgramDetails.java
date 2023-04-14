@@ -20,6 +20,8 @@ public class PatientProgramDetails {
 
   private String programName;
 
+  private String programUuid;
+
   private boolean isEnrolled;
 
   private Date dateEnrolled;
@@ -46,6 +48,14 @@ public class PatientProgramDetails {
 
   public void setProgramName(String programName) {
     this.programName = programName;
+  }
+
+  public String getProgramUuid() {
+    return programUuid;
+  }
+
+  public void setProgramUuid(String programUuid) {
+    this.programUuid = programUuid;
   }
 
   public boolean isEnrolled() {

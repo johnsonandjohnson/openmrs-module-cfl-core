@@ -333,4 +333,15 @@
             </list>
         </property>
     </bean>
+
+    <bean id="cflPatientProgramDetailsService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientProgramDetailsServiceImpl"/>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientProgramDetailsService</value>
+                <ref bean="cflPatientProgramDetailsService"/>
+            </list>
+        </property>
+    </bean>
 </beans>
