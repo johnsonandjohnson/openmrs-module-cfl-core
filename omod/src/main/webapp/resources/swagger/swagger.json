@@ -871,7 +871,22 @@
         "authType" : {
           "type" : "string"
         },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
+        },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
         "pathTranslated" : {
+          "type" : "string"
+        },
+        "remoteUser" : {
           "type" : "string"
         },
         "requestedSessionId" : {
@@ -885,15 +900,6 @@
         },
         "servletPath" : {
           "type" : "string"
-        },
-        "remoteUser" : {
-          "type" : "string"
-        },
-        "pathInfo" : {
-          "type" : "string"
-        },
-        "headerNames" : {
-          "$ref" : "#/definitions/Enumeration"
         },
         "requestedSessionIdValid" : {
           "type" : "boolean",
@@ -911,12 +917,6 @@
           "type" : "boolean",
           "default" : false
         },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
         "queryString" : {
           "type" : "string"
         },
@@ -932,17 +932,14 @@
         "method" : {
           "type" : "string"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "localAddr" : {
-          "type" : "string"
-        },
         "characterEncoding" : {
           "type" : "string"
         },
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
         },
         "serverPort" : {
           "type" : "integer",
@@ -954,16 +951,19 @@
         "remoteHost" : {
           "type" : "string"
         },
-        "serverName" : {
-          "type" : "string"
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         },
         "remotePort" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
+        "localAddr" : {
+          "type" : "string"
+        },
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
@@ -1008,9 +1008,9 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
-        "new" : {
-          "type" : "boolean",
-          "default" : false
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
         },
         "servletContext" : {
           "$ref" : "#/definitions/ServletContext"
@@ -1022,15 +1022,15 @@
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "valueNames" : {
           "type" : "array",
           "items" : {
             "type" : "string"
           }
+        },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
         },
         "creationTime" : {
           "type" : "integer",
@@ -1331,17 +1331,14 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "localAddr" : {
-          "type" : "string"
-        },
         "characterEncoding" : {
           "type" : "string"
         },
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "serverName" : {
+          "type" : "string"
         },
         "serverPort" : {
           "type" : "integer",
@@ -1353,16 +1350,19 @@
         "remoteHost" : {
           "type" : "string"
         },
-        "serverName" : {
-          "type" : "string"
+        "secure" : {
+          "type" : "boolean",
+          "default" : false
         },
         "remotePort" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "secure" : {
-          "type" : "boolean",
-          "default" : false
+        "localAddr" : {
+          "type" : "string"
+        },
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"

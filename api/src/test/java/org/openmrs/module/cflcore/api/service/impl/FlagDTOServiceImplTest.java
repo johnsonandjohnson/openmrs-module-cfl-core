@@ -8,24 +8,29 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-package org.openmrs.module.cflcore.web.controller;
+package org.openmrs.module.cflcore.api.service.impl;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.openmrs.module.cflcore.api.dto.FlagDTO;
 import org.openmrs.module.cflcore.api.service.FlagDTOService;
 import org.openmrs.module.patientflags.Flag;
+import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.test.BaseContextMockTest;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import java.util.Arrays;
+import java.util.List;
 
-public class FlagControllerTest extends BaseContextMockTest {
-  @Mock private FlagDTOService flagDTOService;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+public class FlagDTOServiceImplTest extends BaseContextMockTest {
+  @Mock private FlagService flagService;
 
   @Before
   public void setup() {
-    contextMockHelper.setService(FlagDTOService.class, flagDTOService);
+    contextMockHelper.setService(FlagService.class, flagService);
   }
 
   @Test
@@ -36,9 +41,12 @@ public class FlagControllerTest extends BaseContextMockTest {
     final Flag retiredFlag = new Flag();
     retiredFlag.setRetired(Boolean.TRUE);
 
-    final FlagController controller = new FlagController();
-    controller.getAllFlags();
+    when(flagService.getAllFlags()).thenReturn(Arrays.asList(flag, disabledFlag, retiredFlag));
 
-    verify(flagDTOService, times(1)).getAllEnabledFlags();
+    final FlagDTOService flagDTOService = new FlagDTOServiceImpl();
+    final List<FlagDTO> dtos = flagDTOService.getAllEnabledFlags();
+
+    assertEquals(1, dtos.size());
+    assertEquals(flag.getUuid(), dtos.get(0).getUuid());
   }
 }
