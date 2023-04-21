@@ -82,7 +82,7 @@
 <div class="info-section">
     <div class="info-header" style="padding-bottom: 4px;">
         <i class="${config.icon}"></i>
-        <h3>${ ui.message(config.label) }</h3>
+        <h3>${ui.message(config.label)}</h3>
     </div>
     <div class="info-body" style="padding-bottom: 4px;">
         <ul>
@@ -95,7 +95,7 @@
                             <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
                             ["patientId" : program.patient.patientId, "formUuid" : program.programConfig.programFormUuid,
                             "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}">
-                            <i class="icon-pencil edit-action" title="Edit"></i>
+                            <i class="icon-pencil edit-action" title=${ui.message("common.edit")}></i>
                             </a>
                         </span>
                     <% } else { %>
@@ -103,18 +103,18 @@
                             <a href="${ui.pageLink("htmlformentryui", "htmlform/editHtmlFormWithStandardUi",
                             ["patientId" : program.patient.patientId, "encounterId":program.encounterId,
                             "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}">
-                            <i class="icon-pencil edit-action" title="Edit"></i>
+                            <i class="icon-pencil edit-action" title=${ui.message("common.edit")}></i>
                             </a>
                         </span>
                     <% } %>
                     <span class="not-cropped-text-span">
-                        <i class="icon-remove delete-action" title="Discontinue"
+                        <i class="icon-remove delete-action" title=${ui.message("cfl.discontinue.label")}
                            onclick="location.href = '${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
                            ["patientId" : program.patient.patientId, "formUuid": program.programConfig.discontinuationFormUuid,
                            "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}'">
                         </i>
                     </span>
-                    <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - Current</div>
+                    <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.message("cfl.programsWidget.current.label")}</div>
                 <% } else { %>
                     <% if(program.dateCompleted != null) { %>
                         <span class="not-cropped-text-span flex-class program-name" title="${ui.format(program.programName)}">${ui.format(program.programName)}</span>
@@ -122,7 +122,7 @@
                             <a href="${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
                                 ["patientId" : program.patient.patientId, "formUuid" : program.programConfig.programFormUuid,
                                 "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}">
-                                <i class="icon-pencil edit-action" title="Edit"></i>
+                                <i class="icon-pencil edit-action" title=${ui.message("common.edit")}></i>
                             </a>
                         </span>
                         <div class="tag sixty-percent">${ui.format(program.dateEnrolled)} - ${ui.format(program.dateCompleted)}</div>
@@ -132,7 +132,7 @@
                             <button class="enrollButton"
                                 onClick = "location.href='${ui.pageLink("htmlformentryui", "htmlform/enterHtmlFormWithStandardUi",
                                 ["patientId" : program.patient.patientId, "formUuid" : program.programConfig.programFormUuid,
-                                "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}'">Enroll
+                                "returnUrl" : "/openmrs/coreapps/clinicianfacing/patient.page?patientId=" + program.patient.patientId])}'">${ui.message("cfl.programsWidget.enrolButton.label")}
                             </button>
                         </span>
                     <% } %>

@@ -74,7 +74,7 @@
             </tr>
         </table>
         <br/>
-        <input type="submit" value="Save" name="save">
+        <input type="submit" value="<openmrs:message code="common.save"/>" name="save">
     </fieldset>
 </form>
 
