@@ -21,21 +21,16 @@
 <h2><spring:message code="cfl.uploadCountryList.title"/></h2>
 
 <p id="tooltip">
-Valid file extensions: .txt or .csv </br>
-Each country and related cluster members must be separated by a colon. Cluster members must be separated by a comma. </br>
-Definition of each country must be in separate line (without any delimiter) </br>
-Example: </br>
-US: Alabama, Texas, Nevada </br>
-India: Asam, Goa, Kerala </br>
+<spring:message code="cfl.importCountries.tooltip" htmlEscape="false" />
 </p>
 
 <form method="POST" enctype="multipart/form-data">
-    File to import: <input type="file" name="file"/>
+    <spring:message code="cfl.importCountries.fileToImport.label"/> <input type="file" name="file"/>
     <br/><br/>
-    <input type="submit"/>
+    <input type="submit" value="<spring:message code="common.save"/>" />
 </form>
 
 <br/>
-<a href="countryList.form">Back</a>
+<a href="countryList.form"><spring:message code="common.back"/></a>
 
 <%@ include file="/WEB-INF/template/footer.jsp" %>
