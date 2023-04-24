@@ -160,7 +160,7 @@
                                 <c:when test="${filter.filterTypeName == 'AGE_RANGE'}">
                                     <!-- Select from -->
                                     <spring:bind path="value">
-                                        <label for="from-${filterStatus.index}">from:</label>
+                                        <label for="from-${filterStatus.index}"><openmrs:message code="common.from.label"/>:</label>
                                         <input type="number"
                                                id="from-${filterStatus.index}"
                                                name="${status.expression}"
@@ -172,7 +172,7 @@
                                     </spring:bind>
                                     <!-- Select to -->
                                     <spring:bind path="secondValue">
-                                        <label for="to-${filterStatus.index}">to:</label>
+                                        <label for="to-${filterStatus.index}"><openmrs:message code="common.to.label"/>:</label>
                                         <input type="number"
                                                id="to-${filterStatus.index}"
                                                name="${status.expression}"
