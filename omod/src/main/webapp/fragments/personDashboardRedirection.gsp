@@ -12,14 +12,14 @@
         <div class="text" style="display: flex; align-items: center; justify-content: center;">
             <i class="icon-info-sign medium"></i>
             <% if(isPatientDashboard) { %>
-                <p style="position: inherit; margin-right: 0;">This Patient is also a ${ actorTypeName }.</p>
+                <p style="position: inherit; margin-right: 0;">${ui.message("cfl.personDashboardRedirection.label1", actorTypeName)}</p>
                 &nbsp;
                 <a href=${"?patientId=" + actorUuid + "&dashboard=person"}>
-                See the ${ actorTypeName } Dashboard</a>
+                ${ui.message("cfl.personDashboardRedirection.label2", actorTypeName)}</a>
             <% } else { %>
-                <p style="position: inherit; margin-right: 0;">This ${ actorTypeName } is also a Patient.</p>
+                <p style="position: inherit; margin-right: 0;">${ui.message("cfl.personDashboardRedirection.label3", actorTypeName)}</p>
                 &nbsp;
-                <a href=${"?patientId=" + actorUuid + "&dashboard=patient"}>See the Patient Dashboard</a>
+                <a href=${"?patientId=" + actorUuid + "&dashboard=patient"}>${ui.message("cfl.personDashboardRedirection.label4")}</a>
             <% } %>
         </div>
     </div>
