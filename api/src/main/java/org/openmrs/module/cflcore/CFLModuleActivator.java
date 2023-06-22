@@ -10,9 +10,6 @@
 
 package org.openmrs.module.cflcore;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAttributeType;
@@ -31,13 +28,20 @@ import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.event.CflEventListenerHelper;
 import org.openmrs.module.cflcore.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cflcore.api.htmlformentry.tag.RegimenHandler;
+import org.openmrs.module.cflcore.api.scheduler.job.ScheduledTasksCleanupJobDefinition;
 import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
+import org.openmrs.module.messages.api.constants.MessagesConstants;
+import org.openmrs.module.messages.api.service.MessagesSchedulerService;
 import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -55,6 +59,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     try {
       attachProgramsManagingPrivilegesToSuperUser();
       ensureCorrectRolesAreAssignedToAdmin();
+      configureOrCreateScheduledTasksCleanupJob();
 
       // These 3 are Global Properties
       createPersonOverviewConfig();
@@ -255,6 +260,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.AD_HOC_SMS_MESSAGE_TEMPLATE);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES);
   }
 
   private void createCountrySettings() {
@@ -364,5 +371,16 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
   private void addTagHandlers() {
     Context.getService(HtmlFormEntryService.class)
         .addHandler(CFLConstants.REGIMEN_TAG_NAME, new RegimenHandler());
+  }
+
+  private void configureOrCreateScheduledTasksCleanupJob() {
+    final Long oneWeekInSeconds = 7L * 24 * 60 * 60;
+    getSchedulerService().rescheduleOrCreateNewTask(
+        new ScheduledTasksCleanupJobDefinition(), oneWeekInSeconds);
+  }
+
+  private MessagesSchedulerService getSchedulerService() {
+    return Context.getRegisteredComponent(
+        MessagesConstants.SCHEDULER_SERVICE, MessagesSchedulerService.class);
   }
 }

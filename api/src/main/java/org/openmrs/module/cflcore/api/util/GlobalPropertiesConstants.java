@@ -60,5 +60,14 @@ public final class GlobalPropertiesConstants {
               + "JSON-escaped message text provided by Ad Hoc UI user. The template is evaluated with the usual message "
               + "notification context.");
 
+  public static final GPDefinition SCHEDULED_TASK_CONFIG_CLASS_NAMES =
+      new GPDefinition(
+          "cfl.scheduledTasksToDelete.classNames",
+          "org.openmrs.module.messages.api.scheduler.job.ServiceGroupDeliveryJobDefinition",
+          "Property created to store names of classes for scheduled tasks, which are no longer needed "
+              + "and just clutter the database. All tasks containing class names from this property will be removed "
+              + "by Scheduled Tasks Cleanup Job"
+              + "Use \",\" sign to separate class names");
+
   private GlobalPropertiesConstants() {}
 }
