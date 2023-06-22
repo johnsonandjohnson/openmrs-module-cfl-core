@@ -37,8 +37,10 @@ import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentry.handler.TagHandler;
+import org.openmrs.module.messages.api.constants.MessagesConstants;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
+import org.openmrs.module.messages.api.service.MessagesSchedulerService;
 import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
@@ -71,6 +73,7 @@ public class CFLModuleActivatorTest {
   @Mock private MetadataDeployService metadataDeployService;
   private MetadataBundle mockMetadataBundle = new MockMetadataBundle();
   @Mock private HtmlFormEntryService htmlFormEntryService;
+  @Mock private MessagesSchedulerService messagesSchedulerService;
 
   private Role superUserRole = new Role();
   private Role fullPrivilegeRole = new Role();
@@ -120,6 +123,11 @@ public class CFLModuleActivatorTest {
         .thenReturn(Collections.singletonList(mockMetadataBundle));
     PowerMockito.when(Context.getService(HtmlFormEntryService.class))
         .thenReturn(htmlFormEntryService);
+
+    PowerMockito.when(
+            Context.getRegisteredComponent(
+                MessagesConstants.SCHEDULER_SERVICE, MessagesSchedulerService.class))
+        .thenReturn(messagesSchedulerService);
 
     PowerMockito.doAnswer(
             invocationOnMock -> {
@@ -339,6 +347,11 @@ public class CFLModuleActivatorTest {
             GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID.getKey(),
             GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID.getDefaultValue(),
             GlobalPropertiesConstants.EMAIL_ADDRESS_PERSON_ATTRIBUTE_TYPE_UUID.getDescription()));
+    Assert.assertTrue(
+        hasPropertyBeenCreated(
+            GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getKey(),
+            GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getDefaultValue(),
+            GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getDescription()));
   }
 
   @Test
@@ -387,15 +400,15 @@ public class CFLModuleActivatorTest {
             Boolean.FALSE.toString(),
             CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC));
     Assert.assertTrue(
-      hasCountryPropertyBeenCreated(
-        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC));
+        hasCountryPropertyBeenCreated(
+            CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+            Boolean.FALSE.toString(),
+            CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC));
     Assert.assertTrue(
-      hasCountryPropertyBeenCreated(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC));
+        hasCountryPropertyBeenCreated(
+            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+            Boolean.FALSE.toString(),
+            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC));
     Assert.assertTrue(
         hasCountryPropertyBeenCreated(
             CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,

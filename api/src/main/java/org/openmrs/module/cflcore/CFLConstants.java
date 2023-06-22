@@ -338,6 +338,10 @@ public final class CFLConstants {
 
   public static final String UPDATE_REGIMEN_JOB_NAME = "Update Regimen Job";
 
+  public static final String SCHEDULED_TASKS_TO_DELETE_CLASS_NAMES_KEY = "cfl.scheduledTasksToDelete.classNames";
+
+  public static final String SCHEDULED_TASKS_CLEANUP_JOB_NAME = "Scheduled Tasks Cleanup Job";
+
   public static final String CFL_ADDRESS_DATA_SERVICE_BEAN_NAME = "cfl.addressService";
 
   public static final String CFL_VISIT_SERVICE_BEAN_NAME = "cfl.visitService";
