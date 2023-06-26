@@ -52,7 +52,7 @@ public class ScheduledTasksCleanupJobDefinition extends JobDefinition {
   @Override
   public boolean shouldStartAtFirstCreation() {
     // Execute on each startup
-    return true;
+    return false;
   }
 
   @Override
