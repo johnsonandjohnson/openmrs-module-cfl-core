@@ -932,6 +932,9 @@
         "method" : {
           "type" : "string"
         },
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "characterEncoding" : {
           "type" : "string"
         },
@@ -966,9 +969,6 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
@@ -978,6 +978,9 @@
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
@@ -990,9 +993,6 @@
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "localName" : {
-          "type" : "string"
         },
         "scheme" : {
           "type" : "string"
@@ -1331,6 +1331,9 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
+        "locales" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
         "characterEncoding" : {
           "type" : "string"
         },
@@ -1365,9 +1368,6 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "locales" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
@@ -1377,6 +1377,9 @@
         },
         "locale" : {
           "$ref" : "#/definitions/Locale"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "reader" : {
           "$ref" : "#/definitions/BufferedReader"
@@ -1389,9 +1392,6 @@
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "localName" : {
-          "type" : "string"
         },
         "scheme" : {
           "type" : "string"

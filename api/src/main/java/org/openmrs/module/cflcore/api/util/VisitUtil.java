@@ -179,7 +179,7 @@ public final class VisitUtil {
 
   public static String getOccurredVisitStatus() {
     return Context.getService(org.openmrs.module.visits.api.service.ConfigService.class)
-        .getStatusOfOccurredVisit();
+        .getOccurredVisitStatues().get(0);
   }
 
   /**
