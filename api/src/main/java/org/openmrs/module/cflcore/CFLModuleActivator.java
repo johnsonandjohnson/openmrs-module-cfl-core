@@ -120,9 +120,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     createPersonIdentifierAttributeType();
   }
 
-  /**
-   * Creates person attribute type used to store information about additional person identifier.
-   */
+  /** Creates person attribute type used to store information about additional person identifier. */
   private void createPersonIdentifierAttributeType() {
     PersonAttributeType attributeType = new PersonAttributeType();
     attributeType.setName(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_NAME);
@@ -262,6 +260,16 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_SMS);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_CALL);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP);
   }
 
   private void createCountrySettings() {
@@ -302,13 +310,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         Boolean.FALSE.toString(),
         CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
-      Boolean.FALSE.toString(),
-      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-      Boolean.FALSE.toString(),
-      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
@@ -375,8 +383,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
 
   private void configureOrCreateScheduledTasksCleanupJob() {
     final Long oneWeekInSeconds = 7L * 24 * 60 * 60;
-    getSchedulerService().rescheduleOrCreateNewTask(
-        new ScheduledTasksCleanupJobDefinition(), oneWeekInSeconds);
+    getSchedulerService()
+        .rescheduleOrCreateNewTask(new ScheduledTasksCleanupJobDefinition(), oneWeekInSeconds);
   }
 
   private MessagesSchedulerService getSchedulerService() {

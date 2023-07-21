@@ -178,8 +178,8 @@ public final class VisitUtil {
   }
 
   public static String getOccurredVisitStatus() {
-    return Context.getAdministrationService()
-        .getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+    return Context.getService(org.openmrs.module.visits.api.service.ConfigService.class)
+        .getStatusOfOccurredVisit();
   }
 
   /**
@@ -268,7 +268,6 @@ public final class VisitUtil {
   }
 
   private static ConfigService getCFLConfigService() {
-    return Context.getRegisteredComponent(
-        CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+    return Context.getService(ConfigService.class);
   }
 }

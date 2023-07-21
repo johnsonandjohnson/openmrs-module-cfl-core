@@ -70,6 +70,7 @@
         <surefireVersion>2.17</surefireVersion>
         <!-- CfL modules -->
         <messagesVersion>1.7.0</messagesVersion>
+        <visitsVersion>1.5.1-SNAPSHOT</visitsVersion>
     </properties>
 
     <dependencyManagement>
@@ -273,6 +274,13 @@
                 <groupId>org.openmrs.module</groupId>
                 <artifactId>messages-api</artifactId>
                 <version>${messagesVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>visits-api</artifactId>
+                <version>${visitsVersion}</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>

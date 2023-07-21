@@ -31,7 +31,7 @@ import org.openmrs.module.cflcore.api.helper.LocationHelper;
 import org.openmrs.module.cflcore.api.helper.PatientHelper;
 import org.openmrs.module.cflcore.api.helper.PersonHelper;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.VaccinationService;
+import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;import org.openmrs.module.cflcore.api.service.VaccinationService;
 import org.openmrs.module.cflcore.api.service.impl.VaccinationServiceImpl;
 
 import javax.jms.MapMessage;
@@ -42,54 +42,57 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class VaccinationListenerBaseTest {
-    @Mock
-    protected MapMessage message;
+  @Mock protected MapMessage message;
 
-    @Mock
-    protected ConfigService configService;
+  @Mock protected ConfigService configService;
 
-    @Mock
-    protected VisitService visitService;
+  @Mock protected VisitService visitService;
 
-    @Mock
-    protected AdministrationService administrationService;
+  @Mock protected AdministrationService administrationService;
 
-    @Mock
-    protected PatientService patientService;
+  @Mock protected PatientService patientService;
 
-    @Mock
-    protected LocationService locationService;
+  @Mock protected LocationService locationService;
 
-    @InjectMocks
-    protected VaccinationServiceImpl vaccinationService;
+  @Mock protected org.openmrs.module.visits.api.service.ConfigService visitsConfigService;
 
-    protected Person person;
-    protected Patient patient;
-    protected Location location;
-    protected Visit visit;
-    protected Vaccination[] vaccinations;
+  @Mock
+  protected PatientVisitConfigService patientVisitConfigService;
 
-    @Before
-    public void setUp() throws IOException {
-        mockStatic(Context.class);
+  @InjectMocks protected VaccinationServiceImpl vaccinationService;
 
-        person = PersonHelper.createPerson();
-        location = LocationHelper.createLocation();
-        patient = PatientHelper.createPatient(person, location);
-        vaccinations = createVaccination();
+  protected Person person;
+  protected Patient patient;
+  protected Location location;
+  protected Visit visit;
+  protected Vaccination[] vaccinations;
 
-        when(Context.getRegisteredComponent(CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class)).thenReturn(
-                configService);
-        when(Context.getVisitService()).thenReturn(visitService);
-        when(Context.getAdministrationService()).thenReturn(administrationService);
-        when(Context.getPatientService()).thenReturn(patientService);
-        when(Context.getLocationService()).thenReturn(locationService);
-        when(Context.getService(VaccinationService.class)).thenReturn(vaccinationService);
-    }
+  @Before
+  public void setUp() throws IOException {
+    mockStatic(Context.class);
 
-    protected Vaccination[] createVaccination() throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(Constant.COVID_VACCINATION_PROGRAM_JSON_FILE);
-        Vaccination vaccination = new Gson().fromJson(IOUtils.toString(in), Vaccination.class);
-        return new Vaccination[] {vaccination};
-    }
+    person = PersonHelper.createPerson();
+    location = LocationHelper.createLocation();
+    patient = PatientHelper.createPatient(person, location);
+    vaccinations = createVaccination();
+
+    when(Context.getService(ConfigService.class)).thenReturn(configService);
+    when(Context.getVisitService()).thenReturn(visitService);
+    when(Context.getAdministrationService()).thenReturn(administrationService);
+    when(Context.getPatientService()).thenReturn(patientService);
+    when(Context.getLocationService()).thenReturn(locationService);
+    when(Context.getService(VaccinationService.class)).thenReturn(vaccinationService);
+    when(Context.getService(org.openmrs.module.visits.api.service.ConfigService.class))
+        .thenReturn(visitsConfigService);
+    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+  }
+
+  protected Vaccination[] createVaccination() throws IOException {
+    InputStream in =
+        this.getClass()
+            .getClassLoader()
+            .getResourceAsStream(Constant.COVID_VACCINATION_PROGRAM_JSON_FILE);
+    Vaccination vaccination = new Gson().fromJson(IOUtils.toString(in), Vaccination.class);
+    return new Vaccination[] {vaccination};
+  }
 }

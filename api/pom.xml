@@ -62,6 +62,10 @@
         </dependency>
         <dependency>
             <groupId>org.openmrs.module</groupId>
+            <artifactId>visits-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
             <artifactId>metadatasharing-api</artifactId>
         </dependency>
         <dependency>

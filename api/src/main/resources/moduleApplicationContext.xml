@@ -39,6 +39,14 @@
           class="org.openmrs.module.cflcore.api.service.impl.ConfigServiceImpl">
         <property name="personService" ref="personService"/>
     </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.ConfigService</value>
+                <ref bean="cfl.configService"/>
+            </list>
+        </property>
+    </bean>
 
     <bean id="cfl.actorService"
           class="org.openmrs.module.cflcore.api.copied.messages.service.impl.ActorServiceImpl">
@@ -358,6 +366,30 @@
             <list merge="true">
                 <value>org.openmrs.module.cflcore.api.service.FlagDTOService</value>
                 <ref bean="cflFlagDTOService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cfl.patientVisitConfigService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientVisitConfigServiceImpl">
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientVisitConfigService</value>
+                <ref bean="cfl.patientVisitConfigService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cfl.customAdministrationService"
+          class="org.openmrs.module.cflcore.api.service.impl.CustomAdministrationServiceImpl">
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.CustomAdministrationService</value>
+                <ref bean="cfl.customAdministrationService"/>
             </list>
         </property>
     </bean>

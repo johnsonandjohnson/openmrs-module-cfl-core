@@ -87,7 +87,6 @@ public class UpdatingVisitListener extends VisitActionListener {
   }
 
   private ConfigService getConfigService() {
-    return Context.getRegisteredComponent(
-        CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
+    return Context.getService(ConfigService.class);
   }
 }

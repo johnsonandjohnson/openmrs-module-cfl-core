@@ -33,7 +33,7 @@ public final class GlobalPropertyUtils {
     }
 
     public static String getGlobalProperty(String key) {
-        return Context.getAdministrationService().getGlobalProperty(key);
+        return Context.getAdministrationService().getGlobalProperty(key, null);
     }
 
     public static void createGlobalSettingIfNotExists(GPDefinition gpDefinition) {
@@ -55,10 +55,10 @@ public final class GlobalPropertyUtils {
         }
     }
 
-    public static boolean isTrue(String key) {
-        String gp = getGlobalProperty(key);
-        return StringUtils.isNotBlank(gp) && Boolean.valueOf(gp);
-    }
+  public static boolean isTrue(String key) {
+    String gp = getGlobalProperty(key);
+    return StringUtils.isNotBlank(gp) && Boolean.parseBoolean(gp);
+  }
 
     private GlobalPropertyUtils() { }
 }

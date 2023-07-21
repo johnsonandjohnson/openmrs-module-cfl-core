@@ -11,19 +11,20 @@
 package org.openmrs.module.cflcore.api.util;
 
 import org.openmrs.Concept;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.contract.CountrySetting;
 import org.openmrs.module.cflcore.api.contract.CountrySettingBuilder;
+import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.openmrs.module.messages.api.util.PersonAddressUtil;
 
 public final class CountrySettingUtil {
 
   public static String getChannelTypesForVisitReminder(Person person) {
-    CountrySetting countrySetting = getCountrySettingForPatient(person);
-    return getChannelTypes(countrySetting);
+    return getChannelTypes((Patient) person);
   }
 
   public static CountrySetting getCountrySettingForPatient(Person person) {
@@ -40,16 +41,21 @@ public final class CountrySettingUtil {
     return countrySettingBuilder.build();
   }
 
-  private static String getChannelTypes(CountrySetting countrySetting) {
+  private static String getChannelTypes(Patient patient) {
+    PatientVisitConfigService patientVisitConfigService =
+        Context.getService(PatientVisitConfigService.class);
+    boolean shouldSendReminderViaSMS = patientVisitConfigService.shouldSendReminderViaSMS(patient);
+    boolean shouldSendReminderViaCall =
+        patientVisitConfigService.shouldSendReminderViaCall(patient);
     String channel = "";
-    if (countrySetting.isShouldSendReminderViaSms()
-        && countrySetting.isShouldSendReminderViaCall()) {
+    if (shouldSendReminderViaSMS && shouldSendReminderViaCall) {
       channel = CFLConstants.SMS_CHANNEL_TYPE.concat("," + CFLConstants.CALL_CHANNEL_TYPE);
-    } else if (countrySetting.isShouldSendReminderViaCall()) {
+    } else if (shouldSendReminderViaCall) {
       channel = CFLConstants.CALL_CHANNEL_TYPE;
-    } else if (countrySetting.isShouldSendReminderViaSms()) {
+    } else if (shouldSendReminderViaSMS) {
       channel = CFLConstants.SMS_CHANNEL_TYPE;
     }
+
     return channel;
   }
 

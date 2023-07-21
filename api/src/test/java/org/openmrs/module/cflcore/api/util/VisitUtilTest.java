@@ -74,8 +74,7 @@ public class VisitUtilTest {
     patient = createPatient();
 
     when(Context.getVisitService()).thenReturn(visitService);
-    when(Context.getRegisteredComponent(anyString(), eq(ConfigService.class)))
-        .thenReturn(configService);
+    when(Context.getService(ConfigService.class)).thenReturn(configService);
     when(Context.getAdministrationService()).thenReturn(administrationService);
 
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.createVisitAttrTypes());

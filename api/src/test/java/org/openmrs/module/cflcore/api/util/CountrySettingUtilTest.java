@@ -66,8 +66,6 @@ public class CountrySettingUtilTest extends BaseModuleContextSensitiveTest {
     Assert.assertThat(countrySetting.getSms(), is("turnIO"));
     Assert.assertFalse(countrySetting.isPerformCallOnPatientRegistration());
     Assert.assertFalse(countrySetting.isSendSmsOnPatientRegistration());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaCall());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaSms());
   }
 
   @Test
@@ -80,8 +78,6 @@ public class CountrySettingUtilTest extends BaseModuleContextSensitiveTest {
     Assert.assertThat(countrySetting.getSms(), is("turnIO"));
     Assert.assertTrue(countrySetting.isPerformCallOnPatientRegistration());
     Assert.assertTrue(countrySetting.isSendSmsOnPatientRegistration());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaCall());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaSms());
   }
 
   @Test
@@ -94,8 +90,6 @@ public class CountrySettingUtilTest extends BaseModuleContextSensitiveTest {
     Assert.assertThat(countrySetting.getSms(), is("turnIO"));
     Assert.assertTrue(countrySetting.isPerformCallOnPatientRegistration());
     Assert.assertFalse(countrySetting.isSendSmsOnPatientRegistration());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaCall());
-    Assert.assertFalse(countrySetting.isShouldSendReminderViaSms());
   }
 
   @Test
@@ -108,35 +102,6 @@ public class CountrySettingUtilTest extends BaseModuleContextSensitiveTest {
     Assert.assertThat(countrySetting.getSms(), is("turnIO"));
     Assert.assertFalse(countrySetting.isPerformCallOnPatientRegistration());
     Assert.assertTrue(countrySetting.isSendSmsOnPatientRegistration());
-    Assert.assertFalse(countrySetting.isShouldSendReminderViaCall());
-    Assert.assertTrue(countrySetting.isShouldSendReminderViaSms());
-  }
-
-  @Test
-  public void shouldReturnSmsAndCallChannelTypeForPatientFromIndia() {
-    patient = createPatient("India");
-    when(Context.getPatientService().getPatient(patient.getId())).thenReturn(patient);
-    String actual = CountrySettingUtil.getChannelTypesForVisitReminder(patient);
-
-    Assert.assertThat(actual, is("SMS,Call"));
-  }
-
-  @Test
-  public void shouldReturnSmsChannelTypeForPatientFromDefaultCountry() {
-    patient = createPatient("Russia");
-    when(Context.getPatientService().getPatient(patient.getId())).thenReturn(patient);
-    String actual = CountrySettingUtil.getChannelTypesForVisitReminder(patient);
-
-    Assert.assertThat(actual, is("SMS"));
-  }
-
-  @Test
-  public void shouldReturnCallChannelTypeForPatientFromPhippipines() {
-    patient = createPatient("Phippipines");
-    when(Context.getPatientService().getPatient(patient.getId())).thenReturn(patient);
-    String actual = CountrySettingUtil.getChannelTypesForVisitReminder(patient);
-
-    Assert.assertThat(actual, is("Call"));
   }
 
   private Patient createPatient(String countryValue) {
