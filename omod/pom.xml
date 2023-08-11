@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>cflcore</artifactId>
-        <version>1.11.1-4</version>
+        <version>1.11.1-5-SNAPSHOT</version>
     </parent>
 
     <artifactId>cflcore-omod</artifactId>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>cflcore-api</artifactId>
-            <version>1.11.1-4</version>
+            <version>1.11.1-5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openmrs.web</groupId>
