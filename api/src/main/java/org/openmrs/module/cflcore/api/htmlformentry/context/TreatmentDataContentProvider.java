@@ -10,6 +10,7 @@
 
 package org.openmrs.module.cflcore.api.htmlformentry.context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
@@ -22,6 +23,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.htmlformentry.model.Interruption;
+import org.openmrs.module.cflcore.api.htmlformentry.model.Regimen;
 import org.openmrs.module.cflcore.api.htmlformentry.model.Treatment;
 import org.openmrs.module.cflcore.api.util.PatientUtil;
 import org.openmrs.module.htmlformentry.FormEntrySession;
@@ -44,6 +46,9 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
 
   private static final String TREATMENTS_VELOCITY_PROPERTY_NAME = "treatments";
 
+  private static final String CURRENT_REGIMEN_DRUG_DETAILS_PROPERTY_NAME =
+      "currentRegimenDrugDetailsArrayString";
+
   private static final Log LOGGER = LogFactory.getLog(TreatmentDataContentProvider.class);
 
   @Override
@@ -54,6 +59,17 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
       List<Obs> treatmentGroups = findTreatmentGroups(currentEncounter.get());
       List<Treatment> treatments = buildAllTreatments(treatmentGroups);
 
+      Optional<Treatment> currentTreatment =
+          treatments.stream().filter(treatment -> treatment.getStopDate() == null).findFirst();
+      if (currentTreatment.isPresent()) {
+        Optional<Regimen> optionalPatientRegimen = getRegimenByTreatment(currentTreatment.get());
+        if (optionalPatientRegimen.isPresent()) {
+          String regimenDrugsStringArray =
+              buildRegimenDrugsStringArray(optionalPatientRegimen.get());
+          formEntrySession.addToVelocityContext(
+              CURRENT_REGIMEN_DRUG_DETAILS_PROPERTY_NAME, regimenDrugsStringArray);
+        }
+      }
       try {
         formEntrySession.addToVelocityContext(
             TREATMENTS_VELOCITY_PROPERTY_NAME, new ObjectMapper().writeValueAsString(treatments));
@@ -61,6 +77,7 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
         LOGGER.error("Unable to write treatments object into JSON string");
       }
     } else {
+      formEntrySession.addToVelocityContext(CURRENT_REGIMEN_DRUG_DETAILS_PROPERTY_NAME, "[]");
       LOGGER.warn(
           String.format(
               "Encounter with encounter type uuid %s for patient %s not found",
@@ -181,5 +198,21 @@ public class TreatmentDataContentProvider implements VelocityContextContentProvi
 
       interruptions.add(interruption);
     }
+  }
+
+  private Optional<Regimen> getRegimenByTreatment(Treatment treatment) {
+    List<Regimen> regimens = HtmlFormContextUtil.getRegimensWithDrugs();
+    return regimens.stream()
+        .filter(
+            regimen -> StringUtils.equalsIgnoreCase(regimen.getName(), treatment.getRegimenName()))
+        .findFirst();
+  }
+
+  private String buildRegimenDrugsStringArray(Regimen regimen) {
+    return regimen.getRegimenDrugs().stream()
+        .map(
+            regimenDrug ->
+                "['".concat(regimenDrug.getDrug().getName().replaceAll(" ", "_").concat("']")))
+        .collect(Collectors.joining(","));
   }
 }
