@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cflcore</artifactId>
-    <version>1.11.1-5-SNAPSHOT</version>
+    <version>1.11.1-5</version>
     <packaging>pom</packaging>
     <name>CFL Core Module</name>
     <description>
@@ -22,7 +22,7 @@
         <connection>scm:git:https://bitbucket.org/soldevelo/openmrs-cfl-module.git</connection>
         <developerConnection>scm:git:https://bitbucket.org/soldevelo/openmrs-cfl-module.git</developerConnection>
         <url>https://bitbucket.org/soldevelo/openmrs-cfl-module.git</url>
-      <tag>HEAD</tag>
+      <tag>1.11.1-5</tag>
     </scm>
 
     <modules>
