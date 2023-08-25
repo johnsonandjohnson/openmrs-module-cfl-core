@@ -7,7 +7,9 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Obs;
 import org.openmrs.Order;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
+import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.HibernateUtil;
 import org.openmrs.parameter.EncounterSearchCriteria;
@@ -33,8 +35,8 @@ import java.util.stream.Collectors;
 public class ShipDataMigrationController {
 
   /**
-   * This API adds data to database (Obses) required after changes in Medicine Refill Visit form (AGRE-3033).
-   * It should be executed only once after applying changes in form.
+   * This API adds data to database (Obses) required after changes in Medicine Refill Visit form
+   * (AGRE-3033). It should be executed only once after applying changes in form.
    */
   @RequestMapping(value = "/refill-visit-note", method = RequestMethod.POST)
   @ResponseBody
@@ -56,6 +58,89 @@ public class ShipDataMigrationController {
     }
 
     return new ResponseEntity<>("Data migration completed", HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/medical-visit-note", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity<String> migrateMedicalVisitNoteData() {
+    ConceptService conceptService = Context.getConceptService();
+    Concept mentalHealthSpecifyConcept =
+        conceptService.getConceptByUuid("1638aad5-4fd3-4b5c-ac68-6588c6c586a3");
+    Concept mentalHealthMedicalHistoryConcept =
+        conceptService.getConceptByUuid("62f00afd-e23f-458d-b7d4-049ed567c008");
+
+    EncounterType medicalVisitEncounterType =
+        Context.getEncounterService()
+            .getEncounterTypeByUuid("968789ca-e9c4-492f-b1dc-101fd1aa2026");
+    ObsService obsService = Context.getObsService();
+    List<Obs> mentalHealthSpecifyObsList =
+        obsService
+            .getObservations(
+                null,
+                null,
+                Collections.singletonList(mentalHealthSpecifyConcept),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false)
+            .stream()
+            .filter(obs -> obs.getEncounter().getEncounterType().equals(medicalVisitEncounterType))
+            .collect(Collectors.toList());
+
+    List<Obs> mentalHealthMedicalHistoryObsList =
+        obsService
+            .getObservations(
+                null,
+                null,
+                Collections.singletonList(mentalHealthMedicalHistoryConcept),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false)
+            .stream()
+            .filter(obs -> obs.getEncounter().getEncounterType().equals(medicalVisitEncounterType))
+            .collect(Collectors.toList());
+
+    for (Obs obs : mentalHealthSpecifyObsList) {
+      Encounter encounter = obs.getEncounter();
+      Obs mentalHealthGroupDetailsObs = createGroupObs(obs, "d88ecc57-dc35-46c0-bcf4-0a1aefa803f6");
+      mentalHealthGroupDetailsObs.addGroupMember(obs);
+
+      Obs relatedMedicalHistoryObs =
+          findObsByEncounter(mentalHealthMedicalHistoryObsList, encounter);
+      if (relatedMedicalHistoryObs != null) {
+        mentalHealthGroupDetailsObs.addGroupMember(relatedMedicalHistoryObs);
+        mentalHealthMedicalHistoryObsList.remove(relatedMedicalHistoryObs);
+      }
+
+      obsService.saveObs(mentalHealthGroupDetailsObs, "Medical Visit Note Migration");
+    }
+
+    for (Obs obs : mentalHealthMedicalHistoryObsList) {
+      Obs mentalHealthGroupDetailsObs = createGroupObs(obs, "d88ecc57-dc35-46c0-bcf4-0a1aefa803f6");
+      mentalHealthGroupDetailsObs.addGroupMember(obs);
+
+      obsService.saveObs(mentalHealthGroupDetailsObs, "Medical Visit Note Migration");
+    }
+
+    return new ResponseEntity<>("Data migration completed", HttpStatus.OK);
+  }
+
+  private Obs findObsByEncounter(List<Obs> obsList, Encounter encounter) {
+    return obsList.stream()
+        .filter(obs -> obs.getEncounter().getEncounterId().equals(encounter.getEncounterId()))
+        .findFirst()
+        .orElse(null);
   }
 
   private List<Encounter> findRefillVisitNoteEncounters() {
@@ -82,7 +167,8 @@ public class ShipDataMigrationController {
     if (StringUtils.isNotBlank(valueText)) {
       String[] medications = valueText.split(";");
       for (String medication : medications) {
-        Obs pillDetailsGroupObs = createPillsDetailsGroupObs(medicationDetailsObs);
+        Obs pillDetailsGroupObs =
+            createGroupObs(medicationDetailsObs, "6db838eb-55a6-44d6-8554-60dcafd0a620");
         Obs pillsLeftObs = createPillsLeftObs(medicationDetailsObs, medication);
         if (pillsLeftObs.getValueNumeric() != null) {
           pillDetailsGroupObs.addGroupMember(pillsLeftObs);
@@ -119,10 +205,10 @@ public class ShipDataMigrationController {
     }
   }
 
-  private Obs createPillsDetailsGroupObs(Obs basicObs) {
+  private Obs createGroupObs(Obs basicObs, String groupConceptUuid) {
     Obs pillDetailsGroupObs = creaNewObs(basicObs);
     Concept pillDetailsGroupConcept =
-        Context.getConceptService().getConceptByUuid("6db838eb-55a6-44d6-8554-60dcafd0a620");
+        Context.getConceptService().getConceptByUuid(groupConceptUuid);
     pillDetailsGroupObs.setConcept(pillDetailsGroupConcept);
 
     return pillDetailsGroupObs;
