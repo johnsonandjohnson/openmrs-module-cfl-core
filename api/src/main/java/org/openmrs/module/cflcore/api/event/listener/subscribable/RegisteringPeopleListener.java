@@ -167,7 +167,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private DefaultPatientTemplateService getDefaultPatientTemplateService() {
-    return Context.getRegisteredComponent(
-        "messages.defaultPatientTemplateService", DefaultPatientTemplateService.class);
+    return Context.getService(DefaultPatientTemplateService.class);
   }
 }
