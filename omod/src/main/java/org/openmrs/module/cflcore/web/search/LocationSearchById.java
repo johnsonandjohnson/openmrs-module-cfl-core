@@ -25,7 +25,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang.StringUtils.isNumeric;
@@ -46,9 +46,7 @@ public class LocationSearchById implements SearchHandler {
       new SearchConfig(
           "byId",
           RestConstants.VERSION_1 + "/location",
-          Arrays.asList(
-              "1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*", "2.3.*",
-              "2.4.*"),
+          Collections.singletonList("1.8.* - 9.*"),
           new SearchQuery.Builder("Allows you to find location by Id")
               .withRequiredParameters(LOCATION_ID_PARAM)
               .build());
