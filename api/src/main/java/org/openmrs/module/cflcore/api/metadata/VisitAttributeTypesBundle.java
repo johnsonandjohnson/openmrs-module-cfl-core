@@ -25,7 +25,7 @@ public class VisitAttributeTypesBundle extends VersionedMetadataBundle {
 
     @Override
     public int getVersion() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -35,12 +35,41 @@ public class VisitAttributeTypesBundle extends VersionedMetadataBundle {
 
     @Override
     protected void installNewVersion() {
-        VisitAttributeType isLastDosingVisitAttrType = createVisitAttributeType(
+        createVisitAttributeTypes();
+    }
+
+    private void createVisitAttributeTypes() {
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.UP_WINDOW_ATTR_TYPE_UUID,
+            createVisitAttributeType(
+                CFLConstants.UP_WINDOW_ATTRIBUTE_NAME,
+                CFLConstants.UP_WINDOW_ATTR_TYPE_DATATYPE,
+                CFLConstants.UP_WINDOW_ATTR_TYPE_DESCRIPTION,
+                CFLConstants.UP_WINDOW_ATTR_TYPE_UUID));
+
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.LOW_WINDOW_ATTR_TYPE_UUID,
+            createVisitAttributeType(
+                CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME,
+                CFLConstants.LOW_WINDOW_ATTR_TYPE_DATATYPE,
+                CFLConstants.LOW_WINDOW_ATTR_TYPE_DESCRIPTION,
+                CFLConstants.LOW_WINDOW_ATTR_TYPE_UUID));
+
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.DOSE_NUMBER_ATTR_TYPE_UUID,
+            createVisitAttributeType(
+                CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME,
+                CFLConstants.DOSE_NUMBER_ATTR_TYPE_DATATYPE,
+                CFLConstants.DOSE_NUMBER_ATTR_TYPE_DESCRIPTION,
+                CFLConstants.DOSE_NUMBER_ATTR_TYPE_UUID));
+
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID,
+            createVisitAttributeType(
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTRIBUTE_NAME,
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DATATYPE,
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DESCRIPTION,
-                CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID);
-        createVisitAttributeTypeIfNotExists(CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID, isLastDosingVisitAttrType);
+                CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID));
     }
 
     private VisitAttributeType createVisitAttributeType(String name, String dataTypeClassName, String description,

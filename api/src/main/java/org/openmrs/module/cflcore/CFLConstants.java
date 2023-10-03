@@ -358,6 +358,32 @@ public final class CFLConstants {
   public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID =
       "1e566e6d-108e-11ec-a36a-0242ac130002";
 
+  public static final String UP_WINDOW_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String UP_WINDOW_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine time window after the visit";
+
+  public static final String UP_WINDOW_ATTR_TYPE_UUID =
+      "5899e8d4-5eac-11ee-8c99-0242ac120002";
+
+  public static final String LOW_WINDOW_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String LOW_WINDOW_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine time window before the visit";
+
+  public static final String LOW_WINDOW_ATTR_TYPE_UUID =
+      "5899ed48-5eac-11ee-8c99-0242ac120002";
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine vaccine dose number";
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_UUID =
+      "5899ee92-5eac-11ee-8c99-0242ac120002";
   public static final String MAIN_CONFIG = "biometric.api.config.main";
 
   public static final String REGIMEN_TAG_NAME = "regimen";
