@@ -112,6 +112,11 @@
         <class>org.openmrs.module.cflcore.advice.PatientCountAdvisor</class>
     </advice>
 
+    <advice>
+        <point>org.openmrs.api.EncounterService</point>
+        <class>org.openmrs.module.cflcore.advice.EncounterAdvice</class>
+    </advice>
+
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->
     <messages>

@@ -19,6 +19,7 @@ import org.openmrs.User;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.handler.NoVisitAssignmentHandler;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
@@ -65,6 +66,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
       createPersonOverviewConfig();
       createGlobalSettings();
       createCountrySettings();
+      updateGlobalSettings();
 
       CflEventListenerHelper.registerEventListeners();
 
@@ -325,6 +327,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
         CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
+  }
+
+  private void updateGlobalSettings() {
+    Context.getAdministrationService()
+        .setGlobalProperty(
+            CFLConstants.VISITS_ASSIGNMENT_HANDLER_GP_NAME,
+            NoVisitAssignmentHandler.class.getName());
   }
 
   private void createPersonOverviewConfig() {

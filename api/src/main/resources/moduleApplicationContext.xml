@@ -309,8 +309,8 @@
     <bean id="cfl.regimensContentProvider"
           class="org.openmrs.module.cflcore.api.htmlformentry.context.RegimenContextContentProvider"/>
 
-    <bean id="cfl.treatmentsContentProvider"
-          class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentDataContentProvider"/>
+    <bean id="cfl.treatmentFunctionsContextContentProvider"
+          class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentFunctionsContextContentProvider" />
 
     <bean id="cfl.patientFlagsOverviewDAO" class="org.openmrs.module.cflcore.db.impl.PatientFlagsOverviewDAOImpl">
         <property name="dbSessionFactory" ref="dbSessionFactory"/>
@@ -392,5 +392,20 @@
                 <ref bean="cfl.customAdministrationService"/>
             </list>
         </property>
+    </bean>
+
+    <bean id="cflTreatmentService" class="org.openmrs.module.cflcore.api.htmlformentry.service.impl.TreatmentServiceImpl" />
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.htmlformentry.service.TreatmentService</value>
+                <ref bean="cflTreatmentService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cflExtendedOrderDAO"
+          class="org.openmrs.module.cflcore.db.impl.ExtendedOrderDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 </beans>
