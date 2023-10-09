@@ -394,6 +394,8 @@ public final class CFLConstants {
 
   public static final String FIND_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("findCaregiver");
 
+  public static final String VISITS_ASSIGNMENT_HANDLER_GP_NAME = "visits.assignmentHandler";
+
   private CFLConstants() {
   }
 }
