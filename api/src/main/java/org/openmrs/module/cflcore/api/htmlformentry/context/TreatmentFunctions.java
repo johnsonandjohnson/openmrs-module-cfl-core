@@ -12,6 +12,8 @@ package org.openmrs.module.cflcore.api.htmlformentry.context;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.openmrs.Encounter;
+import org.openmrs.Order;
 import org.openmrs.Visit;
 import org.openmrs.module.cflcore.api.htmlformentry.model.Regimen;
 import org.openmrs.module.cflcore.api.htmlformentry.model.RegimenDrug;
@@ -63,11 +65,13 @@ public class TreatmentFunctions {
   }
 
   public String getCurrentRegimenName() {
-    return treatmentService
-        .getCurrentTreatment(formEntrySession.getPatient(), getEncounterDateTime())
-        .flatMap(this::getRegimenByTreatment)
-        .map(Regimen::getName)
-        .orElse("");
+    return getRegimenOfEncountersOrder()
+        .orElse(
+            treatmentService
+                .getCurrentTreatment(formEntrySession.getPatient(), getEncounterDateTime())
+                .flatMap(this::getRegimenByTreatment)
+                .map(Regimen::getName)
+                .orElse(""));
   }
 
   public String getCurrentRegimenDrugDetailsFormRepeatArray() {
@@ -103,5 +107,33 @@ public class TreatmentFunctions {
         .filter(
             regimen -> StringUtils.equalsIgnoreCase(regimen.getName(), treatment.getRegimenName()))
         .findFirst();
+  }
+
+  private Optional<String> getRegimenOfEncountersOrder() {
+    final Encounter formsEncounter = formEntrySession.getEncounter();
+
+    if (formsEncounter == null) {
+      return Optional.empty();
+    }
+
+    final List<String> regimenNames =
+        formsEncounter.getOrders().stream()
+            .filter(order -> Boolean.FALSE.equals(order.getVoided()))
+            .map(Order::getOrderReasonNonCoded)
+            .distinct()
+            .collect(Collectors.toList());
+
+    if (regimenNames.isEmpty()) {
+      return Optional.empty();
+    }
+
+    if (regimenNames.size() > 1) {
+      LOGGER.warn(
+          "Encounter ID:{} contains Orders for different regimens: {}",
+          formsEncounter.getEncounterId(),
+          regimenNames);
+    }
+
+    return Optional.of(regimenNames.get(0));
   }
 }
