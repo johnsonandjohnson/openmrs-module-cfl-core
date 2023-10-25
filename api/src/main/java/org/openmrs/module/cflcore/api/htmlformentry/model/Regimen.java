@@ -14,28 +14,37 @@ import java.util.List;
 
 public class Regimen {
 
-    private String name;
+  private String name;
+  private boolean retired;
+  private List<RegimenDrug> regimenDrugs;
 
-    private List<RegimenDrug> regimenDrugs;
+  public Regimen(String name, boolean retired, List<RegimenDrug> regimenDrugs) {
+    this.name = name;
+    this.retired = retired;
+    this.regimenDrugs = regimenDrugs;
+  }
 
-    public Regimen(String name, List<RegimenDrug> regimenDrugs) {
-        this.name = name;
-        this.regimenDrugs = regimenDrugs;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public boolean isRetired() {
+    return retired;
+  }
 
-    public List<RegimenDrug> getRegimenDrugs() {
-        return regimenDrugs;
-    }
+  public void setRetired(boolean retired) {
+    this.retired = retired;
+  }
 
-    public void setRegimenDrugs(List<RegimenDrug> regimenDrugs) {
-        this.regimenDrugs = regimenDrugs;
-    }
+  public List<RegimenDrug> getRegimenDrugs() {
+    return regimenDrugs;
+  }
+
+  public void setRegimenDrugs(List<RegimenDrug> regimenDrugs) {
+    this.regimenDrugs = regimenDrugs;
+  }
 }
