@@ -47,7 +47,7 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
 
   public RegimenElement(FormEntryContext context, Map<String, String> parameters) {
     initializeFields(context, parameters);
-    prepareWidget(context);
+    prepareWidget(context, parameters);
   }
 
   @Override
@@ -126,16 +126,18 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
     }
   }
 
-  private void prepareWidget(FormEntryContext context) {
+  private void prepareWidget(FormEntryContext context, Map<String, String> parameter) {
     valueWidget = new DropdownWidget();
-    configureRegimenDropdown();
+    configureRegimenDropdown(parameter);
     errorValueWidget = new ErrorWidget();
     context.registerWidget(valueWidget);
     context.registerErrorWidget(valueWidget, errorValueWidget);
   }
 
-  private void configureRegimenDropdown() {
-    List<OrderSet> orderSets = Context.getOrderSetService().getOrderSets(false);
+  private void configureRegimenDropdown(Map<String, String> parameters) {
+    List<OrderSet> orderSets =
+        Context.getOrderSetService()
+            .getOrderSets(Boolean.parseBoolean(parameters.get("includeRetired")));
     if (CollectionUtils.isEmpty(orderSets)) {
       valueWidget.addOption(new Option("", "", false));
     } else {
