@@ -175,6 +175,8 @@ public class TreatmentServiceImpl implements TreatmentService {
     final List<Obs> treatmentGroups = findTreatmentGroups(programFormEncounter);
     return treatmentGroups.stream()
         .map(this::createTreatment)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .sorted(Comparator.comparing(Treatment::getStartDate))
         .collect(Collectors.toList());
   }
@@ -191,7 +193,7 @@ public class TreatmentServiceImpl implements TreatmentService {
         .collect(Collectors.toList());
   }
 
-  private Treatment createTreatment(Obs treatmentGroup) {
+  private Optional<Treatment> createTreatment(Obs treatmentGroup) {
     final Treatment treatment = new Treatment();
 
     final List<Interruption> interruptions = new ArrayList<>();
@@ -201,7 +203,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     }
     treatment.setInterruptions(interruptions);
 
-    return treatment;
+    return treatment.getStartDate() != null ? Optional.of(treatment) : Optional.empty();
   }
 
   private void buildTreatment(Treatment treatment, Obs treatmentChild) {
