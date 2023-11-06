@@ -80,6 +80,7 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         }
         config.addAttribute("patient", wrapper);
         config.addAttribute("patientNames", getNames(wrapper.getPersonName()));
+        config.addAttribute("shipId", getShipIdentifier(wrapper.getPatient()));
         config.addAttribute(TELEPHONE, wrapper.getPatient().getPerson()
                 .getAttribute(CFLConstants.TELEPHONE_ATTRIBUTE_NAME));
 
@@ -117,6 +118,10 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         config.addAttribute("dashboardUrl", coreAppsProperties.getDashboardUrl());
         model.addAttribute(SHOW_GENDER_PERSON_HEADER, getShowGenderPersonHeader());
         model.addAttribute(SHOW_AGE_PERSON_HEADER, getShowAgePersonHeader());
+    }
+
+    private String getShipIdentifier(Patient patient) {
+        return patient.getPatientIdentifier("SHIP ID").getIdentifier();
     }
     
     private Boolean getShowGenderPersonHeader() {
