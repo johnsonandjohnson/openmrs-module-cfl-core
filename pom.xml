@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cflcore</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.11.2-1-ship-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>CFL Core Module</name>
     <description>
