@@ -10,22 +10,34 @@
 
 package org.openmrs.module.cflcore.api.htmlformentry.context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Encounter;
+import org.openmrs.Patient;
+import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.MedicalVisitNoteAllData;
 import org.openmrs.module.cflcore.api.htmlformentry.service.MedicalVisitNoteService;
+import org.openmrs.module.cflcore.api.util.DateUtil;
+import org.openmrs.parameter.EncounterSearchCriteria;
+import org.openmrs.parameter.EncounterSearchCriteriaBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MedicalVisitNoteFunctions {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MedicalVisitNoteFunctions.class);
+
+  private static final String MEDICAL_VISIT_NOTE_ENCOUNTER_TYPE_UUID =
+      "968789ca-e9c4-492f-b1dc-101fd1aa2026";
 
   private static final String EMPTY_ARRAY_JSON = "[]";
 
@@ -35,17 +47,8 @@ public class MedicalVisitNoteFunctions {
     this.medicalVisitNoteService = medicalVisitNoteService;
   }
 
-  public String getPastEncounterData(Encounter currentEncounter) {
-    List<Encounter> pastEncounters =
-        Context.getEncounterService().getEncountersByPatient(currentEncounter.getPatient()).stream()
-            .filter(
-                enc ->
-                    enc.getEncounterDatetime()
-                        .toInstant()
-                        .isBefore(currentEncounter.getEncounterDatetime().toInstant()))
-            .sorted(Comparator.comparing(Encounter::getEncounterDatetime).reversed())
-            .collect(Collectors.toList());
-
+  public String getPastEncounterData(Encounter baseEncounter, Patient patient) {
+    List<Encounter> pastEncounters = getPastMedicalVisitNoteEncounters(baseEncounter, patient);
     List<MedicalVisitNoteAllData> medicalVisitNoteAllData = new ArrayList<>();
     for (Encounter encounter : pastEncounters) {
       medicalVisitNoteAllData.add(
@@ -66,5 +69,49 @@ public class MedicalVisitNoteFunctions {
       LOGGER.error("Unable to write medical visit data objects into JSON string");
       return EMPTY_ARRAY_JSON;
     }
+  }
+
+  public String getPreviousConsultationDate(Encounter baseEncounter, Patient patient) {
+    List<Encounter> pastMedicalVisitEncounters =
+        getPastMedicalVisitNoteEncounters(baseEncounter, patient);
+
+    Optional<Encounter> latestPastMedicalVisitEncounter =
+        pastMedicalVisitEncounters.stream().findFirst();
+
+    if (latestPastMedicalVisitEncounter.isPresent()) {
+      return latestPastMedicalVisitEncounter.get().getEncounterDatetime().toString();
+    } else {
+      return StringUtils.EMPTY;
+    }
+  }
+
+  public List<Encounter> getPastMedicalVisitNoteEncounters(
+      Encounter baseEncounter, Patient patient) {
+    EncounterService encounterService = Context.getEncounterService();
+    Date currentEncounterDate = getCurrentEncounterDate(baseEncounter);
+
+    EncounterSearchCriteria encounterSearchCriteria =
+        new EncounterSearchCriteriaBuilder()
+            .setPatient(patient)
+            .setEncounterTypes(
+                Collections.singleton(
+                    encounterService.getEncounterTypeByUuid(
+                        (MEDICAL_VISIT_NOTE_ENCOUNTER_TYPE_UUID))))
+            .createEncounterSearchCriteria();
+
+    return encounterService.getEncounters(encounterSearchCriteria).stream()
+        .filter(
+            enc ->
+                enc.getEncounterDatetime().toInstant().isBefore(currentEncounterDate.toInstant()))
+        .sorted(Comparator.comparing(Encounter::getEncounterDatetime).reversed())
+        .collect(Collectors.toList());
+  }
+
+  private Date getCurrentEncounterDate(Encounter encounter) {
+    if (encounter == null) {
+      return DateUtil.getDateWithTimeOfDay(DateUtil.now(), "00:00", DateUtil.getSystemTimeZone());
+    }
+
+    return encounter.getEncounterDatetime();
   }
 }
