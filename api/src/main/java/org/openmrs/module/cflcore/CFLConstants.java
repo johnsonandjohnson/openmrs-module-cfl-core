@@ -422,6 +422,8 @@ public final class CFLConstants {
 
   public static final String VISITS_ASSIGNMENT_HANDLER_GP_NAME = "visits.assignmentHandler";
 
+  public static final String PATIENT_FLAGS_OVERVIEW_APP_NAME = "cfl.patientFlagsOverview";
+
   private CFLConstants() {
   }
 }
