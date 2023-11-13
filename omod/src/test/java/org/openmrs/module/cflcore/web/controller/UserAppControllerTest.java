@@ -32,8 +32,7 @@ public class UserAppControllerTest extends BaseContextMockTest {
         .thenReturn(Arrays.asList(registerPatientApp, otherApp));
 
     final UserAppController controller = new UserAppController();
-    final List<AppDescriptor> appDescriptors =
-        controller.getAllCFLRegisterAndFindAppDescriptors().getBody();
+    final List<AppDescriptor> appDescriptors = controller.getSpecificUserApps().getBody();
 
     assertEquals(1, appDescriptors.size());
     assertEquals(registerPatientApp.getId(), appDescriptors.get(0).getId());
