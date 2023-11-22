@@ -15,17 +15,39 @@ public class PhysicalExaminationDetailsDTO {
   public static final String PHYSICAL_EXAMINATION_CONCEPT_UUID =
       "ac799537-524e-4236-9acd-72a33e3b22a5";
 
-  private String value;
+  private String name;
 
-  public PhysicalExaminationDetailsDTO(String value) {
-    this.value = value;
+  private String result;
+
+  private String details;
+
+  public PhysicalExaminationDetailsDTO(String name, String result, String details) {
+    this.name = name;
+    this.result = result;
+    this.details = details;
   }
 
-  public String getValue() {
-    return value;
+  public String getName() {
+    return name;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getResult() {
+    return result;
+  }
+
+  public void setResult(String result) {
+    this.result = result;
+  }
+
+  public String getDetails() {
+    return details;
+  }
+
+  public void setDetails(String details) {
+    this.details = details;
   }
 }
