@@ -21,8 +21,10 @@ import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.ReviewM
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.VaccinationDetailsDTO;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.VitalDetailsDTO;
 import org.openmrs.module.cflcore.api.htmlformentry.model.LaboratoryDataModel;
+import org.openmrs.module.cflcore.api.htmlformentry.model.PhysicalExaminationDataModel;
 import org.openmrs.module.cflcore.api.htmlformentry.model.VaccinationDataModel;
 import org.openmrs.module.cflcore.api.htmlformentry.util.LaboratoryUtil;
+import org.openmrs.module.cflcore.api.htmlformentry.util.PhysicalExaminationUtil;
 import org.openmrs.module.cflcore.api.htmlformentry.util.VaccinationUtil;
 import org.openmrs.module.cflcore.api.htmlformentry.service.MedicalVisitNoteService;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,16 +85,25 @@ public class MedicalVisitNoteServiceImpl implements MedicalVisitNoteService {
   @Override
   public List<PhysicalExaminationDetailsDTO> getPhysicalExaminationData(Encounter encounter) {
     Set<Obs> encounterObsList = encounter.getAllObs(false);
-    List<PhysicalExaminationDetailsDTO> physicalExaminationNames = new ArrayList<>();
+    List<PhysicalExaminationDetailsDTO> peDetailsDTOS = new ArrayList<>();
     for (Obs obs : encounterObsList) {
       if (!PhysicalExaminationDetailsDTO.PHYSICAL_EXAMINATION_CONCEPT_UUID.equals(
           obs.getConcept().getUuid())) {
         continue;
       }
-      physicalExaminationNames.add(new PhysicalExaminationDetailsDTO(getObsStringValue(obs)));
+      Concept specificPEConcept = obs.getValueCoded();
+      PhysicalExaminationDataModel peDataModel =
+          PhysicalExaminationUtil.findPhysicalExaminationDataModelByPENameConceptUuid(
+              specificPEConcept.getUuid());
+      Obs peResult = findObsByConcept(encounterObsList, peDataModel.getResultConceptUuid());
+      Obs peDetails = findObsByConcept(encounterObsList, peDataModel.getDetailsConceptUuid());
+
+      peDetailsDTOS.add(
+          new PhysicalExaminationDetailsDTO(
+              getObsStringValue(obs), getObsStringValue(peResult), getObsStringValue(peDetails)));
     }
 
-    return physicalExaminationNames;
+    return peDetailsDTOS;
   }
 
   @Override
