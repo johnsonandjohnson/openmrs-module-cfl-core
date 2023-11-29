@@ -16,6 +16,7 @@ import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.OrderSet;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.cflcore.api.htmlformentry.widget.BetterDropdownWidget;
 import org.openmrs.module.cflcore.api.util.DateUtil;
 import org.openmrs.module.htmlformentry.FormEntryContext;
 import org.openmrs.module.htmlformentry.FormEntrySession;
@@ -24,7 +25,6 @@ import org.openmrs.module.htmlformentry.FormSubmissionError;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.htmlformentry.action.FormSubmissionControllerAction;
 import org.openmrs.module.htmlformentry.element.HtmlGeneratorElement;
-import org.openmrs.module.htmlformentry.widget.DropdownWidget;
 import org.openmrs.module.htmlformentry.widget.ErrorWidget;
 import org.openmrs.module.htmlformentry.widget.Option;
 
@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class RegimenElement implements HtmlGeneratorElement, FormSubmissionControllerAction {
 
-  private DropdownWidget valueWidget;
+  private BetterDropdownWidget valueWidget;
 
   private ErrorWidget errorValueWidget;
 
@@ -47,7 +47,7 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
 
   public RegimenElement(FormEntryContext context, Map<String, String> parameters) {
     initializeFields(context, parameters);
-    prepareWidget(context, parameters);
+    prepareWidget(context);
   }
 
   @Override
@@ -126,25 +126,20 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
     }
   }
 
-  private void prepareWidget(FormEntryContext context, Map<String, String> parameter) {
-    valueWidget = new DropdownWidget();
-    configureRegimenDropdown(parameter);
+  private void prepareWidget(FormEntryContext context) {
+    valueWidget = new BetterDropdownWidget();
+    configureRegimenDropdown();
     errorValueWidget = new ErrorWidget();
     context.registerWidget(valueWidget);
     context.registerErrorWidget(valueWidget, errorValueWidget);
   }
 
-  private void configureRegimenDropdown(Map<String, String> parameters) {
-    List<OrderSet> orderSets =
-        Context.getOrderSetService()
-            .getOrderSets(Boolean.parseBoolean(parameters.get("includeRetired")));
-    if (CollectionUtils.isEmpty(orderSets)) {
-      valueWidget.addOption(new Option("", "", false));
-    } else {
-      for (OrderSet orderSet : orderSets) {
-        String regimenName = orderSet.getName();
-        valueWidget.addOption(new Option(regimenName, regimenName, false));
-      }
+  private void configureRegimenDropdown() {
+    List<OrderSet> orderSets = Context.getOrderSetService().getOrderSets(true);
+    valueWidget.addOption(new Option("", "", false));
+    for (OrderSet orderSet : orderSets) {
+      String regimenName = orderSet.getName();
+      valueWidget.addOption(new Option(regimenName, regimenName, false, orderSet.getRetired()));
     }
     setInitialValue();
   }
