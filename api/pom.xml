@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>cflcore</artifactId>
-		<version>1.11.2-1-ship-SNAPSHOT</version>
+		<version>1.12.0-ship</version>
 	</parent>
 
     <artifactId>cflcore-api</artifactId>
