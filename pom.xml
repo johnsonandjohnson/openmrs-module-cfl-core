@@ -9,7 +9,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>cflcore</artifactId>
-    <version>1.12.0-ship</version>
+    <version>1.12.1-ship</version>
     <packaging>pom</packaging>
     <name>CFL Core Module</name>
     <description>
@@ -70,7 +70,7 @@
         <surefireVersion>2.17</surefireVersion>
         <!-- CfL modules -->
         <messagesVersion>1.7.0</messagesVersion>
-        <visitsVersion>1.5.1-SNAPSHOT</visitsVersion>
+        <visitsVersion>1.6.0</visitsVersion>
     </properties>
 
     <dependencyManagement>
