@@ -31,6 +31,7 @@ import org.openmrs.module.htmlformentry.widget.Option;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,7 @@ public class RegimenElement implements HtmlGeneratorElement, FormSubmissionContr
 
   private void configureRegimenDropdown() {
     List<OrderSet> orderSets = Context.getOrderSetService().getOrderSets(true);
+    orderSets.sort(Comparator.comparing(OrderSet::getName));
     valueWidget.addOption(new Option("", "", false));
     for (OrderSet orderSet : orderSets) {
       String regimenName = orderSet.getName();
