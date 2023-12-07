@@ -338,6 +338,10 @@ public final class CFLConstants {
 
   public static final String UPDATE_REGIMEN_JOB_NAME = "Update Regimen Job";
 
+  public static final String SCHEDULED_TASKS_TO_DELETE_CLASS_NAMES_KEY = "cfl.scheduledTasksToDelete.classNames";
+
+  public static final String SCHEDULED_TASKS_CLEANUP_JOB_NAME = "Scheduled Tasks Cleanup Job";
+
   public static final String CFL_ADDRESS_DATA_SERVICE_BEAN_NAME = "cfl.addressService";
 
   public static final String CFL_VISIT_SERVICE_BEAN_NAME = "cfl.visitService";
@@ -354,6 +358,32 @@ public final class CFLConstants {
   public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID =
       "1e566e6d-108e-11ec-a36a-0242ac130002";
 
+  public static final String UP_WINDOW_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String UP_WINDOW_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine time window after the visit";
+
+  public static final String UP_WINDOW_ATTR_TYPE_UUID =
+      "5899e8d4-5eac-11ee-8c99-0242ac120002";
+
+  public static final String LOW_WINDOW_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String LOW_WINDOW_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine time window before the visit";
+
+  public static final String LOW_WINDOW_ATTR_TYPE_UUID =
+      "5899ed48-5eac-11ee-8c99-0242ac120002";
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine vaccine dose number";
+
+  public static final String DOSE_NUMBER_ATTR_TYPE_UUID =
+      "5899ee92-5eac-11ee-8c99-0242ac120002";
   public static final String MAIN_CONFIG = "biometric.api.config.main";
 
   public static final String REGIMEN_TAG_NAME = "regimen";
@@ -389,6 +419,10 @@ public final class CFLConstants {
   public static final String FIND_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("findPatient");
 
   public static final String FIND_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat("findCaregiver");
+
+  public static final String VISITS_ASSIGNMENT_HANDLER_GP_NAME = "visits.assignmentHandler";
+
+  public static final String PATIENT_FLAGS_OVERVIEW_APP_NAME = "cfl.patientFlagsOverview";
 
   private CFLConstants() {
   }

@@ -54,9 +54,6 @@ public class CountrySettingBuilder {
         CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
         CountrySettingBuilder::setPatientNotificationTimeWindowTo);
     tmp.put(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
-        CountrySettingBuilder::setShouldSendReminderViaSms);
-    tmp.put(
         CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
         CountrySettingBuilder::setPerformCallOnPatientRegistration);
     tmp.put(CountryPropertyConstants.SMS_CONFIG_PROP_NAME, CountrySettingBuilder::setSms);
@@ -66,20 +63,8 @@ public class CountrySettingBuilder {
         CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
         CountrySettingBuilder::setSendSmsOnPatientRegistration);
     tmp.put(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
-        CountrySettingBuilder::setShouldSendReminderViaCall);
-    tmp.put(
       CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
       CountrySettingBuilder::setSendWhatsAppOnPatientRegistration);
-    tmp.put(
-      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-      CountrySettingBuilder::setShouldSendReminderViaWhatsApp);
-    tmp.put(
-        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
-        CountrySettingBuilder::setShouldCreateFirstVisit);
-    tmp.put(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
-        CountrySettingBuilder::setShouldCreateFutureVisit);
     PROPERTY_SETTERS_MAPPING = Collections.unmodifiableMap(tmp);
   }
 
@@ -88,12 +73,7 @@ public class CountrySettingBuilder {
   private String whatsApp;
   private boolean performCallOnPatientRegistration = false;
   private boolean sendSmsOnPatientRegistration = false;
-  private boolean shouldSendReminderViaCall = false;
-  private boolean shouldSendReminderViaSms = false;
   private boolean sendWhatsAppOnPatientRegistration = false;
-  private boolean shouldSendReminderViaWhatsApp = false;
-  private boolean shouldCreateFirstVisit = false;
-  private boolean shouldCreateFutureVisit = false;
   private String patientNotificationTimeWindowFrom = "10:00";
   private String patientNotificationTimeWindowTo = "18:00";
 
@@ -123,12 +103,7 @@ public class CountrySettingBuilder {
         call,
         performCallOnPatientRegistration,
         sendSmsOnPatientRegistration,
-        shouldSendReminderViaCall,
-        shouldSendReminderViaSms,
         sendWhatsAppOnPatientRegistration,
-        shouldSendReminderViaWhatsApp,
-        shouldCreateFirstVisit,
-        shouldCreateFutureVisit,
         patientNotificationTimeWindowFrom,
         patientNotificationTimeWindowTo);
   }
@@ -153,28 +128,8 @@ public class CountrySettingBuilder {
     this.sendSmsOnPatientRegistration = parseBoolean(sendSmsOnPatientRegistration);
   }
 
-  private void setShouldSendReminderViaCall(String shouldSendReminderViaCall) {
-    this.shouldSendReminderViaCall = parseBoolean(shouldSendReminderViaCall);
-  }
-
-  private void setShouldSendReminderViaSms(String shouldSendReminderViaSms) {
-    this.shouldSendReminderViaSms = parseBoolean(shouldSendReminderViaSms);
-  }
-
   private void setSendWhatsAppOnPatientRegistration(String sendWhatsAppOnPatientRegistration) {
     this.sendWhatsAppOnPatientRegistration = parseBoolean(sendWhatsAppOnPatientRegistration);
-  }
-
-  private void setShouldSendReminderViaWhatsApp(String shouldSendReminderViaWhatsApp) {
-    this.shouldSendReminderViaWhatsApp = parseBoolean(shouldSendReminderViaWhatsApp);
-  }
-
-  private void setShouldCreateFirstVisit(String shouldCreateFirstVisit) {
-    this.shouldCreateFirstVisit = parseBoolean(shouldCreateFirstVisit);
-  }
-
-  private void setShouldCreateFutureVisit(String shouldCreateFutureVisit) {
-    this.shouldCreateFutureVisit = parseBoolean(shouldCreateFutureVisit);
   }
 
   private void setPatientNotificationTimeWindowFrom(String patientNotificationTimeWindowFrom) {

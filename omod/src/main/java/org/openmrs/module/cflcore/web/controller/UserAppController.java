@@ -24,22 +24,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/cfl/apps")
 public class UserAppController {
 
-  @ApiOperation(value = "None", notes = "Gets all CFL user app descriptors related to register and find patient/caregiver")
-  @ApiResponses(value = {
-      @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User app descriptors have been successfully fetched"),
-      @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Failed to fetch user app descriptors")
-  })
+  @ApiOperation(
+      value = "None",
+      notes = "Gets specific user apps - mainly required for Multi-project support")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            code = HttpURLConnection.HTTP_OK,
+            message = "User app descriptors have been successfully fetched"),
+        @ApiResponse(
+            code = HttpURLConnection.HTTP_INTERNAL_ERROR,
+            message = "Failed to fetch user app descriptors")
+      })
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<AppDescriptor>> getAllCFLRegisterAndFindAppDescriptors() {
-    List<AppDescriptor> allDescriptors = Context.getService(AppFrameworkService.class).getAllApps()
+  public ResponseEntity<List<AppDescriptor>> getSpecificUserApps() {
+    List<AppDescriptor> filteredApps = Context.getService(AppFrameworkService.class).getAllApps()
         .stream()
         .filter(
             app -> StringUtils.startsWithAny(app.getId(), CFLConstants.REGISTER_PATIENT_APP_NAME,
                 CFLConstants.REGISTER_CAREGIVER_APP_NAME, CFLConstants.FIND_PATIENT_APP_NAME,
-                CFLConstants.FIND_CAREGIVER_APP_NAME))
+                CFLConstants.FIND_CAREGIVER_APP_NAME, CFLConstants.PATIENT_FLAGS_OVERVIEW_APP_NAME))
         .collect(Collectors.toList());
 
-    return new ResponseEntity<>(allDescriptors, HttpStatus.OK);
+    return new ResponseEntity<>(filteredApps, HttpStatus.OK);
   }
 }

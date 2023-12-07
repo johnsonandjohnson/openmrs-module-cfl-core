@@ -12,6 +12,7 @@ package org.openmrs.module.cflcore.api.event.listener.subscribable;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -40,6 +41,7 @@ import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -78,12 +80,16 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
   }
 
   @Test
-  public void performAction_updateFromMultipleThreadsSafetyTest() throws JMSException, InterruptedException {
+  public void performAction_updateFromMultipleThreadsSafetyTest()
+      throws JMSException, InterruptedException {
     // Given
     setupDataForFutureVisitCreation();
 
     final VaccinationService vaccinationServiceSpy = Mockito.spy(vaccinationService);
     when(Context.getService(VaccinationService.class)).thenReturn(vaccinationServiceSpy);
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
+    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
 
     doAnswer(
             invocationOnMock -> {
@@ -119,6 +125,9 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
   public void performAction_shouldCreateFutureVisits() throws JMSException {
     // Given
     setupDataForFutureVisitCreation();
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
+    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
 
     // When
     updatingVisitListener.performAction(message);
@@ -127,7 +136,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(visitService).getVisitByUuid(visit.getUuid());
     verify(visitService).getVisitsByPatient(patient);
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+    verify(visitsConfigService).getOccurredVisitStatues();
     verify(configService, times(3)).getRandomizationGlobalProperty();
     verify(configService, times(3)).getVaccinationProgram(visit.getPatient());
     verify(visitService, times(12)).getAllVisitAttributeTypes();
@@ -244,15 +253,15 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     when(visitService.getVisitByUuid(visit.getUuid())).thenReturn(visit);
 
     when(message.getString(CFLConstants.UUID_KEY)).thenReturn(visit.getUuid());
-    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
-        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Arrays.asList(Constant.VISIT_STATUS_OCCURRED));
     // When
     updatingVisitListener.performAction(message);
     // Then
     verify(configService).isVaccinationInfoIsEnabled();
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(visitService).getVisitByUuid(visit.getUuid());
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+    verify(visitsConfigService).getOccurredVisitStatues();
     verifyZeroInteractions(patientService);
     verifyZeroInteractions(locationService);
   }
@@ -303,9 +312,8 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
         .thenReturn(vaccinations[0].getName());
     when(configService.isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME))
         .thenReturn(true);
-
-    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
-        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
 
     when(visitService.getVisitsByPatient(patient)).thenReturn(VisitHelper.getVisits(visit));
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
@@ -326,7 +334,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(visitService).getVisitByUuid(visit.getUuid());
     verify(visitService).getVisitsByPatient(patient);
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
+    verify(visitsConfigService).getOccurredVisitStatues();
     verify(configService).getRandomizationGlobalProperty();
     verify(configService).getVaccinationProgram(visit.getPatient());
     verify(visitService).getAllVisitAttributeTypes();

@@ -36,6 +36,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -84,7 +85,8 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
     visit.addEncounter(encounter);
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setName(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
     shouldCreateFutureVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
@@ -105,9 +107,9 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
     when(visitService.getVisitsByPatient(patient)).thenReturn(VisitHelper.getVisits(visit));
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
 
-    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
-        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
-
+    when(Context.getService(org.openmrs.module.visits.api.service.ConfigService.class)
+            .getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
     when(patientService.getPatient(person.getPersonId())).thenReturn(patient);
 
     when(locationService.getLocationAttributeTypeByName(
@@ -115,6 +117,7 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
         .thenReturn(new LocationAttributeType());
 
     when(message.getString(CFLConstants.UUID_KEY)).thenReturn(encounter.getUuid());
+    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
 
     // When
     vaccinationEncounterListener.performAction(message);
@@ -122,8 +125,6 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
     verify(configService).isVaccinationInfoIsEnabled();
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(encounterService).getEncounterByUuid(encounter.getUuid());
-    verify(visitService).getVisitsByPatient(patient);
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     verify(configService, times(3)).getRandomizationGlobalProperty();
     verify(configService, times(3)).getVaccinationProgram(visit.getPatient());
     verify(visitService, times(12)).getAllVisitAttributeTypes();
@@ -193,15 +194,15 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
 
     when(encounterService.getEncounterByUuid(encounter.getUuid())).thenReturn(encounter);
     when(message.getString(CFLConstants.UUID_KEY)).thenReturn(encounter.getUuid());
-    when(administrationService.getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY))
-        .thenReturn(Constant.VISIT_STATUS_OCCURRED);
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
+
     // When
     vaccinationEncounterListener.performAction(message);
     // Then
     verify(configService).isVaccinationInfoIsEnabled();
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(encounterService).getEncounterByUuid(encounter.getUuid());
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     verifyZeroInteractions(patientService);
     verifyZeroInteractions(locationService);
   }
@@ -242,7 +243,8 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
     visit.addEncounter(encounter);
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
-    shouldCreateFutureVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+    shouldCreateFutureVisitProp.setName(
+        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
     shouldCreateFutureVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
@@ -272,6 +274,8 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
         .thenReturn(new LocationAttributeType());
 
     when(message.getString(CFLConstants.UUID_KEY)).thenReturn(encounter.getUuid());
+    when(visitsConfigService.getOccurredVisitStatues())
+        .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
 
     // When
     vaccinationEncounterListener.performAction(message);
@@ -279,8 +283,6 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
     verify(configService).isVaccinationInfoIsEnabled();
     verify(message).getString(CFLConstants.UUID_KEY);
     verify(encounterService).getEncounterByUuid(encounter.getUuid());
-    verify(visitService).getVisitsByPatient(patient);
-    verify(administrationService).getGlobalProperty(CFLConstants.STATUS_OF_OCCURRED_VISIT_KEY);
     verify(configService).getRandomizationGlobalProperty();
     verify(configService).getVaccinationProgram(visit.getPatient());
     verify(visitService).getAllVisitAttributeTypes();

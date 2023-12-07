@@ -39,6 +39,14 @@
           class="org.openmrs.module.cflcore.api.service.impl.ConfigServiceImpl">
         <property name="personService" ref="personService"/>
     </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.ConfigService</value>
+                <ref bean="cfl.configService"/>
+            </list>
+        </property>
+    </bean>
 
     <bean id="cfl.actorService"
           class="org.openmrs.module.cflcore.api.copied.messages.service.impl.ActorServiceImpl">
@@ -301,8 +309,11 @@
     <bean id="cfl.regimensContentProvider"
           class="org.openmrs.module.cflcore.api.htmlformentry.context.RegimenContextContentProvider"/>
 
-    <bean id="cfl.treatmentsContentProvider"
-          class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentDataContentProvider"/>
+    <bean id="cfl.treatmentFunctionsContextContentProvider"
+          class="org.openmrs.module.cflcore.api.htmlformentry.context.TreatmentFunctionsContextContentProvider" />
+
+    <bean id="cfl.historyDataContentProvider"
+          class="org.openmrs.module.cflcore.api.htmlformentry.context.MedicalVisitNoteDataContentProvider"/>
 
     <bean id="cfl.patientFlagsOverviewDAO" class="org.openmrs.module.cflcore.db.impl.PatientFlagsOverviewDAOImpl">
         <property name="dbSessionFactory" ref="dbSessionFactory"/>
@@ -332,5 +343,81 @@
                 <ref bean="cflPersonService"/>
             </list>
         </property>
+    </bean>
+
+    <bean id="cflPatientProgramDetailsService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientProgramDetailsServiceImpl"/>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientProgramDetailsService</value>
+                <ref bean="cflPatientProgramDetailsService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cflFlagDTOService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="target">
+            <bean class="org.openmrs.module.cflcore.api.service.impl.FlagDTOServiceImpl" />
+        </property>
+        <property name="preInterceptors" ref="serviceInterceptors"/>
+        <property name="transactionAttributeSource" ref="transactionAttributeSource"/>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.FlagDTOService</value>
+                <ref bean="cflFlagDTOService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cfl.patientVisitConfigService"
+          class="org.openmrs.module.cflcore.api.service.impl.PatientVisitConfigServiceImpl">
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.PatientVisitConfigService</value>
+                <ref bean="cfl.patientVisitConfigService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cfl.customAdministrationService"
+          class="org.openmrs.module.cflcore.api.service.impl.CustomAdministrationServiceImpl">
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.CustomAdministrationService</value>
+                <ref bean="cfl.customAdministrationService"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="cflTreatmentService" class="org.openmrs.module.cflcore.api.htmlformentry.service.impl.TreatmentServiceImpl" />
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.htmlformentry.service.TreatmentService</value>
+                <ref bean="cflTreatmentService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cflMedicalVisitNoteService" class="org.openmrs.module.cflcore.api.htmlformentry.service.impl.MedicalVisitNoteServiceImpl" />
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.htmlformentry.service.MedicalVisitNoteService</value>
+                <ref bean="cflMedicalVisitNoteService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cflExtendedOrderDAO"
+          class="org.openmrs.module.cflcore.db.impl.ExtendedOrderDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 </beans>

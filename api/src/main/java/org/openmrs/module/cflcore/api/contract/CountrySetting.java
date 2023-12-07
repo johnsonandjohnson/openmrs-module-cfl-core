@@ -16,12 +16,7 @@ public class CountrySetting {
   private String call;
   private boolean performCallOnPatientRegistration;
   private boolean sendSmsOnPatientRegistration;
-  private boolean shouldSendReminderViaCall;
-  private boolean shouldSendReminderViaSms;
   private boolean sendWhatsAppOnPatientRegistration;
-  private boolean shouldSendReminderViaWhatsApp;
-  private boolean shouldCreateFirstVisit;
-  private boolean shouldCreateFutureVisit;
   private String patientNotificationTimeWindowFrom;
   private String patientNotificationTimeWindowTo;
 
@@ -34,12 +29,7 @@ public class CountrySetting {
       String call,
       boolean performCallOnPatientRegistration,
       boolean sendSmsOnPatientRegistration,
-      boolean shouldSendReminderViaCall,
-      boolean shouldSendReminderViaSms,
       boolean sendWhatsAppOnPatientRegistration,
-      boolean shouldSendReminderViaWhatsApp,
-      boolean shouldCreateFirstVisit,
-      boolean shouldCreateFutureVisit,
       String patientNotificationTimeWindowFrom,
       String patientNotificationTimeWindowTo) {
     this.sms = sms;
@@ -47,12 +37,7 @@ public class CountrySetting {
     this.call = call;
     this.performCallOnPatientRegistration = performCallOnPatientRegistration;
     this.sendSmsOnPatientRegistration = sendSmsOnPatientRegistration;
-    this.shouldSendReminderViaCall = shouldSendReminderViaCall;
-    this.shouldSendReminderViaSms = shouldSendReminderViaSms;
     this.sendWhatsAppOnPatientRegistration = sendWhatsAppOnPatientRegistration;
-    this.shouldSendReminderViaWhatsApp = shouldSendReminderViaWhatsApp;
-    this.shouldCreateFirstVisit = shouldCreateFirstVisit;
-    this.shouldCreateFutureVisit = shouldCreateFutureVisit;
     this.patientNotificationTimeWindowFrom = patientNotificationTimeWindowFrom;
     this.patientNotificationTimeWindowTo = patientNotificationTimeWindowTo;
   }
@@ -97,52 +82,12 @@ public class CountrySetting {
     this.sendSmsOnPatientRegistration = sendSmsOnPatientRegistration;
   }
 
-  public boolean isShouldSendReminderViaCall() {
-    return shouldSendReminderViaCall;
-  }
-
-  public void setShouldSendReminderViaCall(boolean shouldSendReminderViaCall) {
-    this.shouldSendReminderViaCall = shouldSendReminderViaCall;
-  }
-
-  public boolean isShouldSendReminderViaSms() {
-    return shouldSendReminderViaSms;
-  }
-
-  public void setShouldSendReminderViaSms(boolean shouldSendReminderViaSms) {
-    this.shouldSendReminderViaSms = shouldSendReminderViaSms;
-  }
-
   public boolean isSendWhatsAppOnPatientRegistration() {
     return sendWhatsAppOnPatientRegistration;
   }
 
   public void setSendWhatsAppOnPatientRegistration(boolean sendWhatsAppOnPatientRegistration) {
     this.sendWhatsAppOnPatientRegistration = sendWhatsAppOnPatientRegistration;
-  }
-
-  public boolean isShouldSendReminderViaWhatsApp() {
-    return shouldSendReminderViaWhatsApp;
-  }
-
-  public void setShouldSendReminderViaWhatsApp(boolean shouldSendReminderViaWhatsApp) {
-    this.shouldSendReminderViaWhatsApp = shouldSendReminderViaWhatsApp;
-  }
-
-  public boolean isShouldCreateFirstVisit() {
-    return shouldCreateFirstVisit;
-  }
-
-  public void setShouldCreateFirstVisit(boolean shouldCreateFirstVisit) {
-    this.shouldCreateFirstVisit = shouldCreateFirstVisit;
-  }
-
-  public boolean isShouldCreateFutureVisit() {
-    return shouldCreateFutureVisit;
-  }
-
-  public void setShouldCreateFutureVisit(boolean shouldCreateFutureVisit) {
-    this.shouldCreateFutureVisit = shouldCreateFutureVisit;
   }
 
   public String getPatientNotificationTimeWindowFrom() {

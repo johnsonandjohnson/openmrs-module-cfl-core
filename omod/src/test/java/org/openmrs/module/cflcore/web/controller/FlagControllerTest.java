@@ -1,25 +1,31 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
 package org.openmrs.module.cflcore.web.controller;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.openmrs.module.cflcore.api.dto.FlagDTO;
+import org.openmrs.module.cflcore.api.service.FlagDTOService;
 import org.openmrs.module.patientflags.Flag;
-import org.openmrs.module.patientflags.api.FlagService;
 import org.openmrs.test.BaseContextMockTest;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class FlagControllerTest extends BaseContextMockTest {
-  @Mock private FlagService flagService;
+  @Mock private FlagDTOService flagDTOService;
 
   @Before
   public void setup() {
-    contextMockHelper.setService(FlagService.class, flagService);
+    contextMockHelper.setService(FlagDTOService.class, flagDTOService);
   }
 
   @Test
@@ -30,12 +36,9 @@ public class FlagControllerTest extends BaseContextMockTest {
     final Flag retiredFlag = new Flag();
     retiredFlag.setRetired(Boolean.TRUE);
 
-    when(flagService.getAllFlags()).thenReturn(Arrays.asList(flag, disabledFlag, retiredFlag));
-
     final FlagController controller = new FlagController();
-    final List<FlagDTO> dtos = controller.getAllFlags().getBody();
+    controller.getAllFlags();
 
-    assertEquals(1, dtos.size());
-    assertEquals(flag.getUuid(), dtos.get(0).getUuid());
+    verify(flagDTOService, times(1)).getAllEnabledFlags();
   }
 }

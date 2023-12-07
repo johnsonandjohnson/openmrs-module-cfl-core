@@ -95,6 +95,13 @@ public final class DateUtil {
         return calendar.getTime();
     }
 
+    public static Date getMinusOneWeekIntervalDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.WEEK_OF_YEAR, -1);
+        return calendar.getTime();
+    }
+
     /**
      * Gets a Date object representing an instant of time where the date-part is equal to the date-part of {@code date}
      * and time-part is equal to time parsed from {@code timeOfDay}, the seconds and milliseconds are both 0.

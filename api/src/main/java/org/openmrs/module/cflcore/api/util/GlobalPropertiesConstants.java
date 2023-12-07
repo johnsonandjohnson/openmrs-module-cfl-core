@@ -60,5 +60,44 @@ public final class GlobalPropertiesConstants {
               + "JSON-escaped message text provided by Ad Hoc UI user. The template is evaluated with the usual message "
               + "notification context.");
 
+  public static final GPDefinition SCHEDULED_TASK_CONFIG_CLASS_NAMES =
+      new GPDefinition(
+          "cfl.scheduledTasksToDelete.classNames",
+          "org.openmrs.module.messages.api.scheduler.job.ServiceGroupDeliveryJobDefinition",
+          "Property created to store names of classes for scheduled tasks, which are no longer needed "
+              + "and just clutter the database. All tasks containing class names from this property will be removed "
+              + "by Scheduled Tasks Cleanup Job"
+              + "Use \",\" sign to separate class names");
+
+  public static final GPDefinition SHOULD_CREATE_FIRST_VISIT =
+      new GPDefinition(
+          "visits.shouldCreateFirstVisit",
+          "true",
+          "Determines whether first visit should be created automatically after patient registration");
+
+  public static final GPDefinition SHOULD_CREATE_FUTURE_VISITS =
+      new GPDefinition(
+          "visits.shouldCreateFutureVisit",
+          "true",
+          "Determines whether future visits should be created automatically after updating visit to occurred status");
+
+  public static final GPDefinition SHOULD_SEND_REMINDER_VIA_SMS =
+      new GPDefinition(
+          "messages.shouldSendReminderViaSms",
+          "false",
+          "Determines whether visit reminder with SMS channel should be configured automatically after patient registration");
+
+  public static final GPDefinition SHOULD_SEND_REMINDER_VIA_CALL =
+      new GPDefinition(
+          "messages.shouldSendReminderViaCall",
+          "false",
+          "Determines whether visit reminder with Call channel should be configured automatically after patient registration");
+
+  public static final GPDefinition SHOULD_SEND_REMINDER_VIA_WHATSAPP =
+      new GPDefinition(
+          "messages.shouldSendReminderViaWhatsApp",
+          "false",
+          "Determines whether visit reminder with WhatsApp channel should be configured automatically after patient registration");
+
   private GlobalPropertiesConstants() {}
 }

@@ -387,6 +387,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     if (currentPatientIdentifier != null) {
       if (!currentPatientIdentifier.equalsContent(newIdentifier)) {
         voidPatientIdentifiers(patient, patientIdentifierType);
+        newIdentifier.setPreferred(currentPatientIdentifier.getPreferred());
         patient.addIdentifier(newIdentifier);
       }
     } else {

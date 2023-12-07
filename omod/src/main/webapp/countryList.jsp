@@ -14,13 +14,13 @@
 
 <h2><spring:message code="cfl.manageCountries.title"/></h2>
 
-<a href="countryForm.form">Add new country</a>
-<a href="countryImport.form">Import countries</a>
+<a href="countryForm.form"><spring:message code="cfl.addNewCountry.title"/></a>
+<a href="countryImport.form"><spring:message code="cfl.importCountries.title"/></a>
 
 <br/>
 <br/>
 
-<b class="boxHeader">Current countries</b>
+<b class="boxHeader"><spring:message code="cfl.currentCountries.title"/></b>
 <form method="post">
     <fieldset>
         <table>
@@ -33,7 +33,7 @@
                     </td>
                     <td>
                         <span>
-                            <a href="editCountryForm.form?conceptId=${entry.key}">Edit</a>
+                            <a href="editCountryForm.form?conceptId=${entry.key}"><spring:message code="common.edit"/></a>
                         </span>
                     </td>
                 </tr>

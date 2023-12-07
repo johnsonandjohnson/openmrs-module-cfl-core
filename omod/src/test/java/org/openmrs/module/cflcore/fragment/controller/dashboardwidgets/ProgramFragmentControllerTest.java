@@ -15,9 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.openmrs.Patient;
-import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.program.PatientProgramDetails;
+import org.openmrs.module.cflcore.api.service.PatientProgramDetailsService;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -47,12 +47,12 @@ public class ProgramFragmentControllerTest {
 
   @Mock private FragmentConfiguration configuration;
 
-  @Mock private ProgramWorkflowService programService;
+  @Mock private PatientProgramDetailsService patientProgramDetailsService;
 
   @Before
   public void setUp() {
     mockStatic(Context.class);
-    when(Context.getProgramWorkflowService()).thenReturn(programService);
+    when(Context.getService(PatientProgramDetailsService.class)).thenReturn(patientProgramDetailsService);
   }
 
   @Test
@@ -64,7 +64,7 @@ public class ProgramFragmentControllerTest {
     controller.controller(model, configuration, patient);
 
     // then
-    verify(programService).getAllPrograms(false);
+    verify(patientProgramDetailsService).getPatientProgramsDetails(patient, configuration);
     verify(model)
         .addAttribute(
             eq(PATIENT_PROGRAMS_LIST_ATTR_NAME), anyCollectionOf(PatientProgramDetails.class));

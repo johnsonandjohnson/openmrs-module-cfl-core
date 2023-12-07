@@ -38,7 +38,7 @@ import org.openmrs.module.cflcore.api.helper.PatientHelper;
 import org.openmrs.module.cflcore.api.helper.PersonHelper;
 import org.openmrs.module.cflcore.api.helper.VisitHelper;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.VisitReminderService;
+import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;import org.openmrs.module.cflcore.api.service.VisitReminderService;
 import org.openmrs.module.cflcore.api.service.WelcomeService;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
@@ -82,6 +82,9 @@ public class RegisteringPeopleListenerTest {
   @Mock private VisitReminderService visitReminderService;
 
   @Mock private CountryPropertyService countryPropertyService;
+
+  @Mock
+  private PatientVisitConfigService patientVisitConfigService;
 
   @InjectMocks private RegisteringPeopleListener registeringPeopleListener;
 
@@ -138,6 +141,7 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitTypes()).thenReturn(VisitHelper.getVisitTypes());
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     doNothing().when(visitReminderService).create(person);
+    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
 
     // When
     registeringPeopleListener.performAction(message);
@@ -180,11 +184,11 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     when(locationService.getLocationByUuid(Constant.LOCATION_UUID)).thenReturn(location);
     doNothing().when(visitReminderService).create(person);
+    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
 
     // When
     registeringPeopleListener.performAction(message);
     // Then
-    verify(locationService).getLocationByUuid(Constant.LOCATION_UUID);
     verifyInteractions();
   }
 
@@ -274,6 +278,7 @@ public class RegisteringPeopleListenerTest {
     when(locationService.getLocationAttributeTypeByName(
             CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME))
         .thenReturn(new LocationAttributeType());
+    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
     // When
     registeringPeopleListener.performAction(message);
     verify(message).getString(CFLConstants.UUID_KEY);
@@ -321,6 +326,7 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     when(locationService.getLocationByUuid(Constant.LOCATION_UUID)).thenReturn(location);
     doNothing().when(visitReminderService).create(person);
+    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
 
     // When
     try {
@@ -330,7 +336,6 @@ public class RegisteringPeopleListenerTest {
     }
 
     // Then
-    verify(locationService).getLocationByUuid(Constant.LOCATION_UUID);
     verifyInteractions();
   }
 
@@ -340,10 +345,8 @@ public class RegisteringPeopleListenerTest {
     verify(welcomeService).sendWelcomeMessages(person);
     verify(configService).isVaccinationInfoIsEnabled();
     verify(configService).getVaccinationProgram(person);
-    verify(configService, times(2)).getRandomizationGlobalProperty();
+    verify(configService, times(0)).getRandomizationGlobalProperty();
     verify(patientService).getPatientByUuid(Constant.PERSON_UUID);
-    verify(visitService).getAllVisitTypes();
-    verify(visitService, times(5)).getAllVisitAttributeTypes();
     verify(visitReminderService).create(person);
   }
 

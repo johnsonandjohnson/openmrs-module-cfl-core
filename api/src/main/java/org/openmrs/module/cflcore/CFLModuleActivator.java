@@ -10,9 +10,6 @@
 
 package org.openmrs.module.cflcore;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAttributeType;
@@ -22,6 +19,7 @@ import org.openmrs.User;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.handler.NoVisitAssignmentHandler;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
@@ -31,13 +29,20 @@ import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.event.CflEventListenerHelper;
 import org.openmrs.module.cflcore.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cflcore.api.htmlformentry.tag.RegimenHandler;
+import org.openmrs.module.cflcore.api.scheduler.job.ScheduledTasksCleanupJobDefinition;
 import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
+import org.openmrs.module.messages.api.constants.MessagesConstants;
+import org.openmrs.module.messages.api.service.MessagesSchedulerService;
 import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -55,11 +60,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     try {
       attachProgramsManagingPrivilegesToSuperUser();
       ensureCorrectRolesAreAssignedToAdmin();
+      configureOrCreateScheduledTasksCleanupJob();
 
       // These 3 are Global Properties
       createPersonOverviewConfig();
       createGlobalSettings();
       createCountrySettings();
+      updateGlobalSettings();
 
       CflEventListenerHelper.registerEventListeners();
 
@@ -115,9 +122,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
     createPersonIdentifierAttributeType();
   }
 
-  /**
-   * Creates person attribute type used to store information about additional person identifier.
-   */
+  /** Creates person attribute type used to store information about additional person identifier. */
   private void createPersonIdentifierAttributeType() {
     PersonAttributeType attributeType = new PersonAttributeType();
     attributeType.setName(CFLConstants.PERSON_IDENTIFIER_ATTRIBUTE_TYPE_NAME);
@@ -255,6 +260,18 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.AD_HOC_SMS_MESSAGE_TEMPLATE);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.AD_HOC_WHATS_APP_MESSAGE_TEMPLATE);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_SMS);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_CALL);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP);
   }
 
   private void createCountrySettings() {
@@ -295,13 +312,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         Boolean.FALSE.toString(),
         CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
-      Boolean.FALSE.toString(),
-      CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-      Boolean.FALSE.toString(),
-      CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
+        Boolean.FALSE.toString(),
+        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
     CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
         CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
@@ -310,6 +327,13 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
         Boolean.FALSE.toString(),
         CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
+  }
+
+  private void updateGlobalSettings() {
+    Context.getAdministrationService()
+        .setGlobalProperty(
+            CFLConstants.VISITS_ASSIGNMENT_HANDLER_GP_NAME,
+            NoVisitAssignmentHandler.class.getName());
   }
 
   private void createPersonOverviewConfig() {
@@ -364,5 +388,16 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
   private void addTagHandlers() {
     Context.getService(HtmlFormEntryService.class)
         .addHandler(CFLConstants.REGIMEN_TAG_NAME, new RegimenHandler());
+  }
+
+  private void configureOrCreateScheduledTasksCleanupJob() {
+    final Long oneWeekInSeconds = 7L * 24 * 60 * 60;
+    getSchedulerService()
+        .rescheduleOrCreateNewTask(new ScheduledTasksCleanupJobDefinition(), oneWeekInSeconds);
+  }
+
+  private MessagesSchedulerService getSchedulerService() {
+    return Context.getRegisteredComponent(
+        MessagesConstants.SCHEDULER_SERVICE, MessagesSchedulerService.class);
   }
 }
