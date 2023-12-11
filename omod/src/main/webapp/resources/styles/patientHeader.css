@@ -1,0 +1,53 @@
+.header-container {
+  margin-bottom: 20px;
+}
+
+.title-container {
+  margin-bottom: 5px;
+}
+
+.fields-container {
+  column-count: 4;
+}
+
+.column {
+  break-inside: avoid;
+  line-height: 1.2;
+}
+
+.label-field {
+  display: inline-block;
+  min-width: 175px;
+  font-family: CircularStd-Book;
+  color: #333333;
+  opacity: 0.5;
+  font-size: 14px;
+}
+
+.value-field {
+  display: inline-block;
+  min-width: 175px;
+  font-size: 14px;
+}
+
+.title-field {
+  font-size: 28px;
+  color: #2b3640;
+}
+
+.fields-row {
+  display: flex;
+}
+
+.extra-title-fields span {
+  margin: 0;
+  padding: 0;
+}
+
+.buttons-span {
+  float: right;
+}
+
+.buttons-span button {
+  padding: 0.5rem 1.85rem;
+}

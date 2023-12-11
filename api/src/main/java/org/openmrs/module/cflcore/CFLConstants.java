@@ -424,6 +424,8 @@ public final class CFLConstants {
 
   public static final String PATIENT_FLAGS_OVERVIEW_APP_NAME = "cfl.patientFlagsOverview";
 
+  public static final String CONFIGURABLE_PATIENT_HEADER_APP_NAME = "cfl.configurablePatientHeader";
+
   private CFLConstants() {
   }
 }
