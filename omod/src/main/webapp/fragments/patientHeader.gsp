@@ -54,7 +54,7 @@
 
      <span class="buttons-span">
       <% if (isPatientDashboard && patientHeaderConfigDTO.deleteButtonOnPatientDashboardVisible) { %>
-        <button class="btn btn-danger" onclick="delPatient.showDeletePatientCreationDialog('${patient.uuid}')">
+        <button class="btn btn-danger delete-button" onclick="delPatient.showDeletePatientCreationDialog('${patient.uuid}')">
           ${ui.message("cfl.deletePatientButton.label")}
         </button>
       <% } %>
