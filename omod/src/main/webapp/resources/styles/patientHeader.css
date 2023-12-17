@@ -8,6 +8,8 @@
 
 .fields-container {
   column-count: 4;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .column {
