@@ -189,6 +189,10 @@ public class MedicalVisitNoteServiceImpl implements MedicalVisitNoteService {
   }
 
   private Obs findObsByConceptAndGroup(Set<Obs> obsSet, String conceptUuid, Obs obsGroup) {
+    if (obsGroup == null) {
+      return null;
+    }
+
     return obsSet.stream()
         .filter(obs -> obsGroup.equals(obs.getObsGroup()))
         .filter(obs -> conceptUuid.equals(obs.getConcept().getUuid()))
