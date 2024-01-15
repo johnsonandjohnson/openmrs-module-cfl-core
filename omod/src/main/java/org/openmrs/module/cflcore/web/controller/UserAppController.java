@@ -14,20 +14,22 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.net.HttpURLConnection;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cflcore.CFLConstants;
+import org.openmrs.module.webservices.rest.web.ConversionUtil;
+import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.HttpURLConnection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "User Apps API", tags = "REST API for operations related to user apps")
 @RestController("cfl.userAppController")
@@ -48,14 +50,15 @@ public class UserAppController {
       })
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<AppDescriptor>> getSpecificUserApps() {
-    List<AppDescriptor> filteredApps = Context.getService(AppFrameworkService.class).getAllApps()
+  public ResponseEntity<List<Object> > getSpecificUserApps() {
+    List<Object> filteredApps = Context.getService(AppFrameworkService.class).getAllApps()
         .stream()
         .filter(
             app -> StringUtils.startsWithAny(app.getId(), CFLConstants.REGISTER_PATIENT_APP_NAME,
                 CFLConstants.REGISTER_CAREGIVER_APP_NAME, CFLConstants.FIND_PATIENT_APP_NAME,
                 CFLConstants.FIND_CAREGIVER_APP_NAME, CFLConstants.PATIENT_FLAGS_OVERVIEW_APP_NAME,
                 CFLConstants.FIND_CAREGIVER_APP_NAME, CFLConstants.CONFIGURABLE_PATIENT_HEADER_APP_NAME))
+        .map(app -> ConversionUtil.convertToRepresentation(app, Representation.DEFAULT))
         .collect(Collectors.toList());
 
     return new ResponseEntity<>(filteredApps, HttpStatus.OK);
