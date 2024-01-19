@@ -11,10 +11,12 @@
 package org.openmrs.module.cflcore.fragment.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.domain.AppDescriptor;
+import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.dto.PatientHeaderConfigDTO;
@@ -29,12 +31,15 @@ import org.openmrs.ui.framework.page.PageContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Ideally you pass in a PatientDomainWrapper as the "patient" config parameter. But if you pass in
  * a Patient, then this controller will wrap that for you.
  */
 public class PatientHeaderFragmentController extends HeaderFragment {
+
+  private static final String DEFAULT_DELETE_PATIENT_RETURN_URL = "/owa/cfl/index.html#/find-patient";
 
   public void controller(
       FragmentConfiguration config,
@@ -56,6 +61,7 @@ public class PatientHeaderFragmentController extends HeaderFragment {
         patientHeaderConfigModel.getTitleFields().stream()
             .anyMatch(field -> !field.isMainTitleField()));
     model.addAttribute("isPatientDashboard", isPatientDashboard(pageContext));
+    model.addAttribute("deletePatientReturnUrl", getDeletePatientReturnUrl());
   }
 
   private PatientHeaderConfigDTO buildPatientHeaderConfigDTO(
@@ -93,5 +99,26 @@ public class PatientHeaderFragmentController extends HeaderFragment {
   private boolean isPatientDashboard(PageContext pageContext) {
     String dashboardType = (String) pageContext.getModel().getAttribute("dashboard");
     return StringUtils.equalsIgnoreCase(dashboardType, "patientDashboard");
+  }
+
+  private String getDeletePatientReturnUrl() {
+    AppDescriptor deletePatientApp =
+        Context.getService(AppFrameworkService.class)
+            .getApp(CFLConstants.CFL_DELETE_PATIENT_APP_NAME);
+    Optional<Extension> deletePatientLinkExtension =
+        deletePatientApp.getExtensions().stream()
+            .filter(
+                extension ->
+                    StringUtils.equalsIgnoreCase(
+                        extension.getId(), CFLConstants.CFL_DELETE_PATIENT_LINK_EXT_NAME))
+            .findFirst();
+
+    if (deletePatientLinkExtension.isPresent()) {
+      Extension extension = deletePatientLinkExtension.get();
+      String parameters = StringEscapeUtils.unescapeHtml4(StringUtils.substringBetween(extension.getScript(), "(", ")"));
+      return parameters.split(",")[1];
+    }
+
+    return DEFAULT_DELETE_PATIENT_RETURN_URL;
   }
 }

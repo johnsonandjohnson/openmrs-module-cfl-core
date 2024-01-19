@@ -12,7 +12,7 @@
     def extraTitleInfoText = ""
 
     ui.includeCss("cflcore", "patientHeader.css")
-    ui.includeJavascript("coreapps", "custom/deletePatient.js")
+    ui.includeJavascript("cflcore", "cflDeletePatient.js")
     ui.includeJavascript("messages", "changeStatus.js")
 %>
 
@@ -54,7 +54,8 @@
 
      <span class="buttons-span">
       <% if (isPatientDashboard && patientHeaderConfigDTO.deleteButtonOnPatientDashboardVisible) { %>
-        <button class="btn btn-danger delete-button" onclick="delPatient.showDeletePatientCreationDialog('${patient.uuid}')">
+        <button class="btn btn-danger delete-button"
+          onclick="cflDelPatient.showDeletePatientCreationDialog('${patient.uuid}', ${deletePatientReturnUrl})">
           ${ui.message("cfl.deletePatientButton.label")}
         </button>
       <% } %>

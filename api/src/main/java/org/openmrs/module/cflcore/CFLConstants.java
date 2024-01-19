@@ -426,6 +426,10 @@ public final class CFLConstants {
 
   public static final String CONFIGURABLE_PATIENT_HEADER_APP_NAME = "cfl.configurablePatientHeader";
 
+  public static final String CFL_DELETE_PATIENT_APP_NAME = "cfl.deletePatient";
+
+  public static final String CFL_DELETE_PATIENT_LINK_EXT_NAME = "cfl.deletePatient.patientDashboardLink";
+
   private CFLConstants() {
   }
 }

@@ -791,34 +791,7 @@
         "userPrincipal" : {
           "$ref" : "#/definitions/Principal"
         },
-        "headerNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
-        "cookies" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Cookie"
-          }
-        },
-        "authType" : {
-          "type" : "string"
-        },
-        "pathInfo" : {
-          "type" : "string"
-        },
-        "pathTranslated" : {
-          "type" : "string"
-        },
-        "contextPath" : {
-          "type" : "string"
-        },
-        "queryString" : {
-          "type" : "string"
-        },
         "remoteUser" : {
-          "type" : "string"
-        },
-        "requestedSessionId" : {
           "type" : "string"
         },
         "requestURI" : {
@@ -829,10 +802,6 @@
         },
         "servletPath" : {
           "type" : "string"
-        },
-        "requestedSessionIdValid" : {
-          "type" : "boolean",
-          "default" : false
         },
         "requestedSessionIdFromCookie" : {
           "type" : "boolean",
@@ -845,6 +814,37 @@
         "requestedSessionIdFromUrl" : {
           "type" : "boolean",
           "default" : false
+        },
+        "pathInfo" : {
+          "type" : "string"
+        },
+        "contextPath" : {
+          "type" : "string"
+        },
+        "queryString" : {
+          "type" : "string"
+        },
+        "headerNames" : {
+          "$ref" : "#/definitions/Enumeration"
+        },
+        "authType" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
+        "requestedSessionId" : {
+          "type" : "string"
+        },
+        "requestedSessionIdValid" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "cookies" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Cookie"
+          }
         },
         "method" : {
           "type" : "string"
@@ -877,6 +877,12 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "serverName" : {
+          "type" : "string"
+        },
+        "characterEncoding" : {
+          "type" : "string"
+        },
         "serverPort" : {
           "type" : "integer",
           "format" : "int32"
@@ -905,12 +911,6 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "serverName" : {
-          "type" : "string"
-        },
-        "characterEncoding" : {
-          "type" : "string"
-        },
         "scheme" : {
           "type" : "string"
         },
@@ -936,11 +936,8 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "valueNames" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
         },
         "maxInactiveInterval" : {
           "type" : "integer",
@@ -949,12 +946,15 @@
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
+        "valueNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
         "new" : {
           "type" : "boolean",
           "default" : false
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
         },
         "id" : {
           "type" : "string"
@@ -1210,20 +1210,20 @@
         "contextPath" : {
           "type" : "string"
         },
-        "initParameterNames" : {
+        "servletNames" : {
           "$ref" : "#/definitions/Enumeration"
-        },
-        "servletContextName" : {
-          "type" : "string"
         },
         "servlets" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "servletNames" : {
-          "$ref" : "#/definitions/Enumeration"
-        },
         "serverInfo" : {
           "type" : "string"
+        },
+        "servletContextName" : {
+          "type" : "string"
+        },
+        "initParameterNames" : {
+          "$ref" : "#/definitions/Enumeration"
         }
       }
     },
@@ -1261,6 +1261,12 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "serverName" : {
+          "type" : "string"
+        },
+        "characterEncoding" : {
+          "type" : "string"
+        },
         "serverPort" : {
           "type" : "integer",
           "format" : "int32"
@@ -1288,12 +1294,6 @@
         "localPort" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "serverName" : {
-          "type" : "string"
-        },
-        "characterEncoding" : {
-          "type" : "string"
         },
         "scheme" : {
           "type" : "string"
