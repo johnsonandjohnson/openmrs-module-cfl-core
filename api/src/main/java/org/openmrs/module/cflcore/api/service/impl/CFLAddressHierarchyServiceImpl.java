@@ -73,6 +73,7 @@ public class CFLAddressHierarchyServiceImpl extends BaseOpenmrsService
     Context.getService(AddressHierarchyService.class).resetFullAddressCache();
   }
 
+  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public ImportDataResultDTO importAddressHierarchyEntriesAndReturnInvalidRows(
           InputStream inputStream, String delimiter, boolean overwriteData) throws IOException {
