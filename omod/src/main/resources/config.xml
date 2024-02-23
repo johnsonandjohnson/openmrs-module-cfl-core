@@ -138,5 +138,10 @@
         <name>App: reportingui.reports</name>
         <description>Able to access report overview</description>
     </privilege>
+
+    <privilege>
+        <name>View Flag Overview</name>
+        <description>Allows user to view Flag Overview page</description>
+    </privilege>
 </module>
 
