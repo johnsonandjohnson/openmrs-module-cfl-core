@@ -41,7 +41,7 @@ public final class PhysicalExaminationUtil {
       "085082da-f3e4-4b95-a4fd-501f712d3433";
 
   private static final String GASTROINTESTINAL_PE_RESULT_CONCEPT_UUID =
-      "0a20ce59-db5a-4be5-8ab3-7e6ed48e53f1";
+      "166663AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String GASTROINTESTINAL_PE_DETAILS_CONCEPT_UUID =
       "da538586-4138-4273-ac3e-f7eb08713e6b";
@@ -50,13 +50,13 @@ public final class PhysicalExaminationUtil {
       "ed1dd86f-f4d1-4835-b156-6cd4c5c0e0b9";
 
   private static final String REPRODUCTIVE_PE_RESULT_CONCEPT_UUID =
-      "3b5886df-ff4a-4801-8b5f-c5dd41d28a1b";
+      "166665AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String REPRODUCTIVE_PE_DETAILS_CONCEPT_UUID =
       "c3ae6f8b-e759-4b4f-a36c-50a065ee763e";
 
   private static final String NEUROLOGY_PE_NAME_CONCEPT_UUID =
-      "39d0679f-f2df-4da8-9aea-eaecf64a76b4";
+      "165023AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String NEUROLOGY_PE_RESULT_CONCEPT_UUID =
       "d88e8674-d5c9-4d54-bad4-fc65d654f6a2";
@@ -84,7 +84,7 @@ public final class PhysicalExaminationUtil {
       "0af312b8-2806-4252-bca4-7968f64de28c";
 
   private static final String RESPIRATORY_PE_RESULT_CONCEPT_UUID =
-      "99a0738a-88a3-45d8-9d34-67b221d29c3e";
+      "166662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String RESPIRATORY_PE_DETAILS_CONCEPT_UUID =
       "88128239-e71e-450f-bb63-050f9c1a54dd";
@@ -108,7 +108,7 @@ public final class PhysicalExaminationUtil {
       "94dbc638-433d-4fa2-9170-d3f58b51ab78";
 
   private static final String DERMATOLOGY_PE_NAME_CONCEPT_UUID =
-      "3f894498-64bc-4add-ae1a-5c0d910ab1ca";
+      "165003AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String DERMATOLOGY_PE_RESULT_CONCEPT_UUID =
       "43def4aa-f541-4e42-94e8-e3ab78f93e8e";

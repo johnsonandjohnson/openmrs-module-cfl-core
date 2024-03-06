@@ -20,13 +20,13 @@ public final class VaccinationUtil {
   public static final List<VaccinationDataModel> VACCINATION_DATA = new ArrayList<>();
 
   private static final String INFLUENZA_VACCINATION_CONCEPT_UUID =
-      "e90c7eda-e2a7-4ce3-86b1-bf1a3742bb19";
+      "116958AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   private static final String INFLUENZA_VACCINATION_DATE_RECEIVED_CONCEPT_UUID =
       "70fdbba0-578a-42b4-9670-04c2210b895c";
   private static final String INFLUENZA_VACCINATION_LOT_NUMBER_CONCEPT_UUID =
       "bd91eba8-3a59-4fc8-96f9-6e7f257d8877";
   private static final String PCV_13_VACCINATION_CONCEPT_UUID =
-      "d8581c7d-a283-4ff5-a602-4f055352fcfa";
+      "165575AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   private static final String PCV_13_VACCINATION_DATE_RECEIVED_CONCEPT_UUID =
       "57477d5f-eaca-4a02-b6e9-f229e523684c";
   private static final String PCV_13_VACCINATION_LOT_NUMBER_CONCEPT_UUID =
@@ -65,7 +65,7 @@ public final class VaccinationUtil {
       "9b61ba17-3665-469f-8f22-236ed16b0d9c";
   private static final String HBV_VACCINATION_LOT_NUMBER_CONCEPT_UUID =
       "a0098f5d-52a0-47b0-9622-2e4b74b8e99b";
-  private static final String HPV_VACCINATION_CONCEPT_UUID = "adf82ff9-64c5-47c1-9397-7e5676c58e54";
+  private static final String HPV_VACCINATION_CONCEPT_UUID = "1213AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   private static final String HPV_VACCINATION_DATE_RECEIVED_CONCEPT_UUID =
       "202100ce-3b7b-455c-bf72-912a62c8887e";
   private static final String HPV_VACCINATION_LOT_NUMBER_CONCEPT_UUID =

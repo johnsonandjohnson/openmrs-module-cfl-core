@@ -25,7 +25,7 @@ public class LaboratoryUtil {
   private static final String HEMOGLOBIN_DATE_DONE_CONCEPT_UUID =
       "003c56b8-70bb-4ffa-9052-b17ffe0b3ebf";
   private static final String HEMOGLOBIN_RESULTS_CONCEPT_UUID =
-      "83e3b202-50cc-4c5f-beb7-7737330c9846";
+      "21AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   private static final String VIRAL_LOAD_DATE_DONE_CONCEPT_UUID =
       "5e1c0359-45dd-4940-8412-9b88db0fdb26";
   private static final String VIRAL_LOAD_SYMBOL_CONCEPT_UUID =
