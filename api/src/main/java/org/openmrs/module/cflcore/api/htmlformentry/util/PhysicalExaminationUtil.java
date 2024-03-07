@@ -99,7 +99,7 @@ public final class PhysicalExaminationUtil {
       "e2947a46-ce83-41ac-8fb5-498f1c88c76d";
 
   private static final String MUSCULOSKELETAL_PE_NAME_CONCEPT_UUID =
-      "baf71bff-6b3b-4b16-aa26-3e412a6dd890";
+      "5297AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
   private static final String MUSCULOSKELETAL_PE_RESULT_CONCEPT_UUID =
       "3fdda0a1-8c50-43d2-99ed-7dadca8cd40b";
