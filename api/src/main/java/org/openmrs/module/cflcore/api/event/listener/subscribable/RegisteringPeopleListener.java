@@ -22,10 +22,11 @@ import org.openmrs.module.cflcore.api.contract.Randomization;
 import org.openmrs.module.cflcore.api.contract.Vaccination;
 import org.openmrs.module.cflcore.api.contract.VisitInformation;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;
+import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
 import org.openmrs.module.cflcore.api.service.VisitReminderService;
 import org.openmrs.module.cflcore.api.service.WelcomeService;
 import org.openmrs.module.cflcore.api.util.DateUtil;
+import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cflcore.api.util.GlobalPropertyUtils;
 import org.openmrs.module.cflcore.api.util.VisitUtil;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
@@ -88,10 +89,12 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private void createFirstVisit(Person person, String vaccinationProgram) {
-    PatientVisitConfigService patientVisitConfigService =
-        Context.getService(PatientVisitConfigService.class);
+    CustomAdministrationService customAdministrationService =
+        Context.getService(CustomAdministrationService.class);
     final Patient patient = Context.getPatientService().getPatientByUuid(person.getUuid());
-    if (patientVisitConfigService.shouldCreateFirstVisit(patient)) {
+    if (Boolean.parseBoolean(
+        customAdministrationService.getGlobalProperty(
+            GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT_GP_KEY, patient))) {
       final VisitInformation firstVisitInfo = getFirstVisitInfo(vaccinationProgram);
       final PersonAttribute locationAttribute =
           patient.getAttribute(CFLConstants.PERSON_LOCATION_ATTRIBUTE_DEFAULT_VALUE);

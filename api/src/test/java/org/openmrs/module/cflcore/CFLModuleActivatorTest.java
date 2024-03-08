@@ -29,7 +29,6 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.MockMetadataBundle;
 import org.openmrs.module.cflcore.api.constant.ConfigConstants;
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.event.CflEventListenerHelper;
 import org.openmrs.module.cflcore.api.util.GPDefinition;
 import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
@@ -352,73 +351,6 @@ public class CFLModuleActivatorTest {
             GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getKey(),
             GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getDefaultValue(),
             GlobalPropertiesConstants.SCHEDULED_TASK_CONFIG_CLASS_NAMES.getDescription()));
-  }
-
-  @Test
-  public void shouldCreateCountrySettings() {
-    CFLModuleActivator activator = new CFLModuleActivator();
-    activator.started();
-
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
-            "10:00",
-            CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
-            "18:00",
-            CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
-            "-",
-            CountryPropertyConstants.SMS_CONFIG_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
-            "-",
-            CountryPropertyConstants.CALL_CONFIG_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_DESC));
-    Assert.assertTrue(
-        hasCountryPropertyBeenCreated(
-            CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
-            Boolean.FALSE.toString(),
-            CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC));
   }
 
   @Test

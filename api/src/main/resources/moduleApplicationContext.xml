@@ -373,29 +373,6 @@
         </property>
     </bean>
 
-    <bean id="cfl.patientVisitConfigService"
-          class="org.openmrs.module.cflcore.api.service.impl.PatientVisitConfigServiceImpl">
-    </bean>
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>org.openmrs.module.cflcore.api.service.PatientVisitConfigService</value>
-                <ref bean="cfl.patientVisitConfigService"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="cfl.customAdministrationService"
-          class="org.openmrs.module.cflcore.api.service.impl.CustomAdministrationServiceImpl">
-    </bean>
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>org.openmrs.module.cflcore.api.service.CustomAdministrationService</value>
-                <ref bean="cfl.customAdministrationService"/>
-            </list>
-        </property>
-    </bean>
     <bean id="cflTreatmentService" class="org.openmrs.module.cflcore.api.htmlformentry.service.impl.TreatmentServiceImpl" />
     <bean parent="serviceContext">
         <property name="moduleService">
@@ -419,5 +396,17 @@
     <bean id="cflExtendedOrderDAO"
           class="org.openmrs.module.cflcore.db.impl.ExtendedOrderDAOImpl">
         <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="cfl.customAdministrationService"
+          class="org.openmrs.module.cflcore.api.service.impl.CustomAdministrationServiceImpl">
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.cflcore.api.service.CustomAdministrationService</value>
+                <ref bean="cfl.customAdministrationService"/>
+            </list>
+        </property>
     </bean>
 </beans>

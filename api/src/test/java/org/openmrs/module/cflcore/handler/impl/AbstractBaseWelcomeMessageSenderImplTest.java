@@ -32,6 +32,7 @@ import org.openmrs.module.messages.api.model.PatientTemplate;
 import org.openmrs.module.messages.api.model.ScheduledService;
 import org.openmrs.module.messages.api.model.ScheduledServiceGroup;
 import org.openmrs.module.messages.api.model.Template;
+import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.openmrs.module.messages.api.service.MessagesDeliveryService;
 import org.openmrs.module.messages.api.service.MessagingGroupService;
 import org.openmrs.module.messages.api.service.PatientTemplateService;
@@ -43,100 +44,111 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class, DateUtil.class, BestContactTimeHelper.class})
+@PrepareForTest({Context.class, DateUtil.class, BestContactTimeHelper.class})
 public abstract class AbstractBaseWelcomeMessageSenderImplTest {
 
-    protected final Date now = new Date(1620743880000L); // 2021-05-11T14:38:00UTC
-    protected final Date tomorrowBestContactTime = new Date(1620806400000L); // 2021-05-12T10:00:00UTC
-    protected Patient testPatient;
+  protected final Date now = new Date(1620743880000L); // 2021-05-11T14:38:00UTC
+  protected final Date tomorrowBestContactTime = new Date(1620806400000L); // 2021-05-12T10:00:00UTC
+  protected Patient testPatient;
 
-    private final TimeZone testTimeZone = TimeZone.getTimeZone("Europe/Warsaw");
-    private final AtomicInteger idGenerator = new AtomicInteger(1);
-    private final Date tomorrow = new Date(1620830280000L); // 2021-05-12T14:38:00UTC
-    private final String bestContactTime = "10:00";
+  private final TimeZone testTimeZone = TimeZone.getTimeZone("Europe/Warsaw");
+  private final AtomicInteger idGenerator = new AtomicInteger(1);
+  private final Date tomorrow = new Date(1620830280000L); // 2021-05-12T14:38:00UTC
+  private final String bestContactTime = "10:00";
 
-    @Mock
-    protected AdministrationService administrationService;
+  @Mock protected AdministrationService administrationService;
 
-    @Mock
-    protected MessagesDeliveryService messagesDeliveryService;
+  @Mock protected MessagesDeliveryService messagesDeliveryService;
 
-    @Mock
-    protected MessagingGroupService messagingGroupService;
+  @Mock protected MessagingGroupService messagingGroupService;
 
-    @Mock
-    protected PatientTemplateService patientTemplateService;
+  @Mock protected PatientTemplateService patientTemplateService;
 
-    @Mock
-    protected PersonService personService;
+  @Mock protected PersonService personService;
 
-    @Mock
-    protected TemplateService templateService;
+  @Mock protected TemplateService templateService;
 
-    @Before
-    public void setupMocks() {
-        mockStatic(Context.class);
+  @Mock protected CountryPropertyService countryPropertyService;
 
-        PowerMockito.stub(PowerMockito.method(DateUtil.class, "getDefaultUserTimezone")).toReturn(testTimeZone);
-        PowerMockito.stub(PowerMockito.method(DateUtil.class, "now")).toReturn(now);
-        PowerMockito.stub(PowerMockito.method(DateUtil.class, "getTomorrow", TimeZone.class)).toReturn(tomorrow);
+  @Before
+  public void setupMocks() {
+    mockStatic(Context.class);
+    when(Context.getPersonService()).thenReturn(personService);
+    when(Context.getAdministrationService()).thenReturn(administrationService);
+    when(Context.getService(CountryPropertyService.class)).thenReturn(countryPropertyService);
 
-        PowerMockito
-                .stub(PowerMockito.method(BestContactTimeHelper.class, "getBestContactTime", Person.class,
-                        RelationshipType.class))
-                .toReturn(bestContactTime);
+    PowerMockito.stub(PowerMockito.method(DateUtil.class, "getDefaultUserTimezone"))
+        .toReturn(testTimeZone);
+    PowerMockito.stub(PowerMockito.method(DateUtil.class, "now")).toReturn(now);
+    PowerMockito.stub(PowerMockito.method(DateUtil.class, "getTomorrow", TimeZone.class))
+        .toReturn(tomorrow);
 
-        when(Context.getAdministrationService()).thenReturn(administrationService);
-        when(messagingGroupService.saveGroup(Mockito.any(ScheduledServiceGroup.class))).then(
-                new Answer<ScheduledServiceGroup>() {
-                    @Override
-                    public ScheduledServiceGroup answer(InvocationOnMock invocation) {
-                        final ScheduledServiceGroup scheduledServiceGroup =
-                                (ScheduledServiceGroup) invocation.getArguments()[0];
-                        scheduledServiceGroup.setId(idGenerator.incrementAndGet());
+    PowerMockito.stub(
+            PowerMockito.method(
+                BestContactTimeHelper.class,
+                "getBestContactTime",
+                Person.class,
+                RelationshipType.class))
+        .toReturn(bestContactTime);
 
-                        for (final ScheduledService scheduledService : scheduledServiceGroup.getScheduledServices()) {
-                            scheduledService.setId(idGenerator.incrementAndGet());
-                        }
+    when(messagingGroupService.saveGroup(Mockito.any(ScheduledServiceGroup.class)))
+        .then(
+            new Answer<ScheduledServiceGroup>() {
+              @Override
+              public ScheduledServiceGroup answer(InvocationOnMock invocation) {
+                final ScheduledServiceGroup scheduledServiceGroup =
+                    (ScheduledServiceGroup) invocation.getArguments()[0];
+                scheduledServiceGroup.setId(idGenerator.incrementAndGet());
 
-                        return scheduledServiceGroup;
-                    }
-                });
+                for (final ScheduledService scheduledService :
+                    scheduledServiceGroup.getScheduledServices()) {
+                  scheduledService.setId(idGenerator.incrementAndGet());
+                }
 
-        final Template welcomeMessageTemplate = new Template();
-        welcomeMessageTemplate.setId(1);
-        when(templateService.findOneByCriteria(Mockito.any(BaseCriteria.class))).thenReturn(welcomeMessageTemplate);
+                return scheduledServiceGroup;
+              }
+            });
 
-        final PatientTemplate welcomeMessagePatientTemplate = new PatientTemplate();
-        welcomeMessagePatientTemplate.setTemplate(welcomeMessageTemplate);
-        when(patientTemplateService.findOneByCriteria(Mockito.any(BaseCriteria.class))).thenReturn(
-                welcomeMessagePatientTemplate);
+    final Template welcomeMessageTemplate = new Template();
+    welcomeMessageTemplate.setId(1);
+    when(templateService.findOneByCriteria(Mockito.any(BaseCriteria.class)))
+        .thenReturn(welcomeMessageTemplate);
 
-        testPatient = buildTestPatient();
-    }
+    final PatientTemplate welcomeMessagePatientTemplate = new PatientTemplate();
+    welcomeMessagePatientTemplate.setTemplate(welcomeMessageTemplate);
+    when(patientTemplateService.findOneByCriteria(Mockito.any(BaseCriteria.class)))
+        .thenReturn(welcomeMessagePatientTemplate);
 
-    private Patient buildTestPatient() {
-        Patient patient = new Patient(1);
-        patient.addAttribute(buildPersonAttribute(
-                patient,
-                new PersonAttributeTypeBuilder().withName(Constant.PHONE_NUMBER_ATTRIBUTE_NAME).build(),
-                Constant.PHONE_NUMBER));
+    testPatient = buildTestPatient();
+  }
 
-        return patient;
-    }
+  private Patient buildTestPatient() {
+    Patient patient = new Patient(1);
+    patient.addAttribute(
+        buildPersonAttribute(
+            patient,
+            new PersonAttributeTypeBuilder().withName(Constant.PHONE_NUMBER_ATTRIBUTE_NAME).build(),
+            Constant.PHONE_NUMBER));
 
-    private PersonAttribute buildPersonAttribute(Person person, PersonAttributeType type, String value) {
-        return new PersonAttributeBuilder()
-                .withPerson(person)
-                .withPersonAttributeType(type)
-                .withValue(value)
-                .build();
-    }
+    return patient;
+  }
+
+  private PersonAttribute buildPersonAttribute(
+      Person person, PersonAttributeType type, String value) {
+    return new PersonAttributeBuilder()
+        .withPerson(person)
+        .withPersonAttributeType(type)
+        .withValue(value)
+        .build();
+  }
 }

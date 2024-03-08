@@ -21,7 +21,6 @@ public final class CFLConstants {
   public static final String MODULE_ID = "cflcore";
   public static final String MODULE_API_PACKAGE = "org.openmrs.module.cflcore.api";
 
-
   public static final String PERSON_DASHBOARD_ATTR_VALUE = "person";
   public static final String PATIENT_DASHBOARD_ATTR_VALUE = "patient";
 
@@ -213,14 +212,10 @@ public final class CFLConstants {
 
   public static final String COMMA_SEPARATOR = ",";
 
-  /**
-   * The name of message Template for Welcome Message.
-   */
+  /** The name of message Template for Welcome Message. */
   public static final String WELCOME_MESSAGE_TEMPLATE = "Welcome Message";
 
-  /**
-   * The name of Message Template for general-purpose Ad hoc messages.
-   */
+  /** The name of Message Template for general-purpose Ad hoc messages. */
   public static final String AD_HOC_MESSAGE_TEMPLATE_NAME = "Ad hoc Message";
 
   public static final String AD_HOC_MESSAGE_PATIENT_FILTERS_CONFIGURATION_GP_KEY =
@@ -338,7 +333,8 @@ public final class CFLConstants {
 
   public static final String UPDATE_REGIMEN_JOB_NAME = "Update Regimen Job";
 
-  public static final String SCHEDULED_TASKS_TO_DELETE_CLASS_NAMES_KEY = "cfl.scheduledTasksToDelete.classNames";
+  public static final String SCHEDULED_TASKS_TO_DELETE_CLASS_NAMES_KEY =
+      "cfl.scheduledTasksToDelete.classNames";
 
   public static final String SCHEDULED_TASKS_CLEANUP_JOB_NAME = "Scheduled Tasks Cleanup Job";
 
@@ -358,41 +354,36 @@ public final class CFLConstants {
   public static final String IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID =
       "1e566e6d-108e-11ec-a36a-0242ac130002";
 
-  public static final String UP_WINDOW_ATTR_TYPE_DATATYPE =
-      FreeTextDatatype.class.getName();
+  public static final String UP_WINDOW_ATTR_TYPE_DATATYPE = FreeTextDatatype.class.getName();
 
   public static final String UP_WINDOW_ATTR_TYPE_DESCRIPTION =
       "Visit attribute type used to determine time window after the visit";
 
-  public static final String UP_WINDOW_ATTR_TYPE_UUID =
-      "5899e8d4-5eac-11ee-8c99-0242ac120002";
+  public static final String UP_WINDOW_ATTR_TYPE_UUID = "5899e8d4-5eac-11ee-8c99-0242ac120002";
 
-  public static final String LOW_WINDOW_ATTR_TYPE_DATATYPE =
-      FreeTextDatatype.class.getName();
+  public static final String LOW_WINDOW_ATTR_TYPE_DATATYPE = FreeTextDatatype.class.getName();
 
   public static final String LOW_WINDOW_ATTR_TYPE_DESCRIPTION =
       "Visit attribute type used to determine time window before the visit";
 
-  public static final String LOW_WINDOW_ATTR_TYPE_UUID =
-      "5899ed48-5eac-11ee-8c99-0242ac120002";
+  public static final String LOW_WINDOW_ATTR_TYPE_UUID = "5899ed48-5eac-11ee-8c99-0242ac120002";
 
-  public static final String DOSE_NUMBER_ATTR_TYPE_DATATYPE =
-      FreeTextDatatype.class.getName();
+  public static final String DOSE_NUMBER_ATTR_TYPE_DATATYPE = FreeTextDatatype.class.getName();
 
   public static final String DOSE_NUMBER_ATTR_TYPE_DESCRIPTION =
       "Visit attribute type used to determine vaccine dose number";
 
-  public static final String DOSE_NUMBER_ATTR_TYPE_UUID =
-      "5899ee92-5eac-11ee-8c99-0242ac120002";
+  public static final String DOSE_NUMBER_ATTR_TYPE_UUID = "5899ee92-5eac-11ee-8c99-0242ac120002";
   public static final String MAIN_CONFIG = "biometric.api.config.main";
 
   public static final String REGIMEN_TAG_NAME = "regimen";
 
   public static final String EXTENDED_CONCEPT_SET_DAO_BEAN_NAME = "cfl.extendedConceptSetDAO";
 
-  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY = "cfl.creationPatientTemplatesAfterRegistration";
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_KEY =
+      "cfl.creationPatientTemplatesAfterRegistration";
 
-  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE = "SMS";
+  public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DEFAULT_VALUE = "";
 
   public static final String CREATION_PATIENT_TEMPLATES_AFTER_REGISTRATION_GP_DESCRIPTION =
       "Determines whether patient templates should be created after patient registration automatically. "
@@ -400,9 +391,11 @@ public final class CFLConstants {
 
   public static final String PERSON_STATUS_ATTRIBUTE_TYPE_NAME = "Person status";
 
-  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY = "cfl.patientFlagsOverviewIdentifierForSearch";
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_KEY =
+      "cfl.patientFlagsOverviewIdentifierForSearch";
 
-  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE = "OpenMRS ID";
+  public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DEFAULT_VALUE =
+      "OpenMRS ID";
 
   public static final String PATIENT_FLAGS_OVERVIEW_IDENTIFIER_TYPE_FOR_SEARCH_GP_DESCRIPTION =
       "Patient identifier type by which searching "
@@ -410,11 +403,11 @@ public final class CFLConstants {
 
   public static final String CFL_UI_APP_PREFIX = "cflui.";
 
-  public static final String REGISTER_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat(
-      "registerPatient");
+  public static final String REGISTER_PATIENT_APP_NAME =
+      CFL_UI_APP_PREFIX.concat("registerPatient");
 
-  public static final String REGISTER_CAREGIVER_APP_NAME = CFL_UI_APP_PREFIX.concat(
-      "registerCaregiver");
+  public static final String REGISTER_CAREGIVER_APP_NAME =
+      CFL_UI_APP_PREFIX.concat("registerCaregiver");
 
   public static final String FIND_PATIENT_APP_NAME = CFL_UI_APP_PREFIX.concat("findPatient");
 
@@ -428,8 +421,8 @@ public final class CFLConstants {
 
   public static final String CFL_DELETE_PATIENT_APP_NAME = "cfl.deletePatient";
 
-  public static final String CFL_DELETE_PATIENT_LINK_EXT_NAME = "cfl.deletePatient.patientDashboardLink";
+  public static final String CFL_DELETE_PATIENT_LINK_EXT_NAME =
+      "cfl.deletePatient.patientDashboardLink";
 
-  private CFLConstants() {
-  }
+  private CFLConstants() {}
 }

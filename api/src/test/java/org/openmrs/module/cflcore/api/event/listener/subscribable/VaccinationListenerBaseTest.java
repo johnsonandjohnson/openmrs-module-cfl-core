@@ -24,14 +24,14 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.Constant;
 import org.openmrs.module.cflcore.api.contract.Vaccination;
 import org.openmrs.module.cflcore.api.helper.LocationHelper;
 import org.openmrs.module.cflcore.api.helper.PatientHelper;
 import org.openmrs.module.cflcore.api.helper.PersonHelper;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;import org.openmrs.module.cflcore.api.service.VaccinationService;
+import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
+import org.openmrs.module.cflcore.api.service.VaccinationService;
 import org.openmrs.module.cflcore.api.service.impl.VaccinationServiceImpl;
 
 import javax.jms.MapMessage;
@@ -56,8 +56,7 @@ public class VaccinationListenerBaseTest {
 
   @Mock protected org.openmrs.module.visits.api.service.ConfigService visitsConfigService;
 
-  @Mock
-  protected PatientVisitConfigService patientVisitConfigService;
+  @Mock protected CustomAdministrationService customAdministrationService;
 
   @InjectMocks protected VaccinationServiceImpl vaccinationService;
 
@@ -84,7 +83,8 @@ public class VaccinationListenerBaseTest {
     when(Context.getService(VaccinationService.class)).thenReturn(vaccinationService);
     when(Context.getService(org.openmrs.module.visits.api.service.ConfigService.class))
         .thenReturn(visitsConfigService);
-    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+    when(Context.getService(CustomAdministrationService.class))
+        .thenReturn(customAdministrationService);
   }
 
   protected Vaccination[] createVaccination() throws IOException {

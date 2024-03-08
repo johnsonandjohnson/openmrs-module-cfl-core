@@ -29,7 +29,6 @@ import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.Constant;
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.contract.Randomization;
 import org.openmrs.module.cflcore.api.contract.Vaccination;
 import org.openmrs.module.cflcore.api.exception.CflRuntimeException;
@@ -38,8 +37,10 @@ import org.openmrs.module.cflcore.api.helper.PatientHelper;
 import org.openmrs.module.cflcore.api.helper.PersonHelper;
 import org.openmrs.module.cflcore.api.helper.VisitHelper;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;import org.openmrs.module.cflcore.api.service.VisitReminderService;
+import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
+import org.openmrs.module.cflcore.api.service.VisitReminderService;
 import org.openmrs.module.cflcore.api.service.WelcomeService;
+import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -83,8 +84,7 @@ public class RegisteringPeopleListenerTest {
 
   @Mock private CountryPropertyService countryPropertyService;
 
-  @Mock
-  private PatientVisitConfigService patientVisitConfigService;
+  @Mock private CustomAdministrationService customAdministrationService;
 
   @InjectMocks private RegisteringPeopleListener registeringPeopleListener;
 
@@ -115,7 +115,7 @@ public class RegisteringPeopleListenerTest {
       throws JMSException {
     // Given
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT_GP_KEY);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -141,7 +141,8 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitTypes()).thenReturn(VisitHelper.getVisitTypes());
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     doNothing().when(visitReminderService).create(person);
-    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+    when(Context.getService(CustomAdministrationService.class))
+        .thenReturn(customAdministrationService);
 
     // When
     registeringPeopleListener.performAction(message);
@@ -157,7 +158,7 @@ public class RegisteringPeopleListenerTest {
     patient = PatientHelper.createPatient(person, location);
 
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT_GP_KEY);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -184,7 +185,8 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     when(locationService.getLocationByUuid(Constant.LOCATION_UUID)).thenReturn(location);
     doNothing().when(visitReminderService).create(person);
-    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+    when(Context.getService(CustomAdministrationService.class))
+        .thenReturn(customAdministrationService);
 
     // When
     registeringPeopleListener.performAction(message);
@@ -258,7 +260,7 @@ public class RegisteringPeopleListenerTest {
       throws JMSException {
     // Given
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT_GP_KEY);
     shouldCreateFirstVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -278,7 +280,8 @@ public class RegisteringPeopleListenerTest {
     when(locationService.getLocationAttributeTypeByName(
             CFLConstants.COUNTRY_LOCATION_ATTR_TYPE_NAME))
         .thenReturn(new LocationAttributeType());
-    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+    when(Context.getService(CustomAdministrationService.class))
+        .thenReturn(customAdministrationService);
     // When
     registeringPeopleListener.performAction(message);
     verify(message).getString(CFLConstants.UUID_KEY);
@@ -298,7 +301,7 @@ public class RegisteringPeopleListenerTest {
     patient = PatientHelper.createPatient(person, location);
 
     CountryProperty shouldCreateFirstVisitProp = new CountryProperty();
-    shouldCreateFirstVisitProp.setName(CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME);
+    shouldCreateFirstVisitProp.setName(GlobalPropertiesConstants.SHOULD_CREATE_FIRST_VISIT_GP_KEY);
     shouldCreateFirstVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFirstVisitProp.getName()))
@@ -326,7 +329,8 @@ public class RegisteringPeopleListenerTest {
     when(visitService.getAllVisitAttributeTypes()).thenReturn(VisitHelper.getVisitAttributeTypes());
     when(locationService.getLocationByUuid(Constant.LOCATION_UUID)).thenReturn(location);
     doNothing().when(visitReminderService).create(person);
-    when(Context.getService(PatientVisitConfigService.class)).thenReturn(patientVisitConfigService);
+    when(Context.getService(CustomAdministrationService.class))
+        .thenReturn(customAdministrationService);
 
     // When
     try {

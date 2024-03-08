@@ -25,7 +25,6 @@ import org.openmrs.module.DaemonToken;
 import org.openmrs.module.DaemonTokenAware;
 import org.openmrs.module.ModuleException;
 import org.openmrs.module.cflcore.api.constant.ConfigConstants;
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.event.CflEventListenerHelper;
 import org.openmrs.module.cflcore.api.event.listener.subscribable.BaseListener;
 import org.openmrs.module.cflcore.api.htmlformentry.tag.RegimenHandler;
@@ -36,7 +35,6 @@ import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
 import org.openmrs.module.messages.api.service.MessagesSchedulerService;
-import org.openmrs.module.messages.api.util.CountryPropertyUtils;
 import org.openmrs.module.metadatadeploy.api.MetadataDeployService;
 import org.openmrs.module.metadatadeploy.bundle.MetadataBundle;
 
@@ -65,7 +63,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
       // These 3 are Global Properties
       createPersonOverviewConfig();
       createGlobalSettings();
-      createCountrySettings();
       updateGlobalSettings();
 
       CflEventListenerHelper.registerEventListeners();
@@ -272,61 +269,6 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_CALL);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP);
-  }
-
-  private void createCountrySettings() {
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_NAME,
-        "10:00",
-        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_FROM_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_NAME,
-        "18:00",
-        CountryPropertyConstants.PATIENT_NOTIFICATION_TIME_WINDOW_TO_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_SMS_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.PERFORM_CALL_ON_PATIENT_REGISTRATION_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SMS_CONFIG_PROP_NAME,
-        "-",
-        CountryPropertyConstants.SMS_CONFIG_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.WHATSAPP_CONFIG_PROP_NAME,
-        "-",
-        CountryPropertyConstants.WHATSAPP_CONFIG_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.CALL_CONFIG_PROP_NAME,
-        "-",
-        CountryPropertyConstants.CALL_CONFIG_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SEND_SMS_ON_PATIENT_REGISTRATION_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_CALL_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SEND_WHATSAPP_ON_PATIENT_REGISTRATION_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_CREATE_FIRST_VISIT_PROP_DESC);
-    CountryPropertyUtils.createDefaultCountrySettingIfNotExists(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME,
-        Boolean.FALSE.toString(),
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_DESC);
   }
 
   private void updateGlobalSettings() {

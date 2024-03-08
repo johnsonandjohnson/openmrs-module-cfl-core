@@ -69,7 +69,7 @@
         <jacocoVersion>0.8.2</jacocoVersion>
         <surefireVersion>2.17</surefireVersion>
         <!-- CfL modules -->
-        <messagesVersion>1.7.0</messagesVersion>
+        <messagesVersion>1.8.2-SNAPSHOT</messagesVersion>
         <visitsVersion>1.6.0</visitsVersion>
     </properties>
 

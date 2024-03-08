@@ -12,9 +12,9 @@ package org.openmrs.module.cflcore.handler.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.PersonService;
 import org.openmrs.module.cflcore.CFLConstants;
-import org.openmrs.module.cflcore.api.contract.CountrySetting;
 import org.openmrs.module.cflcore.api.service.ConfigService;
 import org.openmrs.module.cflcore.api.util.DateUtil;
 import org.openmrs.module.cflcore.api.util.PersonUtil;
@@ -40,158 +40,170 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Date;
 
-/**
- * The base class for {@link WelcomeMessageSender}s.
- */
+/** The base class for {@link WelcomeMessageSender}s. */
 public abstract class BaseWelcomeMessageSenderImpl implements WelcomeMessageSender {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseWelcomeMessageSenderImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BaseWelcomeMessageSenderImpl.class);
 
-    private final String channelType;
+  private final String channelType;
 
-    private TemplateService templateService;
-    private PatientTemplateService patientTemplateService;
-    private MessagesDeliveryService messagesDeliveryService;
-    private MessagingGroupService messagingGroupService;
-    private PersonService personService;
-    private ConfigService configService;
+  private TemplateService templateService;
+  private PatientTemplateService patientTemplateService;
+  private MessagesDeliveryService messagesDeliveryService;
+  private MessagingGroupService messagingGroupService;
+  private PersonService personService;
+  private ConfigService configService;
 
-    public BaseWelcomeMessageSenderImpl(final String channelType) {
-        this.channelType = channelType;
+  public BaseWelcomeMessageSenderImpl(final String channelType) {
+    this.channelType = channelType;
+  }
+
+  protected ScheduledExecutionContext decorateScheduledExecutionContext(
+      final ScheduledExecutionContext scheduledExecutionContext) {
+    return scheduledExecutionContext;
+  }
+
+  protected abstract boolean isSendOnPatientRegistrationEnabled(Person person);
+
+  @Override
+  public void send(Patient patient) {
+    if (!isSendOnPatientRegistrationEnabled(patient.getPerson())) {
+      return;
     }
 
-    protected ScheduledExecutionContext decorateScheduledExecutionContext(
-            final ScheduledExecutionContext scheduledExecutionContext, CountrySetting setting) {
-        return scheduledExecutionContext;
+    final Date welcomeMessageDeliveryTime =
+        configService.getSafeMessageDeliveryDate(patient, DateUtil.now());
+    final PatientTemplate welcomeMessagePatientTemplate =
+        getOrCreateWelcomeMessagePatientTemplate(patient);
+
+    final ScheduledServiceGroup scheduledServiceGroup =
+        createScheduledServiceGroup(welcomeMessageDeliveryTime, welcomeMessagePatientTemplate);
+
+    final ScheduledExecutionContext executionContext =
+        new ScheduledExecutionContext(
+            scheduledServiceGroup.getScheduledServices(),
+            channelType,
+            welcomeMessageDeliveryTime,
+            patient,
+            patient.getId(),
+            MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
+            scheduledServiceGroup.getId());
+
+    final String patientPhoneNumber = PersonUtil.getPhoneNumber(patient);
+    if (StringUtils.isNotBlank(patientPhoneNumber)) {
+      messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext));
+    } else {
+      LOGGER.error(
+          String.format(
+              "Patient %s with id %d does not have an assigned phone number. "
+                  + "Welcome message will not be sent.",
+              patient.getGivenName() + " " + patient.getFamilyName(), patient.getId()));
+    }
+  }
+
+  private PatientTemplate getOrCreateWelcomeMessagePatientTemplate(final Patient patient) {
+    final Template welcomeMessageTemplate = getWelcomeMessageTemplate();
+
+    final PatientTemplate existingPatientWelcomeMessageTemplate =
+        patientTemplateService.findOneByCriteria(
+            PatientTemplateCriteria.forPatientAndActorAndTemplate(
+                patient.getId(), patient.getId(), welcomeMessageTemplate.getId()));
+
+    final PatientTemplate welcomeMessagePatientTemplate;
+
+    if (existingPatientWelcomeMessageTemplate == null) {
+      final PatientTemplate newPatientTemplate =
+          new PatientTemplateBuilder(welcomeMessageTemplate, patient).build();
+      welcomeMessagePatientTemplate = patientTemplateService.saveOrUpdate(newPatientTemplate);
+    } else {
+      welcomeMessagePatientTemplate = existingPatientWelcomeMessageTemplate;
     }
 
-    protected abstract boolean isSendOnPatientRegistrationEnabled(CountrySetting settings);
+    return welcomeMessagePatientTemplate;
+  }
 
-    @Override
-    public void send(Patient patient, CountrySetting settings) {
-        if (!isSendOnPatientRegistrationEnabled(settings)) {
-            return;
-        }
+  private Template getWelcomeMessageTemplate() {
+    final Template welcomeMessageTemplate =
+        templateService.findOneByCriteria(
+            TemplateCriteria.forName(CFLConstants.WELCOME_MESSAGE_TEMPLATE));
 
-        final Date welcomeMessageDeliveryTime = configService.getSafeMessageDeliveryDate(patient, DateUtil.now(), settings);
-        final PatientTemplate welcomeMessagePatientTemplate = getOrCreateWelcomeMessagePatientTemplate(patient);
-
-        final ScheduledServiceGroup scheduledServiceGroup =
-                createScheduledServiceGroup(welcomeMessageDeliveryTime, welcomeMessagePatientTemplate);
-
-        final ScheduledExecutionContext executionContext =
-                new ScheduledExecutionContext(scheduledServiceGroup.getScheduledServices(), channelType,
-                        welcomeMessageDeliveryTime, patient, patient.getId(), MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
-                        scheduledServiceGroup.getId());
-
-        final String patientPhoneNumber = PersonUtil.getPhoneNumber(patient);
-        if (StringUtils.isNotBlank(patientPhoneNumber)) {
-            messagesDeliveryService.scheduleDelivery(decorateScheduledExecutionContext(executionContext, settings));
-        } else {
-            LOGGER.error(String.format("Patient %s with id %d does not have an assigned phone number. " +
-                    "Welcome message will not be sent.", patient.getGivenName() + " " + patient.getFamilyName(),
-                    patient.getId()));
-        }
+    if (welcomeMessageTemplate == null) {
+      throw new IllegalStateException(
+          "Failed to send Welcome Message, missing Messages Template with name: "
+              + CFLConstants.WELCOME_MESSAGE_TEMPLATE);
     }
 
-    private PatientTemplate getOrCreateWelcomeMessagePatientTemplate(final Patient patient) {
-        final Template welcomeMessageTemplate = getWelcomeMessageTemplate();
+    return welcomeMessageTemplate;
+  }
 
-        final PatientTemplate existingPatientWelcomeMessageTemplate = patientTemplateService.findOneByCriteria(
-                PatientTemplateCriteria.forPatientAndActorAndTemplate(patient.getId(), patient.getId(),
-                        welcomeMessageTemplate.getId()));
+  private ScheduledServiceGroup createScheduledServiceGroup(
+      final Date welcomeMessageDeliveryTime, final PatientTemplate welcomeMessagePatientTemplate) {
+    final ScheduledService scheduledService = new ScheduledService();
+    scheduledService.setStatus(ServiceStatus.PENDING);
+    scheduledService.setPatientTemplate(welcomeMessagePatientTemplate);
+    scheduledService.setScheduledServiceParameters(
+        Collections.<ScheduledServiceParameter>emptyList());
+    scheduledService.setService(welcomeMessagePatientTemplate.getTemplate().getName());
 
-        final PatientTemplate welcomeMessagePatientTemplate;
+    final ScheduledServiceGroup scheduledServiceGroup = new ScheduledServiceGroup();
+    scheduledServiceGroup.setPatient(welcomeMessagePatientTemplate.getPatient());
+    scheduledServiceGroup.setActor(welcomeMessagePatientTemplate.getPatient());
+    scheduledServiceGroup.setStatus(ServiceStatus.PENDING);
 
-        if (existingPatientWelcomeMessageTemplate == null) {
-            final PatientTemplate newPatientTemplate = new PatientTemplateBuilder(welcomeMessageTemplate, patient).build();
-            welcomeMessagePatientTemplate = patientTemplateService.saveOrUpdate(newPatientTemplate);
-        } else {
-            welcomeMessagePatientTemplate = existingPatientWelcomeMessageTemplate;
-        }
+    scheduledServiceGroup.setChannelType(channelType);
+    scheduledServiceGroup.setMsgSendTime(welcomeMessageDeliveryTime);
 
-        return welcomeMessagePatientTemplate;
-    }
+    scheduledServiceGroup.getScheduledServices().add(scheduledService);
+    scheduledService.setGroup(scheduledServiceGroup);
 
-    private Template getWelcomeMessageTemplate() {
-        final Template welcomeMessageTemplate =
-                templateService.findOneByCriteria(TemplateCriteria.forName(CFLConstants.WELCOME_MESSAGE_TEMPLATE));
+    return messagingGroupService.saveGroup(scheduledServiceGroup);
+  }
 
-        if (welcomeMessageTemplate == null) {
-            throw new IllegalStateException("Failed to send Welcome Message, missing Messages Template with name: " +
-                    CFLConstants.WELCOME_MESSAGE_TEMPLATE);
-        }
+  public TemplateService getTemplateService() {
+    return templateService;
+  }
 
-        return welcomeMessageTemplate;
-    }
+  public void setTemplateService(TemplateService templateService) {
+    this.templateService = templateService;
+  }
 
-    private ScheduledServiceGroup createScheduledServiceGroup(final Date welcomeMessageDeliveryTime,
-                                                              final PatientTemplate welcomeMessagePatientTemplate) {
-        final ScheduledService scheduledService = new ScheduledService();
-        scheduledService.setStatus(ServiceStatus.PENDING);
-        scheduledService.setPatientTemplate(welcomeMessagePatientTemplate);
-        scheduledService.setScheduledServiceParameters(Collections.<ScheduledServiceParameter>emptyList());
-        scheduledService.setService(welcomeMessagePatientTemplate.getTemplate().getName());
+  public PatientTemplateService getPatientTemplateService() {
+    return patientTemplateService;
+  }
 
-        final ScheduledServiceGroup scheduledServiceGroup = new ScheduledServiceGroup();
-        scheduledServiceGroup.setPatient(welcomeMessagePatientTemplate.getPatient());
-        scheduledServiceGroup.setActor(welcomeMessagePatientTemplate.getPatient());
-        scheduledServiceGroup.setStatus(ServiceStatus.PENDING);
+  public void setPatientTemplateService(PatientTemplateService patientTemplateService) {
+    this.patientTemplateService = patientTemplateService;
+  }
 
-        scheduledServiceGroup.setChannelType(channelType);
-        scheduledServiceGroup.setMsgSendTime(welcomeMessageDeliveryTime);
+  public MessagesDeliveryService getMessagesDeliveryService() {
+    return messagesDeliveryService;
+  }
 
-        scheduledServiceGroup.getScheduledServices().add(scheduledService);
-        scheduledService.setGroup(scheduledServiceGroup);
+  public void setMessagesDeliveryService(MessagesDeliveryService messagesDeliveryService) {
+    this.messagesDeliveryService = messagesDeliveryService;
+  }
 
-        return messagingGroupService.saveGroup(scheduledServiceGroup);
-    }
+  public MessagingGroupService getMessagingGroupService() {
+    return messagingGroupService;
+  }
 
-    public TemplateService getTemplateService() {
-        return templateService;
-    }
+  public void setMessagingGroupService(MessagingGroupService messagingGroupService) {
+    this.messagingGroupService = messagingGroupService;
+  }
 
-    public void setTemplateService(TemplateService templateService) {
-        this.templateService = templateService;
-    }
+  public PersonService getPersonService() {
+    return personService;
+  }
 
-    public PatientTemplateService getPatientTemplateService() {
-        return patientTemplateService;
-    }
+  public void setPersonService(PersonService personService) {
+    this.personService = personService;
+  }
 
-    public void setPatientTemplateService(PatientTemplateService patientTemplateService) {
-        this.patientTemplateService = patientTemplateService;
-    }
+  public ConfigService getConfigService() {
+    return configService;
+  }
 
-    public MessagesDeliveryService getMessagesDeliveryService() {
-        return messagesDeliveryService;
-    }
-
-    public void setMessagesDeliveryService(MessagesDeliveryService messagesDeliveryService) {
-        this.messagesDeliveryService = messagesDeliveryService;
-    }
-
-    public MessagingGroupService getMessagingGroupService() {
-        return messagingGroupService;
-    }
-
-    public void setMessagingGroupService(MessagingGroupService messagingGroupService) {
-        this.messagingGroupService = messagingGroupService;
-    }
-
-    public PersonService getPersonService() {
-        return personService;
-    }
-
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
-    }
-
-    public ConfigService getConfigService() {
-        return configService;
-    }
-
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
-    }
+  public void setConfigService(ConfigService configService) {
+    this.configService = configService;
+  }
 }

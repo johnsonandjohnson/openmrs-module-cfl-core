@@ -25,18 +25,17 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.Constant;
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.contract.Randomization;
 import org.openmrs.module.cflcore.api.exception.CflRuntimeException;
 import org.openmrs.module.cflcore.api.helper.VisitHelper;
 import org.openmrs.module.cflcore.api.util.DateUtil;
+import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.jms.JMSException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -86,7 +85,7 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
     shouldCreateFutureVisitProp.setName(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY);
     shouldCreateFutureVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
@@ -117,7 +116,9 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
         .thenReturn(new LocationAttributeType());
 
     when(message.getString(CFLConstants.UUID_KEY)).thenReturn(encounter.getUuid());
-    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
+    when(customAdministrationService.getGlobalProperty(
+            GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY, patient))
+        .thenReturn(Boolean.TRUE.toString());
 
     // When
     vaccinationEncounterListener.performAction(message);
@@ -244,7 +245,7 @@ public class VaccinationEncounterListenerTest extends VaccinationListenerBaseTes
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
     shouldCreateFutureVisitProp.setName(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY);
     shouldCreateFutureVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))

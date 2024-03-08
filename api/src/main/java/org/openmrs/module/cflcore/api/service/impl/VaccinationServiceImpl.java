@@ -31,8 +31,9 @@ import org.openmrs.module.cflcore.api.dto.RegimensPatientsDataDTO;
 import org.openmrs.module.cflcore.api.service.CFLPatientService;
 import org.openmrs.module.cflcore.api.service.CFLVisitService;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.service.PatientVisitConfigService;
+import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
 import org.openmrs.module.cflcore.api.service.VaccinationService;
+import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.cflcore.api.util.PatientUtil;
 import org.openmrs.module.cflcore.api.util.VisitUtil;
 import org.openmrs.module.cflcore.db.ExtendedPatientDataDAO;
@@ -163,7 +164,12 @@ public class VaccinationServiceImpl implements VaccinationService {
     // should it create future visits and is this the last dosage visit that this patient had
     // scheduled and it is not
     // the last visit in program
-    if (getPatientVisitConfigService().shouldCreateFutureVisits(occurredVisit.getPatient())
+    CustomAdministrationService customAdministrationService =
+        Context.getService(CustomAdministrationService.class);
+    if (Boolean.parseBoolean(
+            customAdministrationService.getGlobalProperty(
+                GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY,
+                occurredVisit.getPatient()))
         && occurredVisit.equals(lastDosingVisit)
         && !isLastVisit(totalNumberOfDoses, occurredVisit)) {
 
@@ -323,10 +329,6 @@ public class VaccinationServiceImpl implements VaccinationService {
   private CFLVisitService getCFLVisitService() {
     return Context.getRegisteredComponent(
         CFLConstants.CFL_VISIT_SERVICE_BEAN_NAME, CFLVisitService.class);
-  }
-
-  private PatientVisitConfigService getPatientVisitConfigService() {
-    return Context.getService(PatientVisitConfigService.class);
   }
 
   private Gson getGson() {

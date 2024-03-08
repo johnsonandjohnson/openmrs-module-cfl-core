@@ -13,10 +13,8 @@ package org.openmrs.module.cflcore.api.service.impl;
 import org.openmrs.Patient;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.contract.AdHocMessageSummary;
-import org.openmrs.module.cflcore.api.contract.CountrySetting;
 import org.openmrs.module.cflcore.api.service.AdHocMessageService;
 import org.openmrs.module.cflcore.api.service.ConfigService;
-import org.openmrs.module.cflcore.api.util.CountrySettingUtil;
 import org.openmrs.module.messages.api.constants.MessagesConstants;
 import org.openmrs.module.messages.api.model.PatientTemplate;
 import org.openmrs.module.messages.api.model.ScheduledExecutionContext;
@@ -32,113 +30,130 @@ import java.util.Set;
 
 /**
  * The default implementation of {@link AdHocMessageService}.
- * <p>
- * The bean is configured in resources/moduleApplicationContext.xml.
- * </p>
+ *
+ * <p>The bean is configured in resources/moduleApplicationContext.xml.
  */
 public class AdHocMessageServiceImpl implements AdHocMessageService {
 
-    private PatientTemplateService patientTemplateService;
-    private ScheduledServiceGroupService scheduledServiceGroupService;
-    private MessagesDeliveryService messagesDeliveryService;
-    private ConfigService configService;
+  private PatientTemplateService patientTemplateService;
+  private ScheduledServiceGroupService scheduledServiceGroupService;
+  private MessagesDeliveryService messagesDeliveryService;
+  private ConfigService configService;
 
-    @Override
-    public AdHocMessageSummary scheduleAdHocMessage(final Date deliveryDateTime, final Set<String> channelTypes,
-                                                    final Map<String, String> channelConfiguration,
-                                                    final Collection<Patient> patients) {
+  @Override
+  public AdHocMessageSummary scheduleAdHocMessage(
+      final Date deliveryDateTime,
+      final Set<String> channelTypes,
+      final Map<String, String> channelConfiguration,
+      final Collection<Patient> patients) {
 
-        final ScheduleAdHocContext rootContext = ScheduleAdHocContext.forChannelConfiguration(channelConfiguration);
+    final ScheduleAdHocContext rootContext =
+        ScheduleAdHocContext.forChannelConfiguration(channelConfiguration);
 
-        for (final Patient patient : patients) {
-            final CountrySetting setting = CountrySettingUtil.getCountrySettingForPatient(patient);
-            final Date deliveryDate = configService.getSafeMessageDeliveryDate(patient, deliveryDateTime, setting);
-            final ScheduleAdHocContext patientContext = rootContext.copyWithPatientAndDate(deliveryDate, patient);
+    for (final Patient patient : patients) {
+      final Date deliveryDate = configService.getSafeMessageDeliveryDate(patient, deliveryDateTime);
+      final ScheduleAdHocContext patientContext =
+          rootContext.copyWithPatientAndDate(deliveryDate, patient);
 
-            for (final String channelType : channelTypes) {
-                scheduleAdHocMessageForPatient(patientContext.copyWithChannelType(channelType));
-            }
-        }
-
-        return new AdHocMessageSummary(patients.size());
+      for (final String channelType : channelTypes) {
+        scheduleAdHocMessageForPatient(patientContext.copyWithChannelType(channelType));
+      }
     }
 
-    public void setPatientTemplateService(PatientTemplateService patientTemplateService) {
-        this.patientTemplateService = patientTemplateService;
+    return new AdHocMessageSummary(patients.size());
+  }
+
+  public void setPatientTemplateService(PatientTemplateService patientTemplateService) {
+    this.patientTemplateService = patientTemplateService;
+  }
+
+  public void setScheduledServiceGroupService(
+      ScheduledServiceGroupService scheduledServiceGroupService) {
+    this.scheduledServiceGroupService = scheduledServiceGroupService;
+  }
+
+  public void setMessagesDeliveryService(MessagesDeliveryService messagesDeliveryService) {
+    this.messagesDeliveryService = messagesDeliveryService;
+  }
+
+  public void setConfigService(ConfigService configService) {
+    this.configService = configService;
+  }
+
+  private void scheduleAdHocMessageForPatient(final ScheduleAdHocContext context) {
+    final PatientTemplate adHocPatientTemplate =
+        patientTemplateService.getOrCreatePatientTemplate(
+            context.getPatient(), CFLConstants.AD_HOC_MESSAGE_TEMPLATE_NAME);
+
+    final ScheduledServiceGroup adHocScheduledServiceGroup =
+        scheduledServiceGroupService.createSingletonGroup(
+            context.getDeliverDate(), context.getChannelType(), adHocPatientTemplate);
+
+    final ScheduledExecutionContext executionContext =
+        new ScheduledExecutionContext(
+            adHocScheduledServiceGroup.getScheduledServices(),
+            context.getChannelType(),
+            context.getDeliverDate(),
+            context.getPatient(),
+            context.getPatient().getId(),
+            MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE,
+            adHocScheduledServiceGroup.getId());
+
+    executionContext.setChannelConfiguration(context.getChannelConfiguration());
+
+    messagesDeliveryService.scheduleDelivery(executionContext);
+  }
+
+  /**
+   * The internal helper class to wrap data needed to schedule an Ad hoc message into one object.
+   */
+  private static class ScheduleAdHocContext {
+    private final Date deliveryDate;
+    private final Patient patient;
+    private final String channelType;
+    private final Map<String, String> channelConfiguration;
+
+    ScheduleAdHocContext(
+        Date deliveryDate,
+        Patient patient,
+        String channelType,
+        Map<String, String> channelConfiguration) {
+      this.deliveryDate = deliveryDate;
+      this.patient = patient;
+      this.channelType = channelType;
+      this.channelConfiguration = channelConfiguration;
     }
 
-    public void setScheduledServiceGroupService(ScheduledServiceGroupService scheduledServiceGroupService) {
-        this.scheduledServiceGroupService = scheduledServiceGroupService;
+    static ScheduleAdHocContext forChannelConfiguration(
+        final Map<String, String> channelConfiguration) {
+      return new ScheduleAdHocContext(null, null, null, channelConfiguration);
     }
 
-    public void setMessagesDeliveryService(MessagesDeliveryService messagesDeliveryService) {
-        this.messagesDeliveryService = messagesDeliveryService;
+    ScheduleAdHocContext copyWithChannelType(final String newChannelType) {
+      return new ScheduleAdHocContext(
+          getDeliverDate(), getPatient(), newChannelType, getChannelConfiguration());
     }
 
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
+    ScheduleAdHocContext copyWithPatientAndDate(
+        final Date newDeliveryDate, final Patient newPatient) {
+      return new ScheduleAdHocContext(
+          newDeliveryDate, newPatient, getChannelType(), getChannelConfiguration());
     }
 
-    private void scheduleAdHocMessageForPatient(final ScheduleAdHocContext context) {
-        final PatientTemplate adHocPatientTemplate = patientTemplateService.getOrCreatePatientTemplate(context.getPatient(),
-                CFLConstants.AD_HOC_MESSAGE_TEMPLATE_NAME);
-
-        final ScheduledServiceGroup adHocScheduledServiceGroup =
-                scheduledServiceGroupService.createSingletonGroup(context.getDeliverDate(), context.getChannelType(),
-                        adHocPatientTemplate);
-
-        final ScheduledExecutionContext executionContext =
-                new ScheduledExecutionContext(adHocScheduledServiceGroup.getScheduledServices(), context.getChannelType(),
-                        context.getDeliverDate(), context.getPatient(), context.getPatient().getId(),
-                        MessagesConstants.PATIENT_DEFAULT_ACTOR_TYPE, adHocScheduledServiceGroup.getId());
-
-        executionContext.setChannelConfiguration(context.getChannelConfiguration());
-
-        messagesDeliveryService.scheduleDelivery(executionContext);
+    Date getDeliverDate() {
+      return deliveryDate;
     }
 
-    /**
-     * The internal helper class to wrap data needed to schedule an Ad hoc message into one object.
-     */
-    private static class ScheduleAdHocContext {
-        private final Date deliveryDate;
-        private final Patient patient;
-        private final String channelType;
-        private final Map<String, String> channelConfiguration;
-
-        ScheduleAdHocContext(Date deliveryDate, Patient patient, String channelType, Map<String, String> channelConfiguration) {
-            this.deliveryDate = deliveryDate;
-            this.patient = patient;
-            this.channelType = channelType;
-            this.channelConfiguration = channelConfiguration;
-        }
-
-        static ScheduleAdHocContext forChannelConfiguration(final Map<String, String> channelConfiguration) {
-            return new ScheduleAdHocContext(null, null, null, channelConfiguration);
-        }
-
-        ScheduleAdHocContext copyWithChannelType(final String newChannelType) {
-            return new ScheduleAdHocContext(getDeliverDate(), getPatient(), newChannelType, getChannelConfiguration());
-        }
-
-        ScheduleAdHocContext copyWithPatientAndDate(final Date newDeliveryDate, final Patient newPatient) {
-            return new ScheduleAdHocContext(newDeliveryDate, newPatient, getChannelType(), getChannelConfiguration());
-        }
-
-        Date getDeliverDate() {
-            return deliveryDate;
-        }
-
-        Patient getPatient() {
-            return patient;
-        }
-
-        String getChannelType() {
-            return channelType;
-        }
-
-        Map<String, String> getChannelConfiguration() {
-            return channelConfiguration;
-        }
+    Patient getPatient() {
+      return patient;
     }
+
+    String getChannelType() {
+      return channelType;
+    }
+
+    Map<String, String> getChannelConfiguration() {
+      return channelConfiguration;
+    }
+  }
 }

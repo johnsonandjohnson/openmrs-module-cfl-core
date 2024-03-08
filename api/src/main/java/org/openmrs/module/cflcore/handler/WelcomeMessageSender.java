@@ -11,20 +11,17 @@
 package org.openmrs.module.cflcore.handler;
 
 import org.openmrs.Patient;
-import org.openmrs.module.cflcore.api.contract.CountrySetting;
 
 /**
  * The WelcomeMessageSender Class.
- * <p>
- * The implementation of the WelcomeMessageSender sends Welcome Message to single Patient. The channel used to communicate
- * and exact details depend on the implementation.
- * </p>
- * <p>
- * All implementations must be Spring beans.
- * </p>
+ *
+ * <p>The implementation of the WelcomeMessageSender sends Welcome Message to single Patient. The
+ * channel used to communicate and exact details depend on the implementation.
+ *
+ * <p>All implementations must be Spring beans.
  *
  * @see org.openmrs.module.cflcore.api.service.impl.WelcomeServiceImpl
  */
 public interface WelcomeMessageSender {
-    void send(Patient patient, CountrySetting settings);
+  void send(Patient patient);
 }

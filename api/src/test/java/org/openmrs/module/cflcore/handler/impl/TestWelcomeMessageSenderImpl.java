@@ -10,18 +10,18 @@
 
 package org.openmrs.module.cflcore.handler.impl;
 
-import org.openmrs.module.cflcore.api.contract.CountrySetting;
+import org.openmrs.Person;
 
 public class TestWelcomeMessageSenderImpl extends BaseWelcomeMessageSenderImpl {
-    private final boolean enabled;
+  private final boolean enabled;
 
-    public TestWelcomeMessageSenderImpl(final String channelType, final boolean enabled) {
-        super(channelType);
-        this.enabled = enabled;
-    }
+  public TestWelcomeMessageSenderImpl(final String channelType, final boolean enabled) {
+    super(channelType);
+    this.enabled = enabled;
+  }
 
-    @Override
-    protected boolean isSendOnPatientRegistrationEnabled(CountrySetting settings) {
-        return enabled;
-    }
+  @Override
+  protected boolean isSendOnPatientRegistrationEnabled(Person person) {
+    return enabled;
+  }
 }

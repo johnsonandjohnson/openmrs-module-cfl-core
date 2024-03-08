@@ -12,7 +12,6 @@ package org.openmrs.module.cflcore.api.event.listener.subscribable;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -25,13 +24,13 @@ import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.Constant;
-import org.openmrs.module.cflcore.api.constant.CountryPropertyConstants;
 import org.openmrs.module.cflcore.api.contract.Randomization;
 import org.openmrs.module.cflcore.api.contract.Vaccination;
 import org.openmrs.module.cflcore.api.contract.VisitInformation;
 import org.openmrs.module.cflcore.api.exception.CflRuntimeException;
 import org.openmrs.module.cflcore.api.helper.VisitHelper;
 import org.openmrs.module.cflcore.api.service.VaccinationService;
+import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
 import org.openmrs.module.messages.api.model.CountryProperty;
 import org.openmrs.module.messages.api.service.CountryPropertyService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -89,7 +88,9 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     when(Context.getService(VaccinationService.class)).thenReturn(vaccinationServiceSpy);
     when(visitsConfigService.getOccurredVisitStatues())
         .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
-    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
+    when(customAdministrationService.getGlobalProperty(
+            GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY, patient))
+        .thenReturn(Boolean.TRUE.toString());
 
     doAnswer(
             invocationOnMock -> {
@@ -127,7 +128,9 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     setupDataForFutureVisitCreation();
     when(visitsConfigService.getOccurredVisitStatues())
         .thenReturn(Collections.singletonList(Constant.VISIT_STATUS_OCCURRED));
-    when(patientVisitConfigService.shouldCreateFutureVisits(patient)).thenReturn(true);
+    when(customAdministrationService.getGlobalProperty(
+            GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY, patient))
+        .thenReturn(Boolean.TRUE.toString());
 
     // When
     updatingVisitListener.performAction(message);
@@ -160,7 +163,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
     shouldCreateFutureVisitProp.setName(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY);
     shouldCreateFutureVisitProp.setValue("true");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))
@@ -300,7 +303,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
 
     CountryProperty shouldCreateFutureVisitProp = new CountryProperty();
     shouldCreateFutureVisitProp.setName(
-        CountryPropertyConstants.SHOULD_CREATE_FUTURE_VISIT_PROP_NAME);
+        GlobalPropertiesConstants.SHOULD_CREATE_FUTURE_VISITS_GP_KEY);
     shouldCreateFutureVisitProp.setValue("false");
 
     when(countryPropertyService.getCountryProperty(null, shouldCreateFutureVisitProp.getName()))

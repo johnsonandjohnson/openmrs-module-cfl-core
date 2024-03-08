@@ -69,34 +69,42 @@ public final class GlobalPropertiesConstants {
               + "by Scheduled Tasks Cleanup Job"
               + "Use \",\" sign to separate class names");
 
+  public static final String SHOULD_CREATE_FIRST_VISIT_GP_KEY = "visits.shouldCreateFirstVisit";
   public static final GPDefinition SHOULD_CREATE_FIRST_VISIT =
       new GPDefinition(
-          "visits.shouldCreateFirstVisit",
-          "true",
+          SHOULD_CREATE_FIRST_VISIT_GP_KEY,
+          Boolean.TRUE.toString(),
           "Determines whether first visit should be created automatically after patient registration");
 
+  public static final String SHOULD_CREATE_FUTURE_VISITS_GP_KEY = "visits.shouldCreateFutureVisit";
   public static final GPDefinition SHOULD_CREATE_FUTURE_VISITS =
       new GPDefinition(
-          "visits.shouldCreateFutureVisit",
-          "true",
+          SHOULD_CREATE_FUTURE_VISITS_GP_KEY,
+          Boolean.TRUE.toString(),
           "Determines whether future visits should be created automatically after updating visit to occurred status");
 
+  public static final String SHOULD_SEND_REMINDER_VIA_SMS_GP_KEY =
+      "messages.shouldSendReminderViaSms";
   public static final GPDefinition SHOULD_SEND_REMINDER_VIA_SMS =
       new GPDefinition(
-          "messages.shouldSendReminderViaSms",
-          "false",
+          SHOULD_SEND_REMINDER_VIA_SMS_GP_KEY,
+          Boolean.FALSE.toString(),
           "Determines whether visit reminder with SMS channel should be configured automatically after patient registration");
 
+  public static final String SHOULD_SEND_REMINDER_VIA_CALL_GP_KEY =
+      "messages.shouldSendReminderViaCall";
   public static final GPDefinition SHOULD_SEND_REMINDER_VIA_CALL =
       new GPDefinition(
-          "messages.shouldSendReminderViaCall",
-          "false",
+          SHOULD_SEND_REMINDER_VIA_CALL_GP_KEY,
+          Boolean.FALSE.toString(),
           "Determines whether visit reminder with Call channel should be configured automatically after patient registration");
 
+  public static final String SHOULD_SEND_REMINDER_VIA_WHATSAPP_GP_KEY =
+      "messages.shouldSendReminderViaWhatsApp";
   public static final GPDefinition SHOULD_SEND_REMINDER_VIA_WHATSAPP =
       new GPDefinition(
-          "messages.shouldSendReminderViaWhatsApp",
-          "false",
+          SHOULD_SEND_REMINDER_VIA_WHATSAPP_GP_KEY,
+          Boolean.FALSE.toString(),
           "Determines whether visit reminder with WhatsApp channel should be configured automatically after patient registration");
 
   private GlobalPropertiesConstants() {}
