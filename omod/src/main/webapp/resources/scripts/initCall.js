@@ -27,24 +27,8 @@ initCall.createInitCallCreationDialog = function() {
         selector: '#init-call-dialog',
         actions: {
             confirm: function() {
-                jq.ajax({
-                    url: `/${OPENMRS_CONTEXT_PATH}/ws/callflows/person/${initCall.personUUID}/out/${initCall.ivrProvider}/flows/MainFlow.ccxml?actorType=${initCall.actorType}`,
-                    type: 'GET',
-                    success: function() {
-                        emr.successMessage("cfl.initCall.success");
-                        initCall.initCallCreationDialog.close();
-                    },
-                    error: function(data) {
-                        emr.errorMessage("cfl.initCall.failed");
-                        initCall.initCallCreationDialog.close();
-                        if (data.status == 403) {
-                            window.location.href = `/${OPENMRS_CONTEXT_PATH}/login.htm`;
-                        }
-                    },
-                    final: function() {
-                        initCall.enableConfirmButton();
-                    }
-                });
+                initCall.openDisabledInitCallDialog();
+                initCall.initCallCreationDialog.close();
             },
             cancel: function() {
                 initCall.initCallCreationDialog.close();
@@ -68,5 +52,15 @@ initCall.goToReturnUrl = function() {
 };
 
 initCall.enableConfirmButton = function() {
-    jq('#init-call-dialog' + ' .icon-spin').css('display', 'inline-block').parent().addClass('enabled');
+    $('#init-call-dialog' + ' .icon-spin').css('display', 'inline-block').parent().addClass('enabled');
 };
+
+initCall.openDisabledInitCallDialog = function() {
+    $("#disabled-init-call-dialog, #dialog-background").addClass("active");
+    $("#disabled-init-call-dialog .confirm, #dialog-background").on("click", function() {
+        const player = $('#player')[0];
+        player.pause();
+        player.currentTime = 0;
+        $("#disabled-init-call-dialog, #dialog-background").removeClass("active");
+    });
+}
