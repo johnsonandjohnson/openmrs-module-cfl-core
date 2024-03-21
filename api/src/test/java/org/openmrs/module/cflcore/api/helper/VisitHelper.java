@@ -142,14 +142,20 @@ public final class VisitHelper {
     VisitAttributeType visitAttributeType2 = new VisitAttributeType();
     VisitAttributeType visitAttributeType3 = new VisitAttributeType();
     VisitAttributeType visitAttributeType4 = new VisitAttributeType();
+    VisitAttributeType visitAttributeType5 = new VisitAttributeType();
+    VisitAttributeType visitAttributeType6 = new VisitAttributeType();
     visitAttributeType1.setName(CFLConstants.VISIT_STATUS_ATTRIBUTE_TYPE_NAME);
     visitAttributeType2.setName(CFLConstants.UP_WINDOW_ATTRIBUTE_NAME);
     visitAttributeType3.setName(CFLConstants.LOW_WINDOW_ATTRIBUTE_NAME);
     visitAttributeType4.setName(CFLConstants.DOSE_NUMBER_ATTRIBUTE_NAME);
+    visitAttributeType5.setName(CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_NAME);
+    visitAttributeType6.setName(CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_NAME);
     visitAttributeTypes.add(visitAttributeType1);
     visitAttributeTypes.add(visitAttributeType2);
     visitAttributeTypes.add(visitAttributeType3);
     visitAttributeTypes.add(visitAttributeType4);
+    visitAttributeTypes.add(visitAttributeType5);
+    visitAttributeTypes.add(visitAttributeType6);
     return visitAttributeTypes;
   }
 
