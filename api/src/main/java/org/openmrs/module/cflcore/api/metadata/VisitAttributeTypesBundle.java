@@ -25,7 +25,7 @@ public class VisitAttributeTypesBundle extends VersionedMetadataBundle {
 
     @Override
     public int getVersion() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -70,6 +70,22 @@ public class VisitAttributeTypesBundle extends VersionedMetadataBundle {
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DATATYPE,
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_DESCRIPTION,
                 CFLConstants.IS_LAST_DOSING_VISIT_ATTR_TYPE_UUID));
+
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_UUID,
+            createVisitAttributeType(
+                CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_NAME,
+                CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_DATATYPE,
+                CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_DESCRIPTION,
+                CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_UUID));
+
+        createVisitAttributeTypeIfNotExists(
+            CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_UUID,
+            createVisitAttributeType(
+                CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_NAME,
+                CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_DATATYPE,
+                CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_DESCRIPTION,
+                CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_UUID));
     }
 
     private VisitAttributeType createVisitAttributeType(String name, String dataTypeClassName, String description,
