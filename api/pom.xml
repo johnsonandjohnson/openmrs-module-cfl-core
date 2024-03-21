@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>cflcore</artifactId>
-		<version>1.12.1-leprosy-brazil-1</version>
+		<version>1.12.1-leprosy-brazil-2</version>
 	</parent>
 
     <artifactId>cflcore-api</artifactId>
