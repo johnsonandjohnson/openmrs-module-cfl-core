@@ -426,6 +426,28 @@ public final class CFLConstants {
 
   public static final String CONFIGURABLE_PATIENT_HEADER_APP_NAME = "cfl.configurablePatientHeader";
 
+  public static final String ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_NAME = "Original Visit Date";
+
+  public static final String ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine original date of visit";
+
+  public static final String ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_UUID =
+      "e34bdbb3-e6ab-11ee-b6d2-0242ac190002";
+
+  public static final String MIDPOINT_WINDOW_ATTRIBUTE_TYPE_NAME = "Midpoint Window";
+
+  public static final String MIDPOINT_WINDOW_ATTRIBUTE_TYPE_DATATYPE =
+      FreeTextDatatype.class.getName();
+
+  public static final String MIDPOINT_WINDOW_ATTRIBUTE_TYPE_DESCRIPTION =
+      "Visit attribute type used to determine original date of visit";
+
+  public static final String MIDPOINT_WINDOW_ATTRIBUTE_TYPE_UUID =
+      "6c2eef72-e6b2-11ee-aa7c-0242ac190002";
+
   private CFLConstants() {
   }
 }

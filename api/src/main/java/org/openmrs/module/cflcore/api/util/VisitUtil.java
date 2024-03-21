@@ -179,7 +179,8 @@ public final class VisitUtil {
 
   public static String getOccurredVisitStatus() {
     return Context.getService(org.openmrs.module.visits.api.service.ConfigService.class)
-        .getOccurredVisitStatues().get(0);
+        .getOccurredVisitStatues()
+        .get(0);
   }
 
   /**
@@ -265,6 +266,17 @@ public final class VisitUtil {
         createAttribute(
             CFLConstants.IS_LAST_DOSING_VISIT_ATTRIBUTE_NAME,
             String.valueOf(isLastPatientDosingVisit(visit.getPatient(), visitInformation))));
+
+    visit.setAttribute(
+        createAttribute(
+            CFLConstants.MIDPOINT_WINDOW_ATTRIBUTE_TYPE_NAME,
+            String.valueOf(visitInformation.getMidPointWindow())));
+
+    visit.setAttribute(
+        createAttribute(
+            CFLConstants.ORIGINAL_VISIT_DATE_ATTRIBUTE_TYPE_NAME,
+            DateUtil.formatToServerDateFormat(
+                visit.getStartDatetime(), DateUtil.DEFAULT_SERVER_SIDE_DATETIME_FORMAT)));
   }
 
   private static ConfigService getCFLConfigService() {
