@@ -238,6 +238,12 @@ public class TreatmentServiceImpl implements TreatmentService {
         .equals(conceptService.getConceptByUuid(Treatment.CURRENT_REGIMEN_CONCEPT_UUID))) {
       treatment.setCurrent(treatmentChild.getValueBoolean());
     }
+
+    if (treatmentChild
+        .getConcept()
+        .equals(conceptService.getConceptByUuid(Treatment.STOP_TREATMENT_REASON_CONCEPT_UUID))) {
+      treatment.setStopTreatmentReason(treatmentChild.getValueText());
+    }
   }
 
   private void buildInterruptions(List<Interruption> interruptions, Obs interruptionParent) {
