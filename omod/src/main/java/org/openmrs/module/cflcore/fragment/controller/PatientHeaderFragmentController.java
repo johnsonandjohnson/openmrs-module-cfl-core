@@ -26,6 +26,7 @@ package org.openmrs.module.cflcore.fragment.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appframework.context.AppContextModel;
@@ -121,7 +122,12 @@ public class PatientHeaderFragmentController extends HeaderFragment {
     }
 
     private String getShipIdentifier(Patient patient) {
-        return patient.getPatientIdentifier("SHIP ID").getIdentifier();
+        PatientIdentifier shipIdentifier = patient.getPatientIdentifier("SHIP ID");
+        if (shipIdentifier == null) {
+            return "-";
+        } else {
+            return shipIdentifier.getIdentifier();
+        }
     }
     
     private Boolean getShowGenderPersonHeader() {
