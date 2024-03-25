@@ -147,7 +147,7 @@ public final class CFLConstants {
 
   public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_KEY =
       "cfl.patientRegistrationCallFlowName";
-  public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "";
+  public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DEFAULT_VALUE = "MainFlow";
   public static final String PATIENT_REGISTRATION_CALL_FLOW_NAME_DESCRIPTION =
       "Specifies call flow that will be used in call after patient registration.";
 
@@ -314,7 +314,7 @@ public final class CFLConstants {
    * One of possible values for {@link #VACCINATION_LISTENER_KEY}. The name of {
    * VaccinationEncounterListener} listener.
    */
-  public static final String VACCINATION_ENCOUNTER_LISTENER_NAME = "VaccinationEncounterListener";
+  public static final String VACCINATION_ENCOUNTER_LISTENER_NAME = "UpdatingVisitListener";
 
   /**
    * One of possible values for {@link #VACCINATION_LISTENER_KEY}. The name of {
