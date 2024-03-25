@@ -314,7 +314,7 @@ public final class CFLConstants {
    * One of possible values for {@link #VACCINATION_LISTENER_KEY}. The name of {
    * VaccinationEncounterListener} listener.
    */
-  public static final String VACCINATION_ENCOUNTER_LISTENER_NAME = "UpdatingVisitListener";
+  public static final String VACCINATION_ENCOUNTER_LISTENER_NAME = "VaccinationEncounterListener";
 
   /**
    * One of possible values for {@link #VACCINATION_LISTENER_KEY}. The name of {

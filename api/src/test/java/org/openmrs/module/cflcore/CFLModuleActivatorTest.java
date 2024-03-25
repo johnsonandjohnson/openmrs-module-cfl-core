@@ -318,7 +318,7 @@ public class CFLModuleActivatorTest {
     Assert.assertTrue(
         hasPropertyBeenCreated(
             CFLConstants.VACCINATION_LISTENER_KEY,
-            CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME,
+            CFLConstants.VACCINATION_VISIT_LISTENER_NAME,
             CFLConstants.VACCINATION_LISTENER_DESCRIPTION));
     Assert.assertTrue(
         hasPropertyBeenCreated(
