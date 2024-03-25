@@ -874,37 +874,6 @@
         "userPrincipal" : {
           "$ref" : "#/definitions/Principal"
         },
-        "remoteUser" : {
-          "type" : "string"
-        },
-        "requestedSessionId" : {
-          "type" : "string"
-        },
-        "requestURI" : {
-          "type" : "string"
-        },
-        "requestURL" : {
-          "$ref" : "#/definitions/StringBuffer"
-        },
-        "servletPath" : {
-          "type" : "string"
-        },
-        "requestedSessionIdValid" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "requestedSessionIdFromCookie" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "requestedSessionIdFromURL" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "requestedSessionIdFromUrl" : {
-          "type" : "boolean",
-          "default" : false
-        },
         "authType" : {
           "type" : "string"
         },
@@ -920,17 +889,51 @@
         "pathInfo" : {
           "type" : "string"
         },
-        "pathTranslated" : {
-          "type" : "string"
-        },
         "contextPath" : {
           "type" : "string"
         },
         "queryString" : {
           "type" : "string"
         },
+        "remoteUser" : {
+          "type" : "string"
+        },
+        "requestURI" : {
+          "type" : "string"
+        },
+        "requestURL" : {
+          "$ref" : "#/definitions/StringBuffer"
+        },
+        "servletPath" : {
+          "type" : "string"
+        },
+        "requestedSessionIdFromURL" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "requestedSessionIdFromCookie" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "requestedSessionIdValid" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "requestedSessionIdFromUrl" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "requestedSessionId" : {
+          "type" : "string"
+        },
+        "pathTranslated" : {
+          "type" : "string"
+        },
         "method" : {
           "type" : "string"
+        },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "localName" : {
           "type" : "string"
@@ -941,9 +944,6 @@
         },
         "contentType" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1019,9 +1019,6 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
         "maxInactiveInterval" : {
           "type" : "integer",
           "format" : "int32"
@@ -1038,6 +1035,9 @@
           "items" : {
             "type" : "string"
           }
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
         },
         "id" : {
           "type" : "string"
@@ -1308,10 +1308,10 @@
         "contextPath" : {
           "type" : "string"
         },
-        "servletNames" : {
+        "servlets" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "servlets" : {
+        "servletNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
         "serverInfo" : {
@@ -1331,6 +1331,9 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
         "localName" : {
           "type" : "string"
         },
@@ -1340,9 +1343,6 @@
         },
         "contentType" : {
           "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"

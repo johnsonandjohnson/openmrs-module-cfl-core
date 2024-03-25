@@ -32,17 +32,17 @@ public class PersonDTOBuilder implements Serializable {
     private String relationshipName;
 
     public PersonDTO build() {
-        return new PersonDTO()
-                .withUuid(person.getUuid())
-                .withIsPatient(person.isPatient())
-                .withGivenName(person.getGivenName())
-                .withMiddleName(person.getMiddleName())
-                .withFamilyName(person.getFamilyName())
-                .withIdentifier(getPersonOrPatientIdentifier(person))
-                .withRelationshipName(relationshipName)
-                .withLocation(getPersonLocation(person.getPersonId()))
-                .withAge(person.getAge())
-                .withGender(person.getGender());
+    return new PersonDTO()
+        .withUuid(person.getUuid())
+        .withIsPatient(person.isPatient())
+        .withGivenName(removeQuotesFromString(person.getGivenName()))
+        .withMiddleName(removeQuotesFromString(person.getMiddleName()))
+        .withFamilyName(removeQuotesFromString(person.getFamilyName()))
+        .withIdentifier(getPersonOrPatientIdentifier(person))
+        .withRelationshipName(relationshipName)
+        .withLocation(getPersonLocation(person.getPersonId()))
+        .withAge(person.getAge())
+        .withGender(person.getGender());
     }
 
     public Person getPerson() {
@@ -123,5 +123,14 @@ public class PersonDTOBuilder implements Serializable {
             }
         }
         return personIdentifier;
+    }
+
+  private String removeQuotesFromString(String value) {
+        String cleanedString = value;
+        if (StringUtils.isNotBlank(value)) {
+            cleanedString = value.replaceAll("['\"]", "");
+        }
+
+        return cleanedString;
     }
 }
