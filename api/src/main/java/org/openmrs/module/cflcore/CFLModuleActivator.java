@@ -222,7 +222,7 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         CFLConstants.VACCINATION_VISIT_ENCOUNTER_TYPE_UUID_LIST_DESCRIPTION);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.VACCINATION_LISTENER_KEY,
-        CFLConstants.VACCINATION_ENCOUNTER_LISTENER_NAME,
+        CFLConstants.VACCINATION_VISIT_LISTENER_NAME,
         CFLConstants.VACCINATION_LISTENER_DESCRIPTION);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         CFLConstants.HTML_FORM_JQUERY_DATE_FORMAT_KEY,
