@@ -14,11 +14,8 @@
     ui.includeCss("cflcore", "patientHeader.css")
     ui.includeJavascript("cflcore", "cflDeletePatient.js")
     ui.includeJavascript("messages", "changeStatus.js")
+    ui.includeJavascript("messages", "moment-with-locales.min.js")
 %>
-
-<head>
-  <script src="https://momentjs.com/downloads/moment.js"></script>
-</head>
 
 <div class="header-container">
   <div class="title-container">
