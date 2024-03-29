@@ -142,7 +142,7 @@ public class UpdatingVisitListenerTest extends VaccinationListenerBaseTest {
     verify(visitsConfigService).getOccurredVisitStatues();
     verify(configService, times(3)).getRandomizationGlobalProperty();
     verify(configService, times(3)).getVaccinationProgram(visit.getPatient());
-    verify(visitService, times(12)).getAllVisitAttributeTypes();
+    verify(visitService, times(16)).getAllVisitAttributeTypes();
 
     ArgumentCaptor<Visit> saveVisitArgumentCaptor = ArgumentCaptor.forClass(Visit.class);
     verify(visitService, times(2)).saveVisit(saveVisitArgumentCaptor.capture());
