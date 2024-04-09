@@ -6,6 +6,25 @@
 <% /* Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS */ %>
 <% /* graphic logo is a trademark of OpenMRS Inc. */ %>
 
+<style>
+  #initCallConfirmButton {
+    background-image: none;
+    background-color: #00455c;
+    border-color: #00455c;
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  #initCallCancelButton {
+    background: transparent;
+    border: #000000 1px solid !important;
+    color: #00455c;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+</style>
+
 <%
     ui.includeJavascript("cflcore", "initCall.js")
 %>
@@ -18,9 +37,9 @@
     </div>
     <div class="dialog-content">
         <p class="dialog-instructions">${ ui.message("cfl.initCall.message") }</p>
-        <button class="confirm right">${ ui.message("coreapps.confirm") }
+        <button id="initCallConfirmButton" class="confirm right">${ ui.message("coreapps.confirm") }
             <i class="icon-spinner icon-spin icon-2x" style="display: none; margin-left: 10px;"></i>
         </button>
-        <button class="cancel">${ ui.message("coreapps.cancel") }</button>
+        <button id="initCallCancelButton" class="cancel">${ ui.message("coreapps.cancel") }</button>
     </div>
 </div>

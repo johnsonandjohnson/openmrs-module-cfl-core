@@ -10,6 +10,24 @@
   .dialog-instructions {
     padding-top: 0 !important;
   }
+
+  #deletePatientCancelButton {
+    background: transparent;
+    border: #000000 1px solid !important;
+    color: #00455c;
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  #deletePatientConfirmButton {
+    background-image: none;
+    background-color: #00455c;
+    border-color: #00455c;
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
 </style>
 
 <%
@@ -33,7 +51,9 @@
     <br>
     <span id="cfl-delete-reason-empty">${ ui.message("coreapps.task.deletePatient.deleteMessageEmpty") }</span>
     <br>
-    <button class="confirm right">${ ui.message("coreapps.confirm") }<i class="icon-spinner icon-spin icon-2x" style="display: none; margin-left: 10px;"></i></button>
-    <button class="cancel">${ ui.message("coreapps.cancel") }</button>
+    <button id="deletePatientConfirmButton" class="confirm right">${ ui.message("coreapps.confirm") }
+      <i class="icon-spinner icon-spin icon-2x" style="display: none; margin-left: 10px;"></i>
+    </button>
+    <button id="deletePatientCancelButton" class="cancel">${ ui.message("coreapps.cancel") }</button>
   </div>
 </div>
