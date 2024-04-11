@@ -886,10 +886,10 @@
         "headerNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "pathInfo" : {
+        "pathTranslated" : {
           "type" : "string"
         },
-        "pathTranslated" : {
+        "pathInfo" : {
           "type" : "string"
         },
         "contextPath" : {
@@ -932,9 +932,6 @@
         "method" : {
           "type" : "string"
         },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
         "localName" : {
           "type" : "string"
         },
@@ -944,6 +941,9 @@
         },
         "contentType" : {
           "type" : "string"
+        },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1015,11 +1015,22 @@
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
+        "lastAccessedTime" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "valueNames" : {
           "type" : "array",
           "items" : {
             "type" : "string"
           }
+        },
+        "new" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "servletContext" : {
+          "$ref" : "#/definitions/ServletContext"
         },
         "maxInactiveInterval" : {
           "type" : "integer",
@@ -1027,17 +1038,6 @@
         },
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
-        },
-        "servletContext" : {
-          "$ref" : "#/definitions/ServletContext"
-        },
-        "new" : {
-          "type" : "boolean",
-          "default" : false
-        },
-        "lastAccessedTime" : {
-          "type" : "integer",
-          "format" : "int64"
         },
         "id" : {
           "type" : "string"
@@ -1305,10 +1305,10 @@
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "servlets" : {
-          "$ref" : "#/definitions/Enumeration"
+        "contextPath" : {
+          "type" : "string"
         },
-        "servletNames" : {
+        "servlets" : {
           "$ref" : "#/definitions/Enumeration"
         },
         "serverInfo" : {
@@ -1320,8 +1320,8 @@
         "servletContextName" : {
           "type" : "string"
         },
-        "contextPath" : {
-          "type" : "string"
+        "servletNames" : {
+          "$ref" : "#/definitions/Enumeration"
         }
       }
     },
@@ -1331,9 +1331,6 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
         "localName" : {
           "type" : "string"
         },
@@ -1343,6 +1340,9 @@
         },
         "contentType" : {
           "type" : "string"
+        },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"

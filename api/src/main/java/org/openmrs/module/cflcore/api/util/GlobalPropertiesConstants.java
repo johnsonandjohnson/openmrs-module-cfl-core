@@ -107,5 +107,16 @@ public final class GlobalPropertiesConstants {
           Boolean.FALSE.toString(),
           "Determines whether visit reminder with WhatsApp channel should be configured automatically after patient registration");
 
+  public static final String VISIT_TYPES_TIME_WINDOW_GP_KEY = "cfl.visitTypes.timeWindow";
+  public static final GPDefinition VISIT_TYPES_TIME_WINDOW =
+      new GPDefinition(
+          VISIT_TYPES_TIME_WINDOW_GP_KEY,
+          "["
+              + "{ \"visitTypeUuid\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"shouldHaveTimeWindow\": false }"
+              + "]",
+          "Determines which visit types should have time window defined. " +
+              "It is simple JSON array where each object contains two fields with values - uuid of visit type for 'visitTypeUuid' field " +
+              "and true/false value for 'shouldHaveTimeWindow' field.");
+
   private GlobalPropertiesConstants() {}
 }

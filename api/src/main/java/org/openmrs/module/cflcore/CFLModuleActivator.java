@@ -269,6 +269,8 @@ public class CFLModuleActivator extends BaseModuleActivator implements DaemonTok
         GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_CALL);
     GlobalPropertyUtils.createGlobalSettingIfNotExists(
         GlobalPropertiesConstants.SHOULD_SEND_REMINDER_VIA_WHATSAPP);
+    GlobalPropertyUtils.createGlobalSettingIfNotExists(
+        GlobalPropertiesConstants.VISIT_TYPES_TIME_WINDOW);
   }
 
   private void updateGlobalSettings() {
