@@ -38,6 +38,8 @@ import org.openmrs.module.cflcore.web.dto.CFLRegistrationRelationshipDTO;
 import org.openmrs.module.cflcore.web.service.CFLRegistrationUiService;
 import org.openmrs.module.idgen.IdentifierSource;
 import org.openmrs.module.idgen.service.IdentifierSourceService;
+import org.openmrs.module.messages.api.constants.ConfigConstants;
+import org.openmrs.module.messages.api.util.BestContactTimeHelper;
 import org.openmrs.module.registrationcore.RegistrationData;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.springframework.beans.MutablePropertyValues;
@@ -114,6 +116,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     addPersonAttributes(patient, registrationProperties);
     addPatientIdentifiers(patient, registrationProperties);
     addPatientLocationIfNotProvided(patient, registrationProperties);
+    addBestContactTimeIfNotProvided(patient, registrationProperties);
     return patient;
   }
 
@@ -184,18 +187,34 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     relationshipService.updatedRelationships(newRelationshipDTOs, person);
   }
 
-  private void addPatientLocationIfNotProvided(Patient patient,
-      PropertyValues registrationProperties) {
-    final String locationAttributeName = Context.getAdministrationService()
-        .getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY);
+  private void addPatientLocationIfNotProvided(
+      Patient patient, PropertyValues registrationProperties) {
+    final String locationAttributeName =
+        Context.getAdministrationService()
+            .getGlobalProperty(CFLConstants.PERSON_LOCATION_ATTRIBUTE_KEY);
     if (!registrationProperties.contains(locationAttributeName)) {
-      PersonAttributeType locationAttributeType = personService.getPersonAttributeTypeByName(
-          locationAttributeName);
+      PersonAttributeType locationAttributeType =
+          personService.getPersonAttributeTypeByName(locationAttributeName);
       String currentUserLocationUuid = LocationUtil.getCurrentlyLoggedInUserLocation().getUuid();
 
       final PersonAttribute locationAttribute = new PersonAttribute();
       locationAttribute.setAttributeType(locationAttributeType);
       locationAttribute.setValue(currentUserLocationUuid);
+      patient.addAttribute(locationAttribute);
+    }
+  }
+
+  private void addBestContactTimeIfNotProvided(
+      Patient patient, PropertyValues registrationProperties) {
+    final String bestContactTimeAttributeName =
+        ConfigConstants.PERSON_CONTACT_TIME_ATTRIBUTE_TYPE_NAME;
+    if (!registrationProperties.contains(bestContactTimeAttributeName)) {
+      PersonAttributeType bestContactTimeAttributeType =
+          personService.getPersonAttributeTypeByName(bestContactTimeAttributeName);
+      String bestContactTimeDefaultValue = BestContactTimeHelper.getBestContactTime(patient, null);
+      final PersonAttribute locationAttribute = new PersonAttribute();
+      locationAttribute.setAttributeType(bestContactTimeAttributeType);
+      locationAttribute.setValue(bestContactTimeDefaultValue);
       patient.addAttribute(locationAttribute);
     }
   }
@@ -541,7 +560,7 @@ public class CFLRegistrationUiServiceImpl implements CFLRegistrationUiService {
     } else if (value != null && value.getClass().isArray()) {
       result = Arrays.stream((Object[]) value).map(Object::toString).toArray(String[]::new);
     } else if (value != null) {
-      result = new String[]{value.toString()};
+      result = new String[] {value.toString()};
     } else {
       result = new String[0];
     }
