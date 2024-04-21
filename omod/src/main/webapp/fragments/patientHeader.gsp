@@ -12,8 +12,6 @@
     def extraTitleInfoText = ""
 
     ui.includeCss("cflcore", "patientHeader.css")
-    ui.includeJavascript("cflcore", "cflDeletePatient.js")
-    ui.includeJavascript("messages", "changeStatus.js")
     ui.includeJavascript("messages", "moment-with-locales.min.js")
 %>
 
@@ -84,5 +82,3 @@
     </div>
   </div>
 </div>
-
-<div>${ ui.includeFragment("messages", "patientdashboard/changeStatus") }</div>
