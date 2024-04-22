@@ -117,6 +117,10 @@
         <class>org.openmrs.module.cflcore.advice.EncounterAdvice</class>
     </advice>
 
+    <advice>
+        <point>org.openmrs.api.OrderService</point>
+        <class>org.openmrs.module.cflcore.advice.SaveOrderAdvice</class>
+    </advice>
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->
     <messages>
