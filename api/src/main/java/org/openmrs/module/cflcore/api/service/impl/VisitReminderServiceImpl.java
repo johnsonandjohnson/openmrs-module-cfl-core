@@ -20,7 +20,6 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.CFLConstants;
-import org.openmrs.module.cflcore.api.service.ConfigService;
 import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
 import org.openmrs.module.cflcore.api.service.VisitReminderService;
 import org.openmrs.module.cflcore.api.util.GlobalPropertiesConstants;
@@ -123,10 +122,12 @@ public class VisitReminderServiceImpl implements VisitReminderService {
       SimpleDateFormat sdf = new SimpleDateFormat(CFLConstants.BEST_CONTACT_TIME_FORMAT);
       sdf.setCalendar(localTime);
 
-      String defaultUserTimeZone = getConfigService().getDefaultUserTimeZone();
-      Calendar defaultTime = Calendar.getInstance(TimeZone.getTimeZone(defaultUserTimeZone));
+      String personTimeZone =
+          Context.getService(CustomAdministrationService.class)
+              .getGlobalProperty(CFLConstants.DEFAULT_USER_TIME_ZONE_GP_NAME, person);
+      Calendar defaultTime = Calendar.getInstance(TimeZone.getTimeZone(personTimeZone));
       defaultTime.setTime(localTime.getTime());
-      sdf.setTimeZone(TimeZone.getTimeZone(defaultUserTimeZone));
+      sdf.setTimeZone(TimeZone.getTimeZone(personTimeZone));
 
       return sdf.format(defaultTime.getTime());
     }
@@ -152,10 +153,5 @@ public class VisitReminderServiceImpl implements VisitReminderService {
   private PersonAttributeType getBestContactTimeAttrType() {
     return Context.getPersonService()
         .getPersonAttributeTypeByUuid(ConfigConstants.PERSON_CONTACT_TIME_TYPE_UUID);
-  }
-
-  private ConfigService getConfigService() {
-    return Context.getRegisteredComponent(
-        CFLConstants.CFL_CONFIG_SERVICE_BEAN_NAME, ConfigService.class);
   }
 }

@@ -70,8 +70,6 @@ public interface ConfigService {
 
   boolean isVaccinationListenerEnabled(String listenerName);
 
-  String getDefaultUserTimeZone();
-
   /**
    * Gets the safe delivery time from {@code requestedDeliveryTime}.
    *
