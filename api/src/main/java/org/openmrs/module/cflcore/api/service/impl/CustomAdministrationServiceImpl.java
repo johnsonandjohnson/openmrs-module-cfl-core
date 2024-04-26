@@ -10,14 +10,14 @@
 
 package org.openmrs.module.cflcore.api.service.impl;
 
-import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cflcore.api.service.CustomAdministrationService;
 
 public class CustomAdministrationServiceImpl implements CustomAdministrationService {
 
   @Override
-  public String getGlobalProperty(String key, Patient patient) {
+  public String getGlobalProperty(String key, Person person) {
     return Context.getAdministrationService().getGlobalProperty(key, null);
   }
 }

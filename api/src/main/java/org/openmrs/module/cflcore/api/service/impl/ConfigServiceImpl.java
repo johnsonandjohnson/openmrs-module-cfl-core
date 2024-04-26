@@ -123,12 +123,6 @@ public class ConfigServiceImpl implements ConfigService {
   }
 
   @Override
-  public String getDefaultUserTimeZone() {
-    return getGp(
-        CFLConstants.DEFAULT_USER_TIME_ZONE_GP_NAME, DateUtil.DEFAULT_SYSTEM_TIME_ZONE.getID());
-  }
-
-  @Override
   public Date getSafeMessageDeliveryDate(Patient patient, Date requestedDeliveryTime) {
     CountryPropertyService countryPropertyService =
         Context.getService(CountryPropertyService.class);

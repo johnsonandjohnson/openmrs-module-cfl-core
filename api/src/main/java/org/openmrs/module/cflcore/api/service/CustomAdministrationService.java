@@ -10,7 +10,7 @@
 
 package org.openmrs.module.cflcore.api.service;
 
-import org.openmrs.Patient;
+import org.openmrs.Person;
 
 /**
  * Custom Administration service.
@@ -21,14 +21,14 @@ import org.openmrs.Patient;
 public interface CustomAdministrationService {
 
   /**
-   * Gets global property (using regular OpenMRS Administration Service underneath). Patient param
+   * Gets global property (using regular OpenMRS Administration Service underneath). Person param
    * is helpful for other services/AOP classes that can capture patient object and perform some
-   * specific actions (e.g. searching another global property based on patient location/project/any
+   * specific actions (e.g. searching another global property based on person location/project/any
    * other things)
    *
    * @param key global property key
-   * @param patient patient object
+   * @param person person object
    * @return value of global property
    */
-  String getGlobalProperty(String key, Patient patient);
+  String getGlobalProperty(String key, Person person);
 }
