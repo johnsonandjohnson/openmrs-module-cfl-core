@@ -11,6 +11,7 @@
 package org.openmrs.module.cflcore.api.htmlformentry.service;
 
 import org.openmrs.Encounter;
+import org.openmrs.Obs;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.LaboratoryDetailsDTO;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.PhysicalExaminationDetailsDTO;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.ProgressNoteDetailsDTO;
@@ -18,6 +19,7 @@ import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.ReviewM
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.VaccinationDetailsDTO;
 import org.openmrs.module.cflcore.api.htmlformentry.dto.medicalvisitnote.VitalDetailsDTO;
 import java.util.List;
+import java.util.Set;
 
 /** Provides methods related to Medical Visit Note functionalities */
 public interface MedicalVisitNoteService {
@@ -69,4 +71,14 @@ public interface MedicalVisitNoteService {
    * @return list of {@link LaboratoryDetailsDTO} objects
    */
   List<LaboratoryDetailsDTO> getLaboratoryData(Encounter encounter);
+
+  /**
+   * Finds obs with given concept and obs group from set of obs
+   *
+   * @param obsSet set of observations to search for
+   * @param conceptUuid concept uuid
+   * @param obsGroup obs group where to search for
+   * @return
+   */
+  Obs findObsByConceptAndGroup(Set<Obs> obsSet, String conceptUuid, Obs obsGroup);
 }

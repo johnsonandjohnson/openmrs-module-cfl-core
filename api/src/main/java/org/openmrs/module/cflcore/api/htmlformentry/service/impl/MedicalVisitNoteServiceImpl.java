@@ -188,7 +188,8 @@ public class MedicalVisitNoteServiceImpl implements MedicalVisitNoteService {
     return laboratoryDetails;
   }
 
-  private Obs findObsByConceptAndGroup(Set<Obs> obsSet, String conceptUuid, Obs obsGroup) {
+  @Override
+  public Obs findObsByConceptAndGroup(Set<Obs> obsSet, String conceptUuid, Obs obsGroup) {
     if (obsGroup == null) {
       return null;
     }

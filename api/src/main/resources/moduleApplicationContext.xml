@@ -315,6 +315,9 @@
     <bean id="cfl.historyDataContentProvider"
           class="org.openmrs.module.cflcore.api.htmlformentry.context.MedicalVisitNoteDataContentProvider"/>
 
+    <bean id="cfl.refillVisitNoteDataContentProvider"
+          class="org.openmrs.module.cflcore.api.htmlformentry.context.RefillVisitNoteFunctionsContextContentProvider"/>
+
     <bean id="cfl.patientFlagsOverviewDAO" class="org.openmrs.module.cflcore.db.impl.PatientFlagsOverviewDAOImpl">
         <property name="dbSessionFactory" ref="dbSessionFactory"/>
     </bean>
