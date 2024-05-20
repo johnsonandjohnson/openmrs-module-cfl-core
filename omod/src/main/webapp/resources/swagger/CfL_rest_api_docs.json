@@ -1,0 +1,1402 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CFL MAIN",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/CFLTest/CFLMain/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "http://{{url}}openmrs"
+    }
+  ],
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Register Patient"
+    },
+    {
+      "name": "Common"
+    },
+    {
+      "name": "Find Patient"
+    },
+    {
+      "name": "Visit Overview"
+    },
+    {
+      "name": "Visualization"
+    },
+    {
+      "name": "Flags"
+    },
+    {
+      "name": "Patient Dashboard"
+    },
+    {
+      "name": "Programs"
+    },
+    {
+      "name": "Conditions"
+    },
+    {
+      "name": "Allergies"
+    }
+  ],
+  "paths": {
+    "/ws/cfl/patientRegistration": {
+      "post": {
+        "tags": [
+          "Register Patient"
+        ],
+        "summary": "Register Patient (session COOCKIE!)",
+        "description": "The \"Register Patient\" API endpoint allows healthcare providers to securely register a new patient within the system. Upon successful registration, the patients information is stored in the database, enabling access to essential healthcare services and functionalities.<br><br> full|default|ref - <b>THIS IS COMMON TO MANY ENDPOINTS TRY OUT IF WANT</b> <br><b>Name (object, required):</b> The name of the patient contains: firstName, lastName, middleName<br><b>Birthdate (string, required):</b> The patients date of birth, formatted as YYYY-MM-DD <br><b>Gender (string, required):</b> The patients gender. Acceptable values are \"Male\", \"Female\", and \"Other\" <br><b>Patient Location(object, required):</b> The patients primary location <br><b>Language(string, required):</b> The primary language spoken by the patient <br><b>Phone Number (string, required):</b> The patients primary contact number. Include the country code for consistency (e.g., \"+1 555-555-5555\"). <br><b>Identifiers (array, optional):</b> A list of objects containing identification numbers or codes assigned to the patient by external systems or organizations. <br><b>Relatives (array, optional):</b> A list of objects representing the patients relatives, which could be used for emergency contact information, family medical history, or next-of-kin information.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "{\n    \"LocationAttribute\": \"8d6c993e-c2cc-11de-8d13-0010c6dffd0f\",\n    \"givenName\": \"Szymon72345536\",\n    //\"middleName\": \"test\",\n    //\"familyName\": \"Rujnerrr\",\n    \"birthdate\": null,\n    \"gender\": \"Helikopter bojowy\",\n    //\"personLanguage\": \"English\",\n    //\"Telephone Number\": null,\n    \"Subject ID\": \"SubjectID72345636\",\n    \"relatives\": [\n        {\n            \"relationshipType\": \"acec590b-825e-45d2-876a-0028f174903d-A\",\n            \"otherPerson\": {\n                \"value\": \"171e7fd6-8cc2-4b6c-a8d4-04c9a6803dd4\",\n                \"label\": \"Lorem ipsum\"\n            },\n            \"otherPersonInput\": \"\"\n        }\n    ],\n    \"relationships\": [\n        {\n            \"relationshipType\": \"acec590b-825e-45d2-876a-0028f174903d-A\",\n            \"otherPersonUuid\": \"171e7fd6-8cc2-4b6c-a8d4-04c9a6803dd4\"\n        }\n    ],\n    \"birthdateEstimated\": true\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/cfl/apps": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "summary": "Get CFL UI Configuration apps",
+        "description": "Retrieves UI configuration details for CFL apps. <br><br><b>full|default|ref - THIS IS COMMON TO MANY ENDPOINTS TRY OUT IF WANT ",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/location": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "summary": "Get Locations",
+        "description": "Fetches a list of healthcare facility locations. <br><br><b>full|default|ref - THIS IS COMMON TO MANY ENDPOINTS TRY OUT IF WANT ",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "description": "full|default|ref - THIS IS COMMON TO MANY ENDPOINTS TRY OUT IF WANT ",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "default"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/session": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "summary": "Get Session Session Cookie",
+        "description": "Acquires a session cookie necessary for subsequent requests.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/encounter": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "summary": "Get Encounters (by patient UUID) - see Obs",
+        "description": "Retrieves patient encounters, filtered by patient UUID.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          },
+          {
+            "name": "patient",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "af9d983d-5a6f-414d-873b-25cbc6bd6534"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/patient": {
+      "get": {
+        "tags": [
+          "Find Patient"
+        ],
+        "summary": "Find Patient",
+        "description": "Searches for patients using identifiers like name, phone number, or a searchable ID.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Query - name, phone, searchable id",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "adam"
+          },
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "0"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "50"
+          },
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          },
+          {
+            "name": "totalCount",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": "true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/app/visits.generalOverview": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get Configuration",
+        "description": "Retrieves configuration details related to visits, useful for setting up or customizing the visit overview UI.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/visits/overview": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get Visits",
+        "description": "Fetches a list of visits based on various parameters such as page number, rows per page, location UUID, and sorting options. This allows for a filtered overview of patient visits.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "rows",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "2"
+          },
+          {
+            "name": "locationUuid",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "8d6c993e-c2cc-11de-8d13-0010c6dffd0f"
+          },
+          {
+            "name": "startDatetimeSort",
+            "in": "query",
+            "description": "ASC|DESC - startDatetime is currently the only one which supports sorting",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ASC"
+          },
+          {
+            "name": "patientUuid",
+            "in": "query",
+            "description": "Patient UUID - used on Patient's Visit",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2075b8bf-d919-4210-b846-f924ea93fd6d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/visits/statuses": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get Statuses",
+        "description": "Provides a list of possible visit statuses, aiding in the categorization and filtering of patient visits according to their current state.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/visits/times": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get Times",
+        "description": "Returns time slots for visits, facilitating the scheduling and organization of patient appointments.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        },
+        "security": [
+          {
+            "noauthAuth": []
+          }
+        ]
+      }
+    },
+    "/ws/rest/v1/visittype": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get Visit Types",
+        "description": "Retrieves different types of visits that can be scheduled, offering insights into the various categories of patient encounters available within the healthcare setting.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/visits/ccb5a82e-377b-426c-97d3-ecef28f8d31c": {
+      "get": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Get One Visit by its UUID",
+        "description": "Fetches detailed information about a specific visit identified by its UUID, allowing for targeted retrieval of visit data.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Update Single Visit (session COOKIE!)",
+        "description": "Enables the modification of details for a specific visit, identified by its UUID, including start date, time, location, type, status, and actual date of the visit.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "{\n    // ALL FIEDLS MUST BE HERE ELSE BAD\n    \"uuid\": \"ccb5a82e-377b-426c-97d3-ecef28f8d31c\",\n    \"startDate\": 1708101814000,\n    \"time\": \"Afternoon\",\n    \"location\": \"8d6c993e-c2cc-11de-8d13-0010c6dffd0f\",\n    \"type\": \"3627f825-37f2-455b-80e4-86942a409502\",\n    \"status\": \"MISSED\",\n    \"actualDate\": null,\n    \"patientUuid\": \"6c3a6a2e-c646-42d3-8a18-b3214decfceb\"\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/visits/create": {
+      "post": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Create Visit (session COOKIE!)",
+        "description": "Allows for the creation of a new visit record with specified details such as start date, patient UUID, location, time, and type of visit.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "startDate": "2024-02-19T16:44:35.420Z",
+                  "patientUuid": "af9d983d-5a6f-414d-873b-25cbc6bd6534",
+                  "location": "8d6c993e-c2cc-11de-8d13-0010c6dffd0f",
+                  "time": "Afternoon",
+                  "type": "3627f825-37f2-455b-80e4-86942a409502"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/visit/c397b505-8536-447e-99b2-1c54f7b6b8aa": {
+      "delete": {
+        "tags": [
+          "Visit Overview"
+        ],
+        "summary": "Delete Visit (session COOKIE!)",
+        "description": "Permits the deletion of a specific visit, identified by its UUID, from the system.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/reportingrest/reportDefinition": {
+      "get": {
+        "tags": [
+          "Visualization"
+        ],
+        "summary": "Get Reports",
+        "description": "This endpoint is used to fetch a list of available report definitions. It allows users to understand what reports can be generated and what data they will contain, facilitating the selection of appropriate reports for further analysis or visualization.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/reportingrest/reportdata/1c748798-6e2d-4e23-81d2-68e7c67f4a7f": {
+      "get": {
+        "tags": [
+          "Visualization"
+        ],
+        "summary": "Get Report Data (IT EXECUTES REPORT)",
+        "description": "Unlike merely listing available reports, this endpoint actually executes a specified report and returns the generated data. This function is crucial for obtaining real-time report results based on the current data within the system, enabling dynamic analysis and decision-making.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/systemsetting": {
+      "get": {
+        "tags": [
+          "Visualization"
+        ],
+        "summary": "Get Visualization GP (Common GP endpoint)",
+        "description": "This endpoint retrieves global properties related to visualizations, such as configurations and settings that determine how data is presented or which elements are included in the visual reports. It is a key component for customizing the visualization experience in the application.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Name of GP",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "cflui.reportsDataVisualizationConfiguration"
+          },
+          {
+            "name": "v",
+            "in": "query",
+            "description": "full|default|ref - THIS IS COMMON TO MANY ENDPOINTS TRY OUT IF WANT ",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/cfl/flags": {
+      "get": {
+        "tags": [
+          "Flags"
+        ],
+        "summary": "Get Patient Flags (session COOKIE!)",
+        "description": "Retrieves flags associated with patients for highlighting specific conditions or alerts.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/cfl/patientFlags/8d6c993e-c2cc-11de-8d13-0010c6dffd0f": {
+      "get": {
+        "tags": [
+          "Flags"
+        ],
+        "summary": "Get Flagged patients by UUID",
+        "description": "Fetches patients flagged under a specific category.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Query - name, phone, searchable id of Visit's patient",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/patientflags/flag": {
+      "post": {
+        "tags": [
+          "Flags"
+        ],
+        "summary": "Create Patient Flags",
+        "description": "Allows the creation of new flags for identifying patient conditions or needs.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "APITESTFLAGTEST",
+                  "description": "APITESTFLAGTEST",
+                  "evaluator": "org.openmrs.module.patientflags.evaluator.SQLFlagEvaluator",
+                  "message": "Missed last 3 visitsTEST",
+                  "criteria": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/extension": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get  all  CFL app extensions (99% of extensions, there might be some without cfl prefix)",
+        "description": "This endpoint retrieves a list of all available extensions for the CFL application that are related to the patient dashboard. It allows for the customization and enhancement of the patient dashboard experience by identifying which extensions are available for use.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Filter by extension uuid - contains",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "cfl"
+          },
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/app": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get  all  apps (names descibe what they configure :) )",
+        "description": "Fetches information about all applications integrated into the patient dashboard. This provides a comprehensive view of the tools and functionalities available to healthcare providers for managing patient care directly from the dashboard.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/extension/cfl.configureStandardHeader": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get  Patient Header configuration extension",
+        "description": "Retrieves configuration details for the patient header within the dashboard. This is crucial for customizing how patient information is displayed at the top of the dashboard, allowing for adjustments to meet specific workflow or information needs.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/app/cfl.configurablePatientHeader": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get  Patient Header configuration app",
+        "description": "Similar to the header configuration extension, this endpoint provides access to configurations for the patient header but does so within the context of a specific application. It’s essential for ensuring consistency and relevance of patient information across different parts of the application.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/messages/person-statuses/8889d767-fe66-449e-b5d7-c34003394486": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get Person status (by person/patient UUID or ID)",
+        "description": "Fetches the current status of a person (or patient) based on their UUID. This information can include whether the patient is active, deactivated, or has special considerations like no consent for treatment. It’s vital for understanding and respecting patient preferences and legal requirements.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Update Person status (by person/patient UUID or ID)",
+        "description": "Allows for the updating of a person status, including activating or deactivating their profile and documenting specific status reasons such as \"deceased\" or \"transferred.\" This functionality is essential for maintaining accurate and current patient records within the dashboard.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "{\n    \"value\": \"ACTIVATED\", // NO_CONSENT|ACTIVATED|DEACTIVATED|MISSING_VALUE\n    \"reason\": \"Deceased\",\n    \"personUuid\": \"8889d767-fe66-449e-b5d7-c34003394486\"\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/messages/person-statuses/reasons": {
+      "get": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Get Person status reasons",
+        "description": "Retrieves a list of possible reasons for changing a person status. This ensures that any status updates are accompanied by standardized, clear explanations, facilitating better communication and record-keeping.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/patient/173e6fc7-65e2-4056-981c-b618eae7d6d3": {
+      "delete": {
+        "tags": [
+          "Patient Dashboard"
+        ],
+        "summary": "Delete patient (by UUID)",
+        "description": "Enables the deletion of a patient’s profile based on their UUID, with an optional reason for deletion. This feature is crucial for removing profiles that are no longer needed or valid, ensuring the dashboard remains up-to-date and clutter-free.",
+        "parameters": [
+          {
+            "name": "reason",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "FreeTextReason"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/program": {
+      "get": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Get Programs",
+        "description": "Retrieves a list of medical or healthcare programs.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "default"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/orderset": {
+      "get": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Get Regimens",
+        "description": "Fetches available treatment regimens.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/emrapi/conditionhistory": {
+      "get": {
+        "tags": [
+          "Conditions"
+        ],
+        "summary": "Get Patient condition history",
+        "description": "Pulls a historical log of patient conditions.",
+        "parameters": [
+          {
+            "name": "patientUuid",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "af9d983d-5a6f-414d-873b-25cbc6bd6534"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/emrapi/condition": {
+      "post": {
+        "tags": [
+          "Conditions"
+        ],
+        "summary": "Update/Delete Patient condition",
+        "description": "Modifies or removes records of patient conditions.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "[\n    // all props must be repeated from Get Patient condition\n    {\n        \"uuid\": \"e32b0d8e-b29a-41ba-b99d-af98cef8c0ab\",\n        \"patientUuid\": \"af9d983d-5a6f-414d-873b-25cbc6bd6534\",\n        \"concept\": {\n            \"uuid\": \"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\n            \"name\": \"Other non-coded\",\n            \"shortName\": null\n        },\n        \"conditionNonCoded\": \"Custom text\",\n        \"status\": \"ACTIVE\",\n        \"onSetDate\": \"2024-02-04T00:00:00.000+0000\",\n        \"endDate\": null,\n        \"endReason\": null,\n        \"additionalDetail\": null,\n        \"voided\": true, // soft delete flag\n        \"voidReason\": null,\n        \"creator\": \"Super User (null)\",\n        \"dateCreated\": 1708359588000,\n        \"previousConditionUuid\": null\n    }\n]"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/patient/af9d983d-5a6f-414d-873b-25cbc6bd6534/allergy": {
+      "get": {
+        "tags": [
+          "Allergies"
+        ],
+        "summary": "Get Allergies (this is yet another way of REST patient/UUID/relatedObject)",
+        "description": "Retrieves a comprehensive list of allergies for a specified patient based on their UUID. This endpoint is crucial for healthcare providers to access up-to-date allergy information, which is essential for avoiding adverse drug reactions and for tailoring patient care plans.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Allergies"
+        ],
+        "summary": "Add Allergies",
+        "description": "Allows for the addition of new allergy records to a patient’s profile. This endpoint supports the input of detailed allergy information, including the allergen, severity, reactions, and comments. It is a key feature for updating patient records with new allergy discoveries.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "{\n    \"allergen\": \"\", // Concept\n    \"severity\": \"\", // Concept\n    \"comment\": \"\", // free text\n    \"reactions\": [\n        {\n            \"reaction\": \"\", // Concept or reactionNonCoded\n            // \"reactionNonCoded\": \"\" // free text or reaction\n        }\n    ]\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/patient/af9d983d-5a6f-414d-873b-25cbc6bd6534/allergy/5329f4b9-9ae1-43a6-9f55-37f46e2ab87b": {
+      "post": {
+        "tags": [
+          "Allergies"
+        ],
+        "summary": "Update Allergy (by patient UUID and allergy UUID)",
+        "description": "Provides the functionality to update an existing allergy record identified by a patient’s UUID and the allergy’s UUID. This could involve changing the severity of the allergy, updating the allergen details, or modifying associated reactions and comments. This ensures that allergy information remains accurate and reflective of the patient current condition.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": "{\n    // Take what GET gives, reduce reference to UUID, change\n    \"uuid\": \"5329f4b9-9ae1-43a6-9f55-37f46e2ab87b\",\n    \"allergen\": {\n        \"allergenType\": \"FOOD\",\n        \"codedAllergen\": \"162543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"\n    },\n    \"severity\": \"1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\n    \"comment\": \"This is comment 2\",\n    \"reactions\": [\n        {\n            \"reaction\": \"148787AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"\n        },\n        {\n            \"reaction\": \"143264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"\n        }\n    ]\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Allergies"
+        ],
+        "summary": "Delete Allergy (by patient UUID and allergy UUID)",
+        "description": "Enables the deletion of a specific allergy record for a patient, using the allergys UUID. This feature is necessary for removing outdated or incorrect allergy information, ensuring the patient profile is kept up-to-date with only relevant and accurate allergy data.",
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    },
+    "/ws/rest/v1/concept/162553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA": {
+      "get": {
+        "tags": [
+          "Allergies"
+        ],
+        "summary": "Get Concept with set of food allergies (example)",
+        "description": "This endpoint fetches a predefined concept that contains a set of common food allergies. It’s useful for quickly identifying and documenting common food allergies in patient profiles, streamlining the process of entering known food allergy information.",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request -> If the request is malformed or missing required parameters."
+          },
+          "401": {
+            "description": "Unauthorized -> If the user is not authorized to perform the registration."
+          },
+          "500": {
+            "description": "Internal Server Error -> If there is a server-side issue preventing registration."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "noauthAuth": {
+        "type": "http",
+        "scheme": "noauth"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

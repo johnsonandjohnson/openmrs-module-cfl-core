@@ -48,5 +48,4 @@ public class AdminListExtensionTest {
 
         assertThat(ext.getMediaType(), is(Extension.MEDIA_TYPE.html));
     }
-
 }

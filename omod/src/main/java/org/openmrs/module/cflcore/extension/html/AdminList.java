@@ -46,5 +46,4 @@ public class AdminList extends AdministrationSectionExt {
         map.put("/ms/uiframework/resource/cfl/swagger/index.html", "cfl.restApi.title");
         return map;
     }
-
 }
