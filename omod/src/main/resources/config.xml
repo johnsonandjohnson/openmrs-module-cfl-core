@@ -121,6 +121,23 @@
         <point>org.openmrs.api.OrderService</point>
         <class>org.openmrs.module.cflcore.advice.SaveOrderAdvice</class>
     </advice>
+
+
+    <advice>
+        <point>org.openmrs.module.visits.api.service.VisitService</point>
+        <class>org.openmrs.module.cflcore.advice.UpdateVisitAdvice</class>
+    </advice>
+
+    <advice>
+        <point>org.openmrs.api.VisitService</point>
+        <class>org.openmrs.module.cflcore.advice.UpdateVisitAdvice</class>
+    </advice>
+
+    <advice>
+        <point>org.openmrs.api.EncounterService</point>
+        <class>org.openmrs.module.cflcore.advice.UpdateEncounterAdvice</class>
+    </advice>
+
     <!-- Internationalization -->
     <!-- All message codes should start with @MODULE_ID@.* -->
     <messages>

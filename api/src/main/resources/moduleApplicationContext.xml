@@ -119,25 +119,8 @@
         <property name="personAttributeListenerService" ref="cfl.personAttributeListenerService"/>
     </bean>
 
-    <bean id="cfl.visitActionListener"
-          class="org.openmrs.module.cflcore.api.event.listener.subscribable.VisitActionListener"
-          abstract="true">
-    </bean>
-
-    <bean id="cfl.updatingVisitListener"
-          class="org.openmrs.module.cflcore.api.event.listener.subscribable.UpdatingVisitListener">
-    </bean>
-
-    <bean id="cfl.vaccinationEncounterListener"
-          class="org.openmrs.module.cflcore.api.event.listener.subscribable.VaccinationEncounterListener">
-    </bean>
-
     <bean id="cfl.vaccinesGlobalPropertyListener"
           class="org.openmrs.module.cflcore.api.event.listener.subscribable.VaccinesGlobalPropertyListener">
-    </bean>
-
-    <bean id="cfl.visitEncounterListener"
-          class="org.openmrs.module.cflcore.api.event.listener.subscribable.VisitEncounterListener">
     </bean>
 
     <bean id="cfl.personIdentifierAction"

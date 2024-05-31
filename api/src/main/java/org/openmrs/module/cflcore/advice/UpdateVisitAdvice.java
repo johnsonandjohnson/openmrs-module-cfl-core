@@ -8,11 +8,10 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-package org.openmrs.module.cflcore.api.event.listener.subscribable;
+package org.openmrs.module.cflcore.advice;
 
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
-import org.openmrs.event.Event;
 import org.openmrs.module.cflcore.CFLConstants;
 import org.openmrs.module.cflcore.api.service.ConfigService;
 import org.openmrs.module.cflcore.api.service.VaccinationService;
@@ -20,45 +19,36 @@ import org.openmrs.module.cflcore.api.util.LockByKeyUtil;
 import org.openmrs.module.cflcore.api.util.VisitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jms.Message;
-import java.util.Collections;
+import org.springframework.aop.AfterReturningAdvice;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
-/**
- * The UpdatingVisitListener class.
- *
- * <p>This listener is responsible for scheduling following visits according to the vaccination
- * program defined in Global Property {@link CFLConstants#VACCINATION_PROGRAM_KEY}.
- *
- * <p>This listener must be enabled via Global Parameter: {@link
- * CFLConstants#VACCINATION_LISTENER_KEY}.
- *
- * <p>The following visits are scheduled based on the Visits start date.
- *
- * <p>The listener observes the update of an Visit event and runs it's logic only when:
- *
- * <ul>
- *   <li>the Vaccination information is enabled ({@link
- *       CFLConstants#VACCINATION_INFORMATION_ENABLED_KEY} is true)
- *   <li>the Visit has occurred status
- *   <li>the Visit is the last dosage visit scheduled for its patient
- * </ul>
- *
- * @see VaccinationEncounterListener
- */
-public class UpdatingVisitListener extends VisitActionListener {
+public class UpdateVisitAdvice implements AfterReturningAdvice {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(UpdatingVisitListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UpdateVisitAdvice.class);
+
   private static final LockByKeyUtil LOCK_BY_KEY = new LockByKeyUtil();
 
-  @Override
-  public List<String> subscribeToActions() {
-    return Collections.singletonList(Event.Action.UPDATED.name());
-  }
+  private static final List<String> SAVE_UPDATE_VISIT_METHOD_NAMES =
+      Arrays.asList("saveVisit", "updateVisit");
 
   @Override
-  public void performAction(Message message) {
+  public void afterReturning(Object o, Method method, Object[] objects, Object o1) {
+    if (SAVE_UPDATE_VISIT_METHOD_NAMES.contains(method.getName())) {
+      Object visitObject = objects[0];
+      String visitUuid = null;
+      if (visitObject instanceof Visit) {
+        visitUuid = ((Visit) objects[0]).getUuid();
+      } else if (visitObject instanceof String) {
+        visitUuid = (String) visitObject;
+      }
+
+      createFutureVisits(visitUuid);
+    }
+  }
+
+  private void createFutureVisits(String visitUuid) {
     // is listener not enabled or is vaccination info not enabled
     if (!getConfigService()
             .isVaccinationListenerEnabled(CFLConstants.VACCINATION_VISIT_LISTENER_NAME)
@@ -69,12 +59,10 @@ public class UpdatingVisitListener extends VisitActionListener {
       return;
     }
 
-    final String visitUuid = getVisitUuid(message);
-
     LOCK_BY_KEY.lock(visitUuid);
 
     try {
-      final Visit updatedVisit = getVisit(visitUuid);
+      final Visit updatedVisit = Context.getVisitService().getVisitByUuid(visitUuid);
       final String visitStatus = VisitUtil.getVisitStatus(updatedVisit);
 
       if (visitStatus.equals(VisitUtil.getOccurredVisitStatus())) {
