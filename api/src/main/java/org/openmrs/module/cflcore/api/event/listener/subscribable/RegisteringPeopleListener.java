@@ -170,6 +170,6 @@ public class RegisteringPeopleListener extends PeopleActionListener {
   }
 
   private DefaultPatientTemplateService getDefaultPatientTemplateService() {
-    return Context.getService(DefaultPatientTemplateService.class);
+    return Context.getRegisteredComponent("clfMultiProjectDefaultPatientTemplateService", DefaultPatientTemplateService.class);
   }
 }
