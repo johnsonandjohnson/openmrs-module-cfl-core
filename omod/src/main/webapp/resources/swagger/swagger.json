@@ -889,6 +889,9 @@
         "pathInfo" : {
           "type" : "string"
         },
+        "pathTranslated" : {
+          "type" : "string"
+        },
         "contextPath" : {
           "type" : "string"
         },
@@ -898,6 +901,9 @@
         "remoteUser" : {
           "type" : "string"
         },
+        "requestedSessionId" : {
+          "type" : "string"
+        },
         "requestURI" : {
           "type" : "string"
         },
@@ -905,9 +911,6 @@
           "$ref" : "#/definitions/StringBuffer"
         },
         "servletPath" : {
-          "type" : "string"
-        },
-        "requestedSessionId" : {
           "type" : "string"
         },
         "requestedSessionIdValid" : {
@@ -926,16 +929,7 @@
           "type" : "boolean",
           "default" : false
         },
-        "pathTranslated" : {
-          "type" : "string"
-        },
         "method" : {
-          "type" : "string"
-        },
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
           "type" : "string"
         },
         "contentLength" : {
@@ -945,18 +939,24 @@
         "contentType" : {
           "type" : "string"
         },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "parameterMap" : {
           "type" : "object",
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "remotePort" : {
           "type" : "integer",
@@ -972,15 +972,8 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "serverName" : {
-          "type" : "string"
-        },
         "characterEncoding" : {
           "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "remoteAddr" : {
           "type" : "string"
@@ -993,6 +986,13 @@
         },
         "localAddr" : {
           "type" : "string"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "scheme" : {
           "type" : "string"
@@ -1008,6 +1008,10 @@
     "HttpSession" : {
       "type" : "object",
       "properties" : {
+        "creationTime" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "sessionContext" : {
           "$ref" : "#/definitions/HttpSessionContext"
         },
@@ -1020,10 +1024,6 @@
           "items" : {
             "type" : "string"
           }
-        },
-        "creationTime" : {
-          "type" : "integer",
-          "format" : "int64"
         },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
@@ -1331,12 +1331,6 @@
     "ServletRequest" : {
       "type" : "object",
       "properties" : {
-        "locale" : {
-          "$ref" : "#/definitions/Locale"
-        },
-        "localName" : {
-          "type" : "string"
-        },
         "contentLength" : {
           "type" : "integer",
           "format" : "int32"
@@ -1344,18 +1338,24 @@
         "contentType" : {
           "type" : "string"
         },
+        "locale" : {
+          "$ref" : "#/definitions/Locale"
+        },
+        "localPort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "attributeNames" : {
           "$ref" : "#/definitions/Enumeration"
+        },
+        "localName" : {
+          "type" : "string"
         },
         "parameterMap" : {
           "type" : "object",
           "additionalProperties" : {
             "type" : "object"
           }
-        },
-        "localPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "remotePort" : {
           "type" : "integer",
@@ -1371,15 +1371,8 @@
         "parameterNames" : {
           "$ref" : "#/definitions/Enumeration"
         },
-        "serverName" : {
-          "type" : "string"
-        },
         "characterEncoding" : {
           "type" : "string"
-        },
-        "serverPort" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "remoteAddr" : {
           "type" : "string"
@@ -1392,6 +1385,13 @@
         },
         "localAddr" : {
           "type" : "string"
+        },
+        "serverName" : {
+          "type" : "string"
+        },
+        "serverPort" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "scheme" : {
           "type" : "string"

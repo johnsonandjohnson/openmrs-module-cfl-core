@@ -17,6 +17,7 @@ import org.openmrs.module.cflcore.api.util.DateUtil;
 import org.springframework.aop.MethodBeforeAdvice;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -37,6 +38,7 @@ public class SaveOrderAdvice implements MethodBeforeAdvice {
           orderService.getAllOrdersByPatient(currentOrder.getPatient()).stream()
               .filter(order -> order.getDateStopped() == null)
               .map(Order::getAutoExpireDate)
+              .filter(Objects::nonNull)
               .filter(autoExpireDate -> autoExpireDate.after(currentOrder.getDateActivated()))
               .max(Date::compareTo);
 
